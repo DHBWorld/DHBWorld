@@ -3,7 +3,9 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/Code/DHBWorld/app/src/main/res/layout/activity_main.xml" value="0.2708333333333333" />
+        <entry key="..\:/Users/z0047ynv/AndroidStudioProjects/DHBWorld/DHBWorld/app/src/main/res/drawable/circular_button.xml" value="0.1" />
+        <entry key="..\:/Users/z0047ynv/AndroidStudioProjects/DHBWorld/DHBWorld/app/src/main/res/layout/activity_main.xml" value="0.1" />
+        <entry key="..\:/Users/z0047ynv/AndroidStudioProjects/DHBWorld/DHBWorld/app/src/main/res/layout/view_element_examples.xml" value="0.1" />
       </map>
     </option>
   </component>
