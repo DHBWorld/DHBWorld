@@ -83,8 +83,8 @@
     </com.google.android.material.textfield.TextInputLayout>
 
 
-    <LinearLayout
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
@@ -97,9 +97,24 @@
         android:layout_height="wrap_content"
         android:text = "Save"
         style="@style/Widget.MaterialComponents.Button"
+        android:layout_alignParentLeft="true"
         >
     </com.google.android.material.button.MaterialButton>
 
-    </LinearLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/cancel_Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text = "Cancel"
+            style="@style/Widget.MaterialComponents.Button"
+            android:backgroundTint="@color/grey_dark"
+            android:layout_alignParentRight="true"
+            >
+        </com.google.android.material.button.MaterialButton>
+
+
+
+    </RelativeLayout>
 
 </LinearLayout>
