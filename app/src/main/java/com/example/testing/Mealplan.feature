@@ -19,6 +19,5 @@ Feature: Meal plan
   Scenario: Meal plan is displayed to the user
     Given The app is opened
     When The user opens the meal plan page
-    And The user has no connection to the internet
     And The meal plan server responds
     Then The meal plan for the current day or the current week will be displayed
