@@ -1,8 +1,10 @@
-package com.example.dhbworld;
+package com.main.dhbworld;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+
+import com.main.dhbworld.R;
 
 public class MainActivity extends AppCompatActivity {
 

@@ -6,7 +6,7 @@
     android:orientation="vertical"
     android:padding = "20dp"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context="com.main.dhbworld.MainActivity">
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/studentName"
@@ -97,7 +97,7 @@
         android:layout_height="wrap_content"
         android:text = "Save"
         style="@style/Widget.MaterialComponents.Button"
-        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
         >
     </com.google.android.material.button.MaterialButton>
 
@@ -109,9 +109,13 @@
             android:text = "Cancel"
             style="@style/Widget.MaterialComponents.Button"
             android:backgroundTint="@color/grey_dark"
-            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
             >
         </com.google.android.material.button.MaterialButton>
+
+
+
+
 
 
 

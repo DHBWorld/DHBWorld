@@ -1,4 +1,4 @@
-package com.example.dhbworld;
+package com.main.dhbworld;
 
 import org.junit.Test;
 
