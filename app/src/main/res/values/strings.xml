@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">DHBWorld</string>
+    <string name="default_notification_channel_id">userInteraction</string>
 </resources>
