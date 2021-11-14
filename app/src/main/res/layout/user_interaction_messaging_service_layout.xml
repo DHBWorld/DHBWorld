@@ -1,13 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/grey_light"
-    android:orientation="vertical"
     android:padding="20dp"
     tools:context="com.main.dhbworld.Services.UserInteractionMessagingService">
+
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    >
 
 
     <com.google.android.material.card.MaterialCardView
@@ -18,6 +24,7 @@
         android:baselineAligned="false"
         app:strokeWidth="1dp"
         app:strokeColor="@color/stroke_color"
+
         app:cardElevation="0dp">
 
         <LinearLayout
@@ -62,15 +69,16 @@
                 android:layout_marginTop="20dp"
                 android:layout_marginRight="7dp"
                 android:layout_marginLeft="7dp"
+                android:gravity="center_horizontal"
 
-                android:layout_width="wrap_content"
+                android:layout_width="87dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:textColor="@color/white"
                 android:backgroundTint="@color/grey_dark"
                 android:clipToOutline="false"
                 android:text="Kantine"
-                android:textSize="25dp"/>
+                android:textSize="23dp"/>
         </LinearLayout>
 
 
@@ -111,7 +119,7 @@
 
             </LinearLayout>
 
-            <!-- Buttons -->
+
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -137,6 +145,13 @@
 
     </com.google.android.material.card.MaterialCardView>
 
+    <LinearLayout
+        android:paddingTop="20dp"
+        android:paddingBottom="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
     <com.google.android.material.card.MaterialCardView
 
         android:layout_width="match_parent"
@@ -146,12 +161,13 @@
         app:strokeWidth="1dp"
         app:strokeColor="@color/stroke_color"
         app:cardElevation="0dp"
-        android:paddingBottom="10dp">
+        >
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
+
             >
 
             <!-- Media -->
@@ -182,7 +198,7 @@
 
                         android:contentDescription="content_description_media"
                         android:scaleType="centerCrop"
-                        app:srcCompat="@drawable/ic_baseline_restaurant_24" />
+                        app:srcCompat="@drawable/baseline_coffee_maker_24" />
 
 
                 </com.google.android.material.card.MaterialCardView>
@@ -190,15 +206,16 @@
                     android:layout_marginTop="20dp"
                     android:layout_marginRight="7dp"
                     android:layout_marginLeft="7dp"
+                    android:gravity="center_horizontal"
 
-                    android:layout_width="wrap_content"
+                    android:layout_width="87dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:textColor="@color/white"
                     android:backgroundTint="@color/grey_dark"
                     android:clipToOutline="false"
-                    android:text="Kantine"
-                    android:textSize="25dp"/>
+                    android:text="Kaffee"
+                    android:textSize="23dp"/>
             </LinearLayout>
 
 
@@ -265,7 +282,7 @@
         </LinearLayout>
 
     </com.google.android.material.card.MaterialCardView>
-
+    </LinearLayout>
     <com.google.android.material.card.MaterialCardView
 
         android:layout_width="match_parent"
@@ -310,7 +327,7 @@
 
                         android:contentDescription="content_description_media"
                         android:scaleType="centerCrop"
-                        app:srcCompat="@drawable/ic_baseline_restaurant_24" />
+                        app:srcCompat="@drawable/ic_baseline_print_24" />
 
 
                 </com.google.android.material.card.MaterialCardView>
@@ -318,15 +335,16 @@
                     android:layout_marginTop="20dp"
                     android:layout_marginRight="7dp"
                     android:layout_marginLeft="7dp"
+                    android:gravity="center_horizontal"
 
-                    android:layout_width="wrap_content"
+                    android:layout_width="87dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:textColor="@color/white"
                     android:backgroundTint="@color/grey_dark"
                     android:clipToOutline="false"
-                    android:text="Kantine"
-                    android:textSize="25dp"/>
+                    android:text="Drucker"
+                    android:textSize="23dp"/>
             </LinearLayout>
 
 
@@ -350,6 +368,7 @@
                         android:textAppearance="?attr/textAppearanceHeadline6" />
 
                     <TextView
+
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
@@ -394,3 +413,4 @@
     </com.google.android.material.card.MaterialCardView>
 
 </LinearLayout>
+</ScrollView>
