@@ -10,6 +10,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.DHBWorld">
         <activity
+            android:name=".UserInteraction"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
@@ -27,4 +30,5 @@
             </intent-filter>
         </service>
     </application>
+
 </manifest>

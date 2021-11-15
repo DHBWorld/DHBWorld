@@ -1,4 +1,13 @@
 <resources>
     <string name="app_name">DHBWorld</string>
     <string name="default_notification_channel_id">userInteraction</string>
+    <string name="besteht_das_problem_noch">Besteht das Problem noch?</string>
+    <string name="kantine">Kantine</string>
+    <string name="kaffee">Kaffee</string>
+    <string name="drucker">Drucker</string>
+    <string name="ja">Ja</string>
+    <string name="nein">Nein</string>
+    <string name="kaffeemaschine">Kaffeemaschine</string>
+    <string name="zustand">Zustand:</string>
+    <string name="bisherigen_meldungen">Bisherigen Meldungen:</string>
 </resources>
