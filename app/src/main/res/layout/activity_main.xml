@@ -1,10 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<androidx.drawerlayout.widget.DrawerLayout
+    xmlns:tools = "http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/drawerLayout"
+    >
+
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:fitsSystemWindows="true">
+
+<com.google.android.material.appbar.AppBarLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    style="@style/Widget.MaterialComponents.AppBarLayout.PrimarySurface"
+    android:fitsSystemWindows="true">
+
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/topAppBar"
@@ -13,10 +43,14 @@
         app:title="@string/page_title"
         app:menu="@menu/top_app_bar"
         app:navigationIcon="@drawable/navitem"
-        style="@style/Widget.MaterialComponents.Toolbar.Primary"
+
+        style="@style/Widget.MaterialComponents.Toolbar.PrimarySurface"
+        android:background="@android:color/transparent"
+        android:elevation="0dp"
+
         />
 
-
+</com.google.android.material.appbar.AppBarLayout>
 
 
 
@@ -150,4 +184,16 @@
     </RelativeLayout>
 
 </LinearLayout>
-</LinearLayout>
+
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
+    <com.google.android.material.navigation.NavigationView
+
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:layout_gravity="start" />
+
+
+
+
+</androidx.drawerlayout.widget.DrawerLayout>

@@ -2,9 +2,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/favorite"
-        app:showAsAction="ifRoom"
-        android:title="TODO" />
+        android:id="@+id/more"
+        android:title="@string/more"
+        android:contentDescription="@string/content_description_more"
+        app:showAsAction="never"
+        android:icon="@drawable/triple_point"
+        />
 
 
 

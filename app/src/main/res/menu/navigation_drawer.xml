@@ -7,13 +7,11 @@
         android:checkableBehavior="single">
         <item
             android:id="@+id/item1"
-            android:icon="@drawable/ic_launcher_background"
-            android:title="@string/app_name"
+            android:title="Personal Information"
             android:checked="true" />
         <item
-            android:id="@+id/item3"
-            android:icon="@drawable/ic_launcher_background"
-            android:title="@string/app_name" />
+            android:id="@+id/item2"
+            android:title="Meal Plan" />
     </group>
 
 
