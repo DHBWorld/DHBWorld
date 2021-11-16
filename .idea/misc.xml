@@ -3,8 +3,12 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Code/DHBWorld/app/src/main/res/drawable/ic_launcher_background.xml" value="0.22179487179487178" />
         <entry key="..\:/Code/DHBWorld/app/src/main/res/layout/activity_main.xml" value="0.4" />
         <entry key="..\:/Code/DHBWorld/app/src/main/res/layout/defaultlayout.xml" value="0.264" />
+        <entry key="..\:/Code/DHBWorld/app/src/main/res/layout/navigation.xml" value="0.20854700854700856" />
+        <entry key="..\:/Code/DHBWorld/app/src/main/res/menu/navigation_drawer.xml" value="0.20854700854700856" />
+        <entry key="..\:/Code/DHBWorld/app/src/main/res/menu/top_app_bar.xml" value="0.10683760683760683" />
       </map>
     </option>
   </component>
