@@ -2,17 +2,27 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
 
+
     <group
         android:id="@+id/group1"
-        android:checkableBehavior="single">
+        android:checkableBehavior="single"
+        >
         <item
             android:id="@+id/item1"
-            android:title="Personal Information"
+            android:title="@string/personal_information"
             android:checked="true" />
         <item
             android:id="@+id/item2"
-            android:title="Meal Plan" />
+            android:title="@string/meal_plan" />
     </group>
 
+    <group>
+        <item
+            android:title="abc"
+            android:id="@+id/abc">
+
+        </item>
+
+    </group>
 
 </menu>
