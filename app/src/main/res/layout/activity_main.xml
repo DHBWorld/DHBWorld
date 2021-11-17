@@ -81,13 +81,14 @@ android:fitsSystemWindows="true">
 
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/studentName"
+
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Name"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/studentName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="none">
@@ -98,13 +99,13 @@ android:fitsSystemWindows="true">
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/matriculationNumber"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Matrikelnummer"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/matriculationNumber"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             />
@@ -113,13 +114,13 @@ android:fitsSystemWindows="true">
 
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/libraryNumber"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Bibliotheksnummer"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/libraryNumber"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             />
@@ -128,13 +129,14 @@ android:fitsSystemWindows="true">
 
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/StudentMail"
+
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Studenten-E-Mail-Adresse"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/studentMail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             />
@@ -143,13 +145,13 @@ android:fitsSystemWindows="true">
 
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/FreieNotizen"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Freie Notizen"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/freeNotes"
             android:layout_width="match_parent"
             android:layout_height="300dp"
             />
@@ -180,13 +182,11 @@ android:fitsSystemWindows="true">
             android:id="@+id/cancel_Button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text = "Cancel"
+            android:text = "@string/cancel"
             style="@style/Widget.MaterialComponents.Button"
             android:backgroundTint="@color/grey_dark"
             android:layout_alignParentEnd="true"
-            android:visibility="invisible"
-            >
-        </com.google.android.material.button.MaterialButton>
+            android:visibility="invisible"/>
 
                     </RelativeLayout>
                  </LinearLayout>
@@ -197,6 +197,7 @@ android:fitsSystemWindows="true">
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/edit_Button"
             android:layout_width="wrap_content"
