@@ -6,8 +6,6 @@
     android:layout_height="match_parent"
     android:background="@color/grey_light"
     android:paddingHorizontal="20dp"
-
-
     tools:context="com.main.dhbworld.Services.UserInteractionMessagingService">
 
 
@@ -19,7 +17,6 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     >
-
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/card_cafe"

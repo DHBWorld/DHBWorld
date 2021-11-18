@@ -27,6 +27,7 @@ public class DialogCofirmationUserInteraction extends MaterialAlertDialogBuilder
 
 
 
+
         this.setPositiveButton(R.string.event_melden, new DialogInterface.OnClickListener() {
 
             @SuppressLint("ResourceAsColor")
