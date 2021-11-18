@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.os.Bundle;
@@ -26,7 +27,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         TextView lNumber;
         TextView studentMail;
         TextView freeNotes;
-        SharedPreferences preferences;
+
+        SharedPreferences sp;
+        public static final String MyPREFERENCES = "" ;
+        public static final String Name = "";
+        public static final String LibraryNumber = "";
+        public static final String MatriculationNumber = "";
+        public static final String  StudentMail= "";
+        public static final String FreeNotes = "";
 
 
     @Override
@@ -60,6 +68,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         });
 
 
+        sp = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+
+
+
 
         editButton.setOnClickListener(v -> {
             editButton.setVisibility(View.INVISIBLE);
@@ -85,6 +97,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             lNumber.setEnabled(false);
             studentMail.setEnabled(false);
             freeNotes.setEnabled(false);
+
+            String n = name.getText().toString();
+            String m = mNumber.getText().toString();
+            String l = lNumber.getText().toString();
+            String s = studentMail.getText().toString();
+            String f = freeNotes.getText().toString();
+
+            SharedPreferences.Editor editor = sp.edit();
+
+            editor.putString(Name,n);
+            editor.putString(MatriculationNumber,m);
+            editor.putString(LibraryNumber,l);
+            editor.putString(StudentMail,s);
+            editor.putString(FreeNotes,f);
+            editor.apply();
+
+
+
         });
 
         cancelButton.setOnClickListener(v -> {
@@ -98,6 +128,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             studentMail.setEnabled(false);
             freeNotes.setEnabled(false);
         });
+
 
     }
 
