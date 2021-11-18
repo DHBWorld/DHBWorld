@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import android.content.SharedPreferences;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.os.Bundle;
 import android.view.View;
@@ -17,8 +18,6 @@ import com.google.android.material.snackbar.Snackbar;
 import com.main.dhbworld.R;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
-
-
         FloatingActionButton editButton;
         Button saveButton;
         Button cancelButton;
@@ -27,10 +26,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         TextView lNumber;
         TextView studentMail;
         TextView freeNotes;
-
-
-
-
+        SharedPreferences preferences;
 
 
     @Override
@@ -75,9 +71,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             lNumber.setEnabled(true);
             studentMail.setEnabled(true);
             freeNotes.setEnabled(true);
+
         });
 
         saveButton.setOnClickListener(v -> {
+
             editButton.setVisibility(View.VISIBLE);
             saveButton.setVisibility(View.INVISIBLE);
             cancelButton.setVisibility(View.INVISIBLE);
@@ -100,7 +98,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             studentMail.setEnabled(false);
             freeNotes.setEnabled(false);
         });
+
     }
+
+
 
 
 
