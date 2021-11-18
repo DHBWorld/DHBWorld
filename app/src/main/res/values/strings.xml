@@ -10,4 +10,10 @@
     <string name="kaffeemaschine">Kaffeemaschine</string>
     <string name="zustand">Zustand:</string>
     <string name="bisherigen_meldungen">Bisherigen Meldungen:</string>
+    <string name="moechten_sie_event_melden">Möchten Sie den das Event melden?</string>
+    <string name="sind_sie_sicher">Sind Sie sicher?</string>
+    <string name="abbrechen">Abbrechen</string>
+    <string name="event_melden">Event melden</string>
+    <string name="danke_fuer_event">Danke, dass Sie an unsrem Kommunikation-Service teilnehmen!</string>
+    <string name="moechten_sie_das_problem_besteht_nicht_mehr">Möchten Sie melden, dass das Problem nicht mehr besteht?</string>
 </resources>

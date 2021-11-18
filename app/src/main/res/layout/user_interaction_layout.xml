@@ -12,6 +12,7 @@
 
 
 <LinearLayout
+    android:id="@+id/user_interaction_linear"
     android:background="@color/grey_light"
     android:paddingVertical="20dp"
     android:layout_width="match_parent"
@@ -155,6 +156,7 @@
                 android:orientation="horizontal">
 
                 <com.google.android.material.button.MaterialButton
+                    android:id="@+id/ja0"
                     style="?attr/borderlessButtonStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -162,6 +164,7 @@
                     android:text="@string/ja" />
 
                 <com.google.android.material.button.MaterialButton
+                    android:id="@+id/nein0"
                     style="?attr/borderlessButtonStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -313,12 +316,14 @@
 
                             <com.google.android.material.button.MaterialButton
                                 style="?attr/borderlessButtonStyle"
+                                android:id="@+id/ja1"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginEnd="8dp"
                                 android:text="@string/ja" />
 
                             <com.google.android.material.button.MaterialButton
+                                android:id="@+id/nein1"
                                 style="?attr/borderlessButtonStyle"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -470,13 +475,15 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginEnd="8dp"
-                                android:text="@string/ja" />
+                                android:text="@string/ja"
+                                android:id="@+id/ja2"/>
 
                             <com.google.android.material.button.MaterialButton
                                 style="?attr/borderlessButtonStyle"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@string/nein" />
+                                android:text="@string/nein"
+                                android:id="@+id/nein2"/>
                         </LinearLayout>
                     </LinearLayout>
 
