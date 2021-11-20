@@ -53,6 +53,7 @@
 
                 app:cardElevation="0dp">
             <ImageView
+                android:id="@+id/bild_kantine"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:background="@color/white"
@@ -104,6 +105,7 @@
                     android:textAppearance="?attr/textAppearanceHeadline6" />
 
                 <TextView
+                    android:id="@+id/zustand_kantine"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
@@ -112,6 +114,7 @@
                     android:textColor="?android:attr/textColorSecondary" />
 
                 <TextView
+                    android:id="@+id/bisherige_meldungen_kantine"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
@@ -216,6 +219,7 @@
 
                         app:cardElevation="0dp">
                         <ImageView
+                            android:id="@+id/bild_kaffee"
                             android:layout_width="100dp"
                             android:layout_height="100dp"
                             android:background="@color/white"
@@ -263,6 +267,7 @@
                             android:textAppearance="?attr/textAppearanceHeadline6" />
 
                         <TextView
+                            android:id="@+id/zustand_kaffee"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="8dp"
@@ -271,6 +276,7 @@
                             android:textColor="?android:attr/textColorSecondary" />
 
                         <TextView
+                            android:id="@+id/bisherige_meldungen_kaffe"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="10dp"
@@ -371,6 +377,7 @@
 
                         app:cardElevation="0dp">
                         <ImageView
+                            android:id="@+id/bild_druker"
                             android:layout_width="100dp"
                             android:layout_height="100dp"
                             android:background="@color/white"
@@ -411,8 +418,9 @@
                         android:paddingHorizontal="16dp"
                         android:paddingVertical="10dp">
 
-                        <!-- Title, secondary and supporting text -->
+
                         <TextView
+                            android:id="@+id/zustand_druker"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/drucker"
@@ -427,6 +435,7 @@
                             android:textColor="?android:attr/textColorSecondary" />
 
                         <TextView
+                            android:id="@+id/bisherige_meldungen_druker"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="10dp"
