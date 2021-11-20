@@ -33,7 +33,7 @@ public class UserInteraction extends AppCompatActivity {
             j.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    DialogCofirmationUserInteraction confirmation= new DialogCofirmationUserInteraction(UserInteraction.this, R.string.moechten_sie_event_melden);
+                    DialogCofirmationUserInteraction confirmation= new DialogCofirmationUserInteraction(UserInteraction.this, R.string.moechten_sie_event_melden, R.string.problem_melden);
                     confirmation.show();
 
                     //Backend logik: Ein Event wurde gemeldet
@@ -46,7 +46,7 @@ public class UserInteraction extends AppCompatActivity {
             n.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    DialogCofirmationUserInteraction confirmation= new DialogCofirmationUserInteraction(UserInteraction.this, R.string.moechten_sie_das_problem_besteht_nicht_mehr);
+                    DialogCofirmationUserInteraction confirmation= new DialogCofirmationUserInteraction(UserInteraction.this, R.string.moechten_sie_das_problem_besteht_nicht_mehr, R.string.problem_ist_geloest);
                     confirmation.show();
 
                     //Backend logik: Das Event besteht nicht mehr

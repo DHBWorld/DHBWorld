@@ -12,9 +12,8 @@ import com.main.dhbworld.R;
 public class DialogCofirmationUserInteraction extends MaterialAlertDialogBuilder {
 
 
-    public DialogCofirmationUserInteraction(@NonNull Context context, int message) {
+    public DialogCofirmationUserInteraction(@NonNull Context context, int message, int buttonText) {
         super(context);
-
         this.setTitle(R.string.sind_sie_sicher);
         this.setMessage(message);
 
@@ -24,16 +23,10 @@ public class DialogCofirmationUserInteraction extends MaterialAlertDialogBuilder
                 dialog.cancel();
             }
         });
+        this.setPositiveButton(buttonText, new DialogInterface.OnClickListener() {
 
-
-
-
-        this.setPositiveButton(R.string.event_melden, new DialogInterface.OnClickListener() {
-
-            @SuppressLint("ResourceAsColor")
             @Override
             public void onClick(DialogInterface dialog, int which) {
-
                 Toast toast= Toast.makeText(context, R.string.danke_fuer_event, Toast.LENGTH_SHORT);
                 toast.setGravity(Gravity.CENTER,0,0);
                 toast.show();
