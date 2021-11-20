@@ -420,13 +420,14 @@
 
 
                         <TextView
-                            android:id="@+id/zustand_druker"
+
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/drucker"
                             android:textAppearance="?attr/textAppearanceHeadline6" />
 
                         <TextView
+                            android:id="@+id/zustand_druker"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="8dp"
@@ -435,6 +436,7 @@
                             android:textColor="?android:attr/textColorSecondary" />
 
                         <TextView
+
                             android:id="@+id/bisherige_meldungen_druker"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"

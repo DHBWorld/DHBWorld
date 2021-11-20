@@ -96,7 +96,7 @@ public class UserInteraction extends AppCompatActivity {
         zustandDrukerTV= findViewById(R.id.zustand_druker);
 
         zustandKantine=InteractionState.QUEUE_ABCENT;
-        zustandKaffee=InteractionState.NORMAL;
+        zustandKaffee=InteractionState.DEFECT;
         zustandDruker=InteractionState.NORMAL;
 
         zustandKantineTV.setText(getResources().getString(R.string.zustand)+" "+zustandKantine.getText());
