@@ -11,8 +11,10 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
@@ -20,28 +22,28 @@ import com.main.dhbworld.R;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
         FloatingActionButton editButton;
-        Button saveButton;
-        Button cancelButton;
+        MaterialButton saveButton;
+        MaterialButton cancelButton;
         TextView name;
         TextView mNumber;
         TextView lNumber;
         TextView studentMail;
         TextView freeNotes;
-
         SharedPreferences sp;
-        public static final String MyPREFERENCES = "" ;
-        public static final String Name = "";
-        public static final String LibraryNumber = "";
-        public static final String MatriculationNumber = "";
-        public static final String  StudentMail= "";
-        public static final String FreeNotes = "";
+
+        public static final String MyPREFERENCES = "myPreferencesKey" ;
+        public static final String Name = "nameKey";
+        public static final String LibraryNumber = "libraryNumberKey";
+        public static final String MatriculationNumber = "matriculationNumberKey";
+        public static final String StudentMail= "studentMailKey";
+        public static final String FreeNotes = "freeNotesKey";
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        /*sp = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);*/
         editButton = findViewById(R.id.edit_Button);
         saveButton = findViewById(R.id.save_Button);
         cancelButton = findViewById(R.id.cancel_Button);
@@ -57,6 +59,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         studentMail.setEnabled(false);
         freeNotes.setEnabled(false);
 
+        loadAndUpdateData();
+
         MaterialToolbar toolbar = findViewById(R.id.topAppBar);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -68,7 +72,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         });
 
 
-        sp = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+
 
 
 
@@ -98,23 +102,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             studentMail.setEnabled(false);
             freeNotes.setEnabled(false);
 
-            String n = name.getText().toString();
-            String m = mNumber.getText().toString();
-            String l = lNumber.getText().toString();
-            String s = studentMail.getText().toString();
-            String f = freeNotes.getText().toString();
+            saveData();
+            /*SharedPreferences.Editor editor = sp.edit();
 
-            SharedPreferences.Editor editor = sp.edit();
-
-            editor.putString(Name,n);
-            editor.putString(MatriculationNumber,m);
-            editor.putString(LibraryNumber,l);
-            editor.putString(StudentMail,s);
-            editor.putString(FreeNotes,f);
+            editor.putString(Name, name.getText().toString());
+            editor.putString(LibraryNumber, lNumber.getText().toString());
+            editor.putString(MatriculationNumber, mNumber.getText().toString());
+            editor.putString(StudentMail, studentMail.getText().toString());
+            editor.putString(FreeNotes, freeNotes.getText().toString());
             editor.apply();
-
-
-
+            Toast.makeText(this, "Data saved", Toast.LENGTH_SHORT).show();
+            */
         });
 
         cancelButton.setOnClickListener(v -> {
@@ -139,5 +137,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View v) {
 
+    }
+
+    public void saveData(){
+        sp = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+
+        editor.putString(Name, name.getText().toString());
+        editor.putString(LibraryNumber, lNumber.getText().toString());
+        editor.putString(MatriculationNumber, mNumber.getText().toString());
+        editor.putString(StudentMail, studentMail.getText().toString());
+        editor.putString(FreeNotes, freeNotes.getText().toString());
+        editor.apply();
+        Toast.makeText(this, "Data saved", Toast.LENGTH_SHORT).show();
+    }
+
+    public void loadAndUpdateData(){
+        sp = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+        name.setText(sp.getString(Name, ""));
+        mNumber.setText(sp.getString(MatriculationNumber,""));
+        lNumber.setText(sp.getString(LibraryNumber, ""));
+        studentMail.setText(sp.getString(StudentMail,""));
+        freeNotes.setText(sp.getString(FreeNotes,""));
     }
 }
