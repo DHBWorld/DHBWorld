@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        /*sp = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);*/
+        //instantiate buttons, text fields
         editButton = findViewById(R.id.edit_Button);
         saveButton = findViewById(R.id.save_Button);
         cancelButton = findViewById(R.id.cancel_Button);
@@ -71,17 +71,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
 
-
-
-
-
-
-
         editButton.setOnClickListener(v -> {
+            //visibility off buttons
             editButton.setVisibility(View.INVISIBLE);
             saveButton.setVisibility(View.VISIBLE);
             cancelButton.setVisibility(View.VISIBLE);
-
+            //enabling text field
             name.setEnabled(true);
             mNumber.setEnabled(true);
             lNumber.setEnabled(true);
@@ -91,11 +86,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         });
 
         saveButton.setOnClickListener(v -> {
-
+            //visibility off buttons
             editButton.setVisibility(View.VISIBLE);
             saveButton.setVisibility(View.INVISIBLE);
             cancelButton.setVisibility(View.INVISIBLE);
-
+            //disabling text field
             name.setEnabled(false);
             mNumber.setEnabled(false);
             lNumber.setEnabled(false);
@@ -103,28 +98,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             freeNotes.setEnabled(false);
 
             saveData();
-            /*SharedPreferences.Editor editor = sp.edit();
 
-            editor.putString(Name, name.getText().toString());
-            editor.putString(LibraryNumber, lNumber.getText().toString());
-            editor.putString(MatriculationNumber, mNumber.getText().toString());
-            editor.putString(StudentMail, studentMail.getText().toString());
-            editor.putString(FreeNotes, freeNotes.getText().toString());
-            editor.apply();
-            Toast.makeText(this, "Data saved", Toast.LENGTH_SHORT).show();
-            */
         });
 
         cancelButton.setOnClickListener(v -> {
+            //visibility off buttons
             editButton.setVisibility(View.VISIBLE);
             saveButton.setVisibility(View.INVISIBLE);
             cancelButton.setVisibility(View.INVISIBLE);
-
+            //disabling text field
             name.setEnabled(false);
             mNumber.setEnabled(false);
             lNumber.setEnabled(false);
             studentMail.setEnabled(false);
             freeNotes.setEnabled(false);
+
+            loadAndUpdateData();
         });
 
 
@@ -140,19 +129,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void saveData(){
+        //instantiate the SharedPreferences
         sp = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
-
+        //put the data into it
         editor.putString(Name, name.getText().toString());
         editor.putString(LibraryNumber, lNumber.getText().toString());
         editor.putString(MatriculationNumber, mNumber.getText().toString());
         editor.putString(StudentMail, studentMail.getText().toString());
         editor.putString(FreeNotes, freeNotes.getText().toString());
         editor.apply();
+        //show a message to the user
         Toast.makeText(this, "Data saved", Toast.LENGTH_SHORT).show();
     }
 
     public void loadAndUpdateData(){
+        //load the data and put it into the text field
         sp = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
         name.setText(sp.getString(Name, ""));
         mNumber.setText(sp.getString(MatriculationNumber,""));
