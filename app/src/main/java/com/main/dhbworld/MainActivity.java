@@ -97,7 +97,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             studentMail.setEnabled(false);
             freeNotes.setEnabled(false);
 
-            saveData();
+            //check MNumber and LNumber if they are too long
+            if(checkLNumber(lNumber.getText().toString()) && checkMNumber(mNumber.getText().toString())){
+                saveData();
+            }else{
+                //loadandupdate to set the text fields to the status before. then show a msg to the user
+                loadAndUpdateData();
+                Toast.makeText(this, "Data could not be saved", Toast.LENGTH_SHORT).show();
+            }
+
 
         });
 
@@ -125,6 +133,46 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
+
+    }
+
+    public boolean checkLNumber(String l){
+        if(l.isEmpty()){
+            return true;
+        }else{
+            try{
+                long libraryNumberLength = Long.parseLong(l);
+                if(libraryNumberLength>999999999999l){
+                    Toast.makeText(this, "[Bibliotheksnummer] should only contain 12 digits", Toast.LENGTH_SHORT).show();
+                    return false;
+                }else{
+                    return true;
+                }
+            }catch(NumberFormatException g){
+                Toast.makeText(this, "[Bibliotheksnummer] does not contain only digits", Toast.LENGTH_SHORT).show();
+                return false;
+            }
+        }
+    }
+
+    public boolean checkMNumber(String m){
+        if(m.isEmpty()){
+            return true;
+        }else{
+            try{
+                int matriculationNumberLength = Integer.parseInt(m);
+                if(matriculationNumberLength>9999999){
+                    Toast.makeText(this, "[Matrikelnummer] should only contain 7 digits", Toast.LENGTH_SHORT).show();
+                    return false;
+                }else{
+                    return true;
+                }
+            }catch (NumberFormatException g){
+                Toast.makeText(this, "[Matrikelnummer] does not contain only digits", Toast.LENGTH_SHORT).show();
+                return false;
+            }
+        }
+
 
     }
 
