@@ -9,6 +9,7 @@ public enum InteractionState {
     NORMAL("Funktioniert", R.color.black),
     DEFECT("Defekt", R.color.grey_light),
     CLEANING("wird sauber gemacht", R.color.grey_light),
+
     QUEUE_LONG("lange Schlange", R.color.red_dark),
     QUEUE_MIDDLE("mittlere Schlange", R.color.red),
     QUEUE_KURZ("kurze Schlange", R.color.teal_700),
@@ -20,6 +21,7 @@ public enum InteractionState {
 
     private int color;
     private String text;
+
     InteractionState(String text, int color){
         this.color= color;
         this.text=text;

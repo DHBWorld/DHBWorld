@@ -1,9 +1,7 @@
 package com.main.dhbworld;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentManager;
 
-import android.content.DialogInterface;
 import android.content.res.Resources;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
@@ -12,12 +10,14 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.main.dhbworld.Enums.InteractionState;
+
 import com.main.dhbworld.Fragments.DialogCofirmationUserInteraction;
 
+import java.util.ArrayList;
+
 public class UserInteraction extends AppCompatActivity {
-    private Button[] ja;
+    private ArrayList <Button> ja;
     private Button[] nein;
 
     private TextView zustandKantineTV;
@@ -53,26 +53,47 @@ public class UserInteraction extends AppCompatActivity {
     }
 
     private void jaNeinButtonsManagement(){
-        ja =new Button[3];
-        ja[0]= findViewById(R.id.ja0);
+        ja =new ArrayList<Button> ();
+        ja.add(findViewById(R.id.ja0));
+        ja.add(findViewById(R.id.ja1));
+        ja.add(findViewById(R.id.ja2));
+        /*ja[0]= findViewById(R.id.ja0);
         ja[1]= findViewById(R.id.ja1);
-        ja[2]= findViewById(R.id.ja2);
+        ja[2]= findViewById(R.id.ja2);*/
 
         nein =new Button[3];
         nein[0]= findViewById(R.id.nein0);
         nein[1]= findViewById(R.id.nein1);
         nein[2]= findViewById(R.id.nein2);
 
+        String[][] states= new String[3][];
+        states[0]= new String[]{InteractionState.QUEUE_KURZ.getText(), InteractionState.QUEUE_MIDDLE.getText(), InteractionState.QUEUE_LONG.getText()};
+        states[1]= new String[]{InteractionState.CLEANING.getText(), InteractionState.DEFECT.getText()};
+        states[2]= new String[]{"", ""};
+
         for(Button j:ja){
             j.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    DialogCofirmationUserInteraction confirmation= new DialogCofirmationUserInteraction(UserInteraction.this, R.string.moechten_sie_event_melden, R.string.problem_melden);
+
+                    DialogCofirmationUserInteraction confirmation= new DialogCofirmationUserInteraction(UserInteraction.this, states[ja.indexOf(j)] , R.string.problem_melden);
                     confirmation.show();
 
                     //Backend logik: Ein Event wurde gemeldet
 
-                }});}
+                }});
+
+        }
+
+        ja.get(2).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DialogCofirmationUserInteraction confirmation= new DialogCofirmationUserInteraction(UserInteraction.this, R.string.moechten_sie_melden_dass_der_drucker_kaputt_ist, R.string.problem_melden);
+                confirmation.show();
+
+                //Backend logik: Ein Event wurde gemeldet
+            }
+        });
 
 
 
@@ -82,6 +103,7 @@ public class UserInteraction extends AppCompatActivity {
                 public void onClick(View v) {
                     DialogCofirmationUserInteraction confirmation= new DialogCofirmationUserInteraction(UserInteraction.this, R.string.moechten_sie_das_problem_besteht_nicht_mehr, R.string.problem_ist_geloest);
                     confirmation.show();
+
 
                     //Backend logik: Das Event besteht nicht mehr
 
@@ -95,7 +117,7 @@ public class UserInteraction extends AppCompatActivity {
         zustandKaffeeTV= findViewById(R.id.zustand_kaffee);
         zustandDrukerTV= findViewById(R.id.zustand_druker);
 
-        zustandKantine=InteractionState.QUEUE_ABCENT;
+        zustandKantine=InteractionState.QUEUE_LONG;
         zustandKaffee=InteractionState.DEFECT;
         zustandDruker=InteractionState.NORMAL;
 
