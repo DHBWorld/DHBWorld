@@ -10,4 +10,6 @@
     <string name="kaffeemaschine">Kaffeemaschine</string>
     <string name="zustand">Zustand:</string>
     <string name="bisherigen_meldungen">Bisherigen Meldungen:</string>
+    <string name="warnings">Warnungen</string>
+    <string name="nitifications_for_important_events">Nachrichten zu wichtigen Events</string>
 </resources>

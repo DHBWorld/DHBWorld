@@ -154,6 +154,7 @@
                 android:orientation="horizontal">
 
                 <com.google.android.material.button.MaterialButton
+                    android:id="@+id/cantine_yes"
                     style="?attr/borderlessButtonStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -161,6 +162,7 @@
                     android:text="@string/ja" />
 
                 <com.google.android.material.button.MaterialButton
+                    android:id="@+id/cantine_no"
                     style="?attr/borderlessButtonStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

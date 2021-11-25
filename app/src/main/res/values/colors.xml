@@ -11,4 +11,7 @@
     <color name="red_dark">#A2001A</color>
     <color name="grey_dark">#4A5360</color>
     <color name="grey_light">#9CA0A4</color>
+    <color name="notification_warning">#EF6C00</color>
+    <color name="notification_alarm">@color/red_dark</color>
+    <color name="notification_all_clear">#2E7D32</color>
 </resources>
