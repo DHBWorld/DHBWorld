@@ -36,25 +36,43 @@ public class UserInteractionMessagingService extends FirebaseMessagingService {
             new Handler(Looper.getMainLooper()).post(new Runnable() {
                 @Override
                 public void run() {
-                    String title = remoteMessage.getNotification().getTitle();
-                    String message = remoteMessage.getNotification().getBody();
                     String category = remoteMessage.getData().get("category");
-                    if (title == null || message == null || category == null) {
+                    if (category == null || remoteMessage.getData().get("problem") == null) {
                         return;
                     }
+                    int problem = Integer.parseInt(remoteMessage.getData().get("problem"));
+                    String title = "";
+                    switch (category) {
+                        case Utilities.CATEGORY_CAFETERIA:
+                            title = "Kantine";
+                            break;
+                        case Utilities.CATEGORY_COFFEE:
+                            title = "Kaffeemaschine";
+                            break;
+                        case Utilities.CATEGORY_PRINTER:
+                            title = "Drucker";
+                            break;
+                    }
+
+                    //TODO: Nicht die Nummer ausgeben sonder enum von Daria
+                    String message = "Der Status der Kategorie hat sich geändert in: " + problem;
+
                     NotificationManagerCompat notificationManager = NotificationManagerCompat.from(getApplicationContext());
                     notificationManager.cancel(0);
 
-                    if (title.contains("Warnung") || title.contains("Alarm")) {
+                    if (problem != 0) {
                         UpdateEventsReceiver.setReceiver(getApplicationContext(), category);
                     }
 
+                    //TODO: FARBEN NOCH EINBINDEN
+
+
                     int color = getResources().getColor(R.color.notification_all_clear);
-                    if (title.contains("Warnung")) {
-                        color = getResources().getColor(R.color.notification_warning);
-                    } else if (title.contains("Alarm")) {
-                        color = getResources().getColor(R.color.notification_alarm);
-                    }
+                    //if (title.contains("Warnung")) {
+                    //    color = getResources().getColor(R.color.notification_warning);
+                    //} else if (title.contains("Alarm")) {
+                    //    color = getResources().getColor(R.color.notification_alarm);
+                    //}
 
                     int icon = R.drawable.baseline_coffee_maker_24;
                     if (category.equals(Utilities.CATEGORY_CAFETERIA)) {

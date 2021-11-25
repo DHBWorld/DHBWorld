@@ -55,15 +55,12 @@ public class Utilities {
     private SharedPreferences preferences;
     private SharedPreferences.Editor editor;
 
-    private Context context;
-
     /**
      * Utilities constructor
      * @param context of the calling Class
      */
 
     public Utilities(Context context) {
-        this.context = context;
         database = FirebaseDatabase.getInstance();
         database.useEmulator(emulatorIp, 9000);
 
@@ -109,6 +106,10 @@ public class Utilities {
         this.dataSendListener = dataSendListener;
     }
 
+    /**
+     * Set a currentStatusListener, gets called when the status is returned
+     * @param currentStatusListener gets set
+     */
     public void setCurrentStatusListener(CurrentStatusListener currentStatusListener) {
         this.currentStatusListener = currentStatusListener;
     }
@@ -179,101 +180,26 @@ public class Utilities {
         });
     }
 
+    /**
+     * Gets the current Status of a set category
+     * @param category is the category of which the status should be loaded
+     * @see #setCurrentStatusListener(CurrentStatusListener)
+     */
     public void getCurrentStatus(String category) {
         if (currentStatusListener == null) {
             return;
         }
 
-        DatabaseReference issueDatabase = getIssueDatabase(category);
+        DatabaseReference issueDatabase = getIssueDatabase().child(category + "Status");
         issueDatabase.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DataSnapshot> task) {
                 if (task.isSuccessful() && task.getResult() != null) {
-                    if (category.equals(CATEGORY_CAFETERIA)) {
-                        int[] count = new int[7];
-                        int sumOfWeights = 0;
-                        int numberTimesWeight = 0;
-                        int reportCount = 0;
-                        for (DataSnapshot dataSnapshot : task.getResult().getChildren()) {
-                            Issue issue = dataSnapshot.getValue(Issue.class);
-                            count[issue.getProblem()]++;
-                            reportCount++;
-                        }
-                        for (int i = 0; i < 7; i++) {
-                            numberTimesWeight = numberTimesWeight + (i * count[i]);
-                            sumOfWeights = sumOfWeights + count[i];
-                        }
-
-                        if (reportCount < 5 || sumOfWeights == 0/*Anzahl Personen minimum*/) {
-                            currentStatusListener.onStatusReceived(category, PROBLEM_FUNCTIONING);
-                            return;
-                        }
-                        int finalProblem = (int) Math.round((double) numberTimesWeight / sumOfWeights);
-                        currentStatusListener.onStatusReceived(category, finalProblem);
-                        Toast.makeText(context, "" + finalProblem, Toast.LENGTH_LONG).show();
-                    } else {
-                        int[] count = new int[7];
-                        int max = 0;
-                        int currentProblem = 0;
-                        int reportCount = 0;
-
-                        for (DataSnapshot dataSnapshot : task.getResult().getChildren()) {
-                            Issue issue = dataSnapshot.getValue(Issue.class);
-                            count[issue.getProblem()]++;
-                            reportCount++;
-                        }
-
-                        for (int i=0; i<7; i++) {
-                            if (count[i] > max) {
-                                max = count[i];
-                                currentProblem = i;
-                            }
-                        }
-
-                        if (reportCount < 5) {
-                            currentStatusListener.onStatusReceived(category, PROBLEM_FUNCTIONING);
-                            return;
-                        }
-
-                        currentStatusListener.onStatusReceived(category, currentProblem);
-                        Toast.makeText(context, ""+currentProblem, Toast.LENGTH_LONG).show();
-                    }
+                    currentStatusListener.onStatusReceived(category, task.getResult().getValue(int.class));
                 }
             }
         });
     }
-
-    //public void getCurrentStatus(String category) {
-    //    if (currentStatusListener == null) {
-    //        return;
-    //    }
-    //    DatabaseReference issuesDatabase = getIssueDatabase(category);
-    //    issuesDatabase.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-    //        @Override
-    //        public void onComplete(@NonNull Task<DataSnapshot> task) {
-    //            if (task.isSuccessful() && task.getResult() != null) {
-    //                int count = 0;
-    //                for (DataSnapshot dataSnapshot : task.getResult().getChildren()) {
-    //                    Issue issue = dataSnapshot.getValue(Issue.class);
-    //                    if (issue != null) {
-    //                        if (issue.isProblem()) {
-    //                            count++;
-    //                        } else {
-    //                            count--;
-    //                        }
-    //                    }
-    //                }
-    //                if (count < 5) {
-    //                    currentStatusListener.onStatusReceived(category, STATUS_ALL_CLEAR);
-    //                } else if (count < 10) {
-    //                    currentStatusListener.onStatusReceived(category, STATUS_WARNING);
-    //                } else {
-    //                    currentStatusListener.onStatusReceived(category, STATUS_ALARM);
-    //                }
-    //            }
-    //        }
-    //    });
-    //}
 
     /**
      * Subscribe to a topic to which the push-notifications are send
@@ -302,6 +228,10 @@ public class Utilities {
 
     private DatabaseReference getIssueDatabase(String category) {
         return database.getReference().child("issues").child(category);
+    }
+
+    private DatabaseReference getIssueDatabase() {
+        return database.getReference().child("issues");
     }
 
 }
