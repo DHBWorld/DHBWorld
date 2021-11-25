@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.main.dhbworld.Enums.InteractionState;
@@ -18,7 +19,7 @@ import java.util.ArrayList;
 
 public class UserInteraction extends AppCompatActivity {
     private ArrayList <Button> ja;
-    private Button[] nein;
+    private ArrayList <Button>  nein;
 
     private TextView zustandKantineTV;
     private TextView zustandKaffeeTV;
@@ -35,9 +36,9 @@ public class UserInteraction extends AppCompatActivity {
     private int meldungenKaffee;
     private int meldungenDruker;
 
-    private ImageView bildKantine;
-    private ImageView bildKaffee;
-    private ImageView bildDruker;
+    private LinearLayout imageBox_kantine;
+    private LinearLayout imageBox_kaffee;
+    private LinearLayout imageBox_drucker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,18 +54,16 @@ public class UserInteraction extends AppCompatActivity {
     }
 
     private void jaNeinButtonsManagement(){
-        ja =new ArrayList<Button> ();
+        ja =new ArrayList<> ();
         ja.add(findViewById(R.id.ja0));
         ja.add(findViewById(R.id.ja1));
         ja.add(findViewById(R.id.ja2));
-        /*ja[0]= findViewById(R.id.ja0);
-        ja[1]= findViewById(R.id.ja1);
-        ja[2]= findViewById(R.id.ja2);*/
 
-        nein =new Button[3];
-        nein[0]= findViewById(R.id.nein0);
-        nein[1]= findViewById(R.id.nein1);
-        nein[2]= findViewById(R.id.nein2);
+
+        nein =new ArrayList<> ();
+        nein.add(findViewById(R.id.nein0));
+        nein.add(findViewById(R.id.nein1));
+        nein.add(findViewById(R.id.nein2));
 
         String[][] states= new String[3][];
         states[0]= new String[]{InteractionState.QUEUE_KURZ.getText(), InteractionState.QUEUE_MIDDLE.getText(), InteractionState.QUEUE_LONG.getText()};
@@ -117,8 +116,8 @@ public class UserInteraction extends AppCompatActivity {
         zustandKaffeeTV= findViewById(R.id.zustand_kaffee);
         zustandDrukerTV= findViewById(R.id.zustand_druker);
 
-        zustandKantine=InteractionState.QUEUE_LONG;
-        zustandKaffee=InteractionState.DEFECT;
+        zustandKantine=InteractionState.QUEUE_ABCENT;
+        zustandKaffee=InteractionState.NORMAL;
         zustandDruker=InteractionState.NORMAL;
 
         zustandKantineTV.setText(getResources().getString(R.string.zustand)+" "+zustandKantine.getText());
@@ -126,13 +125,14 @@ public class UserInteraction extends AppCompatActivity {
         zustandDrukerTV.setText(getResources().getString(R.string.zustand)+" "+zustandDruker.getText());
 
         Resources res = getResources();
-        bildKantine=  findViewById(R.id.bild_kantine);
-        bildKaffee=  findViewById(R.id.bild_kaffee);
-        bildDruker=  findViewById(R.id.bild_druker);
 
-        bildKantine.setColorFilter(res.getColor(zustandKantine.getColor()), PorterDuff.Mode.SRC_ATOP);
-        bildKaffee.setColorFilter(res.getColor(zustandKaffee.getColor()), PorterDuff.Mode.SRC_ATOP);
-        bildDruker.setColorFilter(res.getColor(zustandDruker.getColor()), PorterDuff.Mode.SRC_ATOP);
+        imageBox_kantine= findViewById(R.id.imageBox_kantine);
+        imageBox_kaffee= findViewById(R.id.imageBox_kaffee);
+        imageBox_drucker= findViewById(R.id.imageBox_drucker);
+
+        imageBox_kantine.setBackgroundColor(res.getColor(zustandKantine.getColor()));
+        imageBox_kaffee.setBackgroundColor(res.getColor(zustandKaffee.getColor()));
+        imageBox_drucker.setBackgroundColor(res.getColor(zustandDruker.getColor()));
     }
 
     private void meldungenManagement(){

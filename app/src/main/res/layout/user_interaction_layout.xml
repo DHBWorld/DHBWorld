@@ -36,6 +36,7 @@
             >
 
         <LinearLayout
+            android:id="@+id/imageBox_kantine"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:orientation="vertical"
@@ -202,6 +203,7 @@
                 >
 
                 <LinearLayout
+                    android:id="@+id/imageBox_kaffee"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:orientation="vertical"
@@ -360,6 +362,7 @@
                 >
 
                 <LinearLayout
+                    android:id="@+id/imageBox_drucker"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:orientation="vertical"
