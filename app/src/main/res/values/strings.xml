@@ -9,7 +9,13 @@
     <string name="nein">Nein</string>
     <string name="kaffeemaschine">Kaffeemaschine</string>
     <string name="zustand">Zustand:</string>
-    <string name="bisherigen_meldungen">Bisherigen Meldungen:</string>
-    <string name="warnings">Warnungen</string>
-    <string name="nitifications_for_important_events">Nachrichten zu wichtigen Events</string>
+    <string name="bisherigen_meldungen">Bisherigen Meldungen: </string>
+    <string name="moechten_sie_event_melden">Möchten Sie den das Problem melden?</string>
+    <string name="sind_sie_sicher">Sind Sie sicher?</string>
+    <string name="abbrechen">Abbrechen</string>
+    <string name="problem_melden">Problem melden</string>
+    <string name="danke_fuer_event">Danke, dass Sie an unsrem Kommunikation-Service teilnehmen!</string>
+    <string name="moechten_sie_das_problem_besteht_nicht_mehr">Möchten Sie melden, dass das Problem nicht mehr besteht?</string>
+    <string name="problem_ist_geloest">Schon gelöst</string>
+    <string name="moechten_sie_melden_dass_der_drucker_kaputt_ist">Möchten Sie melden, dass der Drucker kaputt ist?</string>
 </resources>
