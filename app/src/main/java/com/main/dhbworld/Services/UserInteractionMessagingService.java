@@ -67,7 +67,7 @@ public class UserInteractionMessagingService extends FirebaseMessagingService {
                     //TODO: FARBEN NOCH EINBINDEN
 
 
-                    int color = getResources().getColor(R.color.notification_all_clear);
+                    int color = getResources().getColor(R.color.green_queue);
                     //if (title.contains("Warnung")) {
                     //    color = getResources().getColor(R.color.notification_warning);
                     //} else if (title.contains("Alarm")) {
@@ -128,10 +128,11 @@ public class UserInteractionMessagingService extends FirebaseMessagingService {
     }
 
     private void createNotificationChannel() {
+        //TODO String ändern
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             int importance = NotificationManager.IMPORTANCE_HIGH;
-            NotificationChannel channel = new NotificationChannel("warnings", getString(R.string.warnings), importance);
-            channel.setDescription(getString(R.string.nitifications_for_important_events));
+            NotificationChannel channel = new NotificationChannel("warnings", "Warnungen", importance);
+            channel.setDescription("Test Channel");
             NotificationManager notificationManager = getSystemService(NotificationManager.class);
             notificationManager.createNotificationChannel(channel);
         }

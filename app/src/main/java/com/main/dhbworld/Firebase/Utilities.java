@@ -165,6 +165,11 @@ public class Utilities {
         issuesDatabase.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DataSnapshot> task) {
+                if (task.isSuccessful() && dataSendListener != null) {
+                    dataSendListener.success();
+                } else if (dataSendListener != null) {
+                    dataSendListener.failed(task.getException());
+                }
                 if (task.isSuccessful() && task.getResult() != null) {
                     Issue issue = task.getResult().getValue(Issue.class);
                     if (issue == null) {
@@ -195,7 +200,11 @@ public class Utilities {
             @Override
             public void onComplete(@NonNull Task<DataSnapshot> task) {
                 if (task.isSuccessful() && task.getResult() != null) {
-                    currentStatusListener.onStatusReceived(category, task.getResult().getValue(int.class));
+                    if (task.getResult().getValue() == null) {
+                        currentStatusListener.onStatusReceived(category, 0);
+                    } else {
+                        currentStatusListener.onStatusReceived(category, task.getResult().getValue(int.class));
+                    }
                 }
             }
         });
@@ -212,7 +221,6 @@ public class Utilities {
                         System.out.println("subscribed");
                     }
                 });
-
     }
 
     /**
@@ -223,7 +231,7 @@ public class Utilities {
     }
 
     private DatabaseReference getIssueDatabaseWithUser(String category) {
-        return database.getReference().child("issues").child(category).child(user.getUid() + System.currentTimeMillis());
+        return database.getReference().child("issues").child(category).child(user.getUid());
     }
 
     private DatabaseReference getIssueDatabase(String category) {

@@ -17,6 +17,7 @@ import com.main.dhbworld.R;
 public class DialogCofirmationUserInteraction extends MaterialAlertDialogBuilder {
 
     private String nameOfSelectedState;
+    private InteractionState selectedState;
 
 
     public DialogCofirmationUserInteraction(@NonNull Context context, int message, int buttonText) {
@@ -31,6 +32,7 @@ public class DialogCofirmationUserInteraction extends MaterialAlertDialogBuilder
                 dialog.cancel();
             }
         });
+        //TODO can be removed
         this.setPositiveButton(buttonText, new DialogInterface.OnClickListener() {
 
             @Override
@@ -45,21 +47,28 @@ public class DialogCofirmationUserInteraction extends MaterialAlertDialogBuilder
 
     }
 
-    public DialogCofirmationUserInteraction(@NonNull Context context, String[] states, int buttonText) {
+    public DialogCofirmationUserInteraction(@NonNull Context context, InteractionState[] states, int buttonText) {
         super(context);
         this.setTitle(R.string.sind_sie_sicher);
 
+        nameOfSelectedState = states[0].getText();
 
+        selectedState = states[0];
+
+        String[] stateNames = new String[states.length];
+        for (int i=0; i<states.length; i++) {
+            stateNames[i] = states[i].getText();
+        }
 
         this.setSingleChoiceItems(
-                states,
+                stateNames,
                 0,
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int item) {
 
-                        nameOfSelectedState=states[item];
-
+                        nameOfSelectedState=states[item].getText();
+                        selectedState = states[item];
 
                     }
                 }
@@ -71,6 +80,7 @@ public class DialogCofirmationUserInteraction extends MaterialAlertDialogBuilder
                 dialog.cancel();
             }
         });
+        //TODO can be removed
         this.setPositiveButton(buttonText, new DialogInterface.OnClickListener() {
 
             @Override
@@ -87,5 +97,9 @@ public class DialogCofirmationUserInteraction extends MaterialAlertDialogBuilder
 
     public String getNameOfSelectedState() {
         return nameOfSelectedState;
+    }
+
+    public InteractionState getSelectedState() {
+        return selectedState;
     }
 }

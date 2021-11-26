@@ -2,6 +2,7 @@ package com.main.dhbworld;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
 import android.content.res.Resources;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
@@ -10,9 +11,15 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseUser;
 import com.main.dhbworld.Enums.InteractionState;
 
+import com.main.dhbworld.Firebase.CurrentStatusListener;
+import com.main.dhbworld.Firebase.DataSendListener;
+import com.main.dhbworld.Firebase.SignedInListener;
+import com.main.dhbworld.Firebase.Utilities;
 import com.main.dhbworld.Fragments.DialogCofirmationUserInteraction;
 
 import java.util.ArrayList;
@@ -40,6 +47,8 @@ public class UserInteraction extends AppCompatActivity {
     private LinearLayout imageBox_kaffee;
     private LinearLayout imageBox_drucker;
 
+    private Utilities firebaseUtilities;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,7 +58,42 @@ public class UserInteraction extends AppCompatActivity {
         jaNeinButtonsManagement();
         meldungenManagement();
 
+        firebaseUtilities = new Utilities(this);
+        firebaseUtilities.setSignedInListener(new SignedInListener() {
+            @Override
+            public void onSignedIn(FirebaseUser user) {
+                Toast.makeText(UserInteraction.this, "Angemeldet", Toast.LENGTH_SHORT).show();
+            }
 
+            @Override
+            public void onSignInError() {
+
+            }
+        });
+        firebaseUtilities.setCurrentStatusListener(new CurrentStatusListener() {
+            @Override
+            public void onStatusReceived(String category, int status) {
+                //TODO bisherige Meldungen vom Server holen
+                Resources res = getResources();
+                if (category.equals(Utilities.CATEGORY_CAFETERIA)) {
+                    zustandKantine = InteractionState.parseId(status);
+                    zustandKantineTV.setText(getResources().getString(R.string.zustand)+" "+zustandKantine.getText());
+                    imageBox_kantine.setBackgroundColor(res.getColor(zustandKantine.getColor()));
+                } else if (category.equals(Utilities.CATEGORY_COFFEE)) {
+                    zustandKaffee = InteractionState.parseId(status);
+                    zustandKaffeeTV.setText(getResources().getString(R.string.zustand)+" "+zustandKaffee.getText());
+                    imageBox_kaffee.setBackgroundColor(res.getColor(zustandKaffee.getColor()));
+                } else if (category.equals(Utilities.CATEGORY_PRINTER)) {
+                    zustandDruker = InteractionState.parseId(status);
+                    zustandDrukerTV.setText(getResources().getString(R.string.zustand)+" "+zustandDruker.getText());
+                    imageBox_drucker.setBackgroundColor(res.getColor(zustandDruker.getColor()));
+                }
+            }
+        });
+
+        firebaseUtilities.signIn();
+
+        updateInteractionState();
 
     }
 
@@ -65,21 +109,47 @@ public class UserInteraction extends AppCompatActivity {
         nein.add(findViewById(R.id.nein1));
         nein.add(findViewById(R.id.nein2));
 
-        String[][] states= new String[3][];
-        states[0]= new String[]{InteractionState.QUEUE_KURZ.getText(), InteractionState.QUEUE_MIDDLE.getText(), InteractionState.QUEUE_LONG.getText()};
-        states[1]= new String[]{InteractionState.CLEANING.getText(), InteractionState.DEFECT.getText()};
-        states[2]= new String[]{"", ""};
+        InteractionState[][] states= new InteractionState[3][];
+        states[0]= new InteractionState[]{InteractionState.QUEUE_KURZ, InteractionState.QUEUE_MIDDLE, InteractionState.QUEUE_LONG};
+        states[1]= new InteractionState[]{InteractionState.CLEANING, InteractionState.DEFECT};
+        //states[2]= new String[]{"", ""};
 
         for(Button j:ja){
+            if (j.equals(ja.get(2))) {
+                continue;
+            }
             j.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 
                     DialogCofirmationUserInteraction confirmation= new DialogCofirmationUserInteraction(UserInteraction.this, states[ja.indexOf(j)] , R.string.problem_melden);
+                    confirmation.setPositiveButton(R.string.problem_melden, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            firebaseUtilities.setDataSendListener(new DataSendListener() {
+                                @Override
+                                public void success() {
+                                    //TODO Toast anpassen
+                                    Toast.makeText(UserInteraction.this, "Gesendet", Toast.LENGTH_SHORT).show();
+                                    updateInteractionState();
+                                }
+
+                                @Override
+                                public void failed(Exception reason) {
+                                    Toast.makeText(UserInteraction.this, "Fehler", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+
+                            String category = "";
+                            if (j.equals(ja.get(0))) {
+                                category = Utilities.CATEGORY_CAFETERIA;
+                            } else if (j.equals(ja.get(1))) {
+                                category = Utilities.CATEGORY_COFFEE;
+                            }
+                            firebaseUtilities.addToDatabase(category, confirmation.getSelectedState().getId());
+                        }
+                    });
                     confirmation.show();
-
-                    //Backend logik: Ein Event wurde gemeldet
-
                 }});
 
         }
@@ -90,10 +160,29 @@ public class UserInteraction extends AppCompatActivity {
                 DialogCofirmationUserInteraction confirmation= new DialogCofirmationUserInteraction(UserInteraction.this, R.string.moechten_sie_melden_dass_der_drucker_kaputt_ist, R.string.problem_melden);
                 confirmation.show();
 
-                //Backend logik: Ein Event wurde gemeldet
+                confirmation.setPositiveButton(R.string.problem_melden, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        firebaseUtilities.setDataSendListener(new DataSendListener() {
+                            @Override
+                            public void success() {
+                                //TODO Toast anpassen
+                                Toast.makeText(UserInteraction.this, "Gesendet", Toast.LENGTH_SHORT).show();
+                                updateInteractionState();
+                            }
+
+                            @Override
+                            public void failed(Exception reason) {
+                                Toast.makeText(UserInteraction.this, "Fehler", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+
+                        String category = Utilities.CATEGORY_PRINTER;
+                        firebaseUtilities.addToDatabase(category, InteractionState.DEFECT.getId());
+                    }
+                });
             }
         });
-
 
 
         for(Button n:nein){
@@ -101,12 +190,40 @@ public class UserInteraction extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     DialogCofirmationUserInteraction confirmation= new DialogCofirmationUserInteraction(UserInteraction.this, R.string.moechten_sie_das_problem_besteht_nicht_mehr, R.string.problem_ist_geloest);
+                    confirmation.setPositiveButton(R.string.problem_ist_geloest, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            firebaseUtilities.setDataSendListener(new DataSendListener() {
+                                @Override
+                                public void success() {
+                                    //TODO Toast anpassen
+                                    Toast.makeText(UserInteraction.this, "Gesendet", Toast.LENGTH_SHORT).show();
+                                    updateInteractionState();
+                                }
+
+                                @Override
+                                public void failed(Exception reason) {
+                                    Toast.makeText(UserInteraction.this, "Fehler", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+
+                            String category = "";
+                            int id = 0;
+                            if (n.equals(nein.get(0))) {
+                                category = Utilities.CATEGORY_CAFETERIA;
+                                id = 3;
+                            } else if (n.equals(nein.get(1))) {
+                                category = Utilities.CATEGORY_COFFEE;
+                            } else if (n.equals(nein.get(2))) {
+                                category = Utilities.CATEGORY_PRINTER;
+                            }
+                            firebaseUtilities.addToDatabase(category, id);
+                        }
+                    });
                     confirmation.show();
-
-
-                    //Backend logik: Das Event besteht nicht mehr
-
-                }});}
+                }
+            });
+        }
 
     }
 
@@ -148,6 +265,13 @@ public class UserInteraction extends AppCompatActivity {
         meldungenKaffeeTV.setText(getResources().getString(R.string.bisherigen_meldungen)+" "+Integer.toString(meldungenKaffee));
         meldungenDrukerTV.setText(getResources().getString(R.string.bisherigen_meldungen)+" "+Integer.toString(meldungenDruker));
 
+    }
+
+    private void updateInteractionState() {
+        String[] categories = new String[]{Utilities.CATEGORY_CAFETERIA, Utilities.CATEGORY_COFFEE, Utilities.CATEGORY_PRINTER};
+        for (int i=0; i<3; i++) {
+            firebaseUtilities.getCurrentStatus(categories[i]);
+        }
     }
 
     public InteractionState getZustandKantine() {
