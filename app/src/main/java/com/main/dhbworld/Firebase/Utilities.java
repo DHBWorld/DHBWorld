@@ -25,19 +25,6 @@ public class Utilities {
     public static final String CATEGORY_CAFETERIA = "cafeteria";
     public static final String CATEGORY_PRINTER = "printer";
 
-    public static final int PROBLEM_FUNCTIONING = 0;
-    public static final int PROBLEM_DEFECT = 1;
-    public static final int PROBLEM_CLEANING = 2;
-    public static final int PROBLEM_QUEUE_NO = 3;
-    public static final int PROBLEM_QUEUE_SHORT = 4;
-    public static final int PROBLEM_QUEUE_MIDDLE = 5;
-    public static final int PROBLEM_QUEUE_LONG = 6;
-
-
-    private static final int STATUS_ALL_CLEAR = 0;
-    private static final int STATUS_WARNING = 1;
-    private static final int STATUS_ALARM = 2;
-
     private static final long invalidateTime = 0 * 1000 * 10;
     private static final long invalidateTimeSwitch = 0 * 1000 * 10;
     private static final long invalidateTimeClicks = 0 * 1000 * 10;
@@ -231,7 +218,7 @@ public class Utilities {
     }
 
     private DatabaseReference getIssueDatabaseWithUser(String category) {
-        return database.getReference().child("issues").child(category).child(user.getUid());
+        return database.getReference().child("issues").child(category).child(user.getUid() + System.currentTimeMillis());
     }
 
     private DatabaseReference getIssueDatabase(String category) {
