@@ -36,6 +36,7 @@ public class Utilities {
     private SignedInListener signedInListener;
     private DataSendListener dataSendListener;
     private CurrentStatusListener currentStatusListener;
+    private ReportCountListener reportCountListener;
 
     private long lastClick = 0;
 
@@ -99,6 +100,10 @@ public class Utilities {
      */
     public void setCurrentStatusListener(CurrentStatusListener currentStatusListener) {
         this.currentStatusListener = currentStatusListener;
+    }
+
+    public void setReportCountListener(ReportCountListener reportCountListener) {
+        this.reportCountListener = reportCountListener;
     }
 
     /**
@@ -192,6 +197,23 @@ public class Utilities {
                     } else {
                         currentStatusListener.onStatusReceived(category, task.getResult().getValue(int.class));
                     }
+                }
+            }
+        });
+    }
+
+    public void getReportCount(String category) {
+        if (reportCountListener == null) {
+            return;
+        }
+        DatabaseReference issueDatabase = getIssueDatabase(category);
+        issueDatabase.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DataSnapshot> task) {
+                if (task.isSuccessful()) {
+                    reportCountListener.onReportCountReceived(category, task.getResult().getChildrenCount());
+                } else {
+                    reportCountListener.onReportCountReceived(category, 0);
                 }
             }
         });

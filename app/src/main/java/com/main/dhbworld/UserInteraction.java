@@ -18,6 +18,7 @@ import com.main.dhbworld.Enums.InteractionState;
 
 import com.main.dhbworld.Firebase.CurrentStatusListener;
 import com.main.dhbworld.Firebase.DataSendListener;
+import com.main.dhbworld.Firebase.ReportCountListener;
 import com.main.dhbworld.Firebase.SignedInListener;
 import com.main.dhbworld.Firebase.Utilities;
 import com.main.dhbworld.Fragments.DialogCofirmationUserInteraction;
@@ -39,9 +40,9 @@ public class UserInteraction extends AppCompatActivity {
     private InteractionState zustandKaffee;
     private InteractionState zustandDruker;
 
-    private int meldungenKantine;
-    private int meldungenKaffee;
-    private int meldungenDruker;
+    private long meldungenKantine;
+    private long meldungenKaffee;
+    private long meldungenDruker;
 
     private LinearLayout imageBox_kantine;
     private LinearLayout imageBox_kaffee;
@@ -75,18 +76,42 @@ public class UserInteraction extends AppCompatActivity {
             public void onStatusReceived(String category, int status) {
                 //TODO bisherige Meldungen vom Server holen
                 Resources res = getResources();
-                if (category.equals(Utilities.CATEGORY_CAFETERIA)) {
-                    zustandKantine = InteractionState.parseId(status);
-                    zustandKantineTV.setText(getResources().getString(R.string.zustand)+" "+zustandKantine.getText());
-                    imageBox_kantine.setBackgroundColor(res.getColor(zustandKantine.getColor()));
-                } else if (category.equals(Utilities.CATEGORY_COFFEE)) {
-                    zustandKaffee = InteractionState.parseId(status);
-                    zustandKaffeeTV.setText(getResources().getString(R.string.zustand)+" "+zustandKaffee.getText());
-                    imageBox_kaffee.setBackgroundColor(res.getColor(zustandKaffee.getColor()));
-                } else if (category.equals(Utilities.CATEGORY_PRINTER)) {
-                    zustandDruker = InteractionState.parseId(status);
-                    zustandDrukerTV.setText(getResources().getString(R.string.zustand)+" "+zustandDruker.getText());
-                    imageBox_drucker.setBackgroundColor(res.getColor(zustandDruker.getColor()));
+                switch (category) {
+                    case Utilities.CATEGORY_CAFETERIA:
+                        zustandKantine = InteractionState.parseId(status);
+                        zustandKantineTV.setText(getResources().getString(R.string.zustand) + " " + zustandKantine.getText());
+                        imageBox_kantine.setBackgroundColor(res.getColor(zustandKantine.getColor()));
+                        break;
+                    case Utilities.CATEGORY_COFFEE:
+                        zustandKaffee = InteractionState.parseId(status);
+                        zustandKaffeeTV.setText(getResources().getString(R.string.zustand) + " " + zustandKaffee.getText());
+                        imageBox_kaffee.setBackgroundColor(res.getColor(zustandKaffee.getColor()));
+                        break;
+                    case Utilities.CATEGORY_PRINTER:
+                        zustandDruker = InteractionState.parseId(status);
+                        zustandDrukerTV.setText(getResources().getString(R.string.zustand) + " " + zustandDruker.getText());
+                        imageBox_drucker.setBackgroundColor(res.getColor(zustandDruker.getColor()));
+                        break;
+                }
+            }
+        });
+
+        firebaseUtilities.setReportCountListener(new ReportCountListener() {
+            @Override
+            public void onReportCountReceived(String category, long reportCount) {
+                switch (category) {
+                    case Utilities.CATEGORY_CAFETERIA:
+                        meldungenKantine = reportCount;
+                        meldungenKantineTV.setText(getResources().getString(R.string.bisherigen_meldungen) + " " + reportCount);
+                        break;
+                    case Utilities.CATEGORY_COFFEE:
+                        meldungenKaffee = reportCount;
+                        meldungenKaffeeTV.setText(getResources().getString(R.string.bisherigen_meldungen) + " " + reportCount);
+                        break;
+                    case Utilities.CATEGORY_PRINTER:
+                        meldungenDruker = reportCount;
+                        meldungenDrukerTV.setText(getResources().getString(R.string.bisherigen_meldungen) + " " + reportCount);
+                        break;
                 }
             }
         });
@@ -258,12 +283,12 @@ public class UserInteraction extends AppCompatActivity {
         meldungenDrukerTV= findViewById(R.id.bisherige_meldungen_druker);
 
         meldungenKantine=0;
-        meldungenKaffee=1;
-        meldungenDruker=3;
+        meldungenKaffee=0;
+        meldungenDruker=0;
 
-        meldungenKantineTV.setText(getResources().getString(R.string.bisherigen_meldungen)+" "+Integer.toString(meldungenKantine));
-        meldungenKaffeeTV.setText(getResources().getString(R.string.bisherigen_meldungen)+" "+Integer.toString(meldungenKaffee));
-        meldungenDrukerTV.setText(getResources().getString(R.string.bisherigen_meldungen)+" "+Integer.toString(meldungenDruker));
+        meldungenKantineTV.setText(getResources().getString(R.string.bisherigen_meldungen)+" "+meldungenKantine);
+        meldungenKaffeeTV.setText(getResources().getString(R.string.bisherigen_meldungen)+" "+meldungenKaffee);
+        meldungenDrukerTV.setText(getResources().getString(R.string.bisherigen_meldungen)+" "+meldungenDruker);
 
     }
 
@@ -271,6 +296,7 @@ public class UserInteraction extends AppCompatActivity {
         String[] categories = new String[]{Utilities.CATEGORY_CAFETERIA, Utilities.CATEGORY_COFFEE, Utilities.CATEGORY_PRINTER};
         for (int i=0; i<3; i++) {
             firebaseUtilities.getCurrentStatus(categories[i]);
+            firebaseUtilities.getReportCount(categories[i]);
         }
     }
 
@@ -298,7 +324,7 @@ public class UserInteraction extends AppCompatActivity {
         this.zustandDruker = zustandDruker;
     }
 
-    public int getMeldungenKantine() {
+    public long getMeldungenKantine() {
         return meldungenKantine;
     }
 
@@ -306,7 +332,7 @@ public class UserInteraction extends AppCompatActivity {
         this.meldungenKantine = meldungenKantine;
     }
 
-    public int getMeldungenKaffee() {
+    public long getMeldungenKaffee() {
         return meldungenKaffee;
     }
 
@@ -314,7 +340,7 @@ public class UserInteraction extends AppCompatActivity {
         this.meldungenKaffee = meldungenKaffee;
     }
 
-    public int getMeldungenDruker() {
+    public long getMeldungenDruker() {
         return meldungenDruker;
     }
 
