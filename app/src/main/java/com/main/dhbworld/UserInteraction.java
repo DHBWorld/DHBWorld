@@ -4,11 +4,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.DialogInterface;
 import android.content.res.Resources;
-import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -26,27 +24,27 @@ import com.main.dhbworld.Fragments.DialogCofirmationUserInteraction;
 import java.util.ArrayList;
 
 public class UserInteraction extends AppCompatActivity {
-    private ArrayList <Button> ja;
-    private ArrayList <Button>  nein;
+    private ArrayList <Button> yes;
+    private ArrayList <Button> no;
 
-    private TextView zustandKantineTV;
-    private TextView zustandKaffeeTV;
-    private TextView zustandDrukerTV;
-    private TextView meldungenKantineTV;
-    private TextView meldungenKaffeeTV;
-    private TextView meldungenDrukerTV;
+    private TextView stateCanteenTV;
+    private TextView stateCoffeeTV;
+    private TextView statePrinterTV;
+    private TextView notificationCanteenTV;
+    private TextView notificationCoffeeTV;
+    private TextView notificationPrinterTV;
 
-    private InteractionState zustandKantine;
-    private InteractionState zustandKaffee;
-    private InteractionState zustandDruker;
+    private InteractionState stateCanteen;
+    private InteractionState stateCoffee;
+    private InteractionState statePrinter;
 
-    private long meldungenKantine;
-    private long meldungenKaffee;
-    private long meldungenDruker;
+    private long notificationCanteen;
+    private long notificationCoffee;
+    private long notificationPrinter;
 
-    private LinearLayout imageBox_kantine;
-    private LinearLayout imageBox_kaffee;
-    private LinearLayout imageBox_drucker;
+    private LinearLayout imageBox_canteen;
+    private LinearLayout imageBox_coffee;
+    private LinearLayout imageBox_printer;
 
     private Utilities firebaseUtilities;
 
@@ -55,9 +53,9 @@ public class UserInteraction extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.user_interaction_layout);
 
-        zustandManagement();
-        jaNeinButtonsManagement();
-        meldungenManagement();
+        stateManagement();
+        yesNoButtonsManagement();
+        notificationManagement();
 
         firebaseUtilities = new Utilities(this);
         firebaseUtilities.setSignedInListener(new SignedInListener() {
@@ -78,19 +76,19 @@ public class UserInteraction extends AppCompatActivity {
                 Resources res = getResources();
                 switch (category) {
                     case Utilities.CATEGORY_CAFETERIA:
-                        zustandKantine = InteractionState.parseId(status);
-                        zustandKantineTV.setText(getResources().getString(R.string.zustand) + " " + zustandKantine.getText());
-                        imageBox_kantine.setBackgroundColor(res.getColor(zustandKantine.getColor()));
+                        stateCanteen = InteractionState.parseId(status);
+                        stateCanteenTV.setText(getResources().getString(R.string.state) + " " + stateCanteen.getText());
+                        imageBox_canteen.setBackgroundColor(res.getColor(stateCanteen.getColor()));
                         break;
                     case Utilities.CATEGORY_COFFEE:
-                        zustandKaffee = InteractionState.parseId(status);
-                        zustandKaffeeTV.setText(getResources().getString(R.string.zustand) + " " + zustandKaffee.getText());
-                        imageBox_kaffee.setBackgroundColor(res.getColor(zustandKaffee.getColor()));
+                        stateCoffee = InteractionState.parseId(status);
+                        stateCoffeeTV.setText(getResources().getString(R.string.state) + " " + stateCoffee.getText());
+                        imageBox_coffee.setBackgroundColor(res.getColor(stateCoffee.getColor()));
                         break;
                     case Utilities.CATEGORY_PRINTER:
-                        zustandDruker = InteractionState.parseId(status);
-                        zustandDrukerTV.setText(getResources().getString(R.string.zustand) + " " + zustandDruker.getText());
-                        imageBox_drucker.setBackgroundColor(res.getColor(zustandDruker.getColor()));
+                        statePrinter = InteractionState.parseId(status);
+                        statePrinterTV.setText(getResources().getString(R.string.state) + " " + statePrinter.getText());
+                        imageBox_printer.setBackgroundColor(res.getColor(statePrinter.getColor()));
                         break;
                 }
             }
@@ -101,16 +99,16 @@ public class UserInteraction extends AppCompatActivity {
             public void onReportCountReceived(String category, long reportCount) {
                 switch (category) {
                     case Utilities.CATEGORY_CAFETERIA:
-                        meldungenKantine = reportCount;
-                        meldungenKantineTV.setText(getResources().getString(R.string.bisherigen_meldungen) + " " + reportCount);
+                        notificationCanteen = reportCount;
+                        notificationCanteenTV.setText(getResources().getString(R.string.previous_notifications) + " " + reportCount);
                         break;
                     case Utilities.CATEGORY_COFFEE:
-                        meldungenKaffee = reportCount;
-                        meldungenKaffeeTV.setText(getResources().getString(R.string.bisherigen_meldungen) + " " + reportCount);
+                        notificationCoffee = reportCount;
+                        notificationCoffeeTV.setText(getResources().getString(R.string.previous_notifications) + " " + reportCount);
                         break;
                     case Utilities.CATEGORY_PRINTER:
-                        meldungenDruker = reportCount;
-                        meldungenDrukerTV.setText(getResources().getString(R.string.bisherigen_meldungen) + " " + reportCount);
+                        notificationPrinter = reportCount;
+                        notificationPrinterTV.setText(getResources().getString(R.string.previous_notifications) + " " + reportCount);
                         break;
                 }
             }
@@ -122,33 +120,33 @@ public class UserInteraction extends AppCompatActivity {
 
     }
 
-    private void jaNeinButtonsManagement(){
-        ja =new ArrayList<> ();
-        ja.add(findViewById(R.id.ja0));
-        ja.add(findViewById(R.id.ja1));
-        ja.add(findViewById(R.id.ja2));
+    private void yesNoButtonsManagement(){
+        yes =new ArrayList<> ();
+        yes.add(findViewById(R.id.yes0));
+        yes.add(findViewById(R.id.yes1));
+        yes.add(findViewById(R.id.yes2));
 
 
-        nein =new ArrayList<> ();
-        nein.add(findViewById(R.id.nein0));
-        nein.add(findViewById(R.id.nein1));
-        nein.add(findViewById(R.id.nein2));
+        no =new ArrayList<> ();
+        no.add(findViewById(R.id.no0));
+        no.add(findViewById(R.id.no1));
+        no.add(findViewById(R.id.no2));
 
         InteractionState[][] states= new InteractionState[3][];
-        states[0]= new InteractionState[]{InteractionState.QUEUE_KURZ, InteractionState.QUEUE_MIDDLE, InteractionState.QUEUE_LONG};
+        states[0]= new InteractionState[]{InteractionState.QUEUE_SHORT, InteractionState.QUEUE_MIDDLE, InteractionState.QUEUE_LONG};
         states[1]= new InteractionState[]{InteractionState.CLEANING, InteractionState.DEFECT};
         //states[2]= new String[]{"", ""};
 
-        for(Button j:ja){
-            if (j.equals(ja.get(2))) {
+        for(Button j:yes){
+            if (j.equals(yes.get(2))) {
                 continue;
             }
             j.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 
-                    DialogCofirmationUserInteraction confirmation= new DialogCofirmationUserInteraction(UserInteraction.this, states[ja.indexOf(j)] , R.string.problem_melden);
-                    confirmation.setPositiveButton(R.string.problem_melden, new DialogInterface.OnClickListener() {
+                    DialogCofirmationUserInteraction confirmation= new DialogCofirmationUserInteraction(UserInteraction.this, states[yes.indexOf(j)] , R.string.problem_report);
+                    confirmation.setPositiveButton(R.string.problem_report, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                             firebaseUtilities.setDataSendListener(new DataSendListener() {
@@ -166,9 +164,9 @@ public class UserInteraction extends AppCompatActivity {
                             });
 
                             String category = "";
-                            if (j.equals(ja.get(0))) {
+                            if (j.equals(yes.get(0))) {
                                 category = Utilities.CATEGORY_CAFETERIA;
-                            } else if (j.equals(ja.get(1))) {
+                            } else if (j.equals(yes.get(1))) {
                                 category = Utilities.CATEGORY_COFFEE;
                             }
                             firebaseUtilities.addToDatabase(category, confirmation.getSelectedState().getId());
@@ -179,13 +177,13 @@ public class UserInteraction extends AppCompatActivity {
 
         }
 
-        ja.get(2).setOnClickListener(new View.OnClickListener() {
+        yes.get(2).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DialogCofirmationUserInteraction confirmation= new DialogCofirmationUserInteraction(UserInteraction.this, R.string.moechten_sie_melden_dass_der_drucker_kaputt_ist, R.string.problem_melden);
+                DialogCofirmationUserInteraction confirmation= new DialogCofirmationUserInteraction(UserInteraction.this, R.string.moechten_sie_melden_dass_der_drucker_kaputt_ist, R.string.problem_report);
                 confirmation.show();
 
-                confirmation.setPositiveButton(R.string.problem_melden, new DialogInterface.OnClickListener() {
+                confirmation.setPositiveButton(R.string.problem_report, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         firebaseUtilities.setDataSendListener(new DataSendListener() {
@@ -210,12 +208,12 @@ public class UserInteraction extends AppCompatActivity {
         });
 
 
-        for(Button n:nein){
+        for(Button n: no){
             n.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    DialogCofirmationUserInteraction confirmation= new DialogCofirmationUserInteraction(UserInteraction.this, R.string.moechten_sie_das_problem_besteht_nicht_mehr, R.string.problem_ist_geloest);
-                    confirmation.setPositiveButton(R.string.problem_ist_geloest, new DialogInterface.OnClickListener() {
+                    DialogCofirmationUserInteraction confirmation= new DialogCofirmationUserInteraction(UserInteraction.this, R.string.moechten_sie_das_problem_besteht_nicht_mehr, R.string.problem_ist_solved);
+                    confirmation.setPositiveButton(R.string.problem_ist_solved, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                             firebaseUtilities.setDataSendListener(new DataSendListener() {
@@ -234,12 +232,12 @@ public class UserInteraction extends AppCompatActivity {
 
                             String category = "";
                             int id = 0;
-                            if (n.equals(nein.get(0))) {
+                            if (n.equals(no.get(0))) {
                                 category = Utilities.CATEGORY_CAFETERIA;
                                 id = 3;
-                            } else if (n.equals(nein.get(1))) {
+                            } else if (n.equals(no.get(1))) {
                                 category = Utilities.CATEGORY_COFFEE;
-                            } else if (n.equals(nein.get(2))) {
+                            } else if (n.equals(no.get(2))) {
                                 category = Utilities.CATEGORY_PRINTER;
                             }
                             firebaseUtilities.addToDatabase(category, id);
@@ -252,43 +250,43 @@ public class UserInteraction extends AppCompatActivity {
 
     }
 
-    private void zustandManagement(){
+    private void stateManagement(){
 
-        zustandKantineTV= findViewById(R.id.zustand_kantine);
-        zustandKaffeeTV= findViewById(R.id.zustand_kaffee);
-        zustandDrukerTV= findViewById(R.id.zustand_druker);
+        stateCanteenTV = findViewById(R.id.state_canteen);
+        stateCoffeeTV = findViewById(R.id.state_coffee);
+        statePrinterTV = findViewById(R.id.state_printer);
 
-        zustandKantine=InteractionState.QUEUE_ABCENT;
-        zustandKaffee=InteractionState.NORMAL;
-        zustandDruker=InteractionState.NORMAL;
+        stateCanteen =InteractionState.QUEUE_ABCENT;
+        stateCoffee =InteractionState.NORMAL;
+        statePrinter =InteractionState.NORMAL;
 
-        zustandKantineTV.setText(getResources().getString(R.string.zustand)+" "+zustandKantine.getText());
-        zustandKaffeeTV.setText(getResources().getString(R.string.zustand)+" "+zustandKaffee.getText());
-        zustandDrukerTV.setText(getResources().getString(R.string.zustand)+" "+zustandDruker.getText());
+        stateCanteenTV.setText(getResources().getString(R.string.state)+" "+ stateCanteen.getText());
+        stateCoffeeTV.setText(getResources().getString(R.string.state)+" "+ stateCoffee.getText());
+        statePrinterTV.setText(getResources().getString(R.string.state)+" "+ statePrinter.getText());
 
         Resources res = getResources();
 
-        imageBox_kantine= findViewById(R.id.imageBox_kantine);
-        imageBox_kaffee= findViewById(R.id.imageBox_kaffee);
-        imageBox_drucker= findViewById(R.id.imageBox_drucker);
+        imageBox_canteen = findViewById(R.id.imageBox_canteen);
+        imageBox_coffee = findViewById(R.id.imageBox_coffee);
+        imageBox_printer = findViewById(R.id.imageBox_printer);
 
-        imageBox_kantine.setBackgroundColor(res.getColor(zustandKantine.getColor()));
-        imageBox_kaffee.setBackgroundColor(res.getColor(zustandKaffee.getColor()));
-        imageBox_drucker.setBackgroundColor(res.getColor(zustandDruker.getColor()));
+        imageBox_canteen.setBackgroundColor(res.getColor(stateCanteen.getColor()));
+        imageBox_coffee.setBackgroundColor(res.getColor(stateCoffee.getColor()));
+        imageBox_printer.setBackgroundColor(res.getColor(statePrinter.getColor()));
     }
 
-    private void meldungenManagement(){
-        meldungenKantineTV= findViewById(R.id.bisherige_meldungen_kantine);
-        meldungenKaffeeTV= findViewById(R.id.bisherige_meldungen_kaffe);
-        meldungenDrukerTV= findViewById(R.id.bisherige_meldungen_druker);
+    private void notificationManagement(){
+        notificationCanteenTV = findViewById(R.id.previous_notifications_canteen);
+        notificationCoffeeTV = findViewById(R.id.previous_notifications_coffee);
+        notificationPrinterTV = findViewById(R.id.previous_notifications_printer);
 
-        meldungenKantine=0;
-        meldungenKaffee=0;
-        meldungenDruker=0;
+        notificationCanteen =0;
+        notificationCoffee =0;
+        notificationPrinter =0;
 
-        meldungenKantineTV.setText(getResources().getString(R.string.bisherigen_meldungen)+" "+meldungenKantine);
-        meldungenKaffeeTV.setText(getResources().getString(R.string.bisherigen_meldungen)+" "+meldungenKaffee);
-        meldungenDrukerTV.setText(getResources().getString(R.string.bisherigen_meldungen)+" "+meldungenDruker);
+        notificationCanteenTV.setText(getResources().getString(R.string.previous_notifications)+" "+ notificationCanteen);
+        notificationCoffeeTV.setText(getResources().getString(R.string.previous_notifications)+" "+ notificationCoffee);
+        notificationPrinterTV.setText(getResources().getString(R.string.previous_notifications)+" "+ notificationPrinter);
 
     }
 
@@ -300,51 +298,51 @@ public class UserInteraction extends AppCompatActivity {
         }
     }
 
-    public InteractionState getZustandKantine() {
-        return zustandKantine;
+    public InteractionState getStateCanteen() {
+        return stateCanteen;
     }
 
-    public void setZustandKantine(InteractionState zustandKantine) {
-        this.zustandKantine = zustandKantine;
+    public void setStateCanteen(InteractionState stateCanteen) {
+        this.stateCanteen = stateCanteen;
     }
 
-    public InteractionState getZustandKaffee() {
-        return zustandKaffee;
+    public InteractionState getStateCoffee() {
+        return stateCoffee;
     }
 
-    public void setZustandKaffee(InteractionState zustandKaffee) {
-        this.zustandKaffee = zustandKaffee;
+    public void setStateCoffee(InteractionState stateCoffee) {
+        this.stateCoffee = stateCoffee;
     }
 
-    public InteractionState getZustandDruker() {
-        return zustandDruker;
+    public InteractionState getStatePrinter() {
+        return statePrinter;
     }
 
-    public void setZustandDruker(InteractionState zustandDruker) {
-        this.zustandDruker = zustandDruker;
+    public void setStatePrinter(InteractionState statePrinter) {
+        this.statePrinter = statePrinter;
     }
 
-    public long getMeldungenKantine() {
-        return meldungenKantine;
+    public long getNotificationCanteen() {
+        return notificationCanteen;
     }
 
-    public void setMeldungenKantine(int meldungenKantine) {
-        this.meldungenKantine = meldungenKantine;
+    public void setNotificationCanteen(long notificationCanteen) {
+        this.notificationCanteen = notificationCanteen;
     }
 
-    public long getMeldungenKaffee() {
-        return meldungenKaffee;
+    public long getNotificationCoffee() {
+        return notificationCoffee;
     }
 
-    public void setMeldungenKaffee(int meldungenKaffee) {
-        this.meldungenKaffee = meldungenKaffee;
+    public void setNotificationCoffee(long notificationCoffee) {
+        this.notificationCoffee = notificationCoffee;
     }
 
-    public long getMeldungenDruker() {
-        return meldungenDruker;
+    public long getNotificationPrinter() {
+        return notificationPrinter;
     }
 
-    public void setMeldungenDruker(int meldungenDruker) {
-        this.meldungenDruker = meldungenDruker;
+    public void setNotificationPrinter(long notificationPrinter) {
+        this.notificationPrinter = notificationPrinter;
     }
 }

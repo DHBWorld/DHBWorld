@@ -19,7 +19,7 @@
     >
 
     <com.google.android.material.card.MaterialCardView
-        android:id="@+id/card_cafe"
+
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:backgroundTint="@color/white"
@@ -36,7 +36,7 @@
             >
 
         <LinearLayout
-            android:id="@+id/imageBox_kantine"
+            android:id="@+id/imageBox_canteen"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:orientation="vertical"
@@ -54,7 +54,7 @@
 
                 app:cardElevation="0dp">
             <ImageView
-                android:id="@+id/bild_kantine"
+
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:background="@color/white"
@@ -80,7 +80,7 @@
                 android:textColor="@color/white"
                 android:backgroundTint="@color/grey_dark"
                 android:clipToOutline="false"
-                android:text="@string/kantine"
+                android:text="@string/canteen"
                 android:textSize="23dp"/>
         </LinearLayout>
 
@@ -95,18 +95,18 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:paddingHorizontal="16dp"
+                android:paddingLeft="16dp"
                 android:paddingVertical="10dp">
 
                 <!-- Title, secondary and supporting text -->
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/kantine"
+                    android:text="@string/canteen"
                     android:textAppearance="?attr/textAppearanceHeadline6" />
 
                 <TextView
-                    android:id="@+id/zustand_kantine"
+                    android:id="@+id/state_canteen"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
@@ -115,11 +115,11 @@
                     android:textColor="?android:attr/textColorSecondary" />
 
                 <TextView
-                    android:id="@+id/bisherige_meldungen_kantine"
+                    android:id="@+id/previous_notifications_canteen"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:text="@string/bisherigen_meldungen"
+                    android:text="@string/previous_notifications"
                     android:textAppearance="?attr/textAppearanceBody2"
                     android:textColor="?android:attr/textColorSecondary" />
 
@@ -157,7 +157,7 @@
                 android:orientation="horizontal">
 
                 <com.google.android.material.button.MaterialButton
-                    android:id="@+id/ja0"
+                    android:id="@+id/yes0"
                     style="?attr/borderlessButtonStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -165,7 +165,7 @@
                     android:text="@string/ja" />
 
                 <com.google.android.material.button.MaterialButton
-                    android:id="@+id/nein0"
+                    android:id="@+id/no0"
                     style="?attr/borderlessButtonStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -203,7 +203,7 @@
                 >
 
                 <LinearLayout
-                    android:id="@+id/imageBox_kaffee"
+                    android:id="@+id/imageBox_coffee"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:orientation="vertical"
@@ -258,7 +258,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        android:paddingHorizontal="16dp"
+                        android:paddingLeft="16dp"
                         android:paddingVertical="10dp">
 
                         <!-- Title, secondary and supporting text -->
@@ -269,20 +269,20 @@
                             android:textAppearance="?attr/textAppearanceHeadline6" />
 
                         <TextView
-                            android:id="@+id/zustand_kaffee"
+                            android:id="@+id/state_coffee"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="8dp"
-                            android:text="@string/zustand"
+                            android:text="@string/state"
                             android:textAppearance="?attr/textAppearanceBody2"
                             android:textColor="?android:attr/textColorSecondary" />
 
                         <TextView
-                            android:id="@+id/bisherige_meldungen_kaffe"
+                            android:id="@+id/previous_notifications_coffee"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="10dp"
-                            android:text="@string/bisherigen_meldungen"
+                            android:text="@string/previous_notifications"
                             android:textAppearance="?attr/textAppearanceBody2"
                             android:textColor="?android:attr/textColorSecondary" />
 
@@ -321,14 +321,14 @@
 
                             <com.google.android.material.button.MaterialButton
                                 style="?attr/borderlessButtonStyle"
-                                android:id="@+id/ja1"
+                                android:id="@+id/yes1"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginEnd="8dp"
                                 android:text="@string/ja" />
 
                             <com.google.android.material.button.MaterialButton
-                                android:id="@+id/nein1"
+                                android:id="@+id/no1"
                                 style="?attr/borderlessButtonStyle"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -362,7 +362,7 @@
                 >
 
                 <LinearLayout
-                    android:id="@+id/imageBox_drucker"
+                    android:id="@+id/imageBox_printer"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:orientation="vertical"
@@ -418,7 +418,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        android:paddingHorizontal="16dp"
+                        android:paddingLeft="16dp"
                         android:paddingVertical="10dp">
 
 
@@ -430,21 +430,21 @@
                             android:textAppearance="?attr/textAppearanceHeadline6" />
 
                         <TextView
-                            android:id="@+id/zustand_druker"
+                            android:id="@+id/state_printer"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="8dp"
-                            android:text="@string/zustand"
+                            android:text="@string/state"
                             android:textAppearance="?attr/textAppearanceBody2"
                             android:textColor="?android:attr/textColorSecondary" />
 
                         <TextView
 
-                            android:id="@+id/bisherige_meldungen_druker"
+                            android:id="@+id/previous_notifications_printer"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="10dp"
-                            android:text="@string/bisherigen_meldungen"
+                            android:text="@string/previous_notifications"
                             android:textAppearance="?attr/textAppearanceBody2"
                             android:textColor="?android:attr/textColorSecondary" />
 
@@ -487,14 +487,14 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginEnd="8dp"
                                 android:text="@string/ja"
-                                android:id="@+id/ja2"/>
+                                android:id="@+id/yes2"/>
 
                             <com.google.android.material.button.MaterialButton
                                 style="?attr/borderlessButtonStyle"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="@string/nein"
-                                android:id="@+id/nein2"/>
+                                android:id="@+id/no2"/>
                         </LinearLayout>
                     </LinearLayout>
 
