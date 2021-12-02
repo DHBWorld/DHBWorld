@@ -5,6 +5,7 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.os.Bundle;
@@ -60,6 +61,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         freeNotes.setEnabled(false);
 
         loadAndUpdateData();
+
+        Intent intent = new Intent(MainActivity.this, navigation.class);
+        startActivity(intent);
+
 
         MaterialToolbar toolbar = findViewById(R.id.topAppBar);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
