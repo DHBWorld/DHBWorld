@@ -50,6 +50,14 @@ title __DHBWORLD.APP's Class Diagram__\n
 
   namespace com.main.dhbworld {
     namespace Firebase {
+      interface com.main.dhbworld.Firebase.ReportCountListener {
+      }
+    }
+  }
+  
+
+  namespace com.main.dhbworld {
+    namespace Firebase {
       interface com.main.dhbworld.Firebase.SignedInListener {
       }
     }
@@ -103,6 +111,7 @@ title __DHBWORLD.APP's Class Diagram__\n
   com.main.dhbworld.BroadcastReceiver.UpdateEventsReceiver -up-|> android.content.BroadcastReceiver
   com.main.dhbworld.Firebase.Utilities o-- com.main.dhbworld.Firebase.CurrentStatusListener : currentStatusListener
   com.main.dhbworld.Firebase.Utilities o-- com.main.dhbworld.Firebase.DataSendListener : dataSendListener
+  com.main.dhbworld.Firebase.Utilities o-- com.main.dhbworld.Firebase.ReportCountListener : reportCountListener
   com.main.dhbworld.Firebase.Utilities o-- com.main.dhbworld.Firebase.SignedInListener : signedInListener
   com.main.dhbworld.Fragments.DialogCofirmationUserInteraction -up-|> com.google.android.material.dialog.MaterialAlertDialogBuilder
   com.main.dhbworld.Fragments.DialogCofirmationUserInteraction o-- com.main.dhbworld.Enums.InteractionState : selectedState
@@ -110,9 +119,9 @@ title __DHBWORLD.APP's Class Diagram__\n
   com.main.dhbworld.Services.UserInteractionMessagingService -up-|> com.google.firebase.messaging.FirebaseMessagingService
   com.main.dhbworld.UserInteraction -up-|> androidx.appcompat.app.AppCompatActivity
   com.main.dhbworld.UserInteraction o-- com.main.dhbworld.Firebase.Utilities : firebaseUtilities
-  com.main.dhbworld.UserInteraction o-- com.main.dhbworld.Enums.InteractionState : zustandDruker
-  com.main.dhbworld.UserInteraction o-- com.main.dhbworld.Enums.InteractionState : zustandKaffee
-  com.main.dhbworld.UserInteraction o-- com.main.dhbworld.Enums.InteractionState : zustandKantine
+  com.main.dhbworld.UserInteraction o-- com.main.dhbworld.Enums.InteractionState : stateCanteen
+  com.main.dhbworld.UserInteraction o-- com.main.dhbworld.Enums.InteractionState : stateCoffee
+  com.main.dhbworld.UserInteraction o-- com.main.dhbworld.Enums.InteractionState : statePrinter
 
 
 right footer
