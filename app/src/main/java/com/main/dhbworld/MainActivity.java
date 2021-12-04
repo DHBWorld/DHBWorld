@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         lNumber.setEnabled(false);
         studentMail.setEnabled(false);
         freeNotes.setEnabled(false);
-
+        //when the app is opened it loads the data if there is any
         loadAndUpdateData();
 
         MaterialToolbar toolbar = findViewById(R.id.topAppBar);
@@ -135,6 +135,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
 
     }
+
 
     public boolean checkLNumber(String l){
         if(l.isEmpty()){
