@@ -21,22 +21,22 @@ import com.google.android.material.snackbar.Snackbar;
 import com.main.dhbworld.R;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
-        FloatingActionButton editButton;
-        MaterialButton saveButton;
-        MaterialButton cancelButton;
-        TextView name;
-        TextView mNumber;
-        TextView lNumber;
-        TextView studentMail;
-        TextView freeNotes;
-        SharedPreferences sp;
+    FloatingActionButton editButton;
+    MaterialButton saveButton;
+    MaterialButton cancelButton;
+    TextView name;
+    TextView mNumber;
+    TextView lNumber;
+    TextView studentMail;
+    TextView freeNotes;
+    SharedPreferences sp;
 
-        public static final String MyPREFERENCES = "myPreferencesKey" ;
-        public static final String Name = "nameKey";
-        public static final String LibraryNumber = "libraryNumberKey";
-        public static final String MatriculationNumber = "matriculationNumberKey";
-        public static final String StudentMail= "studentMailKey";
-        public static final String FreeNotes = "freeNotesKey";
+    public static final String MyPREFERENCES = "myPreferencesKey" ;
+    public static final String Name = "nameKey";
+    public static final String LibraryNumber = "libraryNumberKey";
+    public static final String MatriculationNumber = "matriculationNumberKey";
+    public static final String StudentMail= "studentMailKey";
+    public static final String FreeNotes = "freeNotesKey";
 
 
     @Override
