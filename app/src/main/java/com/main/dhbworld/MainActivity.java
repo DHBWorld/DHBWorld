@@ -86,24 +86,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         });
 
         saveButton.setOnClickListener(v -> {
-            //visibility off buttons
-            editButton.setVisibility(View.VISIBLE);
-            saveButton.setVisibility(View.INVISIBLE);
-            cancelButton.setVisibility(View.INVISIBLE);
-            //disabling text field
-            name.setEnabled(false);
-            mNumber.setEnabled(false);
-            lNumber.setEnabled(false);
-            studentMail.setEnabled(false);
-            freeNotes.setEnabled(false);
 
-            //check MNumber and LNumber if they are too long
-            if(checkLNumber(lNumber.getText().toString()) && checkMNumber(mNumber.getText().toString())){
-                saveData();
-            }else{
-                //loadandupdate to set the text fields to the status before. then show a msg to the user
-                loadAndUpdateData();
-                Toast.makeText(this, "Data could not be saved", Toast.LENGTH_SHORT).show();
+            if(checkMNumber(mNumber.getText().toString())){
+                if(checkLNumber(lNumber.getText().toString())){
+                    saveData();
+                    //visibility off buttons
+                    editButton.setVisibility(View.VISIBLE);
+                    saveButton.setVisibility(View.INVISIBLE);
+                    cancelButton.setVisibility(View.INVISIBLE);
+                    //disabling text field
+                    name.setEnabled(false);
+                    mNumber.setEnabled(false);
+                    lNumber.setEnabled(false);
+                    studentMail.setEnabled(false);
+                    freeNotes.setEnabled(false);
+                }
             }
 
 
@@ -144,13 +141,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             try{
                 long libraryNumberLength = Long.parseLong(l);
                 if(libraryNumberLength>999999999999l){
-                    Toast.makeText(this, "[Bibliotheksnummer] should only contain 12 digits", Toast.LENGTH_SHORT).show();
+                    lNumber.setError("Can only contain 12 digits");
                     return false;
                 }else{
                     return true;
                 }
             }catch(NumberFormatException g){
-                Toast.makeText(this, "[Bibliotheksnummer] does not contain only digits", Toast.LENGTH_SHORT).show();
+                lNumber.setError("No letters, only digits");
                 return false;
             }
         }
@@ -161,15 +158,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             return true;
         }else{
             try{
-                int matriculationNumberLength = Integer.parseInt(m);
+                long matriculationNumberLength = Long.parseLong(m);
                 if(matriculationNumberLength>9999999){
-                    Toast.makeText(this, "[Matrikelnummer] should only contain 7 digits", Toast.LENGTH_SHORT).show();
+                    mNumber.setError("Can only contain 7 digits");
                     return false;
                 }else{
                     return true;
                 }
             }catch (NumberFormatException g){
-                Toast.makeText(this, "[Matrikelnummer] does not contain only digits", Toast.LENGTH_SHORT).show();
+                mNumber.setError("No letters, only digits");
                 return false;
             }
         }
