@@ -2,6 +2,7 @@ package com.main.dhbworld;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.res.Resources;
 import android.os.Bundle;
@@ -57,22 +58,27 @@ public class UserInteraction extends AppCompatActivity {
         yesNoButtonsManagement();
         notificationManagement();
 
+        ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+
         firebaseUtilities = new Utilities(this);
         firebaseUtilities.setSignedInListener(new SignedInListener() {
             @Override
             public void onSignedIn(FirebaseUser user) {
-                Toast.makeText(UserInteraction.this, "Angemeldet", Toast.LENGTH_SHORT).show();
+                progressDialog.dismiss();
             }
 
             @Override
             public void onSignInError() {
-
+                progressDialog.dismiss();
+                Toast.makeText(UserInteraction.this, "Fehler", Toast.LENGTH_SHORT).show();
             }
         });
         firebaseUtilities.setCurrentStatusListener(new CurrentStatusListener() {
             @Override
             public void onStatusReceived(String category, int status) {
-                //TODO bisherige Meldungen vom Server holen
                 Resources res = getResources();
                 switch (category) {
                     case Utilities.CATEGORY_CAFETERIA:
@@ -82,6 +88,7 @@ public class UserInteraction extends AppCompatActivity {
                         break;
                     case Utilities.CATEGORY_COFFEE:
                         stateCoffee = InteractionState.parseId(status);
+                        stateCoffee = InteractionState.DEFECT;
                         stateCoffeeTV.setText(getResources().getString(R.string.state) + " " + stateCoffee.getText());
                         imageBox_coffee.setBackgroundColor(res.getColor(stateCoffee.getColor()));
                         break;
@@ -100,15 +107,16 @@ public class UserInteraction extends AppCompatActivity {
                 switch (category) {
                     case Utilities.CATEGORY_CAFETERIA:
                         notificationCanteen = reportCount;
-                        notificationCanteenTV.setText(getResources().getString(R.string.previous_notifications) + " " + reportCount);
+                        notificationCanteenTV.setText(getResources().getString(R.string.previous_notifications) + " " + notificationCanteen);
                         break;
                     case Utilities.CATEGORY_COFFEE:
                         notificationCoffee = reportCount;
-                        notificationCoffeeTV.setText(getResources().getString(R.string.previous_notifications) + " " + reportCount);
+                        notificationCoffee = 8;
+                        notificationCoffeeTV.setText(getResources().getString(R.string.previous_notifications) + " " + notificationCoffee);
                         break;
                     case Utilities.CATEGORY_PRINTER:
                         notificationPrinter = reportCount;
-                        notificationPrinterTV.setText(getResources().getString(R.string.previous_notifications) + " " + reportCount);
+                        notificationPrinterTV.setText(getResources().getString(R.string.previous_notifications) + " " + notificationPrinter);
                         break;
                 }
             }
@@ -152,8 +160,7 @@ public class UserInteraction extends AppCompatActivity {
                             firebaseUtilities.setDataSendListener(new DataSendListener() {
                                 @Override
                                 public void success() {
-                                    //TODO Toast anpassen
-                                    Toast.makeText(UserInteraction.this, "Gesendet", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(UserInteraction.this, R.string.thank_you, Toast.LENGTH_SHORT).show();
                                     updateInteractionState();
                                 }
 
@@ -189,8 +196,7 @@ public class UserInteraction extends AppCompatActivity {
                         firebaseUtilities.setDataSendListener(new DataSendListener() {
                             @Override
                             public void success() {
-                                //TODO Toast anpassen
-                                Toast.makeText(UserInteraction.this, "Gesendet", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(UserInteraction.this, R.string.thank_you, Toast.LENGTH_SHORT).show();
                                 updateInteractionState();
                             }
 
@@ -219,8 +225,7 @@ public class UserInteraction extends AppCompatActivity {
                             firebaseUtilities.setDataSendListener(new DataSendListener() {
                                 @Override
                                 public void success() {
-                                    //TODO Toast anpassen
-                                    Toast.makeText(UserInteraction.this, "Gesendet", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(UserInteraction.this, R.string.thank_you, Toast.LENGTH_SHORT).show();
                                     updateInteractionState();
                                 }
 

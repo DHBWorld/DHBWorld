@@ -20,26 +20,12 @@ public class DialogCofirmationUserInteraction extends MaterialAlertDialogBuilder
         this.setTitle(R.string.are_you_sure);
         this.setMessage(message);
 
-
         this.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.cancel();
             }
         });
-        //TODO can be removed
-        this.setPositiveButton(buttonText, new DialogInterface.OnClickListener() {
-
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                Toast toast= Toast.makeText(context, R.string.thank_you, Toast.LENGTH_SHORT);
-                toast.setGravity(Gravity.CENTER,0,0);
-                toast.show();
-
-            }
-        });
-
-
     }
 
     public DialogCofirmationUserInteraction(@NonNull Context context, InteractionState[] states, int buttonText) {
@@ -75,19 +61,6 @@ public class DialogCofirmationUserInteraction extends MaterialAlertDialogBuilder
                 dialog.cancel();
             }
         });
-        //TODO can be removed
-        this.setPositiveButton(buttonText, new DialogInterface.OnClickListener() {
-
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                Toast toast= Toast.makeText(context, R.string.thank_you, Toast.LENGTH_SHORT);
-                toast.setGravity(Gravity.CENTER,0,0);
-                toast.show();
-
-            }
-        });
-
-
     }
 
     public String getNameOfSelectedState() {

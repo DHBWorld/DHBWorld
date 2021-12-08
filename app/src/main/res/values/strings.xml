@@ -18,4 +18,5 @@
     <string name="moechten_sie_das_problem_besteht_nicht_mehr">Möchten Sie melden, dass das Problem nicht mehr besteht?</string>
     <string name="problem_ist_solved">Schon gelöst</string>
     <string name="moechten_sie_melden_dass_der_drucker_kaputt_ist">Möchten Sie melden, dass der Drucker kaputt ist?</string>
+    <string name="event_notifications">Benachrichtigungen zu Events. Defekte Kaffemaschiene, etc.</string>
 </resources>

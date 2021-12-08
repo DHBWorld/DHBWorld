@@ -2,7 +2,6 @@ package com.main.dhbworld.Firebase;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
@@ -16,8 +15,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.messaging.FirebaseMessaging;
 
-import java.util.List;
-
 public class Utilities {
     private static final String emulatorIp = "193.41.237.154";
 
@@ -25,9 +22,9 @@ public class Utilities {
     public static final String CATEGORY_CAFETERIA = "cafeteria";
     public static final String CATEGORY_PRINTER = "printer";
 
-    private static final long invalidateTime = 0 * 1000 * 10;
-    private static final long invalidateTimeSwitch = 0 * 1000 * 10;
-    private static final long invalidateTimeClicks = 0 * 1000 * 10;
+    private static final long invalidateTime = 15 * 1000 * 60;
+    private static final long invalidateTimeSwitch = 5 * 1000 * 60;
+    private static final long invalidateTimeClicks = 1000 * 60;
 
     private final FirebaseAuth mAuth;
     private FirebaseUser user;
@@ -202,6 +199,11 @@ public class Utilities {
         });
     }
 
+    /**
+     * Get the report count of a set category
+     * @param category of which the report count will be received
+     * @see #setReportCountListener(ReportCountListener)
+     */
     public void getReportCount(String category) {
         if (reportCountListener == null) {
             return;

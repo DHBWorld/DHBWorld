@@ -19,6 +19,7 @@ import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.MessagingAnalytics;
 import com.google.firebase.messaging.RemoteMessage;
 import com.main.dhbworld.BroadcastReceiver.UpdateEventsReceiver;
+import com.main.dhbworld.Enums.InteractionState;
 import com.main.dhbworld.Firebase.Utilities;
 import com.main.dhbworld.R;
 import com.main.dhbworld.UserInteraction;
@@ -54,8 +55,7 @@ public class UserInteractionMessagingService extends FirebaseMessagingService {
                             break;
                     }
 
-                    //TODO: Nicht die Nummer ausgeben sonder enum von Daria
-                    String message = "Der Status der Kategorie hat sich geändert in: " + problem;
+                    String message = "Der Status der Kategorie hat sich geändert in: " + InteractionState.parseId(problem).getText();
 
                     NotificationManagerCompat notificationManager = NotificationManagerCompat.from(getApplicationContext());
                     notificationManager.cancel(0);
@@ -64,15 +64,7 @@ public class UserInteractionMessagingService extends FirebaseMessagingService {
                         UpdateEventsReceiver.setReceiver(getApplicationContext(), category);
                     }
 
-                    //TODO: FARBEN NOCH EINBINDEN
-
-
-                    int color = getResources().getColor(R.color.green_queue);
-                    //if (title.contains("Warnung")) {
-                    //    color = getResources().getColor(R.color.notification_warning);
-                    //} else if (title.contains("Alarm")) {
-                    //    color = getResources().getColor(R.color.notification_alarm);
-                    //}
+                    int color = InteractionState.parseId(problem).getColor();
 
                     int icon = R.drawable.baseline_coffee_maker_24;
                     if (category.equals(Utilities.CATEGORY_CAFETERIA)) {
@@ -89,7 +81,7 @@ public class UserInteractionMessagingService extends FirebaseMessagingService {
 
                     NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), "warnings")
                             .setSmallIcon(icon)
-                            .setContentTitle(title.substring(0, 1).toUpperCase() + title.substring(1))
+                            .setContentTitle(title)
                             .setColor(color)
                             .setStyle(new NotificationCompat.BigTextStyle().bigText(message))
                             .setContentText(message)
@@ -128,11 +120,10 @@ public class UserInteractionMessagingService extends FirebaseMessagingService {
     }
 
     private void createNotificationChannel() {
-        //TODO String ändern
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             int importance = NotificationManager.IMPORTANCE_HIGH;
             NotificationChannel channel = new NotificationChannel("warnings", "Warnungen", importance);
-            channel.setDescription("Test Channel");
+            channel.setDescription(getResources().getString(R.string.event_notifications));
             NotificationManager notificationManager = getSystemService(NotificationManager.class);
             notificationManager.createNotificationChannel(channel);
         }
