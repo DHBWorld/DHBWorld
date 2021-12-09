@@ -261,7 +261,7 @@ public class UserInteraction extends AppCompatActivity {
         stateCoffeeTV = findViewById(R.id.state_coffee);
         statePrinterTV = findViewById(R.id.state_printer);
 
-        stateCanteen =InteractionState.QUEUE_ABCENT;
+        stateCanteen =InteractionState.QUEUE_MIDDLE;
         stateCoffee =InteractionState.NORMAL;
         statePrinter =InteractionState.NORMAL;
 
