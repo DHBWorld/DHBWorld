@@ -9,6 +9,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
+import androidx.preference.SwitchPreference;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
@@ -33,7 +34,7 @@ public class SettingsActivity extends AppCompatActivity {
         }
     }
 
-    public static class SettingsFragment extends PreferenceFragmentCompat {
+    public static class SettingsFragment extends PreferenceFragmentCompat implements Preference.OnPreferenceChangeListener {
 
         @Override
         public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
@@ -67,6 +68,42 @@ public class SettingsActivity extends AppCompatActivity {
                     return true;
                 }
             });
+
+            SwitchPreference mensaPreference = findPreference("notifications_mensa");
+            SwitchPreference coffeePreference = findPreference("notifications_coffee");
+            SwitchPreference printerPreference = findPreference("notifications_printer");
+
+            mensaPreference.setOnPreferenceChangeListener(this);
+            coffeePreference.setOnPreferenceChangeListener(this);
+            printerPreference.setOnPreferenceChangeListener(this);
+        }
+
+        @Override
+        public boolean onPreferenceChange(Preference preference, Object newValue) {
+            //switch (preference.getKey()) {
+            //    case "notifications_mensa":
+            //        if ((boolean) newValue) {
+            //            Utilities.subscribeToTopic(Utilities.CATEGORY_CAFETERIA);
+            //        } else {
+            //            Utilities.unsubscribeFromTopic(Utilities.CATEGORY_CAFETERIA);
+            //        }
+            //        break;
+            //    case "notifications_coffee":
+            //        if ((boolean) newValue) {
+            //            Utilities.subscribeToTopic(Utilities.CATEGORY_COFFEE);
+            //        } else {
+            //            Utilities.unsubscribeFromTopic(Utilities.CATEGORY_COFFEE);
+            //        }
+            //        break;
+            //    case "notifications_printer":
+            //        if ((boolean) newValue) {
+            //            Utilities.subscribeToTopic(Utilities.CATEGORY_PRINTER);
+            //        } else {
+            //            Utilities.unsubscribeFromTopic(Utilities.CATEGORY_PRINTER);
+            //        }
+            //        break;
+            //}
+            return true;
         }
     }
 }
