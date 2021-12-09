@@ -63,6 +63,8 @@ public class UserInteraction extends AppCompatActivity {
         progressDialog.setCancelable(false);
         progressDialog.show();
 
+        Utilities.subscribeToTopics();
+
         firebaseUtilities = new Utilities(this);
         firebaseUtilities.setSignedInListener(new SignedInListener() {
             @Override
@@ -82,13 +84,13 @@ public class UserInteraction extends AppCompatActivity {
                 Resources res = getResources();
                 switch (category) {
                     case Utilities.CATEGORY_CAFETERIA:
+                        System.out.println("STATUS: " + status);
                         stateCanteen = InteractionState.parseId(status);
                         stateCanteenTV.setText(getResources().getString(R.string.state) + " " + stateCanteen.getText());
                         imageBox_canteen.setBackgroundColor(res.getColor(stateCanteen.getColor()));
                         break;
                     case Utilities.CATEGORY_COFFEE:
                         stateCoffee = InteractionState.parseId(status);
-                        stateCoffee = InteractionState.DEFECT;
                         stateCoffeeTV.setText(getResources().getString(R.string.state) + " " + stateCoffee.getText());
                         imageBox_coffee.setBackgroundColor(res.getColor(stateCoffee.getColor()));
                         break;
@@ -111,7 +113,6 @@ public class UserInteraction extends AppCompatActivity {
                         break;
                     case Utilities.CATEGORY_COFFEE:
                         notificationCoffee = reportCount;
-                        notificationCoffee = 8;
                         notificationCoffeeTV.setText(getResources().getString(R.string.previous_notifications) + " " + notificationCoffee);
                         break;
                     case Utilities.CATEGORY_PRINTER:
@@ -188,7 +189,6 @@ public class UserInteraction extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 DialogCofirmationUserInteraction confirmation= new DialogCofirmationUserInteraction(UserInteraction.this, R.string.moechten_sie_melden_dass_der_drucker_kaputt_ist, R.string.problem_report);
-                confirmation.show();
 
                 confirmation.setPositiveButton(R.string.problem_report, new DialogInterface.OnClickListener() {
                     @Override
@@ -210,6 +210,7 @@ public class UserInteraction extends AppCompatActivity {
                         firebaseUtilities.addToDatabase(category, InteractionState.DEFECT.getId());
                     }
                 });
+                confirmation.show();
             }
         });
 
@@ -261,7 +262,7 @@ public class UserInteraction extends AppCompatActivity {
         stateCoffeeTV = findViewById(R.id.state_coffee);
         statePrinterTV = findViewById(R.id.state_printer);
 
-        stateCanteen =InteractionState.QUEUE_MIDDLE;
+        stateCanteen =InteractionState.QUEUE_ABCENT;
         stateCoffee =InteractionState.NORMAL;
         statePrinter =InteractionState.NORMAL;
 

@@ -3,6 +3,10 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Christian/AndroidStudioProjects/DHBWorld/app/src/main/res/layout/activity_licence.xml" value="0.16904120138621487" />
+        <entry key="..\:/Christian/AndroidStudioProjects/DHBWorld/app/src/main/res/layout/settings_activity.xml" value="0.2838541666666667" />
+        <entry key="..\:/Christian/AndroidStudioProjects/DHBWorld/app/src/main/res/layout/user_interaction_layout.xml" value="0.35052083333333334" />
+        <entry key="..\:/Christian/AndroidStudioProjects/DHBWorld/app/src/main/res/xml/root_preferences.xml" value="0.2838541666666667" />
         <entry key="..\:/Code/DHBWorld/app/src/main/res/drawable/ic_launcher_background.xml" value="0.22179487179487178" />
         <entry key="..\:/Code/DHBWorld/app/src/main/res/drawable/triple_point.xml" value="0.22179487179487178" />
         <entry key="..\:/Code/DHBWorld/app/src/main/res/layout/activity_main.xml" value="0.1" />

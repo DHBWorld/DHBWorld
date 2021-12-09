@@ -82,7 +82,7 @@ public class UserInteractionMessagingService extends FirebaseMessagingService {
                     NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), "warnings")
                             .setSmallIcon(icon)
                             .setContentTitle(title)
-                            .setColor(color)
+                            .setColor(getResources().getColor(color))
                             .setStyle(new NotificationCompat.BigTextStyle().bigText(message))
                             .setContentText(message)
                             .setPriority(NotificationCompat.PRIORITY_HIGH)
