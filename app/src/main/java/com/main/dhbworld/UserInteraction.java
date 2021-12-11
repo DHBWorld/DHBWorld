@@ -21,6 +21,7 @@ import com.main.dhbworld.Firebase.ReportCountListener;
 import com.main.dhbworld.Firebase.SignedInListener;
 import com.main.dhbworld.Firebase.Utilities;
 import com.main.dhbworld.Fragments.DialogCofirmationUserInteraction;
+import com.main.dhbworld.Navigation.NavigationUtilities;
 
 import java.util.ArrayList;
 
@@ -53,6 +54,8 @@ public class UserInteraction extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.user_interaction_layout);
+
+        NavigationUtilities.setUpNavigation(this, R.id.UserInteraction);
 
         stateManagement();
         yesNoButtonsManagement();

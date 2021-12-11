@@ -249,7 +249,7 @@ public class Utilities {
                     .addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
-                            System.out.println("subscribed");
+                            System.out.println("Successfully subscribed");
                         }
                     });
         }
@@ -260,7 +260,12 @@ public class Utilities {
      * @param category of which no notifications should be received anymore
      */
     public static void unsubscribeFromTopic(String category) {
-        FirebaseMessaging.getInstance().unsubscribeFromTopic(category);
+        FirebaseMessaging.getInstance().unsubscribeFromTopic(category).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                System.out.println("Successfully unsubscribed");
+            }
+        });
     }
 
     /**

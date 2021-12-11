@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import com.alamkanak.weekview.WeekView;
 import com.alamkanak.weekview.WeekViewEntity;
+import com.main.dhbworld.Navigation.NavigationUtilities;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -27,6 +28,8 @@ public class CalendarActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.schedule_layout);
+
+        NavigationUtilities.setUpNavigation(this, R.id.Calendar);
 
         cal = findViewById(R.id.weekView);
 

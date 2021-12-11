@@ -19,9 +19,10 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
+import com.main.dhbworld.Navigation.NavigationUtilities;
 import com.main.dhbworld.R;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener{
+public class MainActivity extends AppCompatActivity{
     FloatingActionButton editButton;
     MaterialButton saveButton;
     MaterialButton cancelButton;
@@ -61,22 +62,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //when the app is opened it loads the data if there is any
         loadAndUpdateData();
 
-
-
-
-        Intent intent = new Intent(MainActivity.this, CalendarActivity.class);
-        startActivity(intent);
-
-
-        MaterialToolbar toolbar = findViewById(R.id.topAppBar);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                DrawerLayout drawerLayout = findViewById(R.id.drawerLayout);
-                drawerLayout.openDrawer(GravityCompat.START);
-
-            }
-        });
+        NavigationUtilities.setUpNavigation(this, R.id.personalInformationNav);
 
         editButton.setOnClickListener(v -> {
             //visibility off buttons
@@ -135,10 +121,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
 
-    @Override
-    public void onClick(View v) {
-
-    }
+    //@Override
+    //public void onClick(View v) {
+//
+    //}
 
 
     public boolean checkLNumber(String l){

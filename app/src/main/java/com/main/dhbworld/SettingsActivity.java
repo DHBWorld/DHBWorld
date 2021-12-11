@@ -12,6 +12,8 @@ import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.SwitchPreference;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.main.dhbworld.Firebase.Utilities;
+import com.main.dhbworld.Navigation.NavigationUtilities;
 
 public class SettingsActivity extends AppCompatActivity {
 
@@ -21,6 +23,9 @@ public class SettingsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.settings_activity);
+
+        NavigationUtilities.setUpNavigation(this, R.id.Settings);
+
         context = this;
         if (savedInstanceState == null) {
             getSupportFragmentManager()
@@ -80,29 +85,29 @@ public class SettingsActivity extends AppCompatActivity {
 
         @Override
         public boolean onPreferenceChange(Preference preference, Object newValue) {
-            //switch (preference.getKey()) {
-            //    case "notifications_mensa":
-            //        if ((boolean) newValue) {
-            //            Utilities.subscribeToTopic(Utilities.CATEGORY_CAFETERIA);
-            //        } else {
-            //            Utilities.unsubscribeFromTopic(Utilities.CATEGORY_CAFETERIA);
-            //        }
-            //        break;
-            //    case "notifications_coffee":
-            //        if ((boolean) newValue) {
-            //            Utilities.subscribeToTopic(Utilities.CATEGORY_COFFEE);
-            //        } else {
-            //            Utilities.unsubscribeFromTopic(Utilities.CATEGORY_COFFEE);
-            //        }
-            //        break;
-            //    case "notifications_printer":
-            //        if ((boolean) newValue) {
-            //            Utilities.subscribeToTopic(Utilities.CATEGORY_PRINTER);
-            //        } else {
-            //            Utilities.unsubscribeFromTopic(Utilities.CATEGORY_PRINTER);
-            //        }
-            //        break;
-            //}
+            switch (preference.getKey()) {
+                case "notifications_mensa":
+                    if ((boolean) newValue) {
+                        Utilities.subscribeToTopic(Utilities.CATEGORY_CAFETERIA);
+                    } else {
+                        Utilities.unsubscribeFromTopic(Utilities.CATEGORY_CAFETERIA);
+                    }
+                    break;
+                case "notifications_coffee":
+                    if ((boolean) newValue) {
+                        Utilities.subscribeToTopic(Utilities.CATEGORY_COFFEE);
+                    } else {
+                        Utilities.unsubscribeFromTopic(Utilities.CATEGORY_COFFEE);
+                    }
+                    break;
+                case "notifications_printer":
+                    if ((boolean) newValue) {
+                        Utilities.subscribeToTopic(Utilities.CATEGORY_PRINTER);
+                    } else {
+                        Utilities.unsubscribeFromTopic(Utilities.CATEGORY_PRINTER);
+                    }
+                    break;
+            }
             return true;
         }
     }
