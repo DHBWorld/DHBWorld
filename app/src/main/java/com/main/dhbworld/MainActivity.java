@@ -62,7 +62,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         loadAndUpdateData();
 
-        Intent intent = new Intent(MainActivity.this, navigation.class);
+
+
+
+        Intent intent = new Intent(MainActivity.this, CalendarActivity.class);
         startActivity(intent);
 
 
