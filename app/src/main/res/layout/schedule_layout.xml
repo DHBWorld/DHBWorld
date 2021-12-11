@@ -58,33 +58,6 @@
             />
 
 
-        <!--
-        <com.alamkanak.weekview.WeekView
-            android:id="@+id/weekView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@id/topAppBarLayout"
-            app:maxHour="@string/maxCalendarHour"
-            app:minHour="@string/minCalendarHour"
-            app:nowLineColor="@color/grey_dark"
-            app:showNowLine="true"
-            app:showWeekNumber="true"
-            app:columnGap="8dp"
-            app:showFirstDayOfWeekFirst="true"
-            app:dayBackgroundColor="@color/white"
-            app:defaultEventColor="@color/AliceBlue"
-            app:eventTextColor="@color/white"
-            app:headerBackgroundColor="@color/LightBlue"
-            app:headerPadding="12dp"
-            app:hourHeight="70dp"
-            app:numberOfVisibleDays="5"
-            app:timeColumnBackgroundColor="@color/white"
-            app:timeColumnPadding="8dp"
-            app:timeColumnTextColor="@color/grey_light"
-            app:timeColumnTextSize="12sp"
-            app:todayBackgroundColor="@color/grey_light" />
-        <-->
-
 
     </RelativeLayout>
 </androidx.drawerlayout.widget.DrawerLayout>
