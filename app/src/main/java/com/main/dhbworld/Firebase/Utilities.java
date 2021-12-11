@@ -2,7 +2,6 @@ package com.main.dhbworld.Firebase;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
@@ -16,8 +15,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.messaging.FirebaseMessaging;
 
-import java.util.List;
-
 public class Utilities {
     private static final String emulatorIp = "193.41.237.154";
 
@@ -25,9 +22,9 @@ public class Utilities {
     public static final String CATEGORY_CAFETERIA = "cafeteria";
     public static final String CATEGORY_PRINTER = "printer";
 
-    private static final long invalidateTime = 0 * 1000 * 10;
-    private static final long invalidateTimeSwitch = 0 * 1000 * 10;
-    private static final long invalidateTimeClicks = 0 * 1000 * 10;
+    private static final long invalidateTime = 0 * 15 * 1000 * 60;
+    private static final long invalidateTimeSwitch = 0 * 5 * 1000 * 60;
+    private static final long invalidateTimeClicks = 0 * 1000 * 60;
 
     private final FirebaseAuth mAuth;
     private FirebaseUser user;
@@ -193,7 +190,11 @@ public class Utilities {
             public void onComplete(@NonNull Task<DataSnapshot> task) {
                 if (task.isSuccessful() && task.getResult() != null) {
                     if (task.getResult().getValue() == null) {
-                        currentStatusListener.onStatusReceived(category, 0);
+                        if (category.equals(CATEGORY_CAFETERIA)) {
+                            currentStatusListener.onStatusReceived(category, 3);
+                        } else {
+                            currentStatusListener.onStatusReceived(category, 0);
+                        }
                     } else {
                         currentStatusListener.onStatusReceived(category, task.getResult().getValue(int.class));
                     }
@@ -202,6 +203,11 @@ public class Utilities {
         });
     }
 
+    /**
+     * Get the report count of a set category
+     * @param category of which the report count will be received
+     * @see #setReportCountListener(ReportCountListener)
+     */
     public void getReportCount(String category) {
         if (reportCountListener == null) {
             return;
@@ -220,16 +226,41 @@ public class Utilities {
     }
 
     /**
-     * Subscribe to a topic to which the push-notifications are send
+     * Subscribe to a topic to receive notifications for a given category
+     * @param category for which to receive notifications
      */
-    public static void subscribeToTopic() {
-        FirebaseMessaging.getInstance().subscribeToTopic("Test")
+    public static void subscribeToTopic(String category) {
+        FirebaseMessaging.getInstance().subscribeToTopic(category)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         System.out.println("subscribed");
                     }
                 });
+    }
+
+    /**
+     * Subscribe to all topics to get notifications for all categories
+     */
+    public static void subscribeToTopics() {
+        String[] categories = new String[]{CATEGORY_CAFETERIA, CATEGORY_COFFEE, CATEGORY_PRINTER};
+        for (String category : categories) {
+            FirebaseMessaging.getInstance().subscribeToTopic(category)
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            System.out.println("subscribed");
+                        }
+                    });
+        }
+    }
+
+    /**
+     * Unsubscribe from a topic to cancel the receiving of notifications
+     * @param category of which no notifications should be received anymore
+     */
+    public static void unsubscribeFromTopic(String category) {
+        FirebaseMessaging.getInstance().unsubscribeFromTopic(category);
     }
 
     /**

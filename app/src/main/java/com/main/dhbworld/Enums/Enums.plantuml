@@ -9,9 +9,9 @@ title __ENUMS's Class Diagram__\n
         DEFECT
         NORMAL
         QUEUE_ABCENT
-        QUEUE_KURZ
         QUEUE_LONG
         QUEUE_MIDDLE
+        QUEUE_SHORT
         color
         id
         text

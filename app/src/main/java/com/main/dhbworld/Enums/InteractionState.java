@@ -1,8 +1,6 @@
 package com.main.dhbworld.Enums;
 // Zustände von dem Drücker, Kaffemaschine und Kantine
 
-import android.graphics.Color;
-
 import com.main.dhbworld.R;
 
 public enum InteractionState {
@@ -12,7 +10,7 @@ public enum InteractionState {
 
     QUEUE_LONG(6, "lange Schlange", R.color.red_dark),
     QUEUE_MIDDLE(5, "mittlere Schlange", R.color.orange_queue),
-    QUEUE_KURZ(4, "kurze Schlange", R.color.green_queue),
+    QUEUE_SHORT(4, "kurze Schlange", R.color.green_queue),
     QUEUE_ABCENT(3, "keine Schlange", R.color.grey_dark);
 
 
@@ -51,7 +49,7 @@ public enum InteractionState {
             case 3:
                 return QUEUE_ABCENT;
             case 4:
-                return QUEUE_KURZ;
+                return QUEUE_SHORT;
             case 5:
                 return QUEUE_MIDDLE;
             case 6:
