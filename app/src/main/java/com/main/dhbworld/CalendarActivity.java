@@ -72,6 +72,8 @@ public class CalendarActivity extends AppCompatActivity {
         });
 
 
+
+
         //set onClickListener for Events
 
         class Adapter extends WeekView.SimpleAdapter<Events> implements com.main.dhbworld.Adapter {
