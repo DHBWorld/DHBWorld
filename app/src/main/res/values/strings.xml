@@ -4,7 +4,7 @@
     <string name="more">more</string>
     <string name="content_description_more">show more information (contextual)</string>
     <string name="header_title">DHBWorld</string>
-    <string name="header_text">header text, should this be empty?</string>
+    <string name="header_text">Welcome to our first Demo!</string>
     <string name="personal_information">Personal Information</string>
     <string name="meal_plan">Meal Plan</string>
     <string name="edit">Edit</string>
@@ -29,6 +29,14 @@
     <string name="moechten_sie_das_problem_besteht_nicht_mehr">Möchten Sie melden, dass das Problem nicht mehr besteht?</string>
     <string name="problem_ist_geloest">Schon gelöst</string>
     <string name="moechten_sie_melden_dass_der_drucker_kaputt_ist">Möchten Sie melden, dass der Drucker kaputt ist?</string>
+    <string name="event_notifications">Benachrichtigungen zu Events. Defekte Kaffemaschiene, etc.</string>
+
+
+    <string name="problem_report">Problem melden</string>
+    <string name="thank_you">Danke, dass Sie an unsrem Kommunikation-Service teilnehmen!</string>
+
+    <string name="problem_ist_solved">Schon gelöst</string>
+
 
     <string name="title_activity_settings">SettingsActivity</string>
 
@@ -255,4 +263,10 @@
    \nSee the License for the specific language governing permissions and
    \nlimitations under the License.
     </string>
+    <string name="maxCalendarHour">20</string>
+    <string name="minCalendarHour">7</string>
+    <string name="canteen">Kantine</string>
+    <string name="previous_notifications">Bisherige Meldungen:</string>
+    <string name="state">Zustand:</string>
+    <string name="are_you_sure">Sind Sie sicher?</string>
 </resources>

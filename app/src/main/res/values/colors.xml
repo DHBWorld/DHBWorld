@@ -14,6 +14,11 @@
 
 
     <!-- copied colors to have a wider variety-->
+    <color name="grey_defect">#babec2</color>
+    <color name="blue_cleaning">#4d8896</color>
+    <color name="orange_queue">#d68e22</color>
+    <color name="green_queue">#409464</color>
+
     <color name="White">#FFFFFF</color>
     <color name="Ivory">#FFFFF0</color>
     <color name="LightYellow">#FFFFE0</color>

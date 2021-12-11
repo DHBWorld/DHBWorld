@@ -5,25 +5,24 @@
 
     <group
         android:id="@+id/group1"
-        android:checkableBehavior="single"
-        >
+        android:checkableBehavior="single">
+
         <item
             android:id="@+id/personalInformationNav"
-            android:title="@string/personal_information"
-            android:checked="true"
-            />
+            android:title="@string/personal_information" />
         <item
-            android:id="@+id/MealPlanNav"
-            android:title="@string/meal_plan" />
+            android:id = "@+id/Calendar"
+            android:title = "Calendar" />
+        <item
+            android:id = "@+id/UserInteraction"
+            android:title = "User Interaction" />
+
     </group>
 
     <group>
         <item
-            android:title="abc"
-            android:id="@+id/abc">
-
-        </item>
+            android:id = "@+id/Settings"
+            android:title="Settings" />
 
     </group>
-
 </menu>
