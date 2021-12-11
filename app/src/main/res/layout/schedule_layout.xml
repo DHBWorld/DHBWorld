@@ -42,16 +42,22 @@
         <!-- everything above is for the topbar and navigation-->
 
 
-
-
-
-        <ScrollView
+        <com.alamkanak.weekview.WeekView
+            android:id="@+id/weekView"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_width="match_parent">
+            android:layout_below="@id/topAppBarLayout"
+            app:columnGap="8dp"
+            app:dayBackgroundColor="@color/white"
+            app:eventTextColor="@color/white"
+            app:hourHeight="70dp"
+            app:maxHour="@string/maxCalendarHour"
+            app:minHour="@string/minCalendarHour"
+            app:showWeekNumber="true"
 
-            <!-- here is the scrollable content of the page-->
+            />
 
-        </ScrollView>
+
 
     </RelativeLayout>
 </androidx.drawerlayout.widget.DrawerLayout>
