@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "595846398245",
+    "project_id": "dhbworld-d9c39",
+    "storage_bucket": "dhbworld-d9c39.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:595846398245:android:7756817d51c9a92fee1acc",
+        "android_client_info": {
+          "package_name": "com.main.dhbworld"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "595846398245-3fifl8ku4v284r8kco1ojlstoskqcckb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC7UkID18fFvQSRs2mwbj_eKBBPm5lQptg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "595846398245-3fifl8ku4v284r8kco1ojlstoskqcckb.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
