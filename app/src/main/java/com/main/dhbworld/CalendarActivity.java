@@ -12,6 +12,7 @@ import com.alamkanak.weekview.WeekView;
 import com.alamkanak.weekview.WeekViewEntity;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Calendar;
 import java.util.concurrent.atomic.AtomicReference;
@@ -72,37 +73,44 @@ public class CalendarActivity extends AppCompatActivity {
         });
 
 
-
-
         //set onClickListener for Events
 
-        class Adapter extends WeekView.SimpleAdapter<Events> implements com.main.dhbworld.Adapter {
+        Adapter adapter = new Adapter();
+        cal.setAdapter(adapter);
 
-            @NonNull
-          @Override
-            public WeekViewEntity onCreateEntity(Events item) {
-                return new WeekViewEntity.Event.Builder<>(item)
-                        .setId(item.id)
-                        .setTitle(item.title)
-                        .setStartTime(item.startTime)
-                        .setEndTime(item.endTime)
-                        .build();
-            }
+        Calendar start = Calendar.getInstance();
+        start.set(Calendar.DAY_OF_MONTH, 14);
 
-            @Override
-            public void onEventClick(Events data) {
-                Toast.makeText(getApplicationContext(), "Titel: " + data.title + "\nBeschreibung: " + data.description, Toast.LENGTH_LONG).show();
-                super.onEventClick(data);
-            }
+        Calendar end = Calendar.getInstance();
+        end.set(Calendar.DAY_OF_MONTH, 14);
+        end.add(Calendar.HOUR, 1);
 
+        ArrayList<Events> events = new ArrayList<>();
+        events.add(new Events(1, "Titel", start, end, "Beschreibung"));
+
+        adapter.submitList(events);
+
+
+    }
+
+    class Adapter extends WeekView.SimpleAdapter<Events> implements com.main.dhbworld.Adapter {
+
+        @NonNull
+        @Override
+        public WeekViewEntity onCreateEntity(Events item) {
+            return new WeekViewEntity.Event.Builder<>(item)
+                    .setId(item.id)
+                    .setTitle(item.title)
+                    .setStartTime(item.startTime)
+                    .setEndTime(item.endTime)
+                    .build();
         }
 
-
-
-
-
-
-
+        @Override
+        public void onEventClick(Events data) {
+            Toast.makeText(getApplicationContext(), "Titel: " + data.title + "\nBeschreibung: " + data.description, Toast.LENGTH_LONG).show();
+            super.onEventClick(data);
+        }
 
     }
 }
