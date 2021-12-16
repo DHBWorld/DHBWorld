@@ -92,7 +92,7 @@ public class UserInteractionMessagingService extends FirebaseMessagingService {
                     if (notificationManager.getNotificationChannel("warnings") == null) {
                         createNotificationChannel();
                     }
-                    notificationManager.notify(0, builder.build());
+                    notificationManager.notify(icon, builder.build());
                 }
             });
         }
