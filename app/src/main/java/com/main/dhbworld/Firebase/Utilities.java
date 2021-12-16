@@ -16,7 +16,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 public class Utilities {
-    private static final String emulatorIp = "193.41.237.154";
+    private static final String emulatorIp = "blitzdose.de";
 
     public static final String CATEGORY_COFFEE = "coffee";
     public static final String CATEGORY_CAFETERIA = "cafeteria";
