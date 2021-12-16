@@ -47,6 +47,9 @@
             app:maxHour="@string/maxCalendarHour"
             app:minHour="@string/minCalendarHour"
             app:showWeekNumber="true"
+            app:showNowLine="true"
+            app:nowLineStrokeWidth="2dp"
+            app:nowLineColor="@color/LightBlue"
 
             />
 
