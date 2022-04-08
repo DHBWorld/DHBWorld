@@ -10,9 +10,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.DHBWorld">
         <activity
+            android:name=".CantineActivity"
+            android:exported="false"
+            android:label="@string/title_activity_cantine"
+            android:theme="@style/Theme.DHBWorld.NoActionBar" />
+        <activity
             android:name=".UserInteraction"
-            android:exported="true" >
-        </activity>
+            android:exported="true"></activity>
         <activity
             android:name=".MainActivity"
             android:exported="true">
@@ -32,6 +36,7 @@
         <activity
             android:name=".CalendarActivity"
             android:exported="false" />
+
         <service
             android:name=".Services.UserInteractionMessagingService"
             android:exported="false">

@@ -27,6 +27,9 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+    buildFeatures {
+        viewBinding true
+    }
 
 }
 
@@ -40,7 +43,8 @@ dependencies {
 
     implementation 'com.github.thellmund.Android-Week-View:core:5.3.2'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.4.32"
-
+    implementation 'androidx.navigation:navigation-fragment:2.3.5'
+    implementation 'androidx.navigation:navigation-ui:2.3.5'
 
 
     testImplementation 'junit:junit:4.+'
