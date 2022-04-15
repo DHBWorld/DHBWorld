@@ -1,0 +1,155 @@
+{
+  "Trias": {
+    "xmlns": "http://www.vdv.de/trias",
+    "ServiceDelivery": {
+      "Status": {
+        "xmlns": "http://www.siri.org.uk/siri",
+        "content": true
+      },
+      "ResponseTimestamp": {
+        "xmlns": "http://www.siri.org.uk/siri",
+        "content": "2022-04-12T08:07:45Z"
+      },
+      "Language": "de",
+      "DeliveryPayload": {
+        "StopEventResponse": {
+          "StopEventResponseContext": {
+            "Situations": ""
+          },
+          "StopEventResult": [
+            {
+              "StopEvent": {
+                "ThisCall": {
+                  "CallAtStop": {
+                    "StopPointRef": "de:08212:12:1:1",
+                    "PlannedBay": {
+                      "Language": "de",
+                      "Text": "Gleis 1"
+                    },
+                    "ServiceDeparture": {
+                      "TimetabledTime": "2022-04-12T08:13:18Z"
+                    },
+                    "StopPointName": {
+                      "Language": "de",
+                      "Text": "Karlsruhe Duale Hochschule"
+                    },
+                    "StopSeqNumber": 18
+                  }
+                },
+                "Service": {
+                  "JourneyRef": "kvv:21001:E:H:j22:245",
+                  "DirectionRef": "outward",
+                  "OriginText": {
+                    "Language": "de",
+                    "Text": "Durlach Turmberg"
+                  },
+                  "PublishedLineName": {
+                    "Language": "de",
+                    "Text": "Straßenbahn 1"
+                  },
+                  "OperatorRef": "kvv:02",
+                  "Attribute": {
+                    "Text": {
+                      "Language": "de",
+                      "Text": "Niederflurwagen"
+                    },
+                    "Code": 152429,
+                    "Mandatory": false
+                  },
+                  "OriginStopPointRef": "de:08212:18:1:1",
+                  "Mode": {
+                    "TramSubmode": "cityTram",
+                    "PtMode": "tram",
+                    "Name": {
+                      "Language": "de",
+                      "Text": "Straßenbahn"
+                    }
+                  },
+                  "DestinationText": {
+                    "Language": "de",
+                    "Text": "Heide"
+                  },
+                  "LineRef": "kvv:21001:E:H",
+                  "RouteDescription": {
+                    "Language": "de",
+                    "Text": "Durlach - Neureut-Heide"
+                  },
+                  "OperatingDayRef": "2022-04-12"
+                }
+              },
+              "ResultId": "ID-6EABD3C6-662E-46ED-B0F3-82FCE2967119"
+            },
+            {
+              "StopEvent": {
+                "ThisCall": {
+                  "CallAtStop": {
+                    "StopPointRef": "de:08212:12:2:2",
+                    "PlannedBay": {
+                      "Language": "de",
+                      "Text": "Gleis 2"
+                    },
+                    "ServiceDeparture": {
+                      "TimetabledTime": "2022-04-12T08:14:36Z"
+                    },
+                    "StopPointName": {
+                      "Language": "de",
+                      "Text": "Karlsruhe Duale Hochschule"
+                    },
+                    "StopSeqNumber": 3
+                  }
+                },
+                "Service": {
+                  "JourneyRef": "kvv:21001:E:R:j22:46",
+                  "DirectionRef": "return",
+                  "OriginText": {
+                    "Language": "de",
+                    "Text": "Neureut-Heide"
+                  },
+                  "PublishedLineName": {
+                    "Language": "de",
+                    "Text": "Straßenbahn 1"
+                  },
+                  "OperatorRef": "kvv:02",
+                  "Attribute": {
+                    "Text": {
+                      "Language": "de",
+                      "Text": "Niederflurwagen"
+                    },
+                    "Code": 152430,
+                    "Mandatory": false
+                  },
+                  "OriginStopPointRef": "de:08212:13:2:2",
+                  "Mode": {
+                    "TramSubmode": "cityTram",
+                    "PtMode": "tram",
+                    "Name": {
+                      "Language": "de",
+                      "Text": "Straßenbahn"
+                    }
+                  },
+                  "DestinationText": {
+                    "Language": "de",
+                    "Text": "Durlach"
+                  },
+                  "LineRef": "kvv:21001:E:R",
+                  "RouteDescription": {
+                    "Language": "de",
+                    "Text": "Neureut-Heide - Durlach"
+                  },
+                  "OperatingDayRef": "2022-04-12"
+                }
+              },
+              "ResultId": "ID-750EDBC2-DAEE-44E7-904D-A47CA014FAD1"
+            }
+          ]
+        }
+      },
+      "MoreData": false,
+      "ProducerRef": {
+        "xmlns": "http://www.siri.org.uk/siri",
+        "content": "EFAController10.3.18.46-EFA03"
+      }
+    },
+    "version": 1.1
+  }
+}

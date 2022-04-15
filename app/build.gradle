@@ -9,7 +9,7 @@ android {
 
     defaultConfig {
         applicationId "com.main.dhbworld"
-        minSdk 21
+        minSdk 26
         targetSdk 31
         versionCode 1
         versionName "1.0"
@@ -31,6 +31,8 @@ android {
 }
 
 dependencies {
+    implementation(fileTree(dir: 'libs', include: ['*.jar']))
+
     implementation platform('com.google.firebase:firebase-bom:29.0.0')
 
     implementation 'androidx.preference:preference:1.1.1'

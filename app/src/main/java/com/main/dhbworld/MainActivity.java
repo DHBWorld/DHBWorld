@@ -1,26 +1,18 @@
 package com.main.dhbworld;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.wifi.p2p.WifiP2pManager;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.navigation.NavigationView;
-import com.google.android.material.snackbar.Snackbar;
+import com.main.dhbworld.KVV.KVVDataLoader;
 import com.main.dhbworld.Navigation.NavigationUtilities;
-import com.main.dhbworld.R;
 
 public class MainActivity extends AppCompatActivity{
     FloatingActionButton editButton;
@@ -113,6 +105,10 @@ public class MainActivity extends AppCompatActivity{
 
             loadAndUpdateData();
         });
+
+
+        KVVDataLoader dataLoader = new KVVDataLoader(this);
+        dataLoader.loadData();
 
 
     }
