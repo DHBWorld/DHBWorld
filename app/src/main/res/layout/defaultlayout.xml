@@ -42,16 +42,13 @@
         <!-- everything above is for the topbar and navigation-->
 
 
-
-
-
         <ScrollView
-                android:layout_height="match_parent"
-                android:layout_width="match_parent">
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
             <!-- here is the scrollable content of the page-->
 
-            </ScrollView>
+        </ScrollView>
 
     </RelativeLayout>
 </androidx.drawerlayout.widget.DrawerLayout>
