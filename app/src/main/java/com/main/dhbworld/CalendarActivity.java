@@ -2,29 +2,38 @@ package com.main.dhbworld;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-
-import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.widget.Toast;
-
 import com.alamkanak.weekview.WeekView;
 import com.alamkanak.weekview.WeekViewEntity;
 import com.main.dhbworld.Navigation.NavigationUtilities;
-
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 import java.util.Calendar;
+import java.time.LocalDate;
+import dhbw.timetable.rapla.data.event.Appointment;
+import dhbw.timetable.rapla.parser.DataImporter;
 import java.util.concurrent.atomic.AtomicReference;
 
 
-public class CalendarActivity extends AppCompatActivity {
+public class CalendarActivity extends AppCompatActivity{
 
     WeekView cal;
+    List<Calendar> startDateList = new ArrayList<>();
+    List<Calendar> endDateList = new ArrayList<>();
+    List<String> personList = new ArrayList<>();
+    List<String> resourceList = new ArrayList<>();
+    List<String> titleList = new ArrayList<>();
+    List<String> classList = new ArrayList<>();
+    List<String> infoList = new ArrayList<>();
+
+    ArrayList<Events> events = new ArrayList<>();
 
 
-    @SuppressLint("ClickableViewAccessibility")
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.schedule_layout);
@@ -40,89 +49,15 @@ public class CalendarActivity extends AppCompatActivity {
             SimpleDateFormat date = new SimpleDateFormat("E dd.MM", Locale.getDefault());
             return date.format(calendar.getTime());
         });
-
         cal.setTimeFormatter(time -> time + " Uhr");
 
+       thread.start();
 
         final AtomicReference<Float>[] x1 = new AtomicReference[]{new AtomicReference<>((float) 0)};
         final float[] x2 = {0};
 
-
-
-
-        //set onClickListener for Events
-
-        Adapter adapter = new Adapter();
-        cal.setAdapter(adapter);
-
-        Calendar start1 = Calendar.getInstance();
-        start1.set(Calendar.DAY_OF_MONTH, 13);
-        start1.set(Calendar.HOUR_OF_DAY, 10);
-        start1.set(Calendar.MINUTE, 0);
-
-        Calendar end1 = Calendar.getInstance();
-        end1.set(Calendar.DAY_OF_MONTH, 13);
-        end1.set(Calendar.HOUR_OF_DAY, 12);
-        end1.set(Calendar.MINUTE, 0);
-        
-        Calendar start2 = Calendar.getInstance();
-        start2.set(Calendar.DAY_OF_MONTH, 14);
-        start2.set(Calendar.HOUR_OF_DAY, 13);
-        start2.set(Calendar.MINUTE, 0);
-
-        Calendar end2 = Calendar.getInstance();
-        end2.set(Calendar.DAY_OF_MONTH, 14);
-        end2.set(Calendar.HOUR_OF_DAY, 15);
-        end2.set(Calendar.MINUTE, 30);
-
-
-        Calendar start3 = Calendar.getInstance();
-        start3.set(Calendar.DAY_OF_MONTH, 15);
-        start3.set(Calendar.HOUR_OF_DAY, 14);
-        start3.set(Calendar.MINUTE, 0);
-
-        Calendar end3 = Calendar.getInstance();
-        end3.set(Calendar.DAY_OF_MONTH, 15);
-        end3.set(Calendar.HOUR_OF_DAY, 16);
-        end3.set(Calendar.MINUTE, 0);
-        
-        Calendar start4 = Calendar.getInstance();
-        start4.set(Calendar.DAY_OF_MONTH, 16);
-        start4.set(Calendar.HOUR_OF_DAY, 8);
-        start4.set(Calendar.MINUTE, 30);
-
-        Calendar end4 = Calendar.getInstance();
-        end4.set(Calendar.DAY_OF_MONTH, 16);
-        end4.set(Calendar.HOUR_OF_DAY, 12);
-        end4.set(Calendar.MINUTE, 30);
-
-        
-        Calendar start5 = Calendar.getInstance();
-        start5.set(Calendar.DAY_OF_MONTH, 17);
-        start5.set(Calendar.HOUR_OF_DAY, 10);
-        start5.set(Calendar.MINUTE, 0);
-
-        Calendar end5 = Calendar.getInstance();
-        end5.set(Calendar.DAY_OF_MONTH, 17);
-        end5.set(Calendar.HOUR_OF_DAY, 12);
-        end5.set(Calendar.MINUTE, 0);
-        
-        ArrayList<Events> events = new ArrayList<>();
-       
-        
-        events.add(new Events(1, "Klausur Betriebssysteme", start1, end1, "Faber, Uwe \n Hörsaal A172 \n TINF20B4"));
-        events.add(new Events(2, "Rechnerarchtiektur", start2, end2, "Roethig, Juergen"));
-        events.add(new Events(3, "Klausur Numerik", start3, end3, "Lausen, Ralph \n Hörsaal A172 \n TINF20B4"));
-        events.add(new Events(4, "Grundlagen des Software Engineering", start4, end4, "Berkling, Kay Margerethe"));
-        events.add(new Events(5, "Klausur Webengineering II", start5, end5, "Pfeil, Daniel \n Hörsaal A172 \n TINF20B4 & TINF20B5"));
-        
-        adapter.submitList(events);
-
-
+        // immer nur auf montag scrollen, damit wochentage richtig angezeigt werden.
         Calendar date = Calendar.getInstance();
-        date.set(Calendar.DAY_OF_MONTH, 13);
-        date.set(Calendar.HOUR_OF_DAY, 8);
-        date.set(Calendar.MINUTE, 30);
         cal.scrollToDateTime(date);
 
         cal.setOnTouchListener((v, event) -> {
@@ -146,13 +81,69 @@ public class CalendarActivity extends AppCompatActivity {
                     }
                     break;
             }
-
             return false;
         });
+    }
+
+    Thread thread = new Thread(new Runnable() {
+        @Override
+        public void run() {
+            LocalDate startDate = LocalDate.now();
+            LocalDate endDate = startDate.plusWeeks(1);
+            String url = "https://rapla.dhbw-karlsruhe.de/rapla?page=calendar&user=eisenbiegler&file=TINF20B4" ; // ist von nutzer einzugeben (oder Liste von Unis auswählen).
+
+            ArrayList<Appointment> data = null;
+            try {
+                data = DataImporter.ImportWeek(startDate, url);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            try {
+                saveValues(data);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    });
+
+
+    public void saveValues(ArrayList<Appointment> data) throws Exception{
+
+        Adapter adapter = new Adapter();
+        cal.setAdapter(adapter);
+
+        for (int i = 0; i <= data.size() -1;i++){
+            startDateList.add(localDateTimeToDate(data.get(i).getStartDate()));
+            endDateList.add(localDateTimeToDate(data.get(i).getEndDate()));
+            personList.add(data.get(i).getPersons());
+            resourceList.add(data.get(i).getResources());
+            titleList.add(data.get(i).getTitle());
+            classList.add(data.get(i).getClass().toString());
+            infoList.add(data.get(i).getInfo());
+            System.out.println(titleList);
+
+        }
+        fillCalendar(adapter);
+    }
+
+    public static Calendar localDateTimeToDate(LocalDateTime localDateTime) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.clear();
+        calendar.set(localDateTime.getYear(), localDateTime.getMonthValue()-1, localDateTime.getDayOfMonth(),
+                localDateTime.getHour(), localDateTime.getMinute(), localDateTime.getSecond());
+        return calendar;
+    }
+
+
+    public void fillCalendar(Adapter adapter){
+        for(int i = 0; i< titleList.size() -1; i++){
+            events.add(new Events(i, titleList.get(i), startDateList.get(i),endDateList.get(i), personList.get(i) + ", " + classList.get(i)));
+            adapter.submitList(events);
+        }
+
 
 
     }
-
     class Adapter extends WeekView.SimpleAdapter<Events> implements com.main.dhbworld.Adapter {
 
         @NonNull
