@@ -1,5 +1,6 @@
 package com.main.dhbworld.KVV;
 
+import android.app.Activity;
 import android.content.Context;
 
 import com.main.dhbworld.R;
@@ -20,6 +21,8 @@ import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.ZoneOffset;
+import java.time.temporal.TemporalAccessor;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
@@ -28,13 +31,13 @@ import javax.net.ssl.HttpsURLConnection;
 public class KVVDataLoader {
 
     DataLoaderListener dataLoaderListener;
-    Context context;
+    Activity context;
 
     /**
      * KVVDataLoader constructor for loading the tram departures
      * @param context of the calling class
      */
-    public KVVDataLoader(Context context) {
+    public KVVDataLoader(Activity context) {
         this.context = context;
     }
 
@@ -51,12 +54,13 @@ public class KVVDataLoader {
      * @return Returns the XML-response
      * @throws IOException If something went wrong calling the server
      */
-    private String loadfromKVVServers() throws IOException {
+    private String loadfromKVVServers(LocalDateTime time) throws IOException {
         URL apiUrl = new URL(context.getResources().getString(R.string.url_kvv));
 
         String apiKey = context.getResources().getString(R.string.api_key_kvv);
-        String timeStr = Instant.now().toString();
-        String data = context.getResources().getString(R.string.request_data_kvv, apiKey, timeStr);
+        String timeStr = time.toInstant(ZoneOffset.UTC).toString();
+        String currentTimeString = Instant.now().toString();
+        String data = context.getResources().getString(R.string.request_data_kvv, apiKey, currentTimeString, timeStr);
 
         HttpsURLConnection connection = (HttpsURLConnection) apiUrl.openConnection();
         connection.setRequestMethod("POST");
@@ -83,7 +87,7 @@ public class KVVDataLoader {
      * Loads and parses the data from the KVV-Server
      * @see #setDataLoaderListener(DataLoaderListener)
      */
-    public void loadData() {
+    public void loadData(LocalDateTime time) {
         new Thread(() -> {
             ArrayList<Departure> departures = new ArrayList<>();
 
@@ -91,14 +95,16 @@ public class KVVDataLoader {
 
             String kvvXMLData;
             try {
-                kvvXMLData = loadfromKVVServers();
+                kvvXMLData = loadfromKVVServers(time);
                 if (kvvXMLData == null) {
                     throw new IOException();
                 }
             } catch (IOException e) {
-                if (dataLoaderListener != null) {
-                    dataLoaderListener.onDataLoaded(false, departures);
-                }
+                context.runOnUiThread(() -> {
+                    if (dataLoaderListener != null) {
+                        dataLoaderListener.onDataLoaded(departures);
+                    }
+                });
                 return;
             }
 
@@ -124,8 +130,14 @@ public class KVVDataLoader {
                     String platform = callAtStop.getJSONObject("PlannedBay")
                             .getString("Text");
 
+
                     String departureTimeString = callAtStop.getJSONObject("ServiceDeparture")
                             .getString("TimetabledTime");
+
+                    if (callAtStop.getJSONObject("ServiceDeparture").has("EstimatedTime")) {
+                        departureTimeString = callAtStop.getJSONObject("ServiceDeparture")
+                                .getString("EstimatedTime");
+                    }
 
                     String line = service.getJSONObject("PublishedLineName")
                             .getString("Text");
@@ -140,20 +152,19 @@ public class KVVDataLoader {
                     String destination = service.getJSONObject("DestinationText")
                             .getString("Text");
 
-                    LocalDateTime departureTime = Instant.parse(departureTimeString)
-                            .atZone(ZoneId.systemDefault())
-                            .toLocalDateTime();
+                    LocalDateTime departureTime = LocalDateTime.ofInstant(Instant.parse(departureTimeString), ZoneOffset.UTC);
 
                     Departure departure = new Departure(line, platform, attribute, destination, departureTime);
                     departures.add(departure);
                 }
-            } catch (JSONException e) {
-                success = false;
-            }
+            } catch (JSONException ignored) { }
 
-            if (dataLoaderListener != null) {
-                dataLoaderListener.onDataLoaded(success, departures);
-            }
+            context.runOnUiThread(() -> {
+                if (dataLoaderListener != null) {
+                    dataLoaderListener.onDataLoaded(departures);
+                }
+            });
+
         }).start();
     }
 }

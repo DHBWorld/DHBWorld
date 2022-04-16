@@ -160,7 +160,7 @@
    \n   (b) You must cause any modified files to carry prominent notices
    \n       stating that You changed the files; and
 \n
-   \n   (c) You must retain, in the Source form of any Derivative Works
+   \n   © You must retain, in the Source form of any Derivative Works
    \n       that You distribute, all copyright, patent, trademark, and
    \n       attribution notices from the Source form of the Work,
    \n       excluding those notices that do not pertain to any part of
@@ -269,4 +269,5 @@
     <string name="previous_notifications">Bisherige Meldungen:</string>
     <string name="state">Zustand:</string>
     <string name="are_you_sure">Sind Sie sicher?</string>
+    <string name="time">%1$02d:%2$02d Uhr</string>
 </resources>

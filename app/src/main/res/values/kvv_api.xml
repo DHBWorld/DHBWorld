@@ -14,9 +14,12 @@
                                   <LocationRef>
                                     <StopPlaceRef>de:08212:12</StopPlaceRef>
                                 </LocationRef>
+                                <DepArrTime>%3$s</DepArrTime>
                               </Location>
                                 <Params>
-                                    <NumberOfResults>2</NumberOfResults>
+                                    <NumberOfResults>6</NumberOfResults>
+                                    <IncludeRealtimeData>true</IncludeRealtimeData>
+                                    <StopEventType>departure</StopEventType>
                                 </Params>
                             </StopEventRequest>
                         </RequestPayload>

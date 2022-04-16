@@ -11,6 +11,7 @@
     <color name="red_dark">#A2001A</color>
     <color name="grey_dark">#4A5360</color>
     <color name="grey_light">#9CA0A4</color>
+    <color name="even_lighter_gray">#0D000000</color>
 
 
     <!-- copied colors to have a wider variety-->

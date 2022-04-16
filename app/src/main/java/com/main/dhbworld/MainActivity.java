@@ -106,11 +106,6 @@ public class MainActivity extends AppCompatActivity{
             loadAndUpdateData();
         });
 
-
-        KVVDataLoader dataLoader = new KVVDataLoader(this);
-        dataLoader.loadData();
-
-
     }
 
 
