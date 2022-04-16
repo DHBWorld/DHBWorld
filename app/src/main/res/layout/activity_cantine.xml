@@ -42,9 +42,6 @@
         <!-- everything above is for the topbar and navigation-->
 
 
-
-
-
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -53,52 +50,38 @@
 
 
             <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                >
+
+            <LinearLayout
+                android:id="@+id/layoutMealCardsBasic"
 
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@color/white"
-                android:orientation="horizontal"
-                android:padding="20dp"
-                >
-
-            <LinearLayout
-
-                android:layout_width="300dp"
-                android:layout_height="match_parent"
-                android:background="@color/white"
                 android:orientation="vertical"
-
-                >
-                <TextView
-                    android:id="@+id/meal"
-                    android:layout_width="match_parent"
-                    android:layout_height="100dp"
-                    android:padding="10dp"
-                    android:singleLine="false"
-                    android:text="test">
-
-                </TextView>
+                android:padding="20dp">
 
             </LinearLayout>
+
+
                 <LinearLayout
+                    android:id="@+id/layoutMealCardsExtra"
 
-                    android:layout_width="60dp"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@color/grey_light"
+                    android:background="@color/white"
                     android:orientation="vertical"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp">
 
-                    >
-                    <TextView
-                        android:id="@+id/preis"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:padding="10dp"
-                        android:text="test">
 
-                    </TextView>
 
                 </LinearLayout>
             </LinearLayout>
+
 
 
         </ScrollView>
