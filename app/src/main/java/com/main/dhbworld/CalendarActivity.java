@@ -2,6 +2,9 @@ package com.main.dhbworld;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.annotation.SuppressLint;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.widget.Toast;
@@ -9,20 +12,39 @@ import com.alamkanak.weekview.WeekView;
 import com.alamkanak.weekview.WeekViewEntity;
 import com.main.dhbworld.Navigation.NavigationUtilities;
 import java.text.SimpleDateFormat;
+import java.time.DayOfWeek;
 import java.time.LocalDateTime;
+
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Calendar;
+import java.util.TimeZone;
+
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Calendar;
 import java.time.LocalDate;
 import dhbw.timetable.rapla.data.event.Appointment;
 import dhbw.timetable.rapla.parser.DataImporter;
+
+import java.util.Map;
+import java.util.Random;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.atomic.AtomicReference;
 
 
 public class CalendarActivity extends AppCompatActivity{
 
     WeekView cal;
+    Map<String, Color> colorMap = new HashMap<>();
+    Random rnd = new Random();
+    Calendar date = Calendar.getInstance();
+
     List<Calendar> startDateList = new ArrayList<>();
     List<Calendar> endDateList = new ArrayList<>();
     List<String> personList = new ArrayList<>();
@@ -34,6 +56,7 @@ public class CalendarActivity extends AppCompatActivity{
     ArrayList<Events> events = new ArrayList<>();
 
 
+    @SuppressLint("ClickableViewAccessibility")
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.schedule_layout);
@@ -43,7 +66,8 @@ public class CalendarActivity extends AppCompatActivity{
         cal = findViewById(R.id.weekView);
 
         cal.setNumberOfVisibleDays(5);
-        cal.setShowFirstDayOfWeekFirst(false);
+
+        cal.setShowFirstDayOfWeekFirst(true);
 
         cal.setDateFormatter(calendar -> {
             SimpleDateFormat date = new SimpleDateFormat("E dd.MM", Locale.getDefault());
@@ -51,14 +75,19 @@ public class CalendarActivity extends AppCompatActivity{
         });
         cal.setTimeFormatter(time -> time + " Uhr");
 
-       thread.start();
+
+        ExecutorService executor = Executors.newFixedThreadPool(10);
+
+       executor.submit(runnableTask);
 
         final AtomicReference<Float>[] x1 = new AtomicReference[]{new AtomicReference<>((float) 0)};
         final float[] x2 = {0};
 
         // immer nur auf montag scrollen, damit wochentage richtig angezeigt werden.
-        Calendar date = Calendar.getInstance();
+        date.set(Calendar.DAY_OF_WEEK,
+                date.getActualMinimum(Calendar.DAY_OF_WEEK) + 1);
         cal.scrollToDateTime(date);
+
 
         cal.setOnTouchListener((v, event) -> {
             // TODO Auto-generated method stub
@@ -73,10 +102,12 @@ public class CalendarActivity extends AppCompatActivity{
                     if (deltaX < -100) {
                         date.add(Calendar.WEEK_OF_YEAR,1);
                         cal.scrollToDate(date);
+                        executor.submit(runnableTask);
                         return true;
                     }else if(deltaX > 100){
                         date.add(Calendar.WEEK_OF_YEAR,-1);
                         cal.scrollToDate(date);
+                        executor.submit(runnableTask);
                         return true;
                     }
                     break;
@@ -85,16 +116,16 @@ public class CalendarActivity extends AppCompatActivity{
         });
     }
 
-    Thread thread = new Thread(new Runnable() {
-        @Override
-        public void run() {
-            LocalDate startDate = LocalDate.now();
-            LocalDate endDate = startDate.plusWeeks(1);
+
+
+    Runnable runnableTask = () -> {
             String url = "https://rapla.dhbw-karlsruhe.de/rapla?page=calendar&user=eisenbiegler&file=TINF20B4" ; // ist von nutzer einzugeben (oder Liste von Unis auswählen).
+
+            LocalDate calInLocalDate = LocalDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault()).toLocalDate();
 
             ArrayList<Appointment> data = null;
             try {
-                data = DataImporter.ImportWeek(startDate, url);
+                data = DataImporter.ImportWeek(calInLocalDate, url);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -103,16 +134,31 @@ public class CalendarActivity extends AppCompatActivity{
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        }
-    });
+        };
 
 
     public void saveValues(ArrayList<Appointment> data) throws Exception{
+
+
 
         Adapter adapter = new Adapter();
         cal.setAdapter(adapter);
 
         for (int i = 0; i <= data.size() -1;i++){
+            if(!titleList.contains(data.get(i).getTitle())){
+                final int baseColor = Color.WHITE;
+
+                final int baseRed = Color.red(baseColor);
+                final int baseGreen = Color.green(baseColor);
+                final int baseBlue = Color.blue(baseColor);
+
+                final int red = (baseRed + rnd.nextInt(256)) / 2;
+                final int green = (baseGreen + rnd.nextInt(256)) / 2;
+                final int blue = (baseBlue + rnd.nextInt(256)) / 2;
+
+                int rndColor = Color.rgb(red, green, blue);
+            }
+
             startDateList.add(localDateTimeToDate(data.get(i).getStartDate()));
             endDateList.add(localDateTimeToDate(data.get(i).getEndDate()));
             personList.add(data.get(i).getPersons());
@@ -120,8 +166,6 @@ public class CalendarActivity extends AppCompatActivity{
             titleList.add(data.get(i).getTitle());
             classList.add(data.get(i).getClass().toString());
             infoList.add(data.get(i).getInfo());
-            System.out.println(titleList);
-
         }
         fillCalendar(adapter);
     }
