@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.widget.Toast;
@@ -45,6 +46,7 @@ public class CalendarActivity extends AppCompatActivity{
     Random rnd = new Random();
     Calendar date = Calendar.getInstance();
 
+    List<String> whiteList = new ArrayList<>();
     List<Calendar> startDateList = new ArrayList<>();
     List<Calendar> endDateList = new ArrayList<>();
     List<String> personList = new ArrayList<>();
@@ -139,13 +141,12 @@ public class CalendarActivity extends AppCompatActivity{
 
     public void saveValues(ArrayList<Appointment> data) throws Exception{
 
-
-
         Adapter adapter = new Adapter();
         cal.setAdapter(adapter);
 
         for (int i = 0; i <= data.size() -1;i++){
             if(!titleList.contains(data.get(i).getTitle())){
+                whiteList.add(data.get(i).getTitle());
                 final int baseColor = Color.WHITE;
 
                 final int baseRed = Color.red(baseColor);
@@ -157,8 +158,9 @@ public class CalendarActivity extends AppCompatActivity{
                 final int blue = (baseBlue + rnd.nextInt(256)) / 2;
 
                 int rndColor = Color.rgb(red, green, blue);
-            }
 
+
+            }
             startDateList.add(localDateTimeToDate(data.get(i).getStartDate()));
             endDateList.add(localDateTimeToDate(data.get(i).getEndDate()));
             personList.add(data.get(i).getPersons());
@@ -181,15 +183,14 @@ public class CalendarActivity extends AppCompatActivity{
 
     public void fillCalendar(Adapter adapter){
         for(int i = 0; i< titleList.size() -1; i++){
-            events.add(new Events(i, titleList.get(i), startDateList.get(i),endDateList.get(i), personList.get(i) + ", " + classList.get(i)));
-            adapter.submitList(events);
+           if(whiteList.contains(titleList.get(i))){
+               events.add(new Events(i, titleList.get(i), startDateList.get(i),endDateList.get(i), personList.get(i) + ", " + classList.get(i)));
+           }
         }
-
-
-
+        adapter.submitList(events);
     }
-    class Adapter extends WeekView.SimpleAdapter<Events> implements com.main.dhbworld.Adapter {
 
+    class Adapter extends WeekView.SimpleAdapter<Events> implements com.main.dhbworld.Adapter {
         @NonNull
         @Override
         public WeekViewEntity onCreateEntity(Events item) {
