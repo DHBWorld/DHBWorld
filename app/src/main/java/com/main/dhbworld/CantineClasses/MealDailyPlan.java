@@ -31,8 +31,8 @@ public class MealDailyPlan {
                 meals[i].addNote(jsonNotes.getString(j));
             }
 
-            /*System.out.println("----------------------------------------------------------------");
-            //System.out.println(json.getString("name"));
+            System.out.println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
+            /*//System.out.println(json.getString("name"));
             System.out.println(meal[i].toString());
             System.out.println(jsonNotes);*/
 
