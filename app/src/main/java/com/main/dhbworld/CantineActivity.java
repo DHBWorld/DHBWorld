@@ -6,12 +6,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.gms.common.util.IOUtils;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.chip.Chip;
+import com.google.android.material.tabs.TabLayout;
 import com.google.gson.Gson;
 
 import org.json.JSONException;
 
 import android.os.Build;
 import android.os.Bundle;
+import android.text.format.DateUtils;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,6 +36,7 @@ import java.io.Reader;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.stream.Collectors;
 
@@ -45,6 +48,7 @@ public class CantineActivity extends AppCompatActivity {
     private LinearLayout layoutMealCardsBasic;
     private LinearLayout layoutMealCardsExtra;
     private String inputFromApi;
+
 
 
 
@@ -60,15 +64,127 @@ public class CantineActivity extends AppCompatActivity {
 
 
         Date date= new Date();
+
+        Date[] currentWeek = new Date[5];
         //inputFromApi ="[{\"id\":8495433,\"name\":\"Börek mit Rindfleischfüllung, Gemüse-Couscous, Bolognesesoße\",\"category\":\"Wahlessen 1\",\"prices\":{\"students\":2.6,\"employees\":3.5,\"pupils\":2.95,\"others\":4.0},\"notes\":[\"mit Farbstoff \",\"Eier\",\"Haselnüsse\",\"Milch/Laktose\",\"Sellerie\",\"Senf\",\"Soja\",\"Weizen\",\"enthält Rindfleisch\"]},{\"id\":8495434,\"name\":\"Börek mit Spinatfüllung, Gemüse-Couscous, pikanter Soja Dip\",\"category\":\"Wahlessen 2\",\"prices\":{\"students\":2.6,\"employees\":3.5,\"pupils\":2.95,\"others\":4.0},\"notes\":[\"mit Farbstoff \",\"mit Konservierungsstoff \",\"mit Antioxidationsmittel\",\"mit Geschmacksverstärker \",\"Sellerie\",\"Soja\",\"Weizen\",\"veganes Gericht\"]},{\"id\":8441249,\"name\":\"Verschiedene Dessert\",\"category\":\"Wahlessen 3\",\"prices\":{\"students\":0.95,\"employees\":0.95,\"pupils\":0.95,\"others\":1.15},\"notes\":[\"mit Farbstoff \",\"Milch/Laktose\",\"vegetarisches Gericht\"]},{\"id\":8441251,\"name\":\"Grüner Mischsalat\",\"category\":\"Wahlessen 3\",\"prices\":{\"students\":0.8,\"employees\":0.8,\"pupils\":0.8,\"others\":1.0},\"notes\":[\"mit Antioxidationsmittel\",\"Sellerie\",\"veganes Gericht\"]},{\"id\":8441250,\"name\":\"Blumenkohlgemüse\",\"category\":\"Wahlessen 3\",\"prices\":{\"students\":0.8,\"employees\":0.8,\"pupils\":0.8,\"others\":1.0},\"notes\":[\"mit Farbstoff \",\"Sellerie\",\"veganes Gericht\"]},{\"id\":8444721,\"name\":\"Gemüse-Couscous\",\"category\":\"Wahlessen 3\",\"prices\":{\"students\":0.75,\"employees\":0.75,\"pupils\":0.75,\"others\":0.95},\"notes\":[\"mit Farbstoff \",\"Sellerie\",\"Weizen\",\"veganes Gericht\"]}]";
 
-        try {
-            mealPlanFromOpenMensa(date);
 
-        } catch ( IOException e) {
-            loadDisplay("Es ist ein Fehler aufgetaucht...");
-            e.printStackTrace();
+
+        TabLayout tabLayout= findViewById(R.id.tabTags);
+
+        Calendar c= Calendar.getInstance();
+        c.setTime(date);
+        Integer dayOfWeek = c.get(Calendar.DAY_OF_WEEK);
+        System.out.println(")))))))))))))))))))))))))))");
+        System.out.println(dayOfWeek); // 2 ->Mo
+
+        currentWeek[dayOfWeek]=date;
+
+        for (int q=dayOfWeek+1; q<5;q++){
+            c.add(Calendar.DATE, 1);
+            currentWeek[q]=c.getTime();
         }
+        for (int q=0; q<dayOfWeek;q++){
+            c.add(Calendar.DATE, 1);
+            currentWeek[q]=c.getTime();
+        }
+
+        System.out.println("§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§");
+
+
+        for (int q=0; q<5;q++){
+            SimpleDateFormat format =new SimpleDateFormat("dd.MM.yyyy");
+
+            System.out.println(format.format(currentWeek[q]));
+        }
+
+
+
+        switch (dayOfWeek){
+            case 2:
+        }
+        SimpleDateFormat f =new SimpleDateFormat("dd");
+        tabLayout.getTabAt(0).setText("Mo ("+f.format(currentWeek[2])+")");
+        tabLayout.getTabAt(1).setText("Di ("+f.format(currentWeek[3])+")");
+        tabLayout.getTabAt(2).setText("Mi ("+f.format(currentWeek[4])+")");
+        tabLayout.getTabAt(3).setText("Do ("+f.format(currentWeek[0])+")");
+        tabLayout.getTabAt(4).setText("Fr ("+f.format(currentWeek[1])+")");
+
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+
+
+
+                SimpleDateFormat f =new SimpleDateFormat("dd");
+                switch (tab.getPosition()){
+                    case 0:
+                        try {
+                            mealPlanFromOpenMensa(currentWeek[2]);
+
+                        } catch ( IOException e) {
+                            loadDisplay("Es ist ein Fehler aufgetaucht...");
+                            e.printStackTrace();
+                        }
+
+                        break;
+                    case 1:
+                        try {
+                            mealPlanFromOpenMensa(currentWeek[3]);
+
+                        } catch ( IOException e) {
+                            loadDisplay("Es ist ein Fehler aufgetaucht...");
+                            e.printStackTrace();
+                        }
+
+                        break;
+                    case 2:
+                        try {
+                            mealPlanFromOpenMensa(currentWeek[4]);
+
+                        } catch ( IOException e) {
+                            loadDisplay("Es ist ein Fehler aufgetaucht...");
+                            e.printStackTrace();
+                        }
+
+                        break;
+                    case 3:
+                        try {
+                            mealPlanFromOpenMensa(currentWeek[0]);
+
+                        } catch ( IOException e) {
+                            loadDisplay("Es ist ein Fehler aufgetaucht...");
+                            e.printStackTrace();
+                        }
+
+                        break;
+                    case 4:
+                        try {
+                            mealPlanFromOpenMensa(currentWeek[1]);
+
+                        } catch ( IOException e) {
+                            loadDisplay("Es ist ein Fehler aufgetaucht...");
+                            e.printStackTrace();
+                        }
+
+                        break;
+                }
+
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
+
+
+
 
 
     }
