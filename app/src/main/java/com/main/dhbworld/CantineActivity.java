@@ -120,6 +120,7 @@ public class CantineActivity extends AppCompatActivity {
             c.add(Calendar.DATE, 1);
             currentWeek[q]=c.getTime();
         }
+        c.add(Calendar.DATE, 2);
         for (int q=0; q<dayOfWeek;q++){
             c.add(Calendar.DATE, 1);
             currentWeek[q]=c.getTime();
