@@ -35,6 +35,7 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -69,22 +70,18 @@ public class CantineActivity extends AppCompatActivity {
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-
-
-
-                SimpleDateFormat f =new SimpleDateFormat("dd");
                 try {
 
                     switch (tab.getPosition()){
-                        case 0: mealPlanFromOpenMensa(currentWeek[2]);
+                        case 0: mealPlanFromOpenMensa(currentWeek[0]);
                             break;
-                        case 1:mealPlanFromOpenMensa(currentWeek[3]);
+                        case 1:mealPlanFromOpenMensa(currentWeek[1]);
                             break;
-                        case 2: mealPlanFromOpenMensa(currentWeek[4]);
+                        case 2: mealPlanFromOpenMensa(currentWeek[2]);
                             break;
-                        case 3: mealPlanFromOpenMensa(currentWeek[0]);
+                        case 3: mealPlanFromOpenMensa(currentWeek[3]);
                             break;
-                        case 4: mealPlanFromOpenMensa(currentWeek[1]);
+                        case 4: mealPlanFromOpenMensa(currentWeek[4]);
                                 break;
                     }
                 } catch ( IOException e) {
@@ -107,18 +104,22 @@ public class CantineActivity extends AppCompatActivity {
 
     }
 
-    private void generateCurrentWeek(){
+    private void generateCurrentWeek()  {
         Date date= new Date();
         currentWeek = new Date[5];
         Calendar c= Calendar.getInstance();
         c.setTime(date);
-        Integer dayOfWeek = c.get(Calendar.DAY_OF_WEEK); // dayOfWeek2 ->Mo
-        currentWeek[dayOfWeek]=date;
 
+        Integer dayOfWeek = c.get(Calendar.DAY_OF_WEEK); // dayOfWeek= 2 ->Mo
+        dayOfWeek=dayOfWeek-2; // dayOfWeek= 0 ->Mo
+        if ((dayOfWeek<0) || (dayOfWeek>4)){
+            dayOfWeek=0;
+            c.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+        }
 
-        for (int q=dayOfWeek+1; q<5;q++){
-            c.add(Calendar.DATE, 1);
+        for (int q=dayOfWeek; q<5;q++){
             currentWeek[q]=c.getTime();
+            c.add(Calendar.DATE, 1);
         }
         c.add(Calendar.DATE, 2);
         for (int q=0; q<dayOfWeek;q++){
@@ -130,11 +131,11 @@ public class CantineActivity extends AppCompatActivity {
     private void showTabs (){
 
         SimpleDateFormat f =new SimpleDateFormat("dd");
-        tabLayout.getTabAt(0).setText("Mo ("+f.format(currentWeek[2])+")");
-        tabLayout.getTabAt(1).setText("Di ("+f.format(currentWeek[3])+")");
-        tabLayout.getTabAt(2).setText("Mi ("+f.format(currentWeek[4])+")");
-        tabLayout.getTabAt(3).setText("Do ("+f.format(currentWeek[0])+")");
-        tabLayout.getTabAt(4).setText("Fr ("+f.format(currentWeek[1])+")");
+        tabLayout.getTabAt(0).setText("Mo ("+f.format(currentWeek[0])+")");
+        tabLayout.getTabAt(1).setText("Di ("+f.format(currentWeek[1])+")");
+        tabLayout.getTabAt(2).setText("Mi ("+f.format(currentWeek[2])+")");
+        tabLayout.getTabAt(3).setText("Do ("+f.format(currentWeek[3])+")");
+        tabLayout.getTabAt(4).setText("Fr ("+f.format(currentWeek[4])+")");
 
     }
 
@@ -268,7 +269,6 @@ public class CantineActivity extends AppCompatActivity {
                         layoutMealCardsBasic.post(new Runnable() {
                             @Override
                             public void run() {
-
                                 try {
                                     MealDailyPlan mealDailyPlan = new MealDailyPlan( inputFromApi);
                                     loadLayout(mealDailyPlan, date);
@@ -279,14 +279,6 @@ public class CantineActivity extends AppCompatActivity {
 
                             }
                         });
-
-
-
-
-
-
-
-
 
                     }else{
                         inputFromApi=null;
