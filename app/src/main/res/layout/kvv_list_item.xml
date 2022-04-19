@@ -23,7 +23,8 @@
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:src="@drawable/ic_baseline_arrow_forward_24"
-                android:layout_gravity="center" />
+                android:layout_gravity="center"
+                android:contentDescription="@string/marker_destination" />
 
             <TextView
                 android:id="@+id/tram_destination"
@@ -50,7 +51,7 @@
             android:layout_height="wrap_content" >
 
             <TextView
-                android:paddingStart="20dp"
+                android:layout_marginStart="20dp"
                 android:id="@+id/tram_line"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -59,7 +60,6 @@
                 android:text="Straßenbahn 1"/>
 
             <TextView
-                android:paddingStart="20dp"
                 android:id="@+id/tram_platform"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"

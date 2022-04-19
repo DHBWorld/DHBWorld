@@ -1,7 +1,6 @@
 package com.main.dhbworld.KVV;
 
 import android.app.Activity;
-import android.content.Context;
 
 import com.main.dhbworld.R;
 
@@ -20,9 +19,7 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.time.ZoneOffset;
-import java.time.temporal.TemporalAccessor;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
@@ -90,8 +87,6 @@ public class KVVDataLoader {
     public void loadData(LocalDateTime time) {
         new Thread(() -> {
             ArrayList<Departure> departures = new ArrayList<>();
-
-            boolean success = true;
 
             String kvvXMLData;
             try {
