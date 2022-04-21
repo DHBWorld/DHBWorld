@@ -76,7 +76,7 @@ public class CalendarActivity extends AppCompatActivity{
         cal.setTimeFormatter(time -> time + " Uhr");
 
 
-        ExecutorService executor = Executors.newFixedThreadPool(16);
+        ExecutorService executor = Executors.newCachedThreadPool();
 
        executor.submit(runnableTask);
 
