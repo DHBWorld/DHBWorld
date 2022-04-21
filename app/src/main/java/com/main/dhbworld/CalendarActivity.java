@@ -62,7 +62,6 @@ public class CalendarActivity extends AppCompatActivity{
     List<String> personList = new ArrayList<>();
     List<String> resourceList = new ArrayList<>();
     List<String> titleList = new ArrayList<>();
-    List<String> classList = new ArrayList<>();
     List<String> infoList = new ArrayList<>();
 
     List<String> allTitleList = new ArrayList<>();
@@ -92,7 +91,7 @@ public class CalendarActivity extends AppCompatActivity{
         cal.setTimeFormatter(time -> time + " Uhr");
 
 
-        ExecutorService executor = Executors.newFixedThreadPool(10);
+        ExecutorService executor = Executors.newFixedThreadPool(16);
 
        executor.submit(runnableTask);
 
@@ -112,7 +111,6 @@ public class CalendarActivity extends AppCompatActivity{
                     break;
                 case MotionEvent.ACTION_UP:
                     x2[0] = event.getX();
-                    System.out.println(x1[0] + "     " + x2[0]);
                     float deltaX = x2[0] - x1[0].get();
                     if (deltaX < -100) {
                         date.add(Calendar.WEEK_OF_YEAR,1);
@@ -151,7 +149,6 @@ public class CalendarActivity extends AppCompatActivity{
             }
             try {
                 assert data != null;
-                System.out.println(data);
                 saveValues(data);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -177,7 +174,6 @@ public class CalendarActivity extends AppCompatActivity{
             personList.add(currentData.get(i).getPersons());
             resourceList.add(currentData.get(i).getResources());
             titleList.add(currentData.get(i).getTitle());
-            classList.add(currentData.get(i).getClass().toString());
             infoList.add(currentData.get(i).getInfo());
         }
         fillCalendar(adapter);
@@ -191,10 +187,23 @@ public class CalendarActivity extends AppCompatActivity{
         return calendar;
     }
 
+    public String formatResources(String resources){
+        String output = "";
+
+
+
+        return output;
+    }
+
+
+
     public void fillCalendar(Adapter adapter){
         for(int i = 0; i< titleList.size() -1; i++){
 
             WeekViewEntity.Style style = null;
+            String resources = formatResources(resourceList.get(i));
+            System.out.println(resourceList.get(i));
+
 
             if(colorMap.containsKey(titleList.get(i))){
                 try {
@@ -218,10 +227,9 @@ public class CalendarActivity extends AppCompatActivity{
             }
 
             if(whiteList.contains(titleList.get(i))){
-                Events event = new Events(i, titleList.get(i), startDateList.get(i),endDateList.get(i), personList.get(i) + ", " + classList.get(i), style);
+                Events event = new Events(i, titleList.get(i), startDateList.get(i),endDateList.get(i), personList.get(i) + ", " + resourceList.get(i), style);
                if (!events.contains(event)) {
                    events.add(event);
-                   System.out.println(event.title + event.startTime);
                }
            }
         }
@@ -234,7 +242,6 @@ public class CalendarActivity extends AppCompatActivity{
         personList.clear();
         resourceList.clear();
         titleList.clear();
-        classList.clear();
         infoList.clear();
     }
 
