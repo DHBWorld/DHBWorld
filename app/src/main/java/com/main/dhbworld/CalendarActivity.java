@@ -4,18 +4,29 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.MotionEvent;
+import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.PopupMenu;
+import android.widget.PopupWindow;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alamkanak.weekview.WeekView;
 import com.alamkanak.weekview.WeekViewEntity;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.main.dhbworld.Navigation.NavigationUtilities;
+
+import org.w3c.dom.Text;
+
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDateTime;
 
+import java.time.LocalTime;
 import java.time.ZoneId;
 import java.util.Calendar;
 
@@ -38,12 +49,11 @@ import java.util.concurrent.atomic.AtomicReference;
 public class CalendarActivity extends AppCompatActivity{
 
     WeekView cal;
-    Map<String, Color> colorMap = new HashMap<>();
+    Map<String, Integer> colorMap = new HashMap<>();
     Random rnd = new Random();
     Calendar date = Calendar.getInstance();
 
-    List<Instant> loadedDateList = new ArrayList<java.time.Instant>();
-
+    List<Instant> loadedDateList = new ArrayList<>();
     Map<LocalDate, ArrayList<Appointment>> data = null;
 
     List<String> whiteList = new ArrayList<>();
@@ -54,6 +64,8 @@ public class CalendarActivity extends AppCompatActivity{
     List<String> titleList = new ArrayList<>();
     List<String> classList = new ArrayList<>();
     List<String> infoList = new ArrayList<>();
+
+    List<String> allTitleList = new ArrayList<>();
 
     ArrayList<Events> events = new ArrayList<>();
 
@@ -71,6 +83,7 @@ public class CalendarActivity extends AppCompatActivity{
         cal.setNumberOfVisibleDays(5);
 
         cal.setShowFirstDayOfWeekFirst(true);
+        cal.setNowLineStrokeWidth(6);
 
         cal.setDateFormatter(calendar -> {
             SimpleDateFormat date = new SimpleDateFormat("E dd.MM", Locale.getDefault());
@@ -158,6 +171,7 @@ public class CalendarActivity extends AppCompatActivity{
             if(!titleList.contains(currentData.get(i).getTitle())){
                 whiteList.add(currentData.get(i).getTitle());
             }
+            allTitleList.add(currentData.get(i).getTitle());
             startDateList.add(localDateTimeToDate(currentData.get(i).getStartDate()));
             endDateList.add(localDateTimeToDate(currentData.get(i).getEndDate()));
             personList.add(currentData.get(i).getPersons());
@@ -179,18 +193,29 @@ public class CalendarActivity extends AppCompatActivity{
 
     public void fillCalendar(Adapter adapter){
         for(int i = 0; i< titleList.size() -1; i++){
-            final int baseColor = Color.WHITE;
-            final int baseRed = Color.red(baseColor);
-            final int baseGreen = Color.green(baseColor);
-            final int baseBlue = Color.blue(baseColor);
 
-            final int red = (baseRed + rnd.nextInt(256)) / 2;
-            final int green = (baseGreen + rnd.nextInt(256)) / 2;
-            final int blue = (baseBlue + rnd.nextInt(256)) / 2;
+            WeekViewEntity.Style style = null;
 
-            int rndColor = Color.rgb(red, green, blue);
-
-            WeekViewEntity.Style style = new WeekViewEntity.Style.Builder().setBackgroundColor(rndColor).build();
+            if(colorMap.containsKey(titleList.get(i))){
+                try {
+                    style = new WeekViewEntity.Style.Builder().setBackgroundColor(colorMap.get(titleList.get(i))).build();
+                }
+                catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+            else {
+                final int baseColor = Color.WHITE;
+                final int baseRed = Color.red(baseColor);
+                final int baseGreen = Color.green(baseColor);
+                final int baseBlue = Color.blue(baseColor);
+                final int red = (baseRed + rnd.nextInt(256)) / 2;
+                final int green = (baseGreen + rnd.nextInt(256)) / 2;
+                final int blue = (baseBlue + rnd.nextInt(256)) / 2;
+                int rndColor = Color.rgb(red, green, blue);
+                colorMap.put(titleList.get(i), rndColor);
+                style = new WeekViewEntity.Style.Builder().setBackgroundColor(rndColor).build();
+            }
 
             if(whiteList.contains(titleList.get(i))){
                 Events event = new Events(i, titleList.get(i), startDateList.get(i),endDateList.get(i), personList.get(i) + ", " + classList.get(i), style);
@@ -213,6 +238,27 @@ public class CalendarActivity extends AppCompatActivity{
         infoList.clear();
     }
 
+    public void showBottomSheet(Events event){
+        final BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(this);
+
+        LocalTime startTimeAsLocalDate = LocalDateTime.ofInstant(event.startTime.toInstant(), ZoneId.systemDefault()).toLocalTime();
+        LocalTime endTimeAsLocalDate = LocalDateTime.ofInstant(event.endTime.toInstant(), ZoneId.systemDefault()).toLocalTime();
+
+
+        String timeString = String.format("%s - %s",startTimeAsLocalDate.toString(),endTimeAsLocalDate.toString());
+        bottomSheetDialog.setContentView(R.layout.calendaritembottonsheet);
+        bottomSheetDialog.show();
+
+        TextView titleView = bottomSheetDialog.findViewById(R.id.calendarTitleText);
+            titleView.setText(event.title);
+        TextView timeView = bottomSheetDialog.findViewById(R.id.calendarTimeText);
+            timeView.setText(timeString);
+        TextView descriptionView = bottomSheetDialog.findViewById(R.id.calendarDescriptionText);
+        descriptionView.setText(event.description);
+
+        bottomSheetDialog.show();
+    }
+
 
     class Adapter extends WeekView.SimpleAdapter<Events> implements com.main.dhbworld.Adapter {
         @NonNull
@@ -229,12 +275,23 @@ public class CalendarActivity extends AppCompatActivity{
 
         @Override
         public void onEventClick(Events data) {
-            Toast.makeText(getApplicationContext(), "Titel: " + data.title + "\nBeschreibung: " + data.description, Toast.LENGTH_LONG).show();
+
+            CalendarActivity.this.showBottomSheet(data);
+
+
+
+
+
+//            View popup = findViewById(R.id.calendarPopout);
+//            TextView title = findViewById(R.id.calendarTitleView);
+//            title.setText(data.title);
+//            TextView time = findViewById(R.id.calendarTimeView);
+//            time.setText(timeString);
+//            TextView description = findViewById(R.id.calendarDescriptionView);
+//            description.setText(data.description);
+//
+//            popup.setVisibility(View.VISIBLE);
             super.onEventClick(data);
         }
-
     }
-
-
-
 }

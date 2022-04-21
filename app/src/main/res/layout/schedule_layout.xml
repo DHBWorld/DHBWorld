@@ -12,6 +12,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:weightSum="3"
         android:fitsSystemWindows="true">
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/topAppBarLayout"
@@ -46,15 +47,12 @@
             app:hourHeight="70dp"
             app:maxHour="@string/maxCalendarHour"
             app:minHour="@string/minCalendarHour"
-            app:showWeekNumber="true"
-            app:showNowLine="true"
-            app:nowLineStrokeWidth="2dp"
             app:nowLineColor="@color/LightBlue"
+            app:nowLineStrokeWidth="2dp"
+            app:showNowLine="true"
+            app:showWeekNumber="true"
 
             />
-
-
-
     </RelativeLayout>
 
     <com.google.android.material.navigation.NavigationView
@@ -65,4 +63,5 @@
         app:menu="@menu/navigation_drawer"
         app:headerLayout="@layout/header_nav"
         />
+
 </androidx.drawerlayout.widget.DrawerLayout>
