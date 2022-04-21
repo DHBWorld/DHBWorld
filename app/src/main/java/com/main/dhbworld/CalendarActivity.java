@@ -2,35 +2,21 @@ package com.main.dhbworld;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.annotation.SuppressLint;
-import android.app.Dialog;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.MotionEvent;
-import android.view.View;
-import android.widget.LinearLayout;
-import android.widget.PopupMenu;
-import android.widget.PopupWindow;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import com.alamkanak.weekview.WeekView;
 import com.alamkanak.weekview.WeekViewEntity;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.main.dhbworld.Navigation.NavigationUtilities;
-
-import org.w3c.dom.Text;
-
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDateTime;
-
 import java.time.LocalTime;
 import java.time.ZoneId;
 import java.util.Calendar;
-
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -38,7 +24,6 @@ import java.util.Locale;
 import java.time.LocalDate;
 import dhbw.timetable.rapla.data.event.Appointment;
 import dhbw.timetable.rapla.parser.DataImporter;
-
 import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.ExecutorService;
@@ -187,22 +172,12 @@ public class CalendarActivity extends AppCompatActivity{
         return calendar;
     }
 
-    public String formatResources(String resources){
-        String output = "";
-
-
-
-        return output;
-    }
-
-
-
     public void fillCalendar(Adapter adapter){
         for(int i = 0; i< titleList.size() -1; i++){
 
             WeekViewEntity.Style style = null;
-            String resources = formatResources(resourceList.get(i));
-            System.out.println(resourceList.get(i));
+            String resources = resourceList.get(i).replace(",","\n");
+            System.out.println(resources);
 
 
             if(colorMap.containsKey(titleList.get(i))){
@@ -227,7 +202,7 @@ public class CalendarActivity extends AppCompatActivity{
             }
 
             if(whiteList.contains(titleList.get(i))){
-                Events event = new Events(i, titleList.get(i), startDateList.get(i),endDateList.get(i), personList.get(i) + ", " + resourceList.get(i), style);
+                Events event = new Events(i, titleList.get(i), startDateList.get(i),endDateList.get(i), personList.get(i) + ", " + resources, style);
                if (!events.contains(event)) {
                    events.add(event);
                }
@@ -247,10 +222,8 @@ public class CalendarActivity extends AppCompatActivity{
 
     public void showBottomSheet(Events event){
         final BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(this);
-
         LocalTime startTimeAsLocalDate = LocalDateTime.ofInstant(event.startTime.toInstant(), ZoneId.systemDefault()).toLocalTime();
         LocalTime endTimeAsLocalDate = LocalDateTime.ofInstant(event.endTime.toInstant(), ZoneId.systemDefault()).toLocalTime();
-
 
         String timeString = String.format("%s - %s",startTimeAsLocalDate.toString(),endTimeAsLocalDate.toString());
         bottomSheetDialog.setContentView(R.layout.calendaritembottonsheet);
@@ -258,6 +231,7 @@ public class CalendarActivity extends AppCompatActivity{
 
         TextView titleView = bottomSheetDialog.findViewById(R.id.calendarTitleText);
             titleView.setText(event.title);
+            //titleView.setTextColor(event.style.hashCode());
         TextView timeView = bottomSheetDialog.findViewById(R.id.calendarTimeText);
             timeView.setText(timeString);
         TextView descriptionView = bottomSheetDialog.findViewById(R.id.calendarDescriptionText);
@@ -282,22 +256,7 @@ public class CalendarActivity extends AppCompatActivity{
 
         @Override
         public void onEventClick(Events data) {
-
             CalendarActivity.this.showBottomSheet(data);
-
-
-
-
-
-//            View popup = findViewById(R.id.calendarPopout);
-//            TextView title = findViewById(R.id.calendarTitleView);
-//            title.setText(data.title);
-//            TextView time = findViewById(R.id.calendarTimeView);
-//            time.setText(timeString);
-//            TextView description = findViewById(R.id.calendarDescriptionView);
-//            description.setText(data.description);
-//
-//            popup.setVisibility(View.VISIBLE);
             super.onEventClick(data);
         }
     }
