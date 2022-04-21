@@ -202,8 +202,9 @@ public class CalendarActivity extends AppCompatActivity{
             }
 
             if(whiteList.contains(titleList.get(i))){
-                Events event = new Events(i, titleList.get(i), startDateList.get(i),endDateList.get(i), personList.get(i) + ", " + resources, style);
-               if (!events.contains(event)) {
+                Random rnd = new Random();
+                Events event = new Events(rnd.nextInt(), titleList.get(i), startDateList.get(i),endDateList.get(i), personList.get(i) + ", " + resources, style);
+                if (!events.contains(event)) {
                    events.add(event);
                }
            }
@@ -257,6 +258,7 @@ public class CalendarActivity extends AppCompatActivity{
         @Override
         public void onEventClick(Events data) {
             CalendarActivity.this.showBottomSheet(data);
+            System.out.println(data.title + data.startTime.toString());
             super.onEventClick(data);
         }
     }
