@@ -57,6 +57,7 @@ public class CantineActivity extends AppCompatActivity {
     private LinearLayout layoutMealCardsBasic;
     private LinearLayout layoutMealCardsExtra;
     private CircularProgressIndicator progressIndicator;
+    private ScrollView scroll;
     private String inputFromApi;
     TabLayout tabLayout;
     Date[] currentWeek;
@@ -76,6 +77,35 @@ public class CantineActivity extends AppCompatActivity {
 
         generateCurrentWeek();
         showTabs();
+
+        scroll= findViewById(R.id.scrollViewCantine);
+
+        final AtomicReference<Float>[] x1 = new AtomicReference[]{new AtomicReference<>((float) 0)};
+        final float[] x2 = {0};
+
+        scroll.setOnTouchListener((v, event) -> {
+            // TODO Auto-generated method stub
+            switch (event.getAction()) {
+                case MotionEvent.ACTION_DOWN:
+                    x1[0].set(event.getX());
+                    break;
+                case MotionEvent.ACTION_UP:
+                    x2[0] = event.getX();
+                    System.out.println(x1[0] + "     " + x2[0]);
+                    float deltaX = x2[0] - x1[0].get();
+                    if (deltaX < -100) {
+                        tabLayout.selectTab(tabLayout.getTabAt(tabLayout.getSelectedTabPosition()+1));
+                        return true;
+                    }else if(deltaX > 100){
+                        tabLayout.selectTab(tabLayout.getTabAt(tabLayout.getSelectedTabPosition()-1));
+                        return true;
+
+                    }
+                    break;
+            }
+
+            return false;
+        });
 
 
 
