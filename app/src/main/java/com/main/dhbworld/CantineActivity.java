@@ -6,19 +6,25 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.gms.common.util.IOUtils;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.chip.Chip;
+import com.google.android.material.progressindicator.BaseProgressIndicatorSpec;
+import com.google.android.material.progressindicator.CircularProgressIndicator;
+import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.google.android.material.tabs.TabLayout;
 import com.google.gson.Gson;
 
 import org.json.JSONException;
 
+import android.annotation.SuppressLint;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.format.DateUtils;
 import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
@@ -39,6 +45,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Objects;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -48,12 +56,14 @@ public class CantineActivity extends AppCompatActivity {
 
     private LinearLayout layoutMealCardsBasic;
     private LinearLayout layoutMealCardsExtra;
+    private CircularProgressIndicator progressIndicator;
     private String inputFromApi;
     TabLayout tabLayout;
     Date[] currentWeek;
 
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,9 +72,12 @@ public class CantineActivity extends AppCompatActivity {
         layoutMealCardsExtra= findViewById(R.id.layoutMealCardsExtra);
         tabLayout= findViewById(R.id.tabTags);
 
+        loadProgressIndikator();
+
         generateCurrentWeek();
         showTabs();
-        loadDisplay("Daten werden gleich geladen");
+
+
 
 
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
@@ -73,9 +86,11 @@ public class CantineActivity extends AppCompatActivity {
                 try {
 
                     switch (tab.getPosition()){
-                        case 0: mealPlanFromOpenMensa(currentWeek[0]);
+                        case 0:
+                                mealPlanFromOpenMensa(currentWeek[0]);
                             break;
-                        case 1:mealPlanFromOpenMensa(currentWeek[1]);
+                        case 1:
+                            mealPlanFromOpenMensa(currentWeek[1]);
                             break;
                         case 2: mealPlanFromOpenMensa(currentWeek[2]);
                             break;
@@ -123,9 +138,13 @@ public class CantineActivity extends AppCompatActivity {
         }
         c.add(Calendar.DATE, 2);
         for (int q=0; q<dayOfWeek;q++){
-            c.add(Calendar.DATE, 1);
             currentWeek[q]=c.getTime();
+            c.add(Calendar.DATE, 1);
+
+
         }
+
+
     }
 
     private void showTabs (){
@@ -140,6 +159,7 @@ public class CantineActivity extends AppCompatActivity {
     }
 
     private void loadLayout (MealDailyPlan mealDailyPlan, Date today){
+
         layoutMealCardsBasic.removeAllViews();
         layoutMealCardsExtra.removeAllViews();
         LinearLayout titleLayout = new LinearLayout(CantineActivity.this);
@@ -248,16 +268,22 @@ public class CantineActivity extends AppCompatActivity {
     }
 
     private void mealPlanFromOpenMensa(Date date) throws IOException {
+
+    loadProgressIndikator();
+
         new Thread(new Runnable() {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void run() {
+
+
                 SimpleDateFormat format =new SimpleDateFormat("yyyy-MM-dd");
                 URL urlOpenMensa= null;
                 try {
                     urlOpenMensa = new URL("https://openmensa.org/api/v2/canteens/33/days/"+format.format(date)+"/meals");
                     //urlOpenMensa = new URL("https://openmensa.org/api/v2/canteens/33/days/2021-10-25/meals");
                     HttpsURLConnection connection=(HttpsURLConnection) urlOpenMensa.openConnection();
+
 
 
 
@@ -303,12 +329,14 @@ public class CantineActivity extends AppCompatActivity {
                 }
 
             }
+
         }).start();
 
 
     }
 
     private void loadDisplay(String message)  {
+
         layoutMealCardsBasic.removeAllViews();
         layoutMealCardsExtra.removeAllViews();
 
@@ -319,6 +347,18 @@ public class CantineActivity extends AppCompatActivity {
         errorView.setPadding(0,0,0,15);
         errorView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         layoutMealCardsBasic.addView(errorView);
+    }
+
+    private void loadProgressIndikator(){
+
+        if (layoutMealCardsBasic.getChildCount()==0){
+        progressIndicator = new CircularProgressIndicator(CantineActivity.this);
+        progressIndicator.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        progressIndicator.setIndeterminate(true);
+        layoutMealCardsBasic.addView(progressIndicator);
+        progressIndicator.setVisibility(View.GONE);
+        progressIndicator.setVisibility(View.VISIBLE);
+        }
     }
 
 
