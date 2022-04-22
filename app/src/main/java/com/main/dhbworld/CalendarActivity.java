@@ -2,10 +2,19 @@ package com.main.dhbworld;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SwitchCompat;
+
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.Button;
+import android.widget.ListAdapter;
 import android.widget.TextView;
 import com.alamkanak.weekview.WeekView;
 import com.alamkanak.weekview.WeekViewEntity;
@@ -73,7 +82,6 @@ public class CalendarActivity extends AppCompatActivity{
         cal.setNowLineColor(nowLineColor);
         cal.setPastBackgroundColor(Color.LTGRAY);
 
-
         cal.setDateFormatter(calendar -> {
             SimpleDateFormat date = new SimpleDateFormat("E dd.MM", Locale.getDefault());
             return date.format(calendar.getTime());
@@ -85,15 +93,14 @@ public class CalendarActivity extends AppCompatActivity{
 
        executor.submit(runnableTask);
 
-        final AtomicReference<Float>[] x1 = new AtomicReference[]{new AtomicReference<>((float) 0)};
-        final float[] x2 = {0};
-
         // immer nur auf montag scrollen, damit wochentage richtig angezeigt werden.
         date.set(Calendar.DAY_OF_WEEK,
                 date.getActualMinimum(Calendar.DAY_OF_WEEK) + 1);
         cal.scrollToDateTime(date);
         cal.setOnTouchListener((v, event) -> {
 
+            final AtomicReference<Float>[] x1 = new AtomicReference[]{new AtomicReference<>((float) 0)};
+            final float[] x2 = {0};
             // TODO Auto-generated method stub
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
@@ -275,5 +282,58 @@ public class CalendarActivity extends AppCompatActivity{
             System.out.println(data.title + data.startTime.toString());
             super.onEventClick(data);
         }
+    }
+}
+
+
+class MyCustomAdapter extends BaseAdapter implements ListAdapter {
+    private ArrayList<String> list = new ArrayList<String>();
+    private Context context;
+
+    public MyCustomAdapter(ArrayList<String> list, Context context) {
+        this.list = list;
+        this.context = context;
+    }
+
+    @Override
+    public int getCount() {
+        return list.size();
+    }
+
+    @Override
+    public Object getItem(int pos) {
+        return list.get(pos);
+    }
+
+    @Override
+    public long getItemId(int pos) {
+        return list.get(pos).getBytes().length;
+        //just return 0 if your list items do not have an Id variable.
+    }
+
+    @Override
+    public View getView(final int position, View convertView, ViewGroup parent) {
+        View view = convertView;
+        if (view == null) {
+            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            view = inflater.inflate(R.layout.calendarfilter, null);
+        }
+
+        //Handle TextView and display string from your list
+        TextView calendarFilterText= (TextView)view.findViewById(R.id.calendarFilterText);
+        calendarFilterText.setText(list.get(position));
+
+        //Handle buttons and add onClickListeners
+        SwitchCompat switchCompat= view.findViewById(R.id.calendarFilterSwitch);
+
+        switchCompat.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                //do something
+
+            }
+        });
+
+        return view;
     }
 }
