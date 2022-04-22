@@ -48,10 +48,11 @@ public class CalendarActivity extends AppCompatActivity{
     List<String> resourceList = new ArrayList<>();
     List<String> titleList = new ArrayList<>();
     List<String> infoList = new ArrayList<>();
-
     List<String> allTitleList = new ArrayList<>();
-
     ArrayList<Events> events = new ArrayList<>();
+
+    int todayBackgroundColor = Color.parseColor("#E6E6E9");
+    int nowLineColor = Color.parseColor("#343491");
 
 
     @SuppressLint("ClickableViewAccessibility")
@@ -68,6 +69,10 @@ public class CalendarActivity extends AppCompatActivity{
 
         cal.setShowFirstDayOfWeekFirst(true);
         cal.setNowLineStrokeWidth(6);
+        cal.setShowNowLineDot(true);
+        cal.setNowLineColor(nowLineColor);
+        cal.setPastBackgroundColor(Color.LTGRAY);
+
 
         cal.setDateFormatter(calendar -> {
             SimpleDateFormat date = new SimpleDateFormat("E dd.MM", Locale.getDefault());
@@ -172,38 +177,16 @@ public class CalendarActivity extends AppCompatActivity{
         return calendar;
     }
 
+
     public void fillCalendar(Adapter adapter){
         for(int i = 0; i< titleList.size() -1; i++){
 
-            WeekViewEntity.Style style = null;
             String resources = resourceList.get(i).replace(",","\n");
             System.out.println(resources);
 
-
-            if(colorMap.containsKey(titleList.get(i))){
-                try {
-                    style = new WeekViewEntity.Style.Builder().setBackgroundColor(colorMap.get(titleList.get(i))).build();
-                }
-                catch (Exception e){
-                    e.printStackTrace();
-                }
-            }
-            else {
-                final int baseColor = Color.WHITE;
-                final int baseRed = Color.red(baseColor);
-                final int baseGreen = Color.green(baseColor);
-                final int baseBlue = Color.blue(baseColor);
-                final int red = (baseRed + rnd.nextInt(256)) / 2;
-                final int green = (baseGreen + rnd.nextInt(256)) / 2;
-                final int blue = (baseBlue + rnd.nextInt(256)) / 2;
-                int rndColor = Color.rgb(red, green, blue);
-                colorMap.put(titleList.get(i), rndColor);
-                style = new WeekViewEntity.Style.Builder().setBackgroundColor(rndColor).build();
-            }
-
             if(whiteList.contains(titleList.get(i))){
                 Random rnd = new Random();
-                Events event = new Events(rnd.nextInt(), titleList.get(i), startDateList.get(i),endDateList.get(i), personList.get(i) + ", " + resources, style);
+                Events event = new Events(rnd.nextInt(), titleList.get(i), startDateList.get(i),endDateList.get(i), personList.get(i) + ", " + resources, setEventColor(i));
                 if (!events.contains(event)) {
                    events.add(event);
                }
@@ -211,6 +194,37 @@ public class CalendarActivity extends AppCompatActivity{
         }
         adapter.submitList(events);
     }
+
+    public WeekViewEntity.Style setEventColor(int i){
+        WeekViewEntity.Style style = null;
+
+        if(endDateList.get(i).before(Calendar.getInstance())){
+            style = new WeekViewEntity.Style.Builder().setBackgroundColor(Color.parseColor("#A9A9A9")).build();
+        }
+        else if(colorMap.containsKey(titleList.get(i))){
+            try {
+                style = new WeekViewEntity.Style.Builder().setBackgroundColor(colorMap.get(titleList.get(i))).build();
+            }
+            catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+        else {
+            final int baseColor = Color.WHITE;
+            final int baseRed = Color.red(baseColor);
+            final int baseGreen = Color.green(baseColor);
+            final int baseBlue = Color.blue(baseColor);
+            final int red = (baseRed + rnd.nextInt(256)) / 2;
+            final int green = (baseGreen + rnd.nextInt(256)) / 2;
+            final int blue = (baseBlue + rnd.nextInt(256)) / 2;
+            int rndColor = Color.rgb(red, green, blue);
+            colorMap.put(titleList.get(i), rndColor);
+            style = new WeekViewEntity.Style.Builder().setBackgroundColor(rndColor).build();
+
+        }
+        return style;
+    }
+
 
     public void clearLists(){
         startDateList.clear();
