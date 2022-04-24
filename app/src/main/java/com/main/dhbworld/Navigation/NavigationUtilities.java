@@ -12,6 +12,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.navigation.NavigationView;
 import com.main.dhbworld.CalendarActivity;
+import com.main.dhbworld.KVVActivity;
 import com.main.dhbworld.MainActivity;
 import com.main.dhbworld.R;
 import com.main.dhbworld.SettingsActivity;
@@ -52,6 +53,8 @@ public class NavigationUtilities {
                     case R.id.Settings:
                         startActivity(activity, SettingsActivity.class);
                         break;
+                    case R.id.tram_departure:
+                        startActivity(activity, KVVActivity.class);
                 }
 
                 return true;
