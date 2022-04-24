@@ -30,6 +30,12 @@
 
 
     </style>
+    <style name="Theme.DHBWorld.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+    <style name="Theme.DHBWorld.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style name="Theme.DHBWorld.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
 
 

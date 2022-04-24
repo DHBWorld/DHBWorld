@@ -34,25 +34,21 @@
         <!-- everything above is for the topbar and navigation-->
 
 
-
-
-
         <ScrollView
-            android:layout_below="@id/topAppBarLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_below="@id/topAppBarLayout"
             android:background="@color/grey_light"
             tools:context="com.main.dhbworld.Services.UserInteractionMessagingService">
 
 
             <LinearLayout
                 android:id="@+id/user_interaction_linear"
-                android:background="@color/grey_light"
-                android:padding="20dp"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:background="@color/grey_light"
                 android:orientation="vertical"
-                >
+                android:padding="20dp">
 
                 <com.google.android.material.card.MaterialCardView
 
@@ -60,23 +56,22 @@
                     android:layout_height="wrap_content"
                     android:backgroundTint="@color/white"
                     android:baselineAligned="false"
-                    app:strokeWidth="1dp"
+                    app:cardElevation="0dp"
                     app:strokeColor="@color/stroke_color"
-                    app:cardElevation="0dp">
+                    app:strokeWidth="1dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        >
+                        android:orientation="horizontal">
 
                         <LinearLayout
                             android:id="@+id/imageBox_canteen"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
+                            android:background="@color/grey_dark"
                             android:orientation="vertical"
                             android:padding="15dp"
-                            android:background="@color/grey_dark"
 
                             >
 
@@ -84,17 +79,16 @@
 
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                app:strokeWidth="1dp"
+                                app:cardElevation="0dp"
                                 app:strokeColor="@color/stroke_color"
 
-                                app:cardElevation="0dp">
+                                app:strokeWidth="1dp">
+
                                 <ImageView
 
                                     android:layout_width="100dp"
                                     android:layout_height="100dp"
                                     android:background="@color/white"
-
-
 
 
                                     android:contentDescription="content_description_media"
@@ -103,36 +97,36 @@
 
 
                             </com.google.android.material.card.MaterialCardView>
-                            <TextView
-                                android:layout_marginTop="20dp"
-                                android:layout_marginRight="7dp"
-                                android:layout_marginLeft="7dp"
-                                android:gravity="center_horizontal"
 
+                            <TextView
                                 android:layout_width="87dp"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_horizontal"
-                                android:textColor="@color/white"
+                                android:layout_marginLeft="7dp"
+
+                                android:layout_marginTop="20dp"
+                                android:layout_marginRight="7dp"
                                 android:backgroundTint="@color/grey_dark"
                                 android:clipToOutline="false"
+                                android:gravity="center_horizontal"
                                 android:text="@string/canteen"
-                                android:textSize="23dp"/>
+                                android:textColor="@color/white"
+                                android:textSize="23dp" />
                         </LinearLayout>
-
 
 
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="vertical"
                             android:layout_marginEnd="16dp"
-                            >
+                            android:orientation="vertical">
+
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:orientation="vertical"
-                                android:paddingLeft="16dp"
-                                android:paddingVertical="10dp">
+                                android:paddingVertical="10dp"
+                                android:paddingLeft="16dp">
 
                                 <!-- Title, secondary and supporting text -->
                                 <TextView
@@ -160,7 +154,6 @@
                                     android:textColor="?android:attr/textColorSecondary" />
 
 
-
                             </LinearLayout>
 
                             <LinearLayout
@@ -168,8 +161,8 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="8dp"
                                 android:layout_marginBottom="4dp"
-                                android:paddingLeft="10dp"
-                                android:orientation="vertical">
+                                android:orientation="vertical"
+                                android:paddingLeft="10dp">
 
                                 <TextView
 
@@ -179,10 +172,6 @@
                                     android:text="@string/besteht_das_problem_noch"
                                     android:textAppearance="?attr/textAppearanceBody2"
                                     android:textColor="?android:attr/textColorSecondary" />
-
-
-
-
 
 
                                 <LinearLayout
@@ -215,10 +204,10 @@
                 </com.google.android.material.card.MaterialCardView>
 
                 <LinearLayout
-                    android:paddingTop="20dp"
-                    android:paddingBottom="20dp"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:paddingTop="20dp"
+                    android:paddingBottom="20dp">
 
 
                     <com.google.android.material.card.MaterialCardView
@@ -227,24 +216,23 @@
                         android:layout_height="wrap_content"
                         android:backgroundTint="@color/white"
                         android:baselineAligned="false"
-                        app:strokeWidth="1dp"
+                        app:cardElevation="0dp"
                         app:strokeColor="@color/stroke_color"
 
-                        app:cardElevation="0dp">
+                        app:strokeWidth="1dp">
 
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            >
+                            android:orientation="horizontal">
 
                             <LinearLayout
                                 android:id="@+id/imageBox_coffee"
                                 android:layout_width="wrap_content"
                                 android:layout_height="match_parent"
+                                android:background="@color/grey_dark"
                                 android:orientation="vertical"
                                 android:padding="15dp"
-                                android:background="@color/grey_dark"
 
                                 >
 
@@ -252,10 +240,11 @@
 
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    app:strokeWidth="1dp"
+                                    app:cardElevation="0dp"
                                     app:strokeColor="@color/stroke_color"
 
-                                    app:cardElevation="0dp">
+                                    app:strokeWidth="1dp">
+
                                     <ImageView
                                         android:id="@+id/bild_kaffee"
                                         android:layout_width="100dp"
@@ -267,36 +256,36 @@
 
 
                                 </com.google.android.material.card.MaterialCardView>
-                                <TextView
-                                    android:layout_marginTop="20dp"
-                                    android:layout_marginRight="7dp"
-                                    android:layout_marginLeft="7dp"
-                                    android:gravity="center_horizontal"
 
+                                <TextView
                                     android:layout_width="87dp"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center_horizontal"
-                                    android:textColor="@color/white"
+                                    android:layout_marginLeft="7dp"
+
+                                    android:layout_marginTop="20dp"
+                                    android:layout_marginRight="7dp"
                                     android:backgroundTint="@color/grey_dark"
                                     android:clipToOutline="false"
+                                    android:gravity="center_horizontal"
                                     android:text="@string/kaffee"
-                                    android:textSize="23dp"/>
+                                    android:textColor="@color/white"
+                                    android:textSize="23dp" />
                             </LinearLayout>
-
 
 
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:orientation="vertical"
                                 android:layout_marginEnd="16dp"
-                                >
+                                android:orientation="vertical">
+
                                 <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:orientation="vertical"
-                                    android:paddingLeft="16dp"
-                                    android:paddingVertical="10dp">
+                                    android:paddingVertical="10dp"
+                                    android:paddingLeft="16dp">
 
                                     <!-- Title, secondary and supporting text -->
                                     <TextView
@@ -324,7 +313,6 @@
                                         android:textColor="?android:attr/textColorSecondary" />
 
 
-
                                 </LinearLayout>
 
                                 <LinearLayout
@@ -332,8 +320,8 @@
                                     android:layout_height="wrap_content"
                                     android:layout_marginLeft="8dp"
                                     android:layout_marginBottom="4dp"
-                                    android:paddingLeft="10dp"
-                                    android:orientation="vertical">
+                                    android:orientation="vertical"
+                                    android:paddingLeft="10dp">
 
                                     <TextView
 
@@ -345,10 +333,6 @@
                                         android:textColor="?android:attr/textColorSecondary" />
 
 
-
-
-
-
                                     <LinearLayout
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
@@ -357,8 +341,8 @@
                                         android:orientation="horizontal">
 
                                         <com.google.android.material.button.MaterialButton
-                                            style="?attr/borderlessButtonStyle"
                                             android:id="@+id/yes1"
+                                            style="?attr/borderlessButtonStyle"
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
                                             android:layout_marginEnd="8dp"
@@ -380,31 +364,29 @@
                 </LinearLayout>
 
 
-
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/card_printer"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:backgroundTint="@color/white"
                     android:baselineAligned="false"
-                    app:strokeWidth="1dp"
+                    app:cardElevation="0dp"
                     app:strokeColor="@color/stroke_color"
 
-                    app:cardElevation="0dp">
+                    app:strokeWidth="1dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        >
+                        android:orientation="horizontal">
 
                         <LinearLayout
                             android:id="@+id/imageBox_printer"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
+                            android:background="@color/grey_dark"
                             android:orientation="vertical"
                             android:padding="15dp"
-                            android:background="@color/grey_dark"
 
                             >
 
@@ -412,10 +394,11 @@
 
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                app:strokeWidth="1dp"
+                                app:cardElevation="0dp"
                                 app:strokeColor="@color/stroke_color"
 
-                                app:cardElevation="0dp">
+                                app:strokeWidth="1dp">
+
                                 <ImageView
                                     android:id="@+id/bild_druker"
                                     android:layout_width="100dp"
@@ -428,36 +411,36 @@
 
 
                             </com.google.android.material.card.MaterialCardView>
-                            <TextView
-                                android:layout_marginTop="20dp"
-                                android:layout_marginRight="7dp"
-                                android:layout_marginLeft="7dp"
-                                android:gravity="center_horizontal"
 
+                            <TextView
                                 android:layout_width="87dp"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_horizontal"
-                                android:textColor="@color/white"
+                                android:layout_marginLeft="7dp"
+
+                                android:layout_marginTop="20dp"
+                                android:layout_marginRight="7dp"
                                 android:backgroundTint="@color/grey_dark"
                                 android:clipToOutline="false"
+                                android:gravity="center_horizontal"
                                 android:text="@string/drucker"
-                                android:textSize="23dp"/>
+                                android:textColor="@color/white"
+                                android:textSize="23dp" />
                         </LinearLayout>
-
 
 
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="vertical"
                             android:layout_marginEnd="16dp"
-                            >
+                            android:orientation="vertical">
+
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:orientation="vertical"
-                                android:paddingLeft="16dp"
-                                android:paddingVertical="10dp">
+                                android:paddingVertical="10dp"
+                                android:paddingLeft="16dp">
 
 
                                 <TextView
@@ -487,7 +470,6 @@
                                     android:textColor="?android:attr/textColorSecondary" />
 
 
-
                             </LinearLayout>
 
                             <LinearLayout
@@ -495,8 +477,8 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="8dp"
                                 android:layout_marginBottom="4dp"
-                                android:paddingLeft="10dp"
-                                android:orientation="vertical">
+                                android:orientation="vertical"
+                                android:paddingLeft="10dp">
 
                                 <TextView
 
@@ -508,10 +490,6 @@
                                     android:textColor="?android:attr/textColorSecondary" />
 
 
-
-
-
-
                                 <LinearLayout
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
@@ -520,19 +498,19 @@
                                     android:orientation="horizontal">
 
                                     <com.google.android.material.button.MaterialButton
+                                        android:id="@+id/yes2"
                                         style="?attr/borderlessButtonStyle"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:layout_marginEnd="8dp"
-                                        android:text="@string/ja"
-                                        android:id="@+id/yes2"/>
+                                        android:text="@string/ja" />
 
                                     <com.google.android.material.button.MaterialButton
+                                        android:id="@+id/no2"
                                         style="?attr/borderlessButtonStyle"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:text="@string/nein"
-                                        android:id="@+id/no2"/>
+                                        android:text="@string/nein" />
                                 </LinearLayout>
                             </LinearLayout>
 
