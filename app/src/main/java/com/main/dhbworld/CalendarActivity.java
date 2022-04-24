@@ -127,15 +127,15 @@ public class CalendarActivity extends AppCompatActivity{
             return false;
         });
 
-        View filterIcon = findViewById(R.id.calendarFilterIcon);
-        filterIcon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-             //   CalendarFilterAdapter calendarFilterAdapter = new CalendarFilterAdapter(whiteList,titleList,this);
+       //View filterIcon = findViewById(R.id.calendarFilterIcon);
+       //filterIcon.setOnClickListener(new View.OnClickListener() {
+       //    @Override
+       //    public void onClick(View v) {
+       //     //   CalendarFilterAdapter calendarFilterAdapter = new CalendarFilterAdapter(whiteList,titleList,this);
 
 
-            }
-        });
+       //    }
+       //});
 
     }
 

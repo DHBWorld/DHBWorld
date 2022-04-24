@@ -269,4 +269,14 @@
     <string name="previous_notifications">Bisherige Meldungen:</string>
     <string name="state">Zustand:</string>
     <string name="are_you_sure">Sind Sie sicher?</string>
+    <string name="time">%1$02d:%2$02d Uhr</string>
+    <string name="error_getting_kvv_data">Fehler beim Abrufen der Abfahrtszeiten</string>
+    <string name="departure_time">Abfahrtszeit</string>
+    <string name="departure_date">Abfahrtsdatum</string>
+    <string name="search">Suchen</string>
+    <string name="marker_destination">Marker Destination</string>
+
+
+
+
 </resources>
