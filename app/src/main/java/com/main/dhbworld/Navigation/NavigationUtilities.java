@@ -12,6 +12,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.navigation.NavigationView;
 import com.main.dhbworld.CalendarActivity;
+import com.main.dhbworld.CantineActivity;
 import com.main.dhbworld.KVVActivity;
 import com.main.dhbworld.MainActivity;
 import com.main.dhbworld.R;
@@ -55,6 +56,8 @@ public class NavigationUtilities {
                         break;
                     case R.id.tram_departure:
                         startActivity(activity, KVVActivity.class);
+                    case R.id.cantine:
+                        startActivity(activity, CantineActivity.class);
                 }
 
                 return true;

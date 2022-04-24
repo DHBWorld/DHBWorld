@@ -10,7 +10,6 @@ import com.google.android.material.progressindicator.BaseProgressIndicatorSpec;
 import com.google.android.material.progressindicator.CircularProgressIndicator;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.google.android.material.tabs.TabLayout;
-import com.google.gson.Gson;
 
 import org.json.JSONException;
 
@@ -31,6 +30,7 @@ import android.widget.TextView;
 
 import com.main.dhbworld.CantineClasses.Meal;
 import com.main.dhbworld.CantineClasses.MealDailyPlan;
+import com.main.dhbworld.Navigation.NavigationUtilities;
 
 
 import java.io.BufferedReader;
@@ -75,6 +75,7 @@ public class CantineActivity extends AppCompatActivity {
         layoutMealCardsBasic= findViewById(R.id.layoutMealCardsBasic);
         layoutMealCardsExtra= findViewById(R.id.layoutMealCardsExtra);
         tabLayout= findViewById(R.id.tabTags);
+        NavigationUtilities.setUpNavigation(this,R.id.cantine);
 
         loadProgressIndikator();
 

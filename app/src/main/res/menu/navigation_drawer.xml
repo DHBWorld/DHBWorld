@@ -18,6 +18,9 @@
         <item
             android:id="@+id/tram_departure"
             android:title="Tram departure" />
+        <item
+            android:id="@+id/cantine"
+            android:title="@string/cantine"/>
 
     </group>
 
