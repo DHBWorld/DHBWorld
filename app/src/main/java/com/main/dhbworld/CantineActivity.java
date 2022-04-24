@@ -77,10 +77,17 @@ public class CantineActivity extends AppCompatActivity {
         tabLayout= findViewById(R.id.tabTags);
         NavigationUtilities.setUpNavigation(this,R.id.cantine);
 
+
+
         loadProgressIndikator();
 
         generateCurrentWeek();
         showTabs();
+
+
+
+
+
 
         scroll= findViewById(R.id.scrollViewCantine);
 
@@ -120,17 +127,25 @@ public class CantineActivity extends AppCompatActivity {
 
                     switch (tab.getPosition()){
                         case 0:
-                                mealPlanFromOpenMensa(currentWeek[0]);
+                            loadProgressIndikator();
+                            mealPlanFromOpenMensa(currentWeek[0]);
                             break;
                         case 1:
+                            loadProgressIndikator();
                             mealPlanFromOpenMensa(currentWeek[1]);
                             break;
-                        case 2: mealPlanFromOpenMensa(currentWeek[2]);
+                        case 2:
+                            loadProgressIndikator();
+                            mealPlanFromOpenMensa(currentWeek[2]);
                             break;
-                        case 3: mealPlanFromOpenMensa(currentWeek[3]);
+                        case 3:
+                            loadProgressIndikator();
+                            mealPlanFromOpenMensa(currentWeek[3]);
                             break;
-                        case 4: mealPlanFromOpenMensa(currentWeek[4]);
-                                break;
+                        case 4:
+                            loadProgressIndikator();
+                            mealPlanFromOpenMensa(currentWeek[4]);
+                            break;
                     }
                 } catch ( IOException e) {
                             loadDisplay("Es ist ein Fehler aufgetaucht...");
@@ -156,7 +171,9 @@ public class CantineActivity extends AppCompatActivity {
         Date date= new Date();
         currentWeek = new Date[5];
         Calendar c= Calendar.getInstance();
+        c.setFirstDayOfWeek(Calendar.SUNDAY);
         c.setTime(date);
+
 
         Integer dayOfWeek = c.get(Calendar.DAY_OF_WEEK); // dayOfWeek= 2 ->Mo
         dayOfWeek=dayOfWeek-2; // dayOfWeek= 0 ->Mo
@@ -188,6 +205,28 @@ public class CantineActivity extends AppCompatActivity {
         tabLayout.getTabAt(2).setText("Mi ("+f.format(currentWeek[2])+")");
         tabLayout.getTabAt(3).setText("Do ("+f.format(currentWeek[3])+")");
         tabLayout.getTabAt(4).setText("Fr ("+f.format(currentWeek[4])+")");
+
+        Calendar c= Calendar.getInstance();
+        c.setFirstDayOfWeek(Calendar.SUNDAY);
+
+        if (((c.get(Calendar.DAY_OF_WEEK)-2)<5) &&((c.get(Calendar.DAY_OF_WEEK)-2)>=0)){
+            tabLayout.selectTab(tabLayout.getTabAt((c.get(Calendar.DAY_OF_WEEK)-2)));
+            try {
+                mealPlanFromOpenMensa(currentWeek[(c.get(Calendar.DAY_OF_WEEK)-2)]);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }else{
+            tabLayout.selectTab(tabLayout.getTabAt(0));
+            try {
+                mealPlanFromOpenMensa(currentWeek[0]);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+
+
 
     }
 
