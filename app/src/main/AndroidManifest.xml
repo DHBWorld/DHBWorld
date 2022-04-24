@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.main.dhbworld">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -9,33 +11,31 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.DHBWorld">
+
         <activity
             android:name=".CantineActivity"
+            android:exported="false"
+            android:label="@string/title_activity_cantine"
+            android:theme="@style/Theme.DHBWorld.NoActionBar">
+        </activity>
+
+        <activity
+            android:name=".DashboardActivity"
             android:exported="true"
             android:label="@string/title_activity_cantine"
-            android:theme="@style/Theme.DHBWorld.NoActionBar" >
+            android:theme="@style/Theme.DHBWorld.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
-
-        <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
-
-            <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
-
-
-
         <activity
             android:name=".UserInteraction"
-            android:exported="false">
-
-        </activity>
-
+            android:exported="false"></activity>
         <activity
             android:name=".MainActivity"
-            android:exported="true">
-
-        </activity>
+            android:exported="true"></activity>
         <activity
             android:name=".SettingsActivity"
             android:exported="false"
@@ -56,5 +56,4 @@
         </service>
     </application>
 
-    <uses-permission android:name="android.permission.INTERNET"></uses-permission>
 </manifest>

@@ -39,6 +39,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.text.ParseException;
@@ -62,6 +63,8 @@ public class CantineActivity extends AppCompatActivity {
     TabLayout tabLayout;
     Date[] currentWeek;
 
+    static String inputForDashboard;
+
 
 
 
@@ -82,7 +85,6 @@ public class CantineActivity extends AppCompatActivity {
 
         final AtomicReference<Float>[] x1 = new AtomicReference[]{new AtomicReference<>((float) 0)};
         final float[] x2 = {0};
-
         scroll.setOnTouchListener((v, event) -> {
             // TODO Auto-generated method stub
             switch (event.getAction()) {
@@ -389,6 +391,54 @@ public class CantineActivity extends AppCompatActivity {
         progressIndicator.setVisibility(View.GONE);
         progressIndicator.setVisibility(View.VISIBLE);
         }
+    }
+
+    public static MealDailyPlan getMealPlanForDashboard() throws JSONException {
+        MealDailyPlan plan= new MealDailyPlan(inputForDashboard);
+
+
+        return plan;
+    }
+
+    public static void loadDataForDashboard() {
+
+
+        new Thread(new Runnable() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
+            @Override
+            public void run() {
+
+                Date now= new Date();
+                SimpleDateFormat format =new SimpleDateFormat("yyyy-MM-dd");
+                URL urlOpenMensa= null;
+
+                try {
+
+
+                        urlOpenMensa = new URL("https://openmensa.org/api/v2/canteens/33/days/" + format.format(now) + "/meals");
+
+                    HttpsURLConnection connection = (HttpsURLConnection) urlOpenMensa.openConnection();
+
+                    if (connection.getResponseCode() == 200) { // something wrong
+                        InputStream responseBody = connection.getInputStream();
+                        InputStreamReader responseBodyReader = new InputStreamReader(responseBody, "UTF-8");
+
+                        inputForDashboard = new BufferedReader(responseBodyReader).lines().collect(Collectors.joining("\n"));
+
+                    }
+
+
+                } catch (IOException e) {
+                e.printStackTrace();
+            }
+            }
+
+        }).start();
+
+
+
+
+
     }
 
 
