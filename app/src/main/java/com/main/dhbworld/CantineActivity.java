@@ -427,6 +427,7 @@ public class CantineActivity extends AppCompatActivity {
         progressIndicator = new CircularProgressIndicator(CantineActivity.this);
         progressIndicator.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         progressIndicator.setIndeterminate(true);
+        progressIndicator.setPadding(400,0,400,0);
         layoutMealCardsBasic.addView(progressIndicator);
         progressIndicator.setVisibility(View.GONE);
         progressIndicator.setVisibility(View.VISIBLE);
