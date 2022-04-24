@@ -15,11 +15,10 @@
         <entry key="..\:/Code/DHBWorld/app/src/main/res/drawable/ic_launcher_background.xml" value="0.22179487179487178" />
         <entry key="..\:/Code/DHBWorld/app/src/main/res/drawable/triple_point.xml" value="0.22179487179487178" />
         <entry key="..\:/Code/DHBWorld/app/src/main/res/layout/activity_main.xml" value="0.1" />
-        <entry key="..\:/Code/DHBWorld/app/src/main/res/layout/calendarfilter.xml" value="0.38645833333333335" />
+        <entry key="..\:/Code/DHBWorld/app/src/main/res/layout/calendarfilter.xml" value="0.2" />
         <entry key="..\:/Code/DHBWorld/app/src/main/res/layout/calendaritembottonsheet.xml" value="0.4547008547008547" />
         <entry key="..\:/Code/DHBWorld/app/src/main/res/layout/defaultlayout.xml" value="0.264" />
         <entry key="..\:/Code/DHBWorld/app/src/main/res/layout/eventviewer.xml" value="0.20854700854700856" />
-        <entry key="..\:/Code/DHBWorld/app/src/main/res/layout/filtertemp.xml" value="0.1" />
         <entry key="..\:/Code/DHBWorld/app/src/main/res/layout/header_nav.xml" value="0.1" />
         <entry key="..\:/Code/DHBWorld/app/src/main/res/layout/nav_drawer.xml" value="0.20854700854700856" />
         <entry key="..\:/Code/DHBWorld/app/src/main/res/layout/navigation.xml" value="0.20854700854700856" />
@@ -28,6 +27,7 @@
         <entry key="..\:/Code/DHBWorld/app/src/main/res/layout/schedule_layout.xml" value="0.21682242990654205" />
         <entry key="..\:/Code/DHBWorld/app/src/main/res/layout/style.xml" value="0.4547008547008547" />
         <entry key="..\:/Code/DHBWorld/app/src/main/res/menu/navigation_drawer.xml" value="0.20854700854700856" />
+        <entry key="..\:/Code/DHBWorld/app/src/main/res/menu/schedule_top_app_bar.xml" value="0.20854700854700856" />
         <entry key="..\:/Code/DHBWorld/app/src/main/res/menu/top_app_bar.xml" value="0.10683760683760683" />
         <entry key="..\:/Users/adria/AndroidStudioProjects/DHBWorld/app/src/main/res/layout/activity_main.xml" value="0.2006340579710145" />
         <entry key="..\:/Users/adria/AndroidStudioProjects/DHBWorld/app/src/main/res/layout/defaultlayout.xml" value="0.25416666666666665" />

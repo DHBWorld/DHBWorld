@@ -1,6 +1,7 @@
 package com.main.dhbworld;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
 
@@ -14,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.ListAdapter;
 import android.widget.TextView;
 import com.alamkanak.weekview.WeekView;
@@ -68,26 +70,23 @@ public class CalendarActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.schedule_layout);
-
         NavigationUtilities.setUpNavigation(this, R.id.Calendar);
 
-
         cal = findViewById(R.id.weekView);
-
         cal.setNumberOfVisibleDays(5);
-
         cal.setShowFirstDayOfWeekFirst(true);
         cal.setNowLineStrokeWidth(6);
         cal.setShowNowLineDot(true);
         cal.setNowLineColor(nowLineColor);
         cal.setPastBackgroundColor(Color.LTGRAY);
-
         cal.setDateFormatter(calendar -> {
             SimpleDateFormat date = new SimpleDateFormat("E dd.MM", Locale.getDefault());
             return date.format(calendar.getTime());
         });
         cal.setTimeFormatter(time -> time + " Uhr");
 
+        final AtomicReference<Float>[] x1 = new AtomicReference[]{new AtomicReference<>((float) 0)};
+        final float[] x2 = {0};
 
         ExecutorService executor = Executors.newCachedThreadPool();
 
@@ -99,8 +98,7 @@ public class CalendarActivity extends AppCompatActivity{
         cal.scrollToDateTime(date);
         cal.setOnTouchListener((v, event) -> {
 
-            final AtomicReference<Float>[] x1 = new AtomicReference[]{new AtomicReference<>((float) 0)};
-            final float[] x2 = {0};
+
             // TODO Auto-generated method stub
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
@@ -128,6 +126,17 @@ public class CalendarActivity extends AppCompatActivity{
             }
             return false;
         });
+
+        View filterIcon = findViewById(R.id.calendarFilterIcon);
+        filterIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+             //   CalendarFilterAdapter calendarFilterAdapter = new CalendarFilterAdapter(whiteList,titleList,this);
+
+
+            }
+        });
+
     }
 
     Runnable runnableTask = () -> {
@@ -151,7 +160,6 @@ public class CalendarActivity extends AppCompatActivity{
                 e.printStackTrace();
             }
         };
-
 
     public void saveValues(Map<LocalDate, ArrayList<Appointment>> data) throws Exception{
         Adapter adapter = new Adapter();
@@ -205,7 +213,16 @@ public class CalendarActivity extends AppCompatActivity{
     public WeekViewEntity.Style setEventColor(int i){
         WeekViewEntity.Style style = null;
 
-        if(endDateList.get(i).before(Calendar.getInstance())){
+
+
+        if(endDateList.get(i).get(Calendar.HOUR_OF_DAY) - startDateList.get(i).get(Calendar.HOUR_OF_DAY) >= 8){
+            style = new WeekViewEntity.Style.Builder().setBackgroundColor(Color.parseColor("#86c5da")).build();
+        }
+        else if(titleList.get(i).contains("Klausur")){
+            style = new WeekViewEntity.Style.Builder().setBackgroundColor(Color.RED).build();
+        }
+
+        else if(endDateList.get(i).before(Calendar.getInstance())){
             style = new WeekViewEntity.Style.Builder().setBackgroundColor(Color.parseColor("#A9A9A9")).build();
         }
         else if(colorMap.containsKey(titleList.get(i))){
@@ -217,13 +234,13 @@ public class CalendarActivity extends AppCompatActivity{
             }
         }
         else {
-            final int baseColor = Color.WHITE;
-            final int baseRed = Color.red(baseColor);
-            final int baseGreen = Color.green(baseColor);
-            final int baseBlue = Color.blue(baseColor);
-            final int red = (baseRed + rnd.nextInt(256)) / 2;
-            final int green = (baseGreen + rnd.nextInt(256)) / 2;
-            final int blue = (baseBlue + rnd.nextInt(256)) / 2;
+            // liste verschiedener farben, aus denen generiert wird. Am besten deterministisch anhand titels.
+            final int baseRed = Color.RED;
+            final int baseGreen = Color.GREEN;
+            final int baseBlue = Color.BLUE;
+            final int red = (baseRed + rnd.nextInt(256 - 100) + 100) / 2;
+            final int green = (baseGreen + rnd.nextInt(256) - 100) + 100 / 2;
+            final int blue = (baseBlue + rnd.nextInt(256 - 100) + 100) / 2;
             int rndColor = Color.rgb(red, green, blue);
             colorMap.put(titleList.get(i), rndColor);
             style = new WeekViewEntity.Style.Builder().setBackgroundColor(rndColor).build();
@@ -241,6 +258,7 @@ public class CalendarActivity extends AppCompatActivity{
         titleList.clear();
         infoList.clear();
     }
+
 
     public void showBottomSheet(Events event){
         final BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(this);
@@ -282,58 +300,5 @@ public class CalendarActivity extends AppCompatActivity{
             System.out.println(data.title + data.startTime.toString());
             super.onEventClick(data);
         }
-    }
-}
-
-
-class MyCustomAdapter extends BaseAdapter implements ListAdapter {
-    private ArrayList<String> list = new ArrayList<String>();
-    private Context context;
-
-    public MyCustomAdapter(ArrayList<String> list, Context context) {
-        this.list = list;
-        this.context = context;
-    }
-
-    @Override
-    public int getCount() {
-        return list.size();
-    }
-
-    @Override
-    public Object getItem(int pos) {
-        return list.get(pos);
-    }
-
-    @Override
-    public long getItemId(int pos) {
-        return list.get(pos).getBytes().length;
-        //just return 0 if your list items do not have an Id variable.
-    }
-
-    @Override
-    public View getView(final int position, View convertView, ViewGroup parent) {
-        View view = convertView;
-        if (view == null) {
-            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            view = inflater.inflate(R.layout.calendarfilter, null);
-        }
-
-        //Handle TextView and display string from your list
-        TextView calendarFilterText= (TextView)view.findViewById(R.id.calendarFilterText);
-        calendarFilterText.setText(list.get(position));
-
-        //Handle buttons and add onClickListeners
-        SwitchCompat switchCompat= view.findViewById(R.id.calendarFilterSwitch);
-
-        switchCompat.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v) {
-                //do something
-
-            }
-        });
-
-        return view;
     }
 }
