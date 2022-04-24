@@ -2,7 +2,7 @@
 <resources>
     <string name="api_key_kvv">BqfoWNT7eaJM</string>
     <string name="url_kvv">https://projekte.kvv-efa.de/zaesketrias/trias</string>
-    <string name="request_data_kvv">
+    <!--<string name="request_data_kvv">
         <![CDATA[<?xml version=\"1.0\" encoding=\"UTF-8\"?>
                 <Trias version=\"1.1\" xmlns=\"http://www.vdv.de/trias\" xmlns:siri=\"http://www.siri.org.uk/siri\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">
                     <ServiceRequest>
@@ -13,6 +13,31 @@
                                 <Location>
                                   <LocationRef>
                                     <StopPlaceRef>de:08212:12</StopPlaceRef>
+                                </LocationRef>
+                                <DepArrTime>%3$s</DepArrTime>
+                              </Location>
+                                <Params>
+                                    <NumberOfResults>6</NumberOfResults>
+                                    <IncludeRealtimeData>true</IncludeRealtimeData>
+                                    <StopEventType>departure</StopEventType>
+                                </Params>
+                            </StopEventRequest>
+                        </RequestPayload>
+                    </ServiceRequest>
+                </Trias>]]>
+    </string>-->
+
+    <string name="request_data_kvv">
+        <![CDATA[<?xml version=\"1.0\" encoding=\"UTF-8\"?>
+                <Trias version=\"1.1\" xmlns=\"http://www.vdv.de/trias\" xmlns:siri=\"http://www.siri.org.uk/siri\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">
+                    <ServiceRequest>
+                        <siri:RequestTimeStamp>%2$s</siri:RequestTimeStamp>
+                        <siri:RequestorRef>%1$s</siri:RequestorRef>
+                        <RequestPayload>
+                            <StopEventRequest>
+                                <Location>
+                                  <LocationRef>
+                                    <StopPlaceRef>de:08212:84</StopPlaceRef>
                                 </LocationRef>
                                 <DepArrTime>%3$s</DepArrTime>
                               </Location>

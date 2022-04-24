@@ -15,7 +15,9 @@ import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.progressindicator.CircularProgressIndicator;
 import com.google.android.material.timepicker.MaterialTimePicker;
 import com.google.android.material.timepicker.TimeFormat;
+import com.main.dhbworld.KVV.DataLoaderListener;
 import com.main.dhbworld.KVV.Departure;
+import com.main.dhbworld.KVV.Disruption;
 import com.main.dhbworld.KVV.KVVDataLoader;
 import com.main.dhbworld.KVV.KVVListAdapter;
 import com.main.dhbworld.Navigation.NavigationUtilities;
@@ -63,7 +65,7 @@ public class KVVActivity extends AppCompatActivity {
         recyclerView.setAdapter(kvvListAdapter);
 
         KVVDataLoader dataLoader = new KVVDataLoader(this);
-        dataLoader.setDataLoaderListener(returnedDepartures -> {
+        dataLoader.setDataLoaderListener((returnedDepartures, disruption) -> {
             departures.clear();
             departures.addAll(returnedDepartures);
             kvvListAdapter.notifyItemRangeInserted(0, departures.size());
@@ -73,6 +75,10 @@ public class KVVActivity extends AppCompatActivity {
                         R.string.error_getting_kvv_data,
                         Toast.LENGTH_LONG
                 ).show();
+            }
+
+            if (disruption != null) {
+                //ADD CODE IF DISRUPTION EXISTS
             }
         });
 
