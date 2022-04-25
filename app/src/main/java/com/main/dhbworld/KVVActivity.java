@@ -1,6 +1,7 @@
 package com.main.dhbworld;
 
 import android.os.Bundle;
+import android.text.Html;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -12,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.datepicker.MaterialDatePicker;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.progressindicator.CircularProgressIndicator;
 import com.google.android.material.timepicker.MaterialTimePicker;
 import com.google.android.material.timepicker.TimeFormat;
@@ -43,6 +45,9 @@ public class KVVActivity extends AppCompatActivity {
     MaterialCardView tramDepartureDateSelectCardView;
     MaterialButton refreshButton;
 
+    MaterialCardView tramDisruptionCardView;
+    TextView tramDisruptionTitle;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,6 +64,9 @@ public class KVVActivity extends AppCompatActivity {
         tramDepartureTimeSelectCardView = findViewById(R.id.tram_departure_time_select);
         tramDepartureDateSelectCardView = findViewById(R.id.tram_departure_date_select);
         refreshButton = findViewById(R.id.tram_refresh);
+
+        tramDisruptionCardView = findViewById(R.id.tram_disruption_title_view);
+        tramDisruptionTitle = findViewById(R.id.tram_disruption_title_text);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         kvvListAdapter = new KVVListAdapter(departures);
@@ -79,6 +87,19 @@ public class KVVActivity extends AppCompatActivity {
 
             if (disruption != null) {
                 //ADD CODE IF DISRUPTION EXISTS
+                tramDisruptionTitle.setText(disruption.getSummary());
+                tramDisruptionCardView.setVisibility(View.VISIBLE);
+                tramDisruptionCardView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        new MaterialAlertDialogBuilder(KVVActivity.this)
+                                .setMessage(Html.fromHtml("<h1>" + disruption.getSummary() + "</h1><h3>" + disruption.getLines() + "</h3>"  + disruption.getDetails(), Html.FROM_HTML_MODE_LEGACY))
+                                .setPositiveButton("Schließen", null)
+                                .show();
+                    }
+                });
+            } else {
+                tramDisruptionCardView.setVisibility(View.GONE);
             }
         });
 
