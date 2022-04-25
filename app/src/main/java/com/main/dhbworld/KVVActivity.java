@@ -17,9 +17,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.progressindicator.CircularProgressIndicator;
 import com.google.android.material.timepicker.MaterialTimePicker;
 import com.google.android.material.timepicker.TimeFormat;
-import com.main.dhbworld.KVV.DataLoaderListener;
 import com.main.dhbworld.KVV.Departure;
-import com.main.dhbworld.KVV.Disruption;
 import com.main.dhbworld.KVV.KVVDataLoader;
 import com.main.dhbworld.KVV.KVVListAdapter;
 import com.main.dhbworld.Navigation.NavigationUtilities;
@@ -86,17 +84,19 @@ public class KVVActivity extends AppCompatActivity {
             }
 
             if (disruption != null) {
-                //ADD CODE IF DISRUPTION EXISTS
                 tramDisruptionTitle.setText(disruption.getSummary());
                 tramDisruptionCardView.setVisibility(View.VISIBLE);
-                tramDisruptionCardView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        new MaterialAlertDialogBuilder(KVVActivity.this)
-                                .setMessage(Html.fromHtml("<h1>" + disruption.getSummary() + "</h1><h3>" + disruption.getLines() + "</h3>"  + disruption.getDetails(), Html.FROM_HTML_MODE_LEGACY))
-                                .setPositiveButton("Schließen", null)
-                                .show();
-                    }
+                tramDisruptionCardView.setOnClickListener(view -> {
+                    String builder = "<h1>" +
+                            disruption.getSummary() +
+                            "</h1><h3>" +
+                            disruption.getLines() +
+                            "</h3>" +
+                            disruption.getDetails();
+                    new MaterialAlertDialogBuilder(KVVActivity.this)
+                            .setMessage(Html.fromHtml(builder, Html.FROM_HTML_MODE_LEGACY))
+                            .setPositiveButton(R.string.close, null)
+                            .show();
                 });
             } else {
                 tramDisruptionCardView.setVisibility(View.GONE);
