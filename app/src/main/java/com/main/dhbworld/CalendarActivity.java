@@ -48,10 +48,10 @@ public class CalendarActivity extends AppCompatActivity{
     Map<String, Integer> colorMap = new HashMap<>();
     Random rnd = new Random();
     Calendar date = Calendar.getInstance();
+    boolean useTempCal;
 
     List<Instant> loadedDateList = new ArrayList<>();
     Map<LocalDate, ArrayList<Appointment>> data = null;
-
     List<String> whiteList = new ArrayList<>();
     List<Calendar> startDateList = new ArrayList<>();
     List<Calendar> endDateList = new ArrayList<>();
@@ -71,8 +71,17 @@ public class CalendarActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.schedule_layout);
         NavigationUtilities.setUpNavigation(this, R.id.Calendar);
-
         cal = findViewById(R.id.weekView);
+        setCalSettings(cal);
+
+        ExecutorService executor = Executors.newCachedThreadPool();
+        // immer nur auf montag scrollen, damit wochentage richtig angezeigt werden.
+        setDates();
+
+        executor.submit(runnableTask);
+        setOnTouchListener(cal,executor);
+
+    public void setCalSettings(WeekView cal){
         cal.setNumberOfVisibleDays(5);
         cal.setShowFirstDayOfWeekFirst(true);
         cal.setNowLineStrokeWidth(6);
@@ -84,21 +93,57 @@ public class CalendarActivity extends AppCompatActivity{
             return date.format(calendar.getTime());
         });
         cal.setTimeFormatter(time -> time + " Uhr");
+    }
 
+
+       //    }
+       //});
+
+    }
+
+    public void makeFilterClickable(){
+
+        View filterIcon = findViewById(R.id.calendarFilterIcon);
+        filterIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+             //   CalendarFilterAdapter calendarFilterAdapter = new CalendarFilterAdapter(whiteList,titleList,this);
+
+
+            }
+        });
+    }
+
+    public void setDates(){
+        date.set(Calendar.DAY_OF_WEEK,
+                date.getActualMinimum(Calendar.DAY_OF_WEEK) + 1);
+
+        Calendar tempCal = Calendar.getInstance();
+        if(tempCal.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY){
+            tempCal.add(Calendar.DAY_OF_WEEK,2);
+            cal.scrollToDate(tempCal);
+            useTempCal = true;
+
+        }
+        else if(tempCal.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY){
+            tempCal.add(Calendar.DAY_OF_WEEK,1);
+            cal.scrollToDate(tempCal);
+            useTempCal = true;
+        }
+        else{
+            cal.scrollToDate(date);
+            useTempCal = false;
+        }
+    }
+
+
+
+    @SuppressLint("ClickableViewAccessibility")
+    public void setOnTouchListener(WeekView cal, ExecutorService executor){
         final AtomicReference<Float>[] x1 = new AtomicReference[]{new AtomicReference<>((float) 0)};
         final float[] x2 = {0};
 
-        ExecutorService executor = Executors.newCachedThreadPool();
-
-       executor.submit(runnableTask);
-
-        // immer nur auf montag scrollen, damit wochentage richtig angezeigt werden.
-        date.set(Calendar.DAY_OF_WEEK,
-                date.getActualMinimum(Calendar.DAY_OF_WEEK) + 1);
-        cal.scrollToDateTime(date);
         cal.setOnTouchListener((v, event) -> {
-
-
             // TODO Auto-generated method stub
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
@@ -126,18 +171,22 @@ public class CalendarActivity extends AppCompatActivity{
             }
             return false;
         });
-
-       //View filterIcon = findViewById(R.id.calendarFilterIcon);
-       //filterIcon.setOnClickListener(new View.OnClickListener() {
-       //    @Override
-       //    public void onClick(View v) {
-       //     //   CalendarFilterAdapter calendarFilterAdapter = new CalendarFilterAdapter(whiteList,titleList,this);
-
-
-       //    }
-       //});
-
     }
+
+    public void setCalSettings(WeekView cal){
+        cal.setNumberOfVisibleDays(5);
+        cal.setShowFirstDayOfWeekFirst(true);
+        cal.setNowLineStrokeWidth(6);
+        cal.setShowNowLineDot(true);
+        cal.setNowLineColor(nowLineColor);
+        cal.setPastBackgroundColor(Color.LTGRAY);
+        cal.setDateFormatter(calendar -> {
+            SimpleDateFormat date = new SimpleDateFormat("E dd.MM", Locale.getDefault());
+            return date.format(calendar.getTime());
+        });
+        cal.setTimeFormatter(time -> time + " Uhr");
+    }
+
 
     Runnable runnableTask = () -> {
         String url = "https://rapla.dhbw-karlsruhe.de/rapla?page=calendar&user=eisenbiegler&file=TINF20B4" ; // ist von nutzer einzugeben (oder Liste von Unis auswählen).
