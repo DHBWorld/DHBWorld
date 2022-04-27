@@ -5,7 +5,7 @@
     <item
         android:title="filter_icon"
         android:id="@+id/calendarFilterIcon"
-        android:icon="@drawable/filter_icon_50px"
+        android:icon="@drawable/ic_baseline_filter_alt_24"
         app:showAsAction="always"
         android:onClick="openFilterClick"
         />

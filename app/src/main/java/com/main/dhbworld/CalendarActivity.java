@@ -3,6 +3,7 @@ package com.main.dhbworld;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
@@ -14,6 +15,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
+
 import com.alamkanak.weekview.WeekView;
 import com.alamkanak.weekview.WeekViewEntity;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
@@ -49,17 +51,18 @@ public class CalendarActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.schedule_layout);
         NavigationUtilities.setUpNavigation(this, R.id.Calendar);
+
         setCalSettings();
         ExecutorService executor = Executors.newCachedThreadPool();
         // immer nur auf montag scrollen, damit wochentage richtig angezeigt werden.
         setDates();
 
-        findViewById(R.id.calendarFilterIcon).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //open filter adapter.
-            }
-        });
+        //findViewById(R.id.calendarFilterIcon).setOnClickListener(new View.OnClickListener() {
+        //    @Override
+        //    public void onClick(View v) {
+        //        //open filter adapter.
+        //    }
+        //});
         executor.submit(runnableTask);
         setOnTouchListener(cal, executor);
     }
@@ -71,8 +74,8 @@ public class CalendarActivity extends AppCompatActivity{
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-    System.out.println("i was here");
-    return false;
+        System.out.println("i was here");
+        return false;
     }
 
 
