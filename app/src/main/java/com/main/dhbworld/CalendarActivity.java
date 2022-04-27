@@ -1,22 +1,13 @@
 package com.main.dhbworld;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.SwitchCompat;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.Button;
-import android.widget.CompoundButton;
-import android.widget.ListAdapter;
 import android.widget.TextView;
 import com.alamkanak.weekview.WeekView;
 import com.alamkanak.weekview.WeekViewEntity;
@@ -43,75 +34,52 @@ import java.util.concurrent.atomic.AtomicReference;
 
 
 public class CalendarActivity extends AppCompatActivity{
-
     WeekView cal;
-    Map<String, Integer> colorMap = new HashMap<>();
-    Random rnd = new Random();
     Calendar date = Calendar.getInstance();
     boolean useTempCal;
-
     List<Instant> loadedDateList = new ArrayList<>();
-    Map<LocalDate, ArrayList<Appointment>> data = null;
-    List<String> whiteList = new ArrayList<>();
-    List<Calendar> startDateList = new ArrayList<>();
-    List<Calendar> endDateList = new ArrayList<>();
-    List<String> personList = new ArrayList<>();
-    List<String> resourceList = new ArrayList<>();
-    List<String> titleList = new ArrayList<>();
-    List<String> infoList = new ArrayList<>();
-    List<String> allTitleList = new ArrayList<>();
     ArrayList<Events> events = new ArrayList<>();
-
-    int todayBackgroundColor = Color.parseColor("#E6E6E9");
-    int nowLineColor = Color.parseColor("#343491");
-
 
     @SuppressLint("ClickableViewAccessibility")
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.schedule_layout);
         NavigationUtilities.setUpNavigation(this, R.id.Calendar);
-        cal = findViewById(R.id.weekView);
-        setCalSettings(cal);
+        setCalSettings();
+        makeFilterClickable();
 
         ExecutorService executor = Executors.newCachedThreadPool();
         // immer nur auf montag scrollen, damit wochentage richtig angezeigt werden.
         setDates();
 
+        findViewById(R.id.calendarFilterIcon).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //open filter adapter.
+            }
+        });
         executor.submit(runnableTask);
-        setOnTouchListener(cal,executor);
+        setOnTouchListener(cal, executor);
+    }
 
-    public void setCalSettings(WeekView cal){
+    public void setCalSettings(){
+        cal = findViewById(R.id.weekView);
         cal.setNumberOfVisibleDays(5);
         cal.setShowFirstDayOfWeekFirst(true);
         cal.setNowLineStrokeWidth(6);
         cal.setShowNowLineDot(true);
-        cal.setNowLineColor(nowLineColor);
+        cal.setNowLineColor(Color.parseColor("#343491"));
         cal.setPastBackgroundColor(Color.LTGRAY);
         cal.setDateFormatter(calendar -> {
-            SimpleDateFormat date = new SimpleDateFormat("E dd.MM", Locale.getDefault());
+            SimpleDateFormat date = new SimpleDateFormat( "E dd.MM", Locale.getDefault());
             return date.format(calendar.getTime());
         });
         cal.setTimeFormatter(time -> time + " Uhr");
     }
 
 
-       //    }
-       //});
-
-    }
-
     public void makeFilterClickable(){
 
-        View filterIcon = findViewById(R.id.calendarFilterIcon);
-        filterIcon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-             //   CalendarFilterAdapter calendarFilterAdapter = new CalendarFilterAdapter(whiteList,titleList,this);
-
-
-            }
-        });
     }
 
     public void setDates(){
@@ -173,23 +141,9 @@ public class CalendarActivity extends AppCompatActivity{
         });
     }
 
-    public void setCalSettings(WeekView cal){
-        cal.setNumberOfVisibleDays(5);
-        cal.setShowFirstDayOfWeekFirst(true);
-        cal.setNowLineStrokeWidth(6);
-        cal.setShowNowLineDot(true);
-        cal.setNowLineColor(nowLineColor);
-        cal.setPastBackgroundColor(Color.LTGRAY);
-        cal.setDateFormatter(calendar -> {
-            SimpleDateFormat date = new SimpleDateFormat("E dd.MM", Locale.getDefault());
-            return date.format(calendar.getTime());
-        });
-        cal.setTimeFormatter(time -> time + " Uhr");
-    }
-
-
     Runnable runnableTask = () -> {
         String url = "https://rapla.dhbw-karlsruhe.de/rapla?page=calendar&user=eisenbiegler&file=TINF20B4" ; // ist von nutzer einzugeben (oder Liste von Unis auswählen).
+        Map<LocalDate, ArrayList<Appointment>> data = null;
         LocalDate calInLocalDate = LocalDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault()).toLocalDate();
         loadedDateList.add(date.toInstant());
 
@@ -210,103 +164,90 @@ public class CalendarActivity extends AppCompatActivity{
             }
         };
 
-    public void saveValues(Map<LocalDate, ArrayList<Appointment>> data) throws Exception{
+    public void saveValues(Map<LocalDate, ArrayList<Appointment>> data){
         Adapter adapter = new Adapter();
         cal.setAdapter(adapter);
-
-        LocalDate asLocalDate = LocalDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault()).toLocalDate();
-        ArrayList<Appointment> currentData = data.get(asLocalDate);
-        clearLists();
-
-        for (int i = 0; i <= currentData.size() -1;i++){
-            if(!titleList.contains(currentData.get(i).getTitle())){
-                whiteList.add(currentData.get(i).getTitle());
-            }
-            allTitleList.add(currentData.get(i).getTitle());
-            startDateList.add(localDateTimeToDate(currentData.get(i).getStartDate()));
-            endDateList.add(localDateTimeToDate(currentData.get(i).getEndDate()));
-            personList.add(currentData.get(i).getPersons());
-            resourceList.add(currentData.get(i).getResources());
-            titleList.add(currentData.get(i).getTitle());
-            infoList.add(currentData.get(i).getInfo());
-        }
-        fillCalendar(adapter);
+        Events.fillData(data, date);
+        fillAdapter(adapter);
     }
 
-    public static Calendar localDateTimeToDate(LocalDateTime localDateTime) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.clear();
-        calendar.set(localDateTime.getYear(), localDateTime.getMonthValue()-1, localDateTime.getDayOfMonth(),
-                localDateTime.getHour(), localDateTime.getMinute(), localDateTime.getSecond());
-        return calendar;
-    }
-
-
-    public void fillCalendar(Adapter adapter){
-        for(int i = 0; i< titleList.size() -1; i++){
-
-            String resources = resourceList.get(i).replace(",","\n");
-            System.out.println(resources);
-
-            if(whiteList.contains(titleList.get(i))){
-                Random rnd = new Random();
-                Events event = new Events(rnd.nextInt(), titleList.get(i), startDateList.get(i),endDateList.get(i), personList.get(i) + ", " + resources, setEventColor(i));
-                if (!events.contains(event)) {
-                   events.add(event);
-               }
-           }
-        }
+    public void fillAdapter(Adapter adapter){
+        events = Events.getEvents();
         adapter.submitList(events);
     }
 
-    public WeekViewEntity.Style setEventColor(int i){
-        WeekViewEntity.Style style = null;
 
 
 
-        if(endDateList.get(i).get(Calendar.HOUR_OF_DAY) - startDateList.get(i).get(Calendar.HOUR_OF_DAY) >= 8){
-            style = new WeekViewEntity.Style.Builder().setBackgroundColor(Color.parseColor("#86c5da")).build();
-        }
-        else if(titleList.get(i).contains("Klausur")){
-            style = new WeekViewEntity.Style.Builder().setBackgroundColor(Color.RED).build();
-        }
-
-        else if(endDateList.get(i).before(Calendar.getInstance())){
-            style = new WeekViewEntity.Style.Builder().setBackgroundColor(Color.parseColor("#A9A9A9")).build();
-        }
-        else if(colorMap.containsKey(titleList.get(i))){
-            try {
-                style = new WeekViewEntity.Style.Builder().setBackgroundColor(colorMap.get(titleList.get(i))).build();
-            }
-            catch (Exception e){
-                e.printStackTrace();
-            }
-        }
-        else {
-            // liste verschiedener farben, aus denen generiert wird. Am besten deterministisch anhand titels.
-            final int baseRed = Color.RED;
-            final int baseGreen = Color.GREEN;
-            final int baseBlue = Color.BLUE;
-            final int red = (baseRed + rnd.nextInt(256 - 100) + 100) / 2;
-            final int green = (baseGreen + rnd.nextInt(256) - 100) + 100 / 2;
-            final int blue = (baseBlue + rnd.nextInt(256 - 100) + 100) / 2;
-            int rndColor = Color.rgb(red, green, blue);
-            colorMap.put(titleList.get(i), rndColor);
-            style = new WeekViewEntity.Style.Builder().setBackgroundColor(rndColor).build();
-
-        }
-        return style;
-    }
+//    public static Calendar localDateTimeToDate(LocalDateTime localDateTime) {
+//        Calendar calendar = Calendar.getInstance();
+//        calendar.clear();
+//        calendar.set(localDateTime.getYear(), localDateTime.getMonthValue()-1, localDateTime.getDayOfMonth(),
+//                localDateTime.getHour(), localDateTime.getMinute(), localDateTime.getSecond());
+//        return calendar;
+//    }
 
 
-    public void clearLists(){
-        startDateList.clear();
-        endDateList.clear();
-        personList.clear();
-        resourceList.clear();
-        titleList.clear();
-        infoList.clear();
-    }
+//    public void fillCalendar(Adapter adapter){
+//        for(int i = 0; i< titleList.size() -1; i++){
+//            String resources = resourceList.get(i).replace(",","\n");
+//            if(whiteList.contains(titleList.get(i))){
+//                Random rnd = new Random();
+//                Events event = new Events(rnd.nextInt(), titleList.get(i), startDateList.get(i),endDateList.get(i), personList.get(i) + ", " + resources, setEventColor(i));
+//                if (!events.contains(event)) {
+//                   events.add(event);
+//               }
+//           }
+//        }
+//        adapter.submitList(events);
+//    }
+
+//    public static WeekViewEntity.Style setEventColor(int i){
+//        WeekViewEntity.Style style = null;
+//
+//        if(endDateList.get(i).get(Calendar.HOUR_OF_DAY) - startDateList.get(i).get(Calendar.HOUR_OF_DAY) >= 8){
+//            style = new WeekViewEntity.Style.Builder().setBackgroundColor(Color.parseColor("#86c5da")).build();
+//        }
+//        else if(titleList.get(i).contains("Klausur")){
+//            style = new WeekViewEntity.Style.Builder().setBackgroundColor(Color.RED).build();
+//        }
+//
+//        else if(endDateList.get(i).before(Calendar.getInstance())){
+//            style = new WeekViewEntity.Style.Builder().setBackgroundColor(Color.parseColor("#A9A9A9")).build();
+//        }
+//        else if(colorMap.containsKey(titleList.get(i))){
+//            try {
+//                style = new WeekViewEntity.Style.Builder().setBackgroundColor(colorMap.get(titleList.get(i))).build();
+//            }
+//            catch (Exception e){
+//                e.printStackTrace();
+//            }
+//        }
+//        else {
+//            // liste verschiedener farben, aus denen generiert wird. Am besten deterministisch anhand titels.
+//            final int baseRed = Color.RED;
+//            final int baseGreen = Color.GREEN;
+//            final int baseBlue = Color.BLUE;
+//            final int red = (baseRed + rnd.nextInt(256 - 100) + 100) / 2;
+//            final int green = (baseGreen + rnd.nextInt(256) - 100) + 100 / 2;
+//            final int blue = (baseBlue + rnd.nextInt(256 - 100) + 100) / 2;
+//            int rndColor = Color.rgb(red, green, blue);
+//            colorMap.put(titleList.get(i), rndColor);
+//            style = new WeekViewEntity.Style.Builder().setBackgroundColor(rndColor).build();
+//
+//        }
+//        return style;
+//    }
+//
+//
+//    public void clearLists(){
+//        startDateList.clear();
+//        endDateList.clear();
+//        personList.clear();
+//        resourceList.clear();
+//        titleList.clear();
+//        infoList.clear();
+//    }
 
 
     public void showBottomSheet(Events event){
@@ -346,7 +287,6 @@ public class CalendarActivity extends AppCompatActivity{
         @Override
         public void onEventClick(Events data) {
             CalendarActivity.this.showBottomSheet(data);
-            System.out.println(data.title + data.startTime.toString());
             super.onEventClick(data);
         }
     }
