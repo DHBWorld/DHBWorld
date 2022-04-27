@@ -58,6 +58,7 @@ public class NavigationUtilities {
                         break;
                     case R.id.tram_departure:
                         startActivity(activity, KVVActivity.class);
+                        break;
                     case R.id.cantine:
                         startActivity(activity, CantineActivity.class);
                 }
