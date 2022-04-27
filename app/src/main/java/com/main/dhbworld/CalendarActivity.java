@@ -1,11 +1,16 @@
 package com.main.dhbworld;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
@@ -18,16 +23,15 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.time.LocalDate;
 import dhbw.timetable.rapla.data.event.Appointment;
 import dhbw.timetable.rapla.parser.DataImporter;
 import java.util.Map;
-import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicReference;
@@ -46,8 +50,6 @@ public class CalendarActivity extends AppCompatActivity{
         setContentView(R.layout.schedule_layout);
         NavigationUtilities.setUpNavigation(this, R.id.Calendar);
         setCalSettings();
-        makeFilterClickable();
-
         ExecutorService executor = Executors.newCachedThreadPool();
         // immer nur auf montag scrollen, damit wochentage richtig angezeigt werden.
         setDates();
@@ -61,6 +63,18 @@ public class CalendarActivity extends AppCompatActivity{
         executor.submit(runnableTask);
         setOnTouchListener(cal, executor);
     }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.calendar_top_app_bar, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+    System.out.println("i was here");
+    return false;
+    }
+
 
     public void setCalSettings(){
         cal = findViewById(R.id.weekView);
@@ -78,7 +92,71 @@ public class CalendarActivity extends AppCompatActivity{
     }
 
 
-    public void makeFilterClickable(){
+    public void openFilterClick(@NonNull MenuItem item){
+        System.out.println("here1111");
+        final String[] listItems = new String[]{"C", "C++", "JAVA", "PYTHON"};
+        final boolean[] checkedItems = new boolean[listItems.length];
+        final List<String> selectedItems = Arrays.asList(listItems);
+
+        item.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                System.out.println("here!");
+                AlertDialog.Builder builder = new AlertDialog.Builder(CalendarActivity.this);
+                builder.setTitle("title");
+
+                builder.setMultiChoiceItems(listItems, checkedItems, new DialogInterface.OnMultiChoiceClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+                        checkedItems[which] = isChecked;
+                        String currentItem = selectedItems.get(which);
+                    }
+                });
+
+                // alert dialog shouldn't be cancellable
+                builder.setCancelable(false);
+
+                builder.setPositiveButton("Done", new DialogInterface.OnClickListener() {
+                    @SuppressLint("SetTextI18n")
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        for (int i = 0; i < checkedItems.length; i++) {
+                            if (checkedItems[i]) {
+                                System.out.println(checkedItems[i]);
+                            }
+                        }
+                    }
+                });
+
+                // handle the negative button of the alert dialog
+                builder.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                });
+
+                // handle the neutral button of the dialog to clear
+                // the selected items boolean checkedItem
+                builder.setNeutralButton("CLEAR ALL", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        for (int i = 0; i < checkedItems.length; i++) {
+                            checkedItems[i] = false;
+                        }
+                    }
+                });
+                builder.create();
+
+                AlertDialog dialog = builder.create();
+                dialog.show();
+
+                return false;
+            }
+        });
+
+
+
 
     }
 
@@ -167,7 +245,7 @@ public class CalendarActivity extends AppCompatActivity{
     public void saveValues(Map<LocalDate, ArrayList<Appointment>> data){
         Adapter adapter = new Adapter();
         cal.setAdapter(adapter);
-        Events.fillData(data, date);
+        EventCreator.fillData(data, date);
         fillAdapter(adapter);
     }
 
@@ -175,80 +253,6 @@ public class CalendarActivity extends AppCompatActivity{
         events = Events.getEvents();
         adapter.submitList(events);
     }
-
-
-
-
-//    public static Calendar localDateTimeToDate(LocalDateTime localDateTime) {
-//        Calendar calendar = Calendar.getInstance();
-//        calendar.clear();
-//        calendar.set(localDateTime.getYear(), localDateTime.getMonthValue()-1, localDateTime.getDayOfMonth(),
-//                localDateTime.getHour(), localDateTime.getMinute(), localDateTime.getSecond());
-//        return calendar;
-//    }
-
-
-//    public void fillCalendar(Adapter adapter){
-//        for(int i = 0; i< titleList.size() -1; i++){
-//            String resources = resourceList.get(i).replace(",","\n");
-//            if(whiteList.contains(titleList.get(i))){
-//                Random rnd = new Random();
-//                Events event = new Events(rnd.nextInt(), titleList.get(i), startDateList.get(i),endDateList.get(i), personList.get(i) + ", " + resources, setEventColor(i));
-//                if (!events.contains(event)) {
-//                   events.add(event);
-//               }
-//           }
-//        }
-//        adapter.submitList(events);
-//    }
-
-//    public static WeekViewEntity.Style setEventColor(int i){
-//        WeekViewEntity.Style style = null;
-//
-//        if(endDateList.get(i).get(Calendar.HOUR_OF_DAY) - startDateList.get(i).get(Calendar.HOUR_OF_DAY) >= 8){
-//            style = new WeekViewEntity.Style.Builder().setBackgroundColor(Color.parseColor("#86c5da")).build();
-//        }
-//        else if(titleList.get(i).contains("Klausur")){
-//            style = new WeekViewEntity.Style.Builder().setBackgroundColor(Color.RED).build();
-//        }
-//
-//        else if(endDateList.get(i).before(Calendar.getInstance())){
-//            style = new WeekViewEntity.Style.Builder().setBackgroundColor(Color.parseColor("#A9A9A9")).build();
-//        }
-//        else if(colorMap.containsKey(titleList.get(i))){
-//            try {
-//                style = new WeekViewEntity.Style.Builder().setBackgroundColor(colorMap.get(titleList.get(i))).build();
-//            }
-//            catch (Exception e){
-//                e.printStackTrace();
-//            }
-//        }
-//        else {
-//            // liste verschiedener farben, aus denen generiert wird. Am besten deterministisch anhand titels.
-//            final int baseRed = Color.RED;
-//            final int baseGreen = Color.GREEN;
-//            final int baseBlue = Color.BLUE;
-//            final int red = (baseRed + rnd.nextInt(256 - 100) + 100) / 2;
-//            final int green = (baseGreen + rnd.nextInt(256) - 100) + 100 / 2;
-//            final int blue = (baseBlue + rnd.nextInt(256 - 100) + 100) / 2;
-//            int rndColor = Color.rgb(red, green, blue);
-//            colorMap.put(titleList.get(i), rndColor);
-//            style = new WeekViewEntity.Style.Builder().setBackgroundColor(rndColor).build();
-//
-//        }
-//        return style;
-//    }
-//
-//
-//    public void clearLists(){
-//        startDateList.clear();
-//        endDateList.clear();
-//        personList.clear();
-//        resourceList.clear();
-//        titleList.clear();
-//        infoList.clear();
-//    }
-
 
     public void showBottomSheet(Events event){
         final BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(this);
