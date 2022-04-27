@@ -57,12 +57,6 @@ public class CalendarActivity extends AppCompatActivity{
         // immer nur auf montag scrollen, damit wochentage richtig angezeigt werden.
         setDates();
 
-        //findViewById(R.id.calendarFilterIcon).setOnClickListener(new View.OnClickListener() {
-        //    @Override
-        //    public void onClick(View v) {
-        //        //open filter adapter.
-        //    }
-        //});
         executor.submit(runnableTask);
         setOnTouchListener(cal, executor);
     }
@@ -71,13 +65,6 @@ public class CalendarActivity extends AppCompatActivity{
         getMenuInflater().inflate(R.menu.calendar_top_app_bar, menu);
         return true;
     }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        System.out.println("i was here");
-        return false;
-    }
-
 
     public void setCalSettings(){
         cal = findViewById(R.id.weekView);
@@ -96,17 +83,14 @@ public class CalendarActivity extends AppCompatActivity{
 
 
     public void openFilterClick(@NonNull MenuItem item){
-        System.out.println("here1111");
+
+
         final String[] listItems = new String[]{"C", "C++", "JAVA", "PYTHON"};
         final boolean[] checkedItems = new boolean[listItems.length];
         final List<String> selectedItems = Arrays.asList(listItems);
 
-        item.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                System.out.println("here!");
                 AlertDialog.Builder builder = new AlertDialog.Builder(CalendarActivity.this);
-                builder.setTitle("title");
+                builder.setTitle("Filter your classes");
 
                 builder.setMultiChoiceItems(listItems, checkedItems, new DialogInterface.OnMultiChoiceClickListener() {
                     @Override
@@ -124,9 +108,7 @@ public class CalendarActivity extends AppCompatActivity{
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         for (int i = 0; i < checkedItems.length; i++) {
-                            if (checkedItems[i]) {
-                                System.out.println(checkedItems[i]);
-                            }
+
                         }
                     }
                 });
@@ -153,13 +135,6 @@ public class CalendarActivity extends AppCompatActivity{
 
                 AlertDialog dialog = builder.create();
                 dialog.show();
-
-                return false;
-            }
-        });
-
-
-
 
     }
 

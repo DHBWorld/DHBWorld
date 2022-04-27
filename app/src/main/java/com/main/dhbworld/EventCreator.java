@@ -29,7 +29,6 @@ public class EventCreator {
     static ArrayList<Events> events = new ArrayList<>();
     static Map<String, Integer> colorMap = new HashMap<>();
 
-
     public static void fillData(Map<LocalDate, ArrayList<Appointment>> data, Calendar date){
         LocalDate asLocalDate = LocalDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault()).toLocalDate();
         ArrayList<Appointment> currentData = data.get(asLocalDate);
@@ -116,4 +115,8 @@ public class EventCreator {
         titleList.clear();
         infoList.clear();
     }
+    public static List<String> getTitleList() {
+        return titleList;
+    }
+
 }

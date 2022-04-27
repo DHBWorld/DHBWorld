@@ -28,4 +28,5 @@ public class Events {
     public static ArrayList<Events> getEvents() {
         return events;
     }
+
 }
