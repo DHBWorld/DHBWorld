@@ -436,16 +436,6 @@ public class CantineActivity extends AppCompatActivity {
         }
     }
 
-    public static MealDailyPlan getMealPlanForDashboard() throws JSONException {
-        MealDailyPlan plan=null;
-        if (inputForDashboard.length()>0){
-             plan= new MealDailyPlan(inputForDashboard);
-
-        }
-
-
-        return plan;
-    }
 
     public static List<String> loadDataForDashboard() {
         List <String> meals= new ArrayList<>();
