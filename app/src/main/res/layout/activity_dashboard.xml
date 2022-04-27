@@ -64,6 +64,24 @@
                     android:orientation="vertical"
                     android:padding="20dp">
 
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/card_dash_mealPlan"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="@color/white"
+                        android:baselineAligned="false"
+                        app:cardElevation="0dp"
+                        app:strokeColor="@color/stroke_color"
+
+                        app:strokeWidth="1dp">
+
+
+
+                    </com.google.android.material.card.MaterialCardView>
+
+
+
+
                     <TextView
                         android:id="@+id/test"
                         android:layout_width="match_parent"
