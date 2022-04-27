@@ -45,6 +45,9 @@ public class CalendarActivity extends AppCompatActivity{
     boolean useTempCal;
     List<Instant> loadedDateList = new ArrayList<>();
     ArrayList<Events> events = new ArrayList<>();
+    ArrayList<String> blackList = new ArrayList<>();
+
+    boolean firstClick = false;
 
     @SuppressLint("ClickableViewAccessibility")
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,15 +84,26 @@ public class CalendarActivity extends AppCompatActivity{
         cal.setTimeFormatter(time -> time + " Uhr");
     }
 
+    public static String[] arrayConvertor(List<String> titleList){
+        return titleList.toArray(new String[0]);
+    }
+
 
     public void openFilterClick(@NonNull MenuItem item){
-
-
-        final String[] listItems = new String[]{"C", "C++", "JAVA", "PYTHON"};
+        final String[] listItems = arrayConvertor(EventCreator.getAllTitleList());
         final boolean[] checkedItems = new boolean[listItems.length];
         final List<String> selectedItems = Arrays.asList(listItems);
 
-                AlertDialog.Builder builder = new AlertDialog.Builder(CalendarActivity.this);
+        for(int i = 0; i < listItems.length; i++){
+            if(blackList.contains(listItems[i])){
+                checkedItems[i] = false;
+            }
+            else{
+                checkedItems[i] = true;
+            }
+        }
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(CalendarActivity.this);
                 builder.setTitle("Filter your classes");
 
                 builder.setMultiChoiceItems(listItems, checkedItems, new DialogInterface.OnMultiChoiceClickListener() {
@@ -108,7 +122,11 @@ public class CalendarActivity extends AppCompatActivity{
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         for (int i = 0; i < checkedItems.length; i++) {
-
+                            if(!checkedItems[i]){
+                                blackList.add(listItems[i]);
+                            }
+                            EventCreator.setBlackList(blackList);
+                            EventCreator.applyBlackList();
                         }
                     }
                 });
@@ -117,18 +135,14 @@ public class CalendarActivity extends AppCompatActivity{
                 builder.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-
                     }
                 });
 
-                // handle the neutral button of the dialog to clear
-                // the selected items boolean checkedItem
-                builder.setNeutralButton("CLEAR ALL", new DialogInterface.OnClickListener() {
+               //TODO When neutral button is pressed, the Dialog should still stay!
+                builder.setNeutralButton("RESET", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        for (int i = 0; i < checkedItems.length; i++) {
-                            checkedItems[i] = false;
-                        }
+                        Arrays.fill(checkedItems, true);
                     }
                 });
                 builder.create();
@@ -159,6 +173,7 @@ public class CalendarActivity extends AppCompatActivity{
             useTempCal = false;
         }
     }
+
 
 
 

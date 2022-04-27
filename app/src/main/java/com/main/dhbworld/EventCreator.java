@@ -18,13 +18,17 @@ import java.util.Random;
 import dhbw.timetable.rapla.data.event.Appointment;
 
 public class EventCreator {
-    static List<String> whiteList = new ArrayList<>();
     static List<Calendar> startDateList = new ArrayList<>();
     static List<Calendar> endDateList = new ArrayList<>();
     static List<String> personList = new ArrayList<>();
     static List<String> resourceList = new ArrayList<>();
     static List<String> titleList = new ArrayList<>();
     static List<String> infoList = new ArrayList<>();
+    static List<String> blackList = new ArrayList<>();
+    static ArrayList<Events> filteredEvents = new ArrayList<>();
+
+
+
     static List<String> allTitleList = new ArrayList<>();
     static ArrayList<Events> events = new ArrayList<>();
     static Map<String, Integer> colorMap = new HashMap<>();
@@ -34,33 +38,47 @@ public class EventCreator {
         ArrayList<Appointment> currentData = data.get(asLocalDate);
         clearLists();
         for (int i = 0; i <= currentData.size() -1;i++){
-            if(!titleList.contains(currentData.get(i).getTitle())){
-                whiteList.add(currentData.get(i).getTitle());
+
+            if(!allTitleList.contains(currentData.get(i).getTitle())){
+                allTitleList.add(currentData.get(i).getTitle());
             }
-            allTitleList.add(currentData.get(i).getTitle());
             startDateList.add(localDateTimeToDate(currentData.get(i).getStartDate()));
             endDateList.add(localDateTimeToDate(currentData.get(i).getEndDate()));
             personList.add(currentData.get(i).getPersons());
             resourceList.add(currentData.get(i).getResources());
             titleList.add(currentData.get(i).getTitle());
+
             infoList.add(currentData.get(i).getInfo());
         }
         createEvents();
     }
 
+    public static void setBlackList(ArrayList<String> blackList){
+        EventCreator.blackList = blackList;
+    }
+
+    public static void applyBlackList(){
+        for(int i = 0; i < events.size(); i++){
+            if(!blackList.contains(events.get(i).title)){
+                filteredEvents.add(events.get(i));
+            }
+        }
+        Events.setEvents(filteredEvents);
+    }
+
     public static void createEvents(){
         for(int i = 0; i< titleList.size() -1; i++){
             String resources = resourceList.get(i).replace(",","\n");
-            if(whiteList.contains(titleList.get(i))){
                 Random rnd = new Random();
                 Events event = new Events(rnd.nextInt(), titleList.get(i), startDateList.get(i),endDateList.get(i), personList.get(i) + ", " + resources, setEventColor(i));
                 if (!events.contains(event)) {
                     events.add(event);
                 }
-            }
         }
-        Events.setEvents(events);
+       applyBlackList();
     }
+
+
 
     public static WeekViewEntity.Style setEventColor(int i) throws NullPointerException{
         WeekViewEntity.Style style = null;
@@ -114,9 +132,14 @@ public class EventCreator {
         resourceList.clear();
         titleList.clear();
         infoList.clear();
+        events.clear();
     }
     public static List<String> getTitleList() {
         return titleList;
     }
+    public static List<String> getAllTitleList() {
+        return allTitleList;
+    }
+
 
 }
