@@ -101,7 +101,6 @@ public class EventCreator {
                                     eventList.get(i).resource,
                             setEventColor(i));
                     events.add(event);
-
                 }
         }
        applyBlackList();
@@ -168,5 +167,17 @@ public class EventCreator {
         filteredEvents.clear();
         eventList.clear();
         events.clear();
+    }
+
+    public static Event getNextEvent(){
+       Calendar now = Calendar.getInstance();
+       Event nextEvent = eventList.get(0);
+       for(int i = 0; i < eventList.size(); i++){
+           Event currentEvent = eventList.get(i);
+           if(currentEvent.getStartDate().after(now) && currentEvent.getStartDate().before(nextEvent)){
+               nextEvent = currentEvent;
+           }
+       }
+       return nextEvent;
     }
 }

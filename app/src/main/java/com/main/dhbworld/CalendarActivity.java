@@ -71,9 +71,11 @@ public class CalendarActivity extends AppCompatActivity{
         return true;
     }
 
-//    public String getDashboardInfo(){
-//
-//    }
+    public String getDashboardInfo(){
+
+
+        return "e";
+    }
 
 
     public void firstSetup(){
