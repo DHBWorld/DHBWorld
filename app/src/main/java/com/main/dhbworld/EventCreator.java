@@ -49,7 +49,7 @@ public class EventCreator {
                     currentData.get(i).getPersons(),
                     currentData.get(i).getResources(),
                     currentData.get(i).getTitle(),
-                    currentData.get(i).getInfo());
+                    currentData.get(i).getInfo()));
 
             if(!allTitleList.contains(currentData.get(i).getTitle())){
                 allTitleList.add(currentData.get(i).getTitle());
