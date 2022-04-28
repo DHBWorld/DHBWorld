@@ -4,9 +4,12 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.preference.PreferenceManager;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Menu;
@@ -19,7 +22,12 @@ import android.widget.TextView;
 import com.alamkanak.weekview.WeekView;
 import com.alamkanak.weekview.WeekViewEntity;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.main.dhbworld.Navigation.NavigationUtilities;
+
+import java.lang.reflect.Array;
+import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -37,6 +45,7 @@ import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Collectors;
 
 
 public class CalendarActivity extends AppCompatActivity{
@@ -44,8 +53,8 @@ public class CalendarActivity extends AppCompatActivity{
     Calendar date = Calendar.getInstance();
     boolean useTempCal;
     List<Instant> loadedDateList = new ArrayList<>();
-    ArrayList<Events> events = new ArrayList<>();
-    ArrayList<String> blackList = new ArrayList<>();
+    static ArrayList<Events> events = new ArrayList<>();
+    static ArrayList<String> blackList = new ArrayList<>();
 
     boolean firstClick = false;
 
@@ -56,6 +65,7 @@ public class CalendarActivity extends AppCompatActivity{
         NavigationUtilities.setUpNavigation(this, R.id.Calendar);
 
         setCalSettings();
+        blackList = getBlackList("blackList");
         ExecutorService executor = Executors.newCachedThreadPool();
         // immer nur auf montag scrollen, damit wochentage richtig angezeigt werden.
         setDates();
@@ -89,18 +99,18 @@ public class CalendarActivity extends AppCompatActivity{
     }
 
 
-    public void openFilterClick(@NonNull MenuItem item){
+    public static ArrayList<String> getBlackList() {
+        return blackList;
+    }
+
+    public void openFilterClick(@NonNull MenuItem item) throws NullPointerException{
         final String[] listItems = arrayConvertor(EventCreator.getAllTitleList());
         final boolean[] checkedItems = new boolean[listItems.length];
         final List<String> selectedItems = Arrays.asList(listItems);
 
         for(int i = 0; i < listItems.length; i++){
-            if(blackList.contains(listItems[i])){
-                checkedItems[i] = false;
-            }
-            else{
-                checkedItems[i] = true;
-            }
+            if(blackList.contains(listItems[i])){ checkedItems[i] = false; }
+            else{ checkedItems[i] = true; }
         }
 
         AlertDialog.Builder builder = new AlertDialog.Builder(CalendarActivity.this);
@@ -125,8 +135,15 @@ public class CalendarActivity extends AppCompatActivity{
                             if(!checkedItems[i]){
                                 blackList.add(listItems[i]);
                             }
+                            else if(blackList.contains(listItems[i])){
+                                System.out.println(listItems[i]);
+                                blackList.remove(listItems[i]);
+                            }
+                            blackList = removeDuplicates(blackList);
                             EventCreator.setBlackList(blackList);
                             EventCreator.applyBlackList();
+                            saveBlackList(blackList,"blackList");
+                            restart(CalendarActivity.this);
                         }
                     }
                 });
@@ -152,6 +169,38 @@ public class CalendarActivity extends AppCompatActivity{
 
     }
 
+    public ArrayList<String> removeDuplicates(ArrayList<String> list){
+        return (ArrayList<String>) list.stream().distinct().collect(Collectors.toList());
+    }
+
+    public static void restart(Activity activity) {
+        activity.recreate();
+    }
+
+    public void saveBlackList(ArrayList<String> list, String key){
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(CalendarActivity.this);
+        SharedPreferences.Editor editor = prefs.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(list);
+        editor.putString(key, json);
+        editor.apply();
+    }
+
+    public ArrayList<String> getBlackList(String key){
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(CalendarActivity.this);
+        Gson gson = new Gson();
+        String json = prefs.getString(key, null);
+        Type type = new TypeToken<ArrayList<String>>() {}.getType();
+        ArrayList<String> blackList = gson.fromJson(json, type);
+        if (blackList == null){
+            ArrayList<String> emptyList = new ArrayList<>();
+            return emptyList;
+        }
+        else{
+            return blackList;
+        }
+    }
+
     public void setDates(){
         date.set(Calendar.DAY_OF_WEEK,
                 date.getActualMinimum(Calendar.DAY_OF_WEEK) + 1);
@@ -173,9 +222,6 @@ public class CalendarActivity extends AppCompatActivity{
             useTempCal = false;
         }
     }
-
-
-
 
     @SuppressLint("ClickableViewAccessibility")
     public void setOnTouchListener(WeekView cal, ExecutorService executor){
@@ -242,8 +288,12 @@ public class CalendarActivity extends AppCompatActivity{
         fillAdapter(adapter);
     }
 
+    public static void setEvents(ArrayList<Events> events) {
+        CalendarActivity.events = events;
+    }
+
     public void fillAdapter(Adapter adapter){
-        events = Events.getEvents();
+        events = EventCreator.getEvents();
         adapter.submitList(events);
     }
 

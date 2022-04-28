@@ -1,11 +1,17 @@
 package com.main.dhbworld;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 
 import androidx.core.graphics.ColorUtils;
+import androidx.preference.PreferenceManager;
 
 import com.alamkanak.weekview.WeekViewEntity;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -26,18 +32,24 @@ public class EventCreator {
     static List<String> infoList = new ArrayList<>();
     static List<String> blackList = new ArrayList<>();
     static ArrayList<Events> filteredEvents = new ArrayList<>();
-
-
-
     static List<String> allTitleList = new ArrayList<>();
     static ArrayList<Events> events = new ArrayList<>();
     static Map<String, Integer> colorMap = new HashMap<>();
+
+   static ArrayList<Event> eventList = new ArrayList<>();
 
     public static void fillData(Map<LocalDate, ArrayList<Appointment>> data, Calendar date){
         LocalDate asLocalDate = LocalDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault()).toLocalDate();
         ArrayList<Appointment> currentData = data.get(asLocalDate);
         clearLists();
         for (int i = 0; i <= currentData.size() -1;i++){
+            eventList.add(new Event(
+                    localDateTimeToDate(currentData.get(i).getStartDate()),
+                    localDateTimeToDate(currentData.get(i).getEndDate()),
+                    currentData.get(i).getPersons(),
+                    currentData.get(i).getResources(),
+                    currentData.get(i).getTitle(),
+                    currentData.get(i).getInfo());
 
             if(!allTitleList.contains(currentData.get(i).getTitle())){
                 allTitleList.add(currentData.get(i).getTitle());
@@ -47,7 +59,6 @@ public class EventCreator {
             personList.add(currentData.get(i).getPersons());
             resourceList.add(currentData.get(i).getResources());
             titleList.add(currentData.get(i).getTitle());
-
             infoList.add(currentData.get(i).getInfo());
         }
         createEvents();
@@ -58,11 +69,14 @@ public class EventCreator {
     }
 
     public static void applyBlackList(){
+        blackList = updateBlackList();
+
         for(int i = 0; i < events.size(); i++){
             if(!blackList.contains(events.get(i).title)){
                 filteredEvents.add(events.get(i));
             }
         }
+        CalendarActivity.setEvents(filteredEvents);
         Events.setEvents(filteredEvents);
     }
 
@@ -77,6 +91,9 @@ public class EventCreator {
         }
        applyBlackList();
     }
+
+
+
 
 
 
@@ -120,9 +137,17 @@ public class EventCreator {
     public static Calendar localDateTimeToDate(LocalDateTime localDateTime) {
         Calendar calendar = Calendar.getInstance();
         calendar.clear();
-        calendar.set(localDateTime.getYear(), localDateTime.getMonthValue()-1, localDateTime.getDayOfMonth(),
+        calendar.set(localDateTime.getYear(), localDateTime.getMonthValue() - 1, localDateTime.getDayOfMonth(),
                 localDateTime.getHour(), localDateTime.getMinute(), localDateTime.getSecond());
         return calendar;
+    }
+
+    public static List<String> getBlackList() {
+        return blackList;
+    }
+
+    public static ArrayList<String> updateBlackList(){
+        return CalendarActivity.getBlackList();
     }
 
     public static void clearLists() {
@@ -142,4 +167,7 @@ public class EventCreator {
     }
 
 
+    public static ArrayList<Events> getEvents() {
+        return filteredEvents;
+    }
 }
