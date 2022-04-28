@@ -17,6 +17,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.alamkanak.weekview.WeekView;
@@ -70,6 +71,11 @@ public class CalendarActivity extends AppCompatActivity{
         return true;
     }
 
+//    public String getDashboardInfo(){
+//
+//    }
+
+
     public void firstSetup(){
         setCalSettings();
         blackList = getBlackList("blackList");
@@ -87,6 +93,7 @@ public class CalendarActivity extends AppCompatActivity{
         cal.setNumberOfVisibleDays(5);
         cal.setShowFirstDayOfWeekFirst(true);
         cal.setNowLineStrokeWidth(6);
+        cal.setHourHeight(9);
         cal.setShowNowLineDot(true);
         cal.setNowLineColor(Color.parseColor("#343491"));
         cal.setPastBackgroundColor(Color.LTGRAY);
@@ -110,7 +117,6 @@ public class CalendarActivity extends AppCompatActivity{
         final String[] listItems = arrayConvertor(Objects.requireNonNull(EventCreator.uniqueTitles()));
         final boolean[] checkedItems = new boolean[listItems.length];
         final List<String> selectedItems = Arrays.asList(listItems);
-
         for(int i = 0; i < listItems.length; i++){
             if(blackList.contains(listItems[i])){ checkedItems[i] = false; }
             else{ checkedItems[i] = true; }
@@ -118,7 +124,6 @@ public class CalendarActivity extends AppCompatActivity{
 
         AlertDialog.Builder builder = new AlertDialog.Builder(CalendarActivity.this);
                 builder.setTitle("Filter your classes");
-
                 builder.setMultiChoiceItems(listItems, checkedItems, new DialogInterface.OnMultiChoiceClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which, boolean isChecked) {
@@ -126,12 +131,9 @@ public class CalendarActivity extends AppCompatActivity{
                         String currentItem = selectedItems.get(which);
                     }
                 });
-
                 // alert dialog shouldn't be cancellable
                 builder.setCancelable(false);
-
                 builder.setPositiveButton("Done", new DialogInterface.OnClickListener() {
-                    @SuppressLint("SetTextI18n")
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         for (int i = 0; i < checkedItems.length; i++) {
@@ -151,26 +153,15 @@ public class CalendarActivity extends AppCompatActivity{
                         restart(CalendarActivity.this, false);
                     }
                 });
-
-                // handle the negative button of the alert dialog
                 builder.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                    }
-                });
-
-               //TODO When neutral button is pressed, the Dialog should still stay!
-                builder.setNeutralButton("RESET", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Arrays.fill(checkedItems, true);
+                        //just close and do nothing, will not save the changed state.
                     }
                 });
                 builder.create();
-
                 AlertDialog dialog = builder.create();
                 dialog.show();
-
     }
 
     public ArrayList<String> removeDuplicates(ArrayList<String> list){
@@ -205,16 +196,17 @@ public class CalendarActivity extends AppCompatActivity{
         }
     }
 
+    //TODO Sundays do NOT work!!!!
     public void setDates(){
         date.set(Calendar.DAY_OF_WEEK,
                 date.getActualMinimum(Calendar.DAY_OF_WEEK) + 1);
+        date.set(Calendar.HOUR_OF_DAY,20);
 
         Calendar tempCal = Calendar.getInstance();
         if(tempCal.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY){
             tempCal.add(Calendar.DAY_OF_WEEK,2);
             cal.scrollToDate(tempCal);
             useTempCal = true;
-
         }
         else if(tempCal.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY){
             tempCal.add(Calendar.DAY_OF_WEEK,1);
@@ -222,7 +214,7 @@ public class CalendarActivity extends AppCompatActivity{
             useTempCal = true;
         }
         else{
-            cal.scrollToDate(date);
+            cal.scrollToDateTime(date);
             useTempCal = false;
         }
     }
