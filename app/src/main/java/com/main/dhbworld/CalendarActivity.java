@@ -36,17 +36,18 @@ import java.time.ZoneId;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.time.LocalDate;
 import dhbw.timetable.rapla.data.event.Appointment;
 import dhbw.timetable.rapla.parser.DataImporter;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
-
 
 public class CalendarActivity extends AppCompatActivity{
     WeekView cal;
@@ -56,28 +57,30 @@ public class CalendarActivity extends AppCompatActivity{
     static ArrayList<Events> events = new ArrayList<>();
     static ArrayList<String> blackList = new ArrayList<>();
 
-    boolean firstClick = false;
-
     @SuppressLint("ClickableViewAccessibility")
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.schedule_layout);
         NavigationUtilities.setUpNavigation(this, R.id.Calendar);
-
-        setCalSettings();
-        blackList = getBlackList("blackList");
-        ExecutorService executor = Executors.newCachedThreadPool();
-        // immer nur auf montag scrollen, damit wochentage richtig angezeigt werden.
-        setDates();
-
-        executor.submit(runnableTask);
-        setOnTouchListener(cal, executor);
+        firstSetup();
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.calendar_top_app_bar, menu);
         return true;
     }
+
+    public void firstSetup(){
+        setCalSettings();
+        blackList = getBlackList("blackList");
+        ExecutorService executor = Executors.newCachedThreadPool();
+        // immer nur auf montag scrollen, damit wochentage richtig angezeigt werden.
+        setDates();
+        EventCreator.instantiateVariables();
+        executor.submit(runnableTask);
+        setOnTouchListener(cal, executor);
+    }
+
 
     public void setCalSettings(){
         cal = findViewById(R.id.weekView);
@@ -104,7 +107,7 @@ public class CalendarActivity extends AppCompatActivity{
     }
 
     public void openFilterClick(@NonNull MenuItem item) throws NullPointerException{
-        final String[] listItems = arrayConvertor(EventCreator.getAllTitleList());
+        final String[] listItems = arrayConvertor(Objects.requireNonNull(EventCreator.uniqueTitles()));
         final boolean[] checkedItems = new boolean[listItems.length];
         final List<String> selectedItems = Arrays.asList(listItems);
 
@@ -136,15 +139,16 @@ public class CalendarActivity extends AppCompatActivity{
                                 blackList.add(listItems[i]);
                             }
                             else if(blackList.contains(listItems[i])){
-                                System.out.println(listItems[i]);
                                 blackList.remove(listItems[i]);
                             }
-                            blackList = removeDuplicates(blackList);
-                            EventCreator.setBlackList(blackList);
-                            EventCreator.applyBlackList();
-                            saveBlackList(blackList,"blackList");
-                            restart(CalendarActivity.this);
                         }
+                        blackList = removeDuplicates(blackList);
+                        EventCreator.clearEvents();
+                        EventCreator.setBlackList(blackList);
+                        EventCreator.applyBlackList();
+                        loadedDateList.clear();
+                        saveBlackList(blackList,"blackList");
+                        restart(CalendarActivity.this, false);
                     }
                 });
 
@@ -173,7 +177,7 @@ public class CalendarActivity extends AppCompatActivity{
         return (ArrayList<String>) list.stream().distinct().collect(Collectors.toList());
     }
 
-    public static void restart(Activity activity) {
+    public static void restart(Activity activity, boolean transition) {
         activity.recreate();
     }
 
@@ -260,8 +264,8 @@ public class CalendarActivity extends AppCompatActivity{
 
     Runnable runnableTask = () -> {
         String url = "https://rapla.dhbw-karlsruhe.de/rapla?page=calendar&user=eisenbiegler&file=TINF20B4" ; // ist von nutzer einzugeben (oder Liste von Unis auswählen).
-        Map<LocalDate, ArrayList<Appointment>> data = null;
-        LocalDate calInLocalDate = LocalDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault()).toLocalDate();
+        Map<LocalDate, ArrayList<Appointment>> data = new HashMap<>();
+        LocalDate thisWeek = LocalDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault()).toLocalDate();
         loadedDateList.add(date.toInstant());
 
         Calendar dateCopy = (Calendar) date.clone();
@@ -269,7 +273,7 @@ public class CalendarActivity extends AppCompatActivity{
         LocalDate nextWeek = LocalDateTime.ofInstant(dateCopy.toInstant(), ZoneId.systemDefault()).toLocalDate();
 
             try {
-                data = DataImporter.ImportWeekRange(calInLocalDate,nextWeek, url);
+                data = DataImporter.ImportWeekRange(thisWeek,nextWeek, url);
             } catch (Exception e) {
                 e.printStackTrace();
             }

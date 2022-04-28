@@ -7,17 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 public class Event {
-    static List<Calendar> startDateList = new ArrayList<>();
-    static List<Calendar> endDateList = new ArrayList<>();
-    static List<String> personList = new ArrayList<>();
-    static List<String> resourceList = new ArrayList<>();
-    static List<String> titleList = new ArrayList<>();
-    static List<String> infoList = new ArrayList<>();
-    static List<String> blackList = new ArrayList<>();
-    static ArrayList<Events> filteredEvents = new ArrayList<>();
-    static List<String> allTitleList = new ArrayList<>();
-    static ArrayList<Events> events = new ArrayList<>();
-    static Map<String, Integer> colorMap = new HashMap<>();
+
 
     Calendar startDate;
     Calendar endDate;
@@ -25,6 +15,7 @@ public class Event {
     String resource;
     String title;
     String info;
+    long id;
 
 
     public Event(Calendar startDate, Calendar endDate, String person, String resource, String title, String info) {
@@ -82,5 +73,11 @@ public class Event {
 
     public String getInfo() {
         return info;
+    }
+
+    public long getId(){
+        String allString = title + startDate.toString() + resource;
+        long id = allString.hashCode();
+        return id;
     }
 }

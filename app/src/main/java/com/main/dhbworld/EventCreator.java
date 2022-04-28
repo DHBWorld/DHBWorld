@@ -11,6 +11,7 @@ import com.alamkanak.weekview.WeekViewEntity;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Array;
 import java.lang.reflect.Type;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -21,47 +22,50 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.stream.Collectors;
+
 import dhbw.timetable.rapla.data.event.Appointment;
 
 public class EventCreator {
-    static List<Calendar> startDateList = new ArrayList<>();
-    static List<Calendar> endDateList = new ArrayList<>();
-    static List<String> personList = new ArrayList<>();
-    static List<String> resourceList = new ArrayList<>();
-    static List<String> titleList = new ArrayList<>();
-    static List<String> infoList = new ArrayList<>();
-    static List<String> blackList = new ArrayList<>();
-    static ArrayList<Events> filteredEvents = new ArrayList<>();
-    static List<String> allTitleList = new ArrayList<>();
-    static ArrayList<Events> events = new ArrayList<>();
-    static Map<String, Integer> colorMap = new HashMap<>();
+    static List<String> blackList;
+    static ArrayList<Events> filteredEvents;
+    static ArrayList<Events> events;
+    static Map<String, Integer> colorMap;
+   static ArrayList<Event> eventList;
+   static ArrayList<Long> uniqueIds;
+   static ArrayList<String> filterTitles;
 
-   static ArrayList<Event> eventList = new ArrayList<>();
+
+   public static void instantiateVariables(){
+       blackList = new ArrayList<>();
+       filteredEvents = new ArrayList<>();
+       events = new ArrayList<>();
+       colorMap = new HashMap<>();
+       eventList = new ArrayList<>();
+       uniqueIds = new ArrayList<>();
+       filterTitles = new ArrayList<>();
+   }
 
     public static void fillData(Map<LocalDate, ArrayList<Appointment>> data, Calendar date){
+
+
         LocalDate asLocalDate = LocalDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault()).toLocalDate();
         ArrayList<Appointment> currentData = data.get(asLocalDate);
-        clearLists();
-        for (int i = 0; i <= currentData.size() -1;i++){
+        for (int i = 0; i < currentData.size();i++){
+            String resources = currentData.get(i).getResources().replace(",","\n");
+            filterTitles.add(currentData.get(i).getTitle());
             eventList.add(new Event(
                     localDateTimeToDate(currentData.get(i).getStartDate()),
                     localDateTimeToDate(currentData.get(i).getEndDate()),
                     currentData.get(i).getPersons(),
-                    currentData.get(i).getResources(),
+                    resources,
                     currentData.get(i).getTitle(),
                     currentData.get(i).getInfo()));
-
-            if(!allTitleList.contains(currentData.get(i).getTitle())){
-                allTitleList.add(currentData.get(i).getTitle());
-            }
-            startDateList.add(localDateTimeToDate(currentData.get(i).getStartDate()));
-            endDateList.add(localDateTimeToDate(currentData.get(i).getEndDate()));
-            personList.add(currentData.get(i).getPersons());
-            resourceList.add(currentData.get(i).getResources());
-            titleList.add(currentData.get(i).getTitle());
-            infoList.add(currentData.get(i).getInfo());
+        System.out.println(eventList.get(i).getTitle() + eventList.get(i).getStartDate().getWeekYear());
         }
+
         createEvents();
+        eventList.clear();
     }
 
     public static void setBlackList(ArrayList<String> blackList){
@@ -70,66 +74,65 @@ public class EventCreator {
 
     public static void applyBlackList(){
         blackList = updateBlackList();
-
+        filteredEvents.clear();
         for(int i = 0; i < events.size(); i++){
             if(!blackList.contains(events.get(i).title)){
                 filteredEvents.add(events.get(i));
             }
         }
         CalendarActivity.setEvents(filteredEvents);
-        Events.setEvents(filteredEvents);
+    }
+
+    public static ArrayList<String> updateBlackList(){
+        return CalendarActivity.getBlackList();
     }
 
     public static void createEvents(){
-        for(int i = 0; i< titleList.size() -1; i++){
-            String resources = resourceList.get(i).replace(",","\n");
-                Random rnd = new Random();
-                Events event = new Events(rnd.nextInt(), titleList.get(i), startDateList.get(i),endDateList.get(i), personList.get(i) + ", " + resources, setEventColor(i));
-                if (!events.contains(event)) {
+        for(int i = 0; i< eventList.size(); i++){
+            long id = eventList.get(i).getId();
+                if(!uniqueIds.contains(id)) {
+                    uniqueIds.add(id);
+                    Events event = new Events(
+                            id,
+                            eventList.get(i).title,
+                            eventList.get(i).startDate,
+                            eventList.get(i).endDate,
+                            eventList.get(i).person + ", " +
+                                    eventList.get(i).resource,
+                            setEventColor(i));
                     events.add(event);
+
                 }
         }
        applyBlackList();
     }
 
-
-
-
-
-
     public static WeekViewEntity.Style setEventColor(int i) throws NullPointerException{
         WeekViewEntity.Style style = null;
         Random rnd = new Random();
 
-        if(endDateList.get(i).get(Calendar.HOUR_OF_DAY) - startDateList.get(i).get(Calendar.HOUR_OF_DAY) >= 8){
+        if(eventList.get(i).endDate.get(Calendar.HOUR_OF_DAY) - eventList.get(i).startDate.get(Calendar.HOUR_OF_DAY) >= 8){
             style = new WeekViewEntity.Style.Builder().setBackgroundColor(Color.parseColor("#86c5da")).build();
         }
-        else if(titleList.get(i).contains("Klausur")){
+        else if(eventList.get(i).title.contains("Klausur")){
             style = new WeekViewEntity.Style.Builder().setBackgroundColor(Color.RED).build();
         }
-        else if(endDateList.get(i).before(Calendar.getInstance())){
+        else if(eventList.get(i).endDate.before(Calendar.getInstance())){
             style = new WeekViewEntity.Style.Builder().setBackgroundColor(Color.parseColor("#A9A9A9")).build();
         }
-        else if(colorMap.containsKey(titleList.get(i))){
-            try {
-                style = new WeekViewEntity.Style.Builder().setBackgroundColor(colorMap.get(titleList.get(i))).build();
-            }
-            catch (Exception e){
-                e.printStackTrace();
-            }
+        else if(colorMap.containsKey(eventList.get(i).title)){
+            try { style = new WeekViewEntity.Style.Builder().setBackgroundColor(colorMap.get(eventList.get(i).title)).build(); }
+            catch (Exception e){ e.printStackTrace(); }
         }
         else {
-            // liste verschiedener farben, aus denen generiert wird. Am besten deterministisch anhand titels.
-
             final int white = Color.WHITE;
             final int red = (rnd.nextInt(130) + 20);
             final int green = (rnd.nextInt(150) + 20);
             final int blue = (rnd.nextInt(190) + 20);
             int rndColor = Color.rgb(red, green, blue);
             int mix = ColorUtils.blendARGB(white, rndColor, 0.8F);
-            colorMap.put(titleList.get(i), mix);
+            colorMap.put(eventList.get(i).title, mix);
             style = new WeekViewEntity.Style.Builder().setBackgroundColor(rndColor).build();
-
         }
         return style;
     }
@@ -142,32 +145,28 @@ public class EventCreator {
         return calendar;
     }
 
+    public static ArrayList<String> uniqueTitles(){
+        ArrayList<String> titles = new ArrayList<>();
+        for(int i = 0; i < filterTitles.size(); i++){
+            String temp = filterTitles.get(i);
+            if(!titles.contains(temp)){
+                titles.add(temp);
+            }
+        }
+        return titles;
+    }
+
     public static List<String> getBlackList() {
         return blackList;
     }
-
-    public static ArrayList<String> updateBlackList(){
-        return CalendarActivity.getBlackList();
-    }
-
-    public static void clearLists() {
-        startDateList.clear();
-        endDateList.clear();
-        personList.clear();
-        resourceList.clear();
-        titleList.clear();
-        infoList.clear();
-        events.clear();
-    }
-    public static List<String> getTitleList() {
-        return titleList;
-    }
-    public static List<String> getAllTitleList() {
-        return allTitleList;
-    }
-
-
     public static ArrayList<Events> getEvents() {
         return filteredEvents;
+    }
+    public static ArrayList<Event> getEventList(){ return eventList; }
+
+    public static void clearEvents(){
+        filteredEvents.clear();
+        eventList.clear();
+        events.clear();
     }
 }
