@@ -51,7 +51,6 @@ public class EventCreator {
                     resources,
                     currentData.get(i).getTitle(),
                     currentData.get(i).getInfo()));
-        System.out.println(eventList.get(i).getTitle() + eventList.get(i).getStartDate().getWeekYear());
         }
 
         createEvents();

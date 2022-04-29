@@ -1,5 +1,6 @@
 package com.main.dhbworld;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -25,6 +26,9 @@ public class Event {
         this.resource = resource;
         this.title = title;
         this.info = info;
+    }
+
+    public Event(LocalDateTime startDate, LocalDateTime endDate, String persons, String resources, String title, String info) {
     }
 
     public Calendar getStartDate() {

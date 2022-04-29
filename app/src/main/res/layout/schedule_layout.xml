@@ -47,6 +47,7 @@
             app:hourHeight="70dp"
             app:maxHour="@string/maxCalendarHour"
             app:minHour="@string/minCalendarHour"
+            app:showCurrentTimeFirst="true"
             app:nowLineColor="@color/LightBlue"
             app:nowLineStrokeWidth="2dp"
             app:showNowLine="true"
