@@ -61,13 +61,6 @@ public class CalendarActivity extends AppCompatActivity{
         return true;
     }
 
-    public String getDashboardInfo(){
-
-
-        return "e";
-    }
-
-
     public void firstSetup(){
         setCalSettings();
         blackList = getBlackList("blackList");
