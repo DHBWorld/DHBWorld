@@ -150,7 +150,7 @@ public class DashboardActivity extends AppCompatActivity {
         ImageView image_coffee= findViewById(R.id.imageBox_dashboard_coffee);
         ImageView image_printer = findViewById(R.id.imageBox_dashboard_printer);
 
-      InteractionState statePrinter= UserInteraction.getStatePrinter();
+        InteractionState statePrinter= UserInteraction.getStatePrinter();
 
 
         image_canteen.setColorFilter(ContextCompat.getColor(this, R.color.orange_queue));
@@ -162,25 +162,8 @@ public class DashboardActivity extends AppCompatActivity {
         image_printer.setColorFilter(statePrinter.getColor());
       }
 
-
-      // image_canteen.setBackgroundColor(res.color.);
-     //  image_canteen.setImageTintList(ColorStateList.valueOf(getColor(R.color.blue_cleaning)));
-      // image_canteen.setColorFilter(getContext().getRessources.getColor(R.color.blue_cleaning));
-       // image_canteen.setColorFilter(getContext().getRessources().getColor(R.color.grey_dark));
-
-       // ColorStateList l=ColorStateList.valueOf(R.color.blue_cleaning);
-        //image_canteen.setImageTintList(this, l);
-
-       // Resources res = getResources();
-     //   image_printer.setBackgroundColor(res.getColor(statePrinter.getColor()));
-
-        //image_canteen.setBackgroundColor(getColor(stateCanteen.getColor()));
-
-        //image_coffee.setBackgroundColor(res.getColor(stateCoffee.getColor()));
-       // image_printer.setBackgroundColor(res.getColor(statePrinter.getColor()));
     }
 
-    @SuppressLint("ResourceAsColor")
     private void loadPersonalInformation(){
 
 
@@ -195,52 +178,51 @@ public class DashboardActivity extends AppCompatActivity {
 
 
         for (String data:personalData){
+            String info= sp.getString(data, "Ihre Studenten-E-Mail ist noch nicht gespreichert");
+            if (!info.equals("")){
 
 
 
+                LinearLayout layoutInfo = new LinearLayout(DashboardActivity.this);
+                layoutInfo.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                layoutInfo.setOrientation(LinearLayout.HORIZONTAL);
+                layoutInfo.setVerticalGravity(Gravity.CENTER_VERTICAL);
+                layoutInfo.setPadding(0,15,0,15);
 
 
-        LinearLayout layoutInfo = new LinearLayout(DashboardActivity.this);
-        layoutInfo.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-        layoutInfo.setOrientation(LinearLayout.HORIZONTAL);
-        layoutInfo.setVerticalGravity(View.TEXT_ALIGNMENT_CENTER);
+
+                layoutCardPI.addView(layoutInfo);
+
+                Button copyImage= new Button(DashboardActivity.this);
+                copyImage.setLayoutParams(new ViewGroup.LayoutParams(60, 60));
+                copyImage.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_copy,0,0,0);
+                copyImage.setBackgroundColor(getResources().getColor(R.color.white));
+                layoutInfo.addView(copyImage);
 
 
-
-        layoutCardPI.addView(layoutInfo);
-
-        Button copyImage= new Button(DashboardActivity.this);
-        copyImage.setLayoutParams(new ViewGroup.LayoutParams(60, 60));
-        copyImage.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_copy,0,0,0);
-        copyImage.setBackgroundColor(getResources().getColor(R.color.white));
-        layoutInfo.addView(copyImage);
-
-
-        TextView emailView = new TextView(DashboardActivity.this);
-        emailView.setTextSize(13);
-        emailView.setTextColor(getResources().getColor(R.color.black));
-
-        String s= sp.getString(data, "Ihre Studenten-E-Mail ist noch nicht gespreichert");
+                TextView emailView = new TextView(DashboardActivity.this);
+                emailView.setTextSize(15);
+                emailView.setGravity(Gravity.CENTER_VERTICAL);
+                emailView.setTextColor(getResources().getColor(R.color.black));
+                emailView.setText(info);
+                emailView.setPadding(10,0,5,0);
+                emailView.setLayoutParams(new ViewGroup.LayoutParams(250, ViewGroup.LayoutParams.WRAP_CONTENT));
+                layoutInfo.addView(emailView);
 
 
-        emailView.setText(s);
-        emailView.setPadding(10,20,5,10);
-        emailView.setLayoutParams(new ViewGroup.LayoutParams(250, ViewGroup.LayoutParams.WRAP_CONTENT));
-        layoutInfo.addView(emailView);
+                copyImage.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                            ClipData clip = ClipData.newPlainText("", info);
+                            clipboard.setPrimaryClip(clip);
 
 
-            copyImage.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-                    ClipData clip = ClipData.newPlainText("", s);
-                    clipboard.setPrimaryClip(clip);
+                            Toast.makeText(DashboardActivity.this, "Kopiert", Toast.LENGTH_SHORT).show();
+                        }
+                    });
 
-
-                    Toast.makeText(DashboardActivity.this, "Kopiert", Toast.LENGTH_LONG).show();
-                }
-            });
-
+        }
         }
 
 
