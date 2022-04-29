@@ -52,14 +52,18 @@
             android:background="@color/white">
 
 
+
+
             <LinearLayout
                 android:id="@+id/layoutDashboardCards"
 
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@color/white"
-                android:orientation="vertical"
-               >
+
+                android:orientation="vertical">
+
+
 
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/card_dash_userInteraction"
@@ -76,27 +80,28 @@
                         android:layout_height="match_parent"
                         android:background="@color/grey_light"
                         android:orientation="horizontal"
-                        android:paddingLeft="70dp">
+                        android:paddingLeft="80dp">
+
                         <ImageView
-
+                            android:id="@+id/imageBox_dashboard_canteen"
                             android:layout_width="50dp"
+
                             android:layout_height="50dp"
-                            android:layout_margin="15dp"
+                            android:layout_margin="10dp"
                             android:background="@color/white"
-
-
                             android:contentDescription="content_description_media"
                             android:scaleType="centerCrop"
-                            app:srcCompat="@drawable/ic_baseline_restaurant_24" />
-
+                            app:srcCompat="@drawable/ic_baseline_restaurant_24"
+                            app:tint="@color/grey_light" />
 
 
                         <ImageView
-                            android:id="@+id/bild_kaffee"
+
+                            android:id="@+id/imageBox_dashboard_coffee"
 
                             android:layout_width="50dp"
                             android:layout_height="50dp"
-                            android:layout_marginTop="15dp"
+                            android:layout_marginTop="10dp"
                             android:background="@color/white"
                             android:contentDescription="content_description_media"
                             android:scaleType="centerCrop"
@@ -104,16 +109,14 @@
 
 
                         <ImageView
-                            android:id="@+id/bild_druker"
+                            android:id="@+id/imageBox_dashboard_printer"
                             android:layout_width="50dp"
                             android:layout_height="50dp"
-                            android:layout_margin="15dp"
+                            android:layout_margin="10dp"
                             android:background="@color/white"
                             android:contentDescription="content_description_media"
                             android:scaleType="centerCrop"
                             app:srcCompat="@drawable/ic_baseline_print_24" />
-
-
 
 
                         <LinearLayout
@@ -126,12 +129,82 @@
                             android:padding="15dp">
 
 
+                        </LinearLayout>
+
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/card_dash_calendar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="20dp"
+                    android:baselineAligned="false"
+                    app:cardElevation="0dp"
+                    app:strokeColor="@color/red"
+                    app:strokeWidth="3dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@color/red"
+                        android:orientation="horizontal"
+                        android:paddingLeft="30dp">
+
+
+                        <LinearLayout
+
+                            android:id="@+id/layoutCardCalendar"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@color/white"
+                            android:orientation="vertical"
+                            android:padding="15dp">
+
 
                         </LinearLayout>
 
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
 
+                <com.google.android.material.card.MaterialCardView
+
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="20dp"
+                    android:baselineAligned="false"
+                    app:cardElevation="0dp"
+                    app:strokeColor="@color/grey_light"
+                    app:strokeWidth="3dp">
+
+                    <LinearLayout
+
+
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@color/grey_light"
+                        android:orientation="horizontal"
+                        android:paddingRight="30dp">
+
+
+                        <LinearLayout
+                            android:id="@+id/layoutCardKvv"
+                            android:layout_width="match_parent"
+
+                            android:layout_height="match_parent"
+                            android:background="@color/white"
+                            android:orientation="vertical"
+                            android:paddingLeft="45dp"
+                            android:paddingTop="15dp"
+                            android:paddingRight="15dp"
+                            android:paddingBottom="15dp">
+
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
 
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/card_dash_mealPlan"
@@ -151,21 +224,21 @@
                         android:paddingLeft="30dp">
 
 
-                    <LinearLayout
+                        <LinearLayout
 
-                        android:id="@+id/layoutCardMealPlan"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="@color/white"
-                        android:orientation="vertical"
-                        android:padding="15dp">
+                            android:id="@+id/layoutCardMealPlan"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@color/white"
+                            android:orientation="vertical"
+                            android:padding="15dp">
 
 
-
-                    </LinearLayout>
+                        </LinearLayout>
 
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
+
 
                 <com.google.android.material.card.MaterialCardView
 
@@ -178,6 +251,8 @@
                     app:strokeWidth="3dp">
 
                     <LinearLayout
+
+
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:background="@color/grey_light"
@@ -186,20 +261,23 @@
 
 
                         <LinearLayout
-
-
+                            android:id="@+id/layoutCardPI"
                             android:layout_width="match_parent"
+
                             android:layout_height="match_parent"
                             android:background="@color/white"
                             android:orientation="vertical"
-                            android:padding="15dp">
-
+                            android:paddingLeft="45dp"
+                            android:paddingTop="15dp"
+                            android:paddingRight="15dp"
+                            android:paddingBottom="15dp">
 
 
                         </LinearLayout>
 
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
+
 
             </LinearLayout>
 

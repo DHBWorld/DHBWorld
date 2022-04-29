@@ -4,15 +4,19 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.textfield.TextInputLayout;
 
 public class PersonalInformationActivity extends AppCompatActivity implements View.OnClickListener{
     FloatingActionButton editButton;
@@ -64,12 +68,28 @@ public class PersonalInformationActivity extends AppCompatActivity implements Vi
         });
 
 
+        TextInputLayout textInputLayout_name= findViewById(R.id.textInputLayoutPI_name);
+        textInputLayout_name.setEndIconOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ClipboardManager clipboard=(ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                ClipData clip = ClipData.newPlainText("", name.getText().toString());
+                clipboard.setPrimaryClip(clip);
+                Toast.makeText(PersonalInformationActivity.this, "Copy", Toast.LENGTH_LONG).show();
+            }
+        });
+
+
         sp = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
 
 
 
 
         editButton.setOnClickListener(v -> {
+            Toast.makeText(PersonalInformationActivity.this,
+                    "R.string.error_getting_kvv_data",
+                    Toast.LENGTH_LONG
+            ).show();
             editButton.setVisibility(View.INVISIBLE);
             saveButton.setVisibility(View.VISIBLE);
             cancelButton.setVisibility(View.VISIBLE);
@@ -136,4 +156,9 @@ public class PersonalInformationActivity extends AppCompatActivity implements Vi
     public void onClick(View v) {
 
     }
+
+
+
+
+
 }
