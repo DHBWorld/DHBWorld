@@ -13,6 +13,7 @@ import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.navigation.NavigationView;
 import com.main.dhbworld.CalendarActivity;
 import com.main.dhbworld.CantineActivity;
+import com.main.dhbworld.DualisActivity;
 import com.main.dhbworld.KVVActivity;
 import com.main.dhbworld.MainActivity;
 import com.main.dhbworld.R;
@@ -41,6 +42,7 @@ public class NavigationUtilities {
                 if (item.isChecked()) {
                     return false;
                 }
+
                 switch (item.getItemId()) {
                     case R.id.personalInformationNav:
                         startActivity(activity, MainActivity.class);
@@ -59,6 +61,10 @@ public class NavigationUtilities {
                         break;
                     case R.id.cantine:
                         startActivity(activity, CantineActivity.class);
+                        break;
+                    case R.id.dualis:
+                        startActivity(activity, DualisActivity.class);
+                        break;
                 }
 
                 return true;

@@ -1,6 +1,7 @@
 package com.main.dhbworld;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -36,6 +37,9 @@ public class MainActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.personal_information);
+
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+
         //instantiate buttons, text fields
         editButton = findViewById(R.id.edit_Button);
         saveButton = findViewById(R.id.save_Button);

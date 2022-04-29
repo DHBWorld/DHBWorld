@@ -22,6 +22,10 @@
             android:id="@+id/cantine"
             android:title="@string/cantine"/>
 
+        <item
+            android:id="@+id/dualis"
+            android:title="@string/dualis" />
+
     </group>
 
     <group
