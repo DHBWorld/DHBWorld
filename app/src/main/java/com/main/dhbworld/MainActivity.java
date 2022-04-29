@@ -2,6 +2,8 @@ package com.main.dhbworld;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -11,6 +13,7 @@ import android.widget.Toast;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.textfield.TextInputLayout;
 import com.main.dhbworld.KVV.KVVDataLoader;
 import com.main.dhbworld.Navigation.NavigationUtilities;
 
@@ -55,6 +58,72 @@ public class MainActivity extends AppCompatActivity{
         loadAndUpdateData();
 
         NavigationUtilities.setUpNavigation(this, R.id.personalInformationNav);
+
+
+
+
+        View.OnClickListener copy= new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                ClipData clip = ClipData.newPlainText("", name.getText().toString());
+                clipboard.setPrimaryClip(clip);
+
+
+                Toast.makeText(MainActivity.this, "Kopiert", Toast.LENGTH_LONG).show();
+            }
+        };
+        TextInputLayout textInputLayout_name = findViewById(R.id.textInputLayoutPI_name);
+        TextInputLayout textInputLayout_matriculationNumber = findViewById(R.id.textInputLayoutPI_matriculationNumber);
+        TextInputLayout textInputLayout_adresse = findViewById(R.id.textInputLayoutPI_adresse);
+        TextInputLayout textInputLayout_libraryNummer = findViewById(R.id.textInputLayoutPI_libraryNummer);
+
+
+        textInputLayout_name.setEndIconOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                ClipData clip = ClipData.newPlainText("", name.getText().toString());
+                clipboard.setPrimaryClip(clip);
+
+
+                Toast.makeText(MainActivity.this, "Kopiert", Toast.LENGTH_LONG).show();
+            }
+        });
+        textInputLayout_matriculationNumber.setEndIconOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                ClipData clip = ClipData.newPlainText("", mNumber.getText().toString());
+                clipboard.setPrimaryClip(clip);
+
+
+                Toast.makeText(MainActivity.this, "Kopiert", Toast.LENGTH_LONG).show();
+            }
+        });
+        textInputLayout_libraryNummer.setEndIconOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                ClipData clip = ClipData.newPlainText("", lNumber.getText().toString());
+                clipboard.setPrimaryClip(clip);
+
+
+                Toast.makeText(MainActivity.this, "Kopiert", Toast.LENGTH_LONG).show();
+            }
+        });
+        textInputLayout_adresse.setEndIconOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                ClipData clip = ClipData.newPlainText("", studentMail.getText().toString());
+                clipboard.setPrimaryClip(clip);
+
+
+                Toast.makeText(MainActivity.this, "Kopiert", Toast.LENGTH_LONG).show();
+            }
+        });
 
         editButton.setOnClickListener(v -> {
             //visibility off buttons

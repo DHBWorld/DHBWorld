@@ -26,6 +26,7 @@ import com.main.dhbworld.Navigation.NavigationUtilities;
 
 import org.json.JSONException;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class DashboardActivity extends AppCompatActivity {
@@ -178,8 +179,23 @@ public class DashboardActivity extends AppCompatActivity {
 
     private void loadPersonalInformation(){
 
-       SharedPreferences sp = getSharedPreferences("", Context.MODE_PRIVATE);
+
+         String MyPREFERENCES = "myPreferencesKey" ;
+
+         List <String> personalData = new ArrayList<>();
+        personalData.add("matriculationNumberKey");
+        personalData.add("libraryNumberKey" );
+        personalData.add("studentMailKey" );
+
+        SharedPreferences sp = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
         LinearLayout layoutCardPI = findViewById(R.id.layoutCardPI);
+
+
+        for (String data:personalData){
+
+
+
+
 
         LinearLayout layoutInfo = new LinearLayout(DashboardActivity.this);
         layoutInfo.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
@@ -204,7 +220,7 @@ public class DashboardActivity extends AppCompatActivity {
         emailView.setTextColor(getResources().getColor(R.color.black));
 
        // SharedPreferences.Editor editor = sp.edit();
-        String s= sp.getString(PersonalInformationActivity.StudentMail, "Ihre Studenten-E-Mail ist noch nicht gespreichert");
+        String s= sp.getString(data, "Ihre Studenten-E-Mail ist noch nicht gespreichert");
        // String w= sp.getString("daria", "");
 
 
@@ -213,6 +229,8 @@ public class DashboardActivity extends AppCompatActivity {
         emailView.setPadding(0,7,5,7);
         emailView.setLayoutParams(new ViewGroup.LayoutParams(250, ViewGroup.LayoutParams.WRAP_CONTENT));
         layoutInfo.addView(emailView);
+
+        }
 
 
 
