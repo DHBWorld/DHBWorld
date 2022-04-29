@@ -1,18 +1,9 @@
 package com.main.dhbworld;
 
-import android.content.Context;
-import android.content.SharedPreferences;
+
 import android.graphics.Color;
-
 import androidx.core.graphics.ColorUtils;
-import androidx.preference.PreferenceManager;
-
 import com.alamkanak.weekview.WeekViewEntity;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
-import java.lang.reflect.Array;
-import java.lang.reflect.Type;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -21,9 +12,8 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Random;
-import java.util.stream.Collectors;
-
 import dhbw.timetable.rapla.data.event.Appointment;
 
 public class EventCreator {
@@ -51,7 +41,7 @@ public class EventCreator {
 
         LocalDate asLocalDate = LocalDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault()).toLocalDate();
         ArrayList<Appointment> currentData = data.get(asLocalDate);
-        for (int i = 0; i < currentData.size();i++){
+        for (int i = 0; i < Objects.requireNonNull(currentData).size(); i++){
             String resources = currentData.get(i).getResources().replace(",","\n");
             filterTitles.add(currentData.get(i).getTitle());
             eventList.add(new Event(
@@ -155,14 +145,6 @@ public class EventCreator {
         return titles;
     }
 
-    public static List<String> getBlackList() {
-        return blackList;
-    }
-    public static ArrayList<Events> getEvents() {
-        return filteredEvents;
-    }
-    public static ArrayList<Event> getEventList(){ return eventList; }
-
     public static void clearEvents(){
         filteredEvents.clear();
         eventList.clear();
@@ -179,5 +161,8 @@ public class EventCreator {
            }
        }
        return nextEvent;
+    }
+    public static ArrayList<Events> getEvents() {
+       return filteredEvents;
     }
 }

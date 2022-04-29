@@ -263,7 +263,7 @@
    \nSee the License for the specific language governing permissions and
    \nlimitations under the License.
     </string>
-    <string name="maxCalendarHour">20</string>
+    <string name="maxCalendarHour">19</string>
     <string name="minCalendarHour">7</string>
     <string name="canteen">Kantine</string>
     <string name="previous_notifications">Bisherige Meldungen:</string>

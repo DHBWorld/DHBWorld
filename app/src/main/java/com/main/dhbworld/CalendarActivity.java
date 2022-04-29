@@ -3,38 +3,28 @@ package com.main.dhbworld;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.preference.PreferenceManager;
-
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
-import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
-
 import com.alamkanak.weekview.WeekView;
 import com.alamkanak.weekview.WeekViewEntity;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.main.dhbworld.Navigation.NavigationUtilities;
-
-import java.lang.reflect.Array;
 import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -92,10 +82,15 @@ public class CalendarActivity extends AppCompatActivity{
 
     public void setCalSettings(){
         cal = findViewById(R.id.weekView);
+        //Only show Mon-Fri
         cal.setNumberOfVisibleDays(5);
         cal.setShowFirstDayOfWeekFirst(true);
+        //Scrolling only with onTouchListener allowed!
+        cal.setHorizontalScrollingEnabled(false);
         cal.setNowLineStrokeWidth(6);
-        cal.setHourHeight(9);
+        //Prevent Calendar from scrolling to the bottom on Activity start
+        cal.setHourHeight(7);
+        //configure now Line
         cal.setShowNowLineDot(true);
         cal.setNowLineColor(Color.parseColor("#343491"));
         cal.setPastBackgroundColor(Color.LTGRAY);
@@ -118,48 +113,33 @@ public class CalendarActivity extends AppCompatActivity{
     public void openFilterClick(@NonNull MenuItem item) throws NullPointerException{
         final String[] listItems = arrayConvertor(Objects.requireNonNull(EventCreator.uniqueTitles()));
         final boolean[] checkedItems = new boolean[listItems.length];
-        final List<String> selectedItems = Arrays.asList(listItems);
         for(int i = 0; i < listItems.length; i++){
-            if(blackList.contains(listItems[i])){ checkedItems[i] = false; }
-            else{ checkedItems[i] = true; }
+            checkedItems[i] = !blackList.contains(listItems[i]);
         }
 
         AlertDialog.Builder builder = new AlertDialog.Builder(CalendarActivity.this);
                 builder.setTitle("Filter your classes");
-                builder.setMultiChoiceItems(listItems, checkedItems, new DialogInterface.OnMultiChoiceClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which, boolean isChecked) {
-                        checkedItems[which] = isChecked;
-                        String currentItem = selectedItems.get(which);
-                    }
-                });
+                builder.setMultiChoiceItems(listItems, checkedItems, (dialog, which, isChecked)
+                        -> checkedItems[which] = isChecked);
                 // alert dialog shouldn't be cancellable
                 builder.setCancelable(false);
-                builder.setPositiveButton("Done", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        for (int i = 0; i < checkedItems.length; i++) {
-                            if(!checkedItems[i]){
-                                blackList.add(listItems[i]);
-                            }
-                            else if(blackList.contains(listItems[i])){
-                                blackList.remove(listItems[i]);
-                            }
+                builder.setPositiveButton("Done", (dialog, which) -> {
+                    for (int i = 0; i < checkedItems.length; i++) {
+                        if(!checkedItems[i]){
+                            blackList.add(listItems[i]);
                         }
-                        blackList = removeDuplicates(blackList);
-                        EventCreator.clearEvents();
-                        EventCreator.setBlackList(blackList);
-                        EventCreator.applyBlackList();
-                        loadedDateList.clear();
-                        saveBlackList(blackList,"blackList");
-                        restart(CalendarActivity.this, false);
+                        else blackList.remove(listItems[i]);
                     }
+                    blackList = removeDuplicates(blackList);
+                    EventCreator.clearEvents();
+                    EventCreator.setBlackList(blackList);
+                    EventCreator.applyBlackList();
+                    loadedDateList.clear();
+                    saveBlackList(blackList,"blackList");
+                    restart(CalendarActivity.this);
                 });
-                builder.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        //just close and do nothing, will not save the changed state.
-                    }
+                builder.setNegativeButton("CANCEL", (dialog, which) -> {
+                    //just close and do nothing, will not save the changed state.
                 });
                 builder.create();
                 AlertDialog dialog = builder.create();
@@ -170,7 +150,7 @@ public class CalendarActivity extends AppCompatActivity{
         return (ArrayList<String>) list.stream().distinct().collect(Collectors.toList());
     }
 
-    public static void restart(Activity activity, boolean transition) {
+    public static void restart(Activity activity) {
         activity.recreate();
     }
 
@@ -190,8 +170,7 @@ public class CalendarActivity extends AppCompatActivity{
         Type type = new TypeToken<ArrayList<String>>() {}.getType();
         ArrayList<String> blackList = gson.fromJson(json, type);
         if (blackList == null){
-            ArrayList<String> emptyList = new ArrayList<>();
-            return emptyList;
+            return new ArrayList<>();
         }
         else{
             return blackList;
@@ -227,7 +206,7 @@ public class CalendarActivity extends AppCompatActivity{
         final float[] x2 = {0};
 
         cal.setOnTouchListener((v, event) -> {
-            // TODO Auto-generated method stub
+            // TODO Replace with native Android OnTouchListener
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
                     x1[0].set(event.getX());
@@ -305,12 +284,12 @@ public class CalendarActivity extends AppCompatActivity{
         bottomSheetDialog.show();
 
         TextView titleView = bottomSheetDialog.findViewById(R.id.calendarTitleText);
-            titleView.setText(event.title);
+        Objects.requireNonNull(titleView).setText(event.title);
             //titleView.setTextColor(event.style.hashCode());
         TextView timeView = bottomSheetDialog.findViewById(R.id.calendarTimeText);
-            timeView.setText(timeString);
+            Objects.requireNonNull(timeView).setText(timeString);
         TextView descriptionView = bottomSheetDialog.findViewById(R.id.calendarDescriptionText);
-        descriptionView.setText(event.description);
+        Objects.requireNonNull(descriptionView).setText(event.description);
 
         bottomSheetDialog.show();
     }
