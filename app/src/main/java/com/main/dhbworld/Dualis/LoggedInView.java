@@ -8,15 +8,21 @@ import android.widget.AutoCompleteTextView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager2.widget.ViewPager2;
 
 import com.android.volley.VolleyError;
 import com.google.android.material.progressindicator.CircularProgressIndicator;
 import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.tabs.TabLayoutMediator;
 import com.google.android.material.textfield.TextInputLayout;
 import com.main.dhbworld.DualisActivity;
 import com.main.dhbworld.Navigation.NavigationUtilities;
@@ -31,23 +37,17 @@ import java.net.CookieManager;
 import java.net.HttpCookie;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.List;
 
 public class LoggedInView implements DualisAPI.DataLoadedListener, DualisAPI.ErrorListener {
 
-    private final Activity activity;
+    private final AppCompatActivity activity;
     private final String arguments;
     private final List<HttpCookie> cookies;
 
-    private AutoCompleteTextView semesterDropdown;
-    private String currentSemester = "";
-    private List<VorlesungModel> vorlesungModels = new ArrayList<>();
-    private VorlesungAdapter vorlesungAdapter;
-    private CircularProgressIndicator mainProgressIndicator;
-    private LinearLayout mainLayout;
-
-    public LoggedInView(Activity activity, String arguments, List<HttpCookie> cookies) {
+    public LoggedInView(AppCompatActivity activity, String arguments, List<HttpCookie> cookies) {
         this.activity = activity;
         this.arguments = arguments;
         this.cookies = cookies;
@@ -57,31 +57,32 @@ public class LoggedInView implements DualisAPI.DataLoadedListener, DualisAPI.Err
         activity.setContentView(R.layout.activity_dualis);
         NavigationUtilities.setUpNavigation(activity, R.id.dualis);
 
-        semesterDropdown = activity.findViewById(R.id.autoComplete);
-        mainProgressIndicator = activity.findViewById(R.id.progress_main);
-        mainLayout = activity.findViewById(R.id.main_layout);
-        mainLayout.setVisibility(View.GONE);
 
-        DualisAPI dualisAPI = new DualisAPI();
-        dualisAPI.setOnDataLoadedListener(this);
-        dualisAPI.setOnErrorListener(this);
+        TabLayout tabLayout = activity.findViewById(R.id.dualisTabLayout);
 
-        CookieManager cookieManager = new CookieManager();
-        try {
-            cookieManager.getCookieStore().add(new URI("dualis.dhbw.de"), cookies.get(0));
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-        }
-        CookieHandler cookieHandler = CookieManager.getDefault();
+        ViewPager2 viewPager2 = activity.findViewById(R.id.dualisViewPager);
+        DualisFragmentAdapter dualisFragmentAdapter = new DualisFragmentAdapter(activity, arguments, cookies);
+        viewPager2.setAdapter(dualisFragmentAdapter);
 
-        dualisAPI.makeRequest(activity, arguments, cookieHandler);
+        TabLayoutMediator tabLayoutMediator = new TabLayoutMediator(tabLayout, viewPager2, new TabLayoutMediator.TabConfigurationStrategy() {
+            @Override
+            public void onConfigureTab(@NonNull TabLayout.Tab tab, int position) {
+                if (position == 0) {
+                    tab.setText("Übersicht");
+                    tab.setIcon(R.drawable.ic_baseline_dashboard_24);
+                } else {
+                    tab.setText("Kurse");
+                    tab.setIcon(R.drawable.ic_baseline_book_24);
+                }
+            }
+        });
 
+        tabLayoutMediator.attach();
         Toolbar toolbar = activity.findViewById(R.id.topAppBar);
+
         toolbar.setOnMenuItemClickListener(item -> {
             if (item.getItemId() == R.id.dualis_refresh) {
-                mainLayout.setVisibility(View.GONE);
-                mainProgressIndicator.setVisibility(View.VISIBLE);
-                dualisAPI.makeRequest(activity, arguments, cookieHandler);
+                DualisSemesterFragment.makeRequest(activity, arguments);
                 return true;
             }
             return false;
@@ -90,75 +91,11 @@ public class LoggedInView implements DualisAPI.DataLoadedListener, DualisAPI.Err
 
     @Override
     public void onDataLoaded(JSONObject data) {
-        ArrayList<String> items = new ArrayList<>();
-        try {
-            for (int i=0; i<data.getJSONArray("semester").length(); i++) {
-                JSONObject semester = data.getJSONArray("semester").getJSONObject(i);
-                items.add(semester.getString("name"));
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
 
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(activity, R.layout.dualis_semester_list_item, items);
-        semesterDropdown.setAdapter(arrayAdapter);
-        if (items.contains(currentSemester)) {
-            semesterDropdown.setText(currentSemester, false);
-        } else {
-            semesterDropdown.setText(items.get(0), false);
-        }
-
-
-        vorlesungModels = new ArrayList<>();
-        RecyclerView mRecyclerView = activity.findViewById(R.id.recycler_view);
-        try {
-            if (items.contains(currentSemester)) {
-                updateList(data, items.indexOf(currentSemester));
-            } else {
-                updateList(data, 0);
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        mRecyclerView.setHasFixedSize(true);
-        LinearLayoutManager mLayoutManager = new LinearLayoutManager(activity);
-        mRecyclerView.setLayoutManager(mLayoutManager);
-        vorlesungAdapter = new VorlesungAdapter(vorlesungModels, activity);
-        mRecyclerView.setAdapter(vorlesungAdapter);
-
-
-
-        semesterDropdown.setOnItemClickListener((adapterView, view, i, l) -> {
-            currentSemester = semesterDropdown.getText().toString();
-            try {
-                updateList(data, i);
-                vorlesungAdapter.notifyDataSetChanged();
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        });
-
-
-        semesterDropdown.setEnabled(true);
-        mainProgressIndicator.setVisibility(View.GONE);
-        mainLayout.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void onError(VolleyError error) {
         Toast.makeText(activity, "Error: " + error.toString(), Toast.LENGTH_LONG).show();
-    }
-
-    void updateList(JSONObject data, int position) throws JSONException {
-        vorlesungModels.clear();
-        JSONArray vorlesungen = data.getJSONArray("semester").getJSONObject(position).getJSONArray("Vorlesungen");
-        for (int k = 0; k < vorlesungen.length(); k++) {
-            JSONObject vorlesung = vorlesungen.getJSONObject(k);
-            vorlesungModels.add(new VorlesungModel(vorlesung.getString("name"),
-                    vorlesung.getJSONArray("pruefungen"),
-                    vorlesung.getString("credits"),
-                    vorlesung.getString("note")));
-        }
     }
 }

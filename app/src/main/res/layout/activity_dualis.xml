@@ -34,57 +34,17 @@
         <!-- everything above is for the topbar and navigation-->
 
 
-        <com.google.android.material.progressindicator.CircularProgressIndicator
-            android:id="@+id/progress_main"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:indeterminate="true"
-            android:visibility="visible"
-            android:layout_gravity="center"
-            android:layout_centerInParent="true"
-            app:indicatorColor="@color/red"/>
-
-        <LinearLayout
-            android:id="@+id/main_layout"
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/dualisViewPager"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@id/topAppBarLayout"
-            android:animateLayoutChanges="true"
-            android:orientation="vertical"
-            android:padding="16dp"
-            android:visibility="visible">
+            android:layout_below="@id/dualisTabLayout" />
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/semesterDropdown"
-                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:enabled="false"
-                android:hint="@string/semester"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <AutoCompleteTextView
-                    android:id="@+id/autoComplete"
-                    style="@style/Card_Bg"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="none"/>
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recycler_view"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:paddingTop="16dp"
-                android:scrollbars="vertical"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/semesterDropdown" />
-
-        </LinearLayout>
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/dualisTabLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/topAppBarLayout" />
 
     </RelativeLayout>
 
