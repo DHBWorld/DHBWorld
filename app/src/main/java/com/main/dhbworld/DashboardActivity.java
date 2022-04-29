@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 import android.annotation.SuppressLint;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
@@ -14,6 +16,7 @@ import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -177,11 +180,11 @@ public class DashboardActivity extends AppCompatActivity {
        // image_printer.setBackgroundColor(res.getColor(statePrinter.getColor()));
     }
 
+    @SuppressLint("ResourceAsColor")
     private void loadPersonalInformation(){
 
 
          String MyPREFERENCES = "myPreferencesKey" ;
-
          List <String> personalData = new ArrayList<>();
         personalData.add("matriculationNumberKey");
         personalData.add("libraryNumberKey" );
@@ -206,29 +209,37 @@ public class DashboardActivity extends AppCompatActivity {
 
         layoutCardPI.addView(layoutInfo);
 
-        ImageView tramImage= new ImageView(DashboardActivity.this);
-
-        tramImage.setLayoutParams(new ViewGroup.LayoutParams(60, 60));
-        tramImage.setImageResource(R.drawable.ic_pencil);
-        tramImage.setPadding(0,0,10,0);
-
-        layoutInfo.addView(tramImage);
+        Button copyImage= new Button(DashboardActivity.this);
+        copyImage.setLayoutParams(new ViewGroup.LayoutParams(60, 60));
+        copyImage.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_copy,0,0,0);
+        copyImage.setBackgroundColor(getResources().getColor(R.color.white));
+        layoutInfo.addView(copyImage);
 
 
         TextView emailView = new TextView(DashboardActivity.this);
         emailView.setTextSize(13);
         emailView.setTextColor(getResources().getColor(R.color.black));
 
-       // SharedPreferences.Editor editor = sp.edit();
         String s= sp.getString(data, "Ihre Studenten-E-Mail ist noch nicht gespreichert");
-       // String w= sp.getString("daria", "");
 
 
         emailView.setText(s);
-        //emailView.setText(PersonalInformationActivity.StudentMail);
-        emailView.setPadding(0,7,5,7);
+        emailView.setPadding(10,20,5,10);
         emailView.setLayoutParams(new ViewGroup.LayoutParams(250, ViewGroup.LayoutParams.WRAP_CONTENT));
         layoutInfo.addView(emailView);
+
+
+            copyImage.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                    ClipData clip = ClipData.newPlainText("", s);
+                    clipboard.setPrimaryClip(clip);
+
+
+                    Toast.makeText(DashboardActivity.this, "Kopiert", Toast.LENGTH_LONG).show();
+                }
+            });
 
         }
 

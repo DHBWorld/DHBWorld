@@ -65,6 +65,8 @@
 
 
 
+
+
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/card_dash_userInteraction"
                     android:layout_width="match_parent"
@@ -250,6 +252,8 @@
                     app:strokeColor="@color/grey_light"
                     app:strokeWidth="3dp">
 
+
+
                     <LinearLayout
 
 
@@ -271,6 +275,38 @@
                             android:paddingTop="15dp"
                             android:paddingRight="15dp"
                             android:paddingBottom="15dp">
+
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="20dp"
+                    android:baselineAligned="false"
+                    app:cardElevation="0dp"
+                    app:strokeColor="@color/red"
+                    app:strokeWidth="3dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@color/red"
+                        android:orientation="horizontal"
+                        android:paddingLeft="30dp">
+
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@color/white"
+                            android:orientation="vertical"
+                            android:padding="15dp">
+
+
 
 
                         </LinearLayout>
