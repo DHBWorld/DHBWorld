@@ -237,6 +237,7 @@ public class CalendarActivity extends AppCompatActivity{
     }
 
     Runnable runnableTask = () -> {
+
         String url = "https://rapla.dhbw-karlsruhe.de/rapla?page=calendar&user=eisenbiegler&file=TINF20B4" ; // ist von nutzer einzugeben (oder Liste von Unis auswählen).
         Map<LocalDate, ArrayList<Appointment>> data = new HashMap<>();
         LocalDate thisWeek = LocalDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault()).toLocalDate();
