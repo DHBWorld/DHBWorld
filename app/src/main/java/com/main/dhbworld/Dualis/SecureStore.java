@@ -34,9 +34,9 @@ public class SecureStore {
 
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
-    Activity activity;
+    Context activity;
 
-    public SecureStore(Activity activity, SharedPreferences sharedPreferences) {
+    public SecureStore(Context activity, SharedPreferences sharedPreferences) {
         this.sharedPreferences = sharedPreferences;
         this.editor = sharedPreferences.edit();
         this.activity = activity;
