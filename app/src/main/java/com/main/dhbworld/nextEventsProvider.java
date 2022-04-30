@@ -23,12 +23,15 @@ public class nextEventsProvider {
         Calendar thisWeekCal = Calendar.getInstance();
         Calendar nextWeekCal = (Calendar) thisWeekCal.clone();
         nextWeekCal.add(Calendar.WEEK_OF_YEAR,2);
-        LocalDate thisWeek = LocalDateTime.ofInstant(thisWeekCal.toInstant(), ZoneId.systemDefault()).toLocalDate();
         LocalDate nextWeek = LocalDateTime.ofInstant(nextWeekCal.toInstant(), ZoneId.systemDefault()).toLocalDate();
+        Calendar mondayCal = (Calendar) thisWeekCal.clone();
+        mondayCal.set(Calendar.DAY_OF_WEEK,
+                mondayCal.getActualMinimum(Calendar.DAY_OF_WEEK) + 1);
+        LocalDate thisWeek = LocalDateTime.ofInstant(mondayCal.toInstant(), ZoneId.systemDefault()).toLocalDate();
 
         Map<LocalDate, ArrayList<Appointment>> rawData = DataImporter.ImportWeekRange(thisWeek,nextWeek,url);
+        System.out.println(thisWeek + "    " + rawData);
         ArrayList<Appointment> thisWeekData = rawData.get(thisWeek);
-
         return(disectData(thisWeekData));
     }
 
