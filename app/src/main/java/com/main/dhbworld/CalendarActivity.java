@@ -79,8 +79,19 @@ public class CalendarActivity extends AppCompatActivity{
         //reset Variables of EventCreator class. Relevant after applying filters.
         EventCreator.instantiateVariables();
         executor.submit(runnableTask);
+        executor.submit(providerRunnable);
         setOnTouchListener(cal, executor);
     }
+
+
+    Runnable providerRunnable = () -> {
+        nextEventsProvider provider = new nextEventsProvider();
+        try {
+            System.out.println(provider.getNextEvent());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    };
 
     public String checkURL(){
        String url = getURL();
