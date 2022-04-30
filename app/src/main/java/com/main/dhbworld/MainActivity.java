@@ -181,12 +181,6 @@ public class MainActivity extends AppCompatActivity{
 
 
 
-    //@Override
-    //public void onClick(View v) {
-//
-    //}
-
-
     public boolean checkLNumber(String l){
         if(l.isEmpty()){
             return true;
@@ -251,4 +245,7 @@ public class MainActivity extends AppCompatActivity{
         studentMail.setText(sp.getString(StudentMail,""));
         freeNotes.setText(sp.getString(FreeNotes,""));
     }
+
+
+
 }

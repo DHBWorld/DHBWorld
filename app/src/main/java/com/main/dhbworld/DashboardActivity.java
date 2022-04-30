@@ -3,6 +3,7 @@ package com.main.dhbworld;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+import androidx.core.graphics.ColorUtils;
 
 import android.annotation.SuppressLint;
 import android.content.ClipData;
@@ -11,17 +12,22 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.content.res.Resources;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.card.MaterialCardView;
 import com.main.dhbworld.CantineClasses.MealDailyPlan;
 import com.main.dhbworld.Enums.InteractionState;
 import com.main.dhbworld.Firebase.Utilities;
@@ -29,14 +35,18 @@ import com.main.dhbworld.Navigation.NavigationUtilities;
 
 import org.json.JSONException;
 
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
+
+import dhbw.timetable.rapla.exceptions.NoConnectionException;
 
 public class DashboardActivity extends AppCompatActivity {
 
 
     private LinearLayout layoutCardMealPlan;
-    public static final String MyPREFERENCES = "" ;
+     Boolean configurationModus;
+
 
 
     @Override
@@ -47,11 +57,23 @@ public class DashboardActivity extends AppCompatActivity {
 
 
         layoutCardMealPlan= findViewById(R.id.layoutCardMealPlan);
+        UserConfigurationOfDashboard();
+
+
+
         loadUserInteraction();
         loadMealPlan();
         loadKvv();
-        loadCalendar();
+        try {
+            loadCalendar();
+        } catch (MalformedURLException | NoConnectionException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
         loadPersonalInformation();
+
+        //test();
+
+
 
 
 
@@ -59,7 +81,131 @@ public class DashboardActivity extends AppCompatActivity {
 
     }
 
-    private void loadCalendar(){
+    private void UserConfigurationOfDashboard(){
+        ImageButton settings = findViewById(R.id.dashboard_settings);
+        configurationModus=false;
+        Button buttonCardCalendar= findViewById(R.id.buttonCardCalendar);
+        Button buttonCardPI= findViewById(R.id.buttonCardPI);
+        Button buttonCardMealPlan= findViewById(R.id.buttonCardMealPlan);
+        Button buttonCardKvv= findViewById(R.id.buttonCardKvv);
+        buttonCardCalendar.setClickable(false);
+        buttonCardPI.setClickable(false);
+        buttonCardMealPlan.setClickable(false);
+        buttonCardKvv.setClickable(false);
+
+        buttonCardCalendar.setEnabled(false);
+        buttonCardPI.setEnabled(false);
+        buttonCardMealPlan.setEnabled(false);
+        buttonCardKvv.setEnabled(false);
+
+      MaterialCardView card_dash_calendar = findViewById(R.id.card_dash_calendar);
+        LinearLayout card_dash_calendar_layout = findViewById(R.id.card_dash_calendar_layout);
+
+        settings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (configurationModus==false){ //User can configure his dashboard
+                    Toast.makeText(DashboardActivity.this, " Wählen sie Cards, die ausblenden oder wieder einblenden möchten", Toast.LENGTH_LONG).show();
+
+                    buttonCardCalendar.setClickable(true);
+                    buttonCardPI.setClickable(true);
+                    buttonCardMealPlan.setClickable(true);
+                    buttonCardKvv.setClickable(true);
+
+                    buttonCardCalendar.setEnabled(true);
+                    buttonCardPI.setEnabled(true);
+                    buttonCardMealPlan.setEnabled(true);
+                    buttonCardKvv.setEnabled(true);
+                   configurationModus=true;
+                } else{
+                    buttonCardCalendar.setClickable(false);
+                    buttonCardPI.setClickable(false);
+                    buttonCardMealPlan.setClickable(false);
+                    buttonCardKvv.setClickable(false);
+
+                    buttonCardCalendar.setEnabled(false);
+                    buttonCardPI.setEnabled(false);
+                    buttonCardMealPlan.setEnabled(false);
+                    buttonCardKvv.setEnabled(false);
+                    configurationModus=false;
+                }
+            }
+        });
+
+
+        buttonCardCalendar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+              //  card_dash_calendar.getBackground().
+
+                card_dash_calendar.getBackground().setAlpha(128);
+                card_dash_calendar.setStrokeColor(ColorUtils.setAlphaComponent(getResources().getColor(R.color.black),50));
+                buttonCardCalendar.setBackgroundColor((ColorUtils.setAlphaComponent(getResources().getColor(R.color.black),50)));
+                card_dash_calendar_layout.setBackgroundColor(ColorUtils.setAlphaComponent(getResources().getColor(R.color.black),50));
+                // card_dash_calendar.setCardBackgroundColor(Color.BLACK);
+                Toast.makeText(DashboardActivity.this, " cool", Toast.LENGTH_LONG).show();
+            }
+        });
+
+        buttonCardPI.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(DashboardActivity.this, " cool", Toast.LENGTH_LONG).show();
+            }
+        });
+
+        buttonCardMealPlan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(DashboardActivity.this, " cool", Toast.LENGTH_LONG).show();
+            }
+        });
+
+        buttonCardKvv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(DashboardActivity.this, " cool", Toast.LENGTH_LONG).show();
+            }
+        });
+
+
+
+
+
+
+
+
+    }
+
+    private void test(){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                System.out.println("/////////////////////////////////////////7");
+
+                try {
+                    nextEventsProvider nextEventsProvider= new nextEventsProvider();
+
+                    Event nextClass = nextEventsProvider.getNextEvent();
+                    //System.out.println(nextClass.getNextEvent());
+
+                } catch (NoConnectionException | IllegalAccessException | MalformedURLException e) {
+                    e.printStackTrace();
+                }
+            }}).start();
+    }
+
+    private void loadCalendar() throws MalformedURLException, NoConnectionException, IllegalAccessException {
+
+
+        System.out.println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
+      //  System.out.println(nextClass);
+
+
+      //  System.out.println(nextClass.getNextEvent());
+      //  System.out.println(nextClass.getNextEvent().toString());
+
+
         LinearLayout layoutCardCalendar = findViewById(R.id.layoutCardCalendar);
         LinearLayout layoutNextClass = new LinearLayout(DashboardActivity.this);
         layoutNextClass.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
@@ -90,6 +236,7 @@ public class DashboardActivity extends AppCompatActivity {
         timeView.setPadding(0,7,5,7);
         timeView.setLayoutParams(new ViewGroup.LayoutParams(250, ViewGroup.LayoutParams.WRAP_CONTENT));
         layoutNextClass.addView(timeView);
+
 
 
     }
@@ -164,6 +311,7 @@ public class DashboardActivity extends AppCompatActivity {
 
     }
 
+
     private void loadPersonalInformation(){
 
 
@@ -193,10 +341,10 @@ public class DashboardActivity extends AppCompatActivity {
 
                 layoutCardPI.addView(layoutInfo);
 
-                Button copyImage= new Button(DashboardActivity.this);
+                ImageButton copyImage= new ImageButton(DashboardActivity.this);
                 copyImage.setLayoutParams(new ViewGroup.LayoutParams(60, 60));
-                copyImage.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_copy,0,0,0);
-                copyImage.setBackgroundColor(getResources().getColor(R.color.white));
+                copyImage.setImageDrawable(getResources().getDrawable(R.drawable.ic_copy));
+                copyImage.getDrawable().setColorFilter(ContextCompat.getColor(this, R.color.red), PorterDuff.Mode.SRC_ATOP);
                 layoutInfo.addView(copyImage);
 
 
@@ -222,7 +370,14 @@ public class DashboardActivity extends AppCompatActivity {
                         }
                     });
 
-        }
+
+
+
+
+
+
+
+            }
         }
 
 

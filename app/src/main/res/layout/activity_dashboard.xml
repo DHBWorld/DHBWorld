@@ -54,10 +54,11 @@
 
             <LinearLayout
                 android:id="@+id/layoutDashboardCards"
-
                 android:layout_width="match_parent"
+
                 android:layout_height="match_parent"
                 android:background="@color/white"
+
 
                 android:orientation="vertical">
 
@@ -123,7 +124,18 @@
                             android:layout_height="match_parent"
                             android:background="@color/grey_light"
                             android:orientation="vertical"
+                            android:gravity="center"
+
                             android:padding="15dp">
+
+                            <ImageButton
+                                android:id="@+id/dashboard_settings"
+
+                                android:layout_width="30dp"
+                                android:layout_height="30dp"
+                                android:background="@drawable/ic_settings"/>
+
+
 
 
                         </LinearLayout>
@@ -140,14 +152,25 @@
                     android:baselineAligned="false"
                     app:cardElevation="0dp"
                     app:strokeColor="@color/red"
+                    android:checkable="true"
                     app:strokeWidth="3dp">
 
                     <LinearLayout
+                        android:id="@+id/card_dash_calendar_layout"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:background="@color/red"
                         android:orientation="horizontal"
-                        android:paddingLeft="30dp">
+                        >
+
+                        <Button
+
+                            android:id="@+id/buttonCardCalendar"
+                            android:layout_width="30dp"
+                            android:layout_height="match_parent"
+                            android:clickable="false"/>
+
+
 
 
                         <LinearLayout
@@ -164,6 +187,7 @@
 
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
+
 
                 <com.google.android.material.card.MaterialCardView
 
@@ -192,13 +216,33 @@
                             android:layout_height="match_parent"
                             android:background="@color/white"
                             android:orientation="vertical"
-                            android:paddingLeft="45dp"
+                            android:paddingStart="45dp"
                             android:paddingTop="15dp"
-                            android:paddingRight="15dp"
+                            android:paddingEnd="15dp"
                             android:paddingBottom="15dp">
 
 
                         </LinearLayout>
+                        <LinearLayout
+
+                            android:layout_width="30dp"
+
+                            android:layout_height="match_parent"
+                            android:background="@color/white"
+                            android:orientation="vertical"
+                           >
+                            <Button
+
+                                android:id="@+id/buttonCardKvv"
+                                android:clickable="false"
+
+                                android:layout_width="30dp"
+                                android:layout_height="50dp" />
+
+
+                        </LinearLayout>
+
+
 
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
@@ -218,7 +262,13 @@
                         android:layout_height="match_parent"
                         android:background="@color/red"
                         android:orientation="horizontal"
-                        android:paddingLeft="30dp">
+                        >
+                        <Button
+
+                            android:id="@+id/buttonCardMealPlan"
+                            android:layout_width="30dp"
+                            android:layout_height="match_parent"
+                            android:clickable="false"/>
 
 
                         <LinearLayout
@@ -272,10 +322,26 @@
 
 
                         </LinearLayout>
+                        <LinearLayout
+
+                            android:layout_width="30dp"
+
+                            android:layout_height="match_parent"
+                            android:background="@color/white"
+                            android:orientation="vertical"
+                            >
+                            <Button
+
+                                android:id="@+id/buttonCardPI"
+                                android:clickable="false"
+                                android:layout_width="30dp"
+                                android:layout_height="50dp" />
+
+
+                        </LinearLayout>
 
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
-
 
 
             </LinearLayout>
