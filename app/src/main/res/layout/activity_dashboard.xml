@@ -133,7 +133,7 @@
 
                                 android:layout_width="30dp"
                                 android:layout_height="30dp"
-                                android:background="@drawable/ic_settings"/>
+                                android:background="@drawable/ic_construction"/>
 
 
 
@@ -168,7 +168,8 @@
                             android:id="@+id/buttonCardCalendar"
                             android:layout_width="30dp"
                             android:layout_height="match_parent"
-                            android:clickable="false"/>
+                            android:stateListAnimator="@null"
+                            />
 
 
 
@@ -190,6 +191,7 @@
 
 
                 <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/card_dash_kvv"
 
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -201,7 +203,7 @@
 
                     <LinearLayout
 
-
+                        android:id="@+id/card_dash_kvv_layout"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:background="@color/grey_light"
@@ -234,8 +236,8 @@
                             <Button
 
                                 android:id="@+id/buttonCardKvv"
-                                android:clickable="false"
 
+                                android:stateListAnimator="@null"
                                 android:layout_width="30dp"
                                 android:layout_height="50dp" />
 
@@ -258,6 +260,7 @@
                     app:strokeWidth="3dp">
 
                     <LinearLayout
+                        android:id="@+id/card_dash_mealPlan_layout"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:background="@color/red"
@@ -267,8 +270,9 @@
 
                             android:id="@+id/buttonCardMealPlan"
                             android:layout_width="30dp"
+                            android:stateListAnimator="@null"
                             android:layout_height="match_parent"
-                            android:clickable="false"/>
+                           />
 
 
                         <LinearLayout
@@ -287,7 +291,9 @@
                 </com.google.android.material.card.MaterialCardView>
 
 
+
                 <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/card_dash_pi"
 
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -297,10 +303,9 @@
                     app:strokeColor="@color/grey_light"
                     app:strokeWidth="3dp">
 
-
                     <LinearLayout
 
-
+                        android:id="@+id/card_dash_pi_layout"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:background="@color/grey_light"
@@ -315,9 +320,9 @@
                             android:layout_height="match_parent"
                             android:background="@color/white"
                             android:orientation="vertical"
-                            android:paddingLeft="45dp"
+                            android:paddingStart="45dp"
                             android:paddingTop="15dp"
-                            android:paddingRight="15dp"
+                            android:paddingEnd="15dp"
                             android:paddingBottom="15dp">
 
 
@@ -333,12 +338,15 @@
                             <Button
 
                                 android:id="@+id/buttonCardPI"
-                                android:clickable="false"
+
+                                android:stateListAnimator="@null"
                                 android:layout_width="30dp"
                                 android:layout_height="50dp" />
 
 
                         </LinearLayout>
+
+
 
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
