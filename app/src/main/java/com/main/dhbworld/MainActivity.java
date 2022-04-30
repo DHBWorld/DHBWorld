@@ -178,9 +178,6 @@ public class MainActivity extends AppCompatActivity{
     }
 
 
-
-
-
     public boolean checkLNumber(String l){
         if(l.isEmpty()){
             return true;
