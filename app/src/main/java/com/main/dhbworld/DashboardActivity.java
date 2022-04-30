@@ -147,16 +147,16 @@ public class DashboardActivity extends AppCompatActivity {
         cardKvv_isVisible = sp.getBoolean("cardKvv", true);
 
        if (!cardCalendar_isVisible){
-           card_dash_calendar.setVisibility(View.INVISIBLE);
+           card_dash_calendar.setVisibility(View.GONE);
        }
         if (!cardPI_isVisible){
-            card_dash_pi.setVisibility(View.INVISIBLE);
+            card_dash_pi.setVisibility(View.GONE);
         }
         if (!cardMealPlan_isVisible){
-            card_dash_mealPlan.setVisibility(View.INVISIBLE);
+            card_dash_mealPlan.setVisibility(View.GONE);
         }
         if (!cardKvv_isVisible){
-            card_dash_kvv.setVisibility(View.INVISIBLE);
+            card_dash_kvv.setVisibility(View.GONE);
         }
 
 
@@ -222,16 +222,16 @@ public class DashboardActivity extends AppCompatActivity {
                     card_dash_mealPlan_layout.setBackgroundColor(ColorUtils.setAlphaComponent(card_dash_mealPlan.getStrokeColor(),255));
 
                     if (!cardCalendar_isVisible){
-                        card_dash_calendar.setVisibility(View.INVISIBLE);
+                        card_dash_calendar.setVisibility(View.GONE);
                     }
                     if (!cardPI_isVisible){
-                        card_dash_pi.setVisibility(View.INVISIBLE);
+                        card_dash_pi.setVisibility(View.GONE);
                     }
                     if (!cardMealPlan_isVisible){
-                        card_dash_mealPlan.setVisibility(View.INVISIBLE);
+                        card_dash_mealPlan.setVisibility(View.GONE);
                     }
                     if (!cardKvv_isVisible){
-                        card_dash_kvv.setVisibility(View.INVISIBLE);
+                        card_dash_kvv.setVisibility(View.GONE);
                     }
 
 
