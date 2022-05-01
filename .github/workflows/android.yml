@@ -45,7 +45,7 @@ jobs:
   ##5
   report:
     runs-on: [ ubuntu-latest ]
-    needs: android_tests # The report job will run after test job
+    needs: build # The report job will run after test job
     if: ${{ always() }} # IMPORTANT: Execute report job regardless of status
     steps:
       - name: Download Test Reports Folder
