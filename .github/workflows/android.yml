@@ -37,7 +37,7 @@ jobs:
     #    script: ./gradlew connectedAndroidTest
     #  continue-on-error: true # IMPORTANT: allow pipeline to continue to Android Test Report step
     
-    - uses: malinskiy/action-android/install-sdk@release/0.1.2
+    - uses: blitzdose/action-android/install-sdk@release/0.1.2
       # Set up platform tools like adb.
     - run: sdkmanager platform-tools
 
@@ -47,7 +47,7 @@ jobs:
     # Verify $ANDROID_HOME is properly set for later Gradle commands.
     - run: echo $ANDROID_HOME
     
-    - uses: malinskiy/action-android/emulator-run-cmd@release/0.1.2
+    - uses: blitzdose/action-android/emulator-run-cmd@release/0.1.2
       with:
         cmd: ./gradlew connectedAndroidTest
         api: 27
