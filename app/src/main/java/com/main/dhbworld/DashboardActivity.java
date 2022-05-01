@@ -78,14 +78,14 @@ public class DashboardActivity extends AppCompatActivity {
         loadUserInteraction();
         loadMealPlan();
         loadKvv();
-        try {
+        /*try {
             loadCalendar();
         } catch (MalformedURLException | NoConnectionException | IllegalAccessException e) {
             e.printStackTrace();
-        }
+        }*/
         loadPersonalInformation();
 
-       // test();
+        test();
 
 
 
@@ -327,27 +327,65 @@ public class DashboardActivity extends AppCompatActivity {
                 System.out.println("/////////////////////////////////////////7");
 
                 try {
+                    System.out.println("§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§");
                     nextEventsProvider nextEventsProvider= new nextEventsProvider();
 
                     Event nextClass = nextEventsProvider.getNextEvent();
-                    System.out.println(nextClass.getTitle());
+                    System.out.println("nextClass"+nextClass);
+                    System.out.println("nextClass.getTitle()"+nextClass.title);
+                    System.out.println("nextClass.getTitle()"+nextClass.info);
+
+
+                    layoutCardMealPlan.post(new Runnable() {
+                        @Override
+                        public void run() {
+
+
+
+
+                    LinearLayout layoutCardCalendar = findViewById(R.id.layoutCardCalendar);
+                    LinearLayout layoutNextClass = new LinearLayout(DashboardActivity.this);
+                    layoutNextClass.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    layoutNextClass.setOrientation(LinearLayout.HORIZONTAL);
+                    layoutNextClass.setVerticalGravity(View.TEXT_ALIGNMENT_CENTER);
+                    layoutCardCalendar.addView(layoutNextClass);
+
+                    ImageView UniImage= new ImageView(DashboardActivity.this);
+
+                    UniImage.setLayoutParams(new ViewGroup.LayoutParams(60, 60));
+                    UniImage.setImageResource(R.drawable.ic_uni);
+                    UniImage.setPadding(0,0,10,0);
+
+                    layoutNextClass.addView(UniImage);
+
+                    TextView nextClassView = new TextView(DashboardActivity.this);
+                    nextClassView.setTextSize(15);
+                    nextClassView.setTextColor(getResources().getColor(R.color.black));
+                    //nextClassView.setText("Softwareengineering");
+                    nextClassView.setText(nextClass.getTitle());
+                    nextClassView.setPadding(0,7,5,7);
+                    nextClassView.setLayoutParams(new ViewGroup.LayoutParams(550, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    layoutNextClass.addView(nextClassView);
+
+                    TextView timeView = new TextView(DashboardActivity.this);
+                    timeView.setTextSize(15);
+                    timeView.setTextColor(getResources().getColor(R.color.black));
+                    timeView.setText("59 Min");
+                    timeView.setPadding(0,7,5,7);
+                    timeView.setLayoutParams(new ViewGroup.LayoutParams(250, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    layoutNextClass.addView(timeView);
+
+                        }
+                    });
 
                 } catch (NoConnectionException | IllegalAccessException | MalformedURLException e) {
                     e.printStackTrace();
+                    System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
                 }
             }}).start();
     }
 
     private void loadCalendar() throws MalformedURLException, NoConnectionException, IllegalAccessException {
-
-
-        System.out.println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
-      //  System.out.println(nextClass);
-
-
-      //  System.out.println(nextClass.getNextEvent());
-      //  System.out.println(nextClass.getNextEvent().toString());
-
 
         LinearLayout layoutCardCalendar = findViewById(R.id.layoutCardCalendar);
         LinearLayout layoutNextClass = new LinearLayout(DashboardActivity.this);
