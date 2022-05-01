@@ -52,7 +52,6 @@ public class EventCreator {
                     currentData.get(i).getTitle(),
                     currentData.get(i).getInfo()));
         }
-
         createEvents();
         eventList.clear();
     }

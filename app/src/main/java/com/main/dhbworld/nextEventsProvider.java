@@ -1,5 +1,9 @@
 package com.main.dhbworld;
 
+import android.content.SharedPreferences;
+
+import androidx.preference.PreferenceManager;
+
 import java.net.MalformedURLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -15,16 +19,23 @@ import dhbw.timetable.rapla.exceptions.NoConnectionException;
 import dhbw.timetable.rapla.parser.DataImporter;
 
 public class nextEventsProvider {
-    private String url = "https://rapla.dhbw-karlsruhe.de/rapla?page=calendar&user=eisenbiegler&file=TINF20B4";
-    Map<LocalDate, ArrayList<Appointment>> rawData;
+    SharedPreferences preferences = getSharedPreferences();
+    //String url = preferences.getString("CurrentURL",null);
+    String url = "https://rapla.dhbw-karlsruhe.de/rapla?page=calendar&user=eisenbiegler&file=TINF20B4";
+    Calendar cal;
 
+    public SharedPreferences getSharedPreferences(){
+        CalendarActivity calendarActivity= new CalendarActivity();
+        return PreferenceManager.getDefaultSharedPreferences(calendarActivity);
+    }
 
     public Event getNextEvent() throws NoConnectionException, IllegalAccessException, MalformedURLException {
-        Calendar thisWeekCal = Calendar.getInstance();
-        Calendar nextWeekCal = (Calendar) thisWeekCal.clone();
-        nextWeekCal.add(Calendar.WEEK_OF_YEAR,2);
+        cal  = nextMonday();
+        System.out.println(cal);
+        Calendar nextWeekCal = (Calendar) cal.clone();
+        nextWeekCal.add(Calendar.WEEK_OF_YEAR,1);
         LocalDate nextWeek = LocalDateTime.ofInstant(nextWeekCal.toInstant(), ZoneId.systemDefault()).toLocalDate();
-        Calendar mondayCal = (Calendar) thisWeekCal.clone();
+        Calendar mondayCal = (Calendar) cal.clone();
         mondayCal.set(Calendar.DAY_OF_WEEK,
                 mondayCal.getActualMinimum(Calendar.DAY_OF_WEEK) + 1);
         LocalDate thisWeek = LocalDateTime.ofInstant(mondayCal.toInstant(), ZoneId.systemDefault()).toLocalDate();
@@ -35,8 +46,16 @@ public class nextEventsProvider {
         return(disectData(thisWeekData));
     }
 
+    public Calendar nextMonday(){
+       Calendar mondayCal = Calendar.getInstance();
+        if(mondayCal.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY || mondayCal.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY){
+            mondayCal.add(Calendar.DAY_OF_WEEK,2);
+        }
+       return mondayCal;
+    }
+
     public Event disectData(ArrayList<Appointment> data){
-        Calendar thisWeekCal = Calendar.getInstance();
+        Calendar thisWeekCal = cal;
         LocalDateTime thisWeek = LocalDateTime.ofInstant(thisWeekCal.toInstant(), ZoneId.systemDefault());
         Appointment nextEvent = data.get(0);
             for(int i = 0; i < data.size(); i++){
@@ -48,6 +67,7 @@ public class nextEventsProvider {
             }
             return(formatAppointment(nextEvent));
     }
+
     public Event formatAppointment(Appointment appointment){
         Event event = new Event(
                 appointment.getStartDate(),

@@ -57,6 +57,7 @@ public class CalendarActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //check url here so the schedule layout isnt displayed yet.
+        checkURL();
         setContentView(R.layout.schedule_layout);
         NavigationUtilities.setUpNavigation(this, R.id.Calendar);
         firstSetup();
@@ -79,19 +80,10 @@ public class CalendarActivity extends AppCompatActivity{
         //reset Variables of EventCreator class. Relevant after applying filters.
         EventCreator.instantiateVariables();
         executor.submit(runnableTask);
-        executor.submit(providerRunnable);
         setOnTouchListener(cal, executor);
     }
 
 
-    Runnable providerRunnable = () -> {
-        nextEventsProvider provider = new nextEventsProvider();
-        try {
-            System.out.println(provider.getNextEvent());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    };
 
     public String checkURL(){
        String url = getURL();
@@ -133,7 +125,6 @@ public class CalendarActivity extends AppCompatActivity{
     public static String[] arrayConvertor(List<String> titleList){
         return titleList.toArray(new String[0]);
     }
-
 
     public static ArrayList<String> getBlackList() {
         return blackList;
