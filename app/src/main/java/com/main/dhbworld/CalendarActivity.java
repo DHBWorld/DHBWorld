@@ -6,12 +6,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.PreferenceManager;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
+import android.widget.EditText;
 import android.widget.TextView;
 import com.alamkanak.weekview.WeekView;
 import com.alamkanak.weekview.WeekViewEntity;
@@ -45,26 +48,20 @@ import java.util.stream.Collectors;
 public class CalendarActivity extends AppCompatActivity{
     WeekView cal;
     Calendar date = Calendar.getInstance();
-    boolean useTempCal;
     List<Instant> loadedDateList = new ArrayList<>();
     static ArrayList<Events> events = new ArrayList<>();
     static ArrayList<String> blackList = new ArrayList<>();
+    String url;
 
     @SuppressLint("ClickableViewAccessibility")
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //check url here so the schedule layout isnt displayed yet.
         setContentView(R.layout.schedule_layout);
         NavigationUtilities.setUpNavigation(this, R.id.Calendar);
         firstSetup();
-        nextEventsProvider p = new nextEventsProvider();
-        try {
-            System.out.println(p.getNextEvent());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.calendar_top_app_bar, menu);
@@ -73,15 +70,44 @@ public class CalendarActivity extends AppCompatActivity{
 
     public void firstSetup(){
         setCalSettings();
+        url = checkURL();
+        System.out.println(url);
         blackList = getBlackList("blackList");
         ExecutorService executor = Executors.newCachedThreadPool();
         // immer nur auf montag scrollen, damit wochentage richtig angezeigt werden.
         setDates();
+        //reset Variables of EventCreator class. Relevant after applying filters.
         EventCreator.instantiateVariables();
         executor.submit(runnableTask);
+        executor.submit(providerRunnable);
         setOnTouchListener(cal, executor);
     }
 
+
+    Runnable providerRunnable = () -> {
+        nextEventsProvider provider = new nextEventsProvider();
+        try {
+            System.out.println(provider.getNextEvent());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    };
+
+    public String checkURL(){
+       String url = getURL();
+        if(url == null){
+            createUrlDialog();
+        }
+        url = getURL();
+        return url;
+    }
+
+    public String getURL(){
+        SharedPreferences preferences = PreferenceManager
+                .getDefaultSharedPreferences(CalendarActivity.this);
+        String url = preferences.getString("CurrentURL",null);
+        return  url;
+    }
 
     public void setCalSettings(){
         cal = findViewById(R.id.weekView);
@@ -149,6 +175,33 @@ public class CalendarActivity extends AppCompatActivity{
                 dialog.show();
     }
 
+    public void createUrlDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(CalendarActivity.this);
+        builder.setTitle("Please enter your Rapla-URL");
+        SharedPreferences preferences = PreferenceManager
+                .getDefaultSharedPreferences(CalendarActivity.this);
+        final EditText urlInput = new EditText(this);
+        urlInput.setHint("Type URL here");
+        urlInput.setInputType(InputType.TYPE_TEXT_VARIATION_WEB_EMAIL_ADDRESS);
+        builder.setView(urlInput);
+        builder.setCancelable(false);
+
+        builder.setPositiveButton("Submit", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String urlString = urlInput.getText().toString();
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putString("CurrentURL",urlString);
+                editor.apply();
+            }
+        });
+        builder.create();
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+
     public ArrayList<String> removeDuplicates(ArrayList<String> list){
         return (ArrayList<String>) list.stream().distinct().collect(Collectors.toList());
     }
@@ -184,22 +237,20 @@ public class CalendarActivity extends AppCompatActivity{
     public void setDates(){
         date.set(Calendar.DAY_OF_WEEK,
                 date.getActualMinimum(Calendar.DAY_OF_WEEK) + 1);
-        date.set(Calendar.HOUR_OF_DAY,20);
 
         Calendar tempCal = Calendar.getInstance();
         if(tempCal.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY){
             tempCal.add(Calendar.DAY_OF_WEEK,2);
             cal.scrollToDate(tempCal);
-            useTempCal = true;
+            date = tempCal;
         }
         else if(tempCal.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY){
             tempCal.add(Calendar.DAY_OF_WEEK,1);
             cal.scrollToDate(tempCal);
-            useTempCal = true;
+            date = tempCal;
         }
         else{
             cal.scrollToDateTime(date);
-            useTempCal = false;
         }
     }
 
@@ -239,16 +290,12 @@ public class CalendarActivity extends AppCompatActivity{
     }
 
     Runnable runnableTask = () -> {
-
-        String url = "https://rapla.dhbw-karlsruhe.de/rapla?page=calendar&user=eisenbiegler&file=TINF20B4" ; // ist von nutzer einzugeben (oder Liste von Unis auswählen).
         Map<LocalDate, ArrayList<Appointment>> data = new HashMap<>();
         LocalDate thisWeek = LocalDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault()).toLocalDate();
         loadedDateList.add(date.toInstant());
-
         Calendar dateCopy = (Calendar) date.clone();
         dateCopy.add(Calendar.WEEK_OF_YEAR,1);
         LocalDate nextWeek = LocalDateTime.ofInstant(dateCopy.toInstant(), ZoneId.systemDefault()).toLocalDate();
-
             try {
                 data = DataImporter.ImportWeekRange(thisWeek,nextWeek, url);
             } catch (Exception e) {
