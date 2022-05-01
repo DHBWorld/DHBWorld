@@ -24,8 +24,38 @@ jobs:
       run: chmod +x gradlew
     - name: Build with Gradle
       run: ./gradlew build
-    - name: Run Android instrumentation tests
-      uses: emulator-wtf/run-tests@v0.0.6
+    - name: Android  Report Action
+      uses: doanpt/AndroidTestReportAction@v1.1
+      
+      
+    - name: Instrumentation Tests
+      uses: reactivecircus/android-emulator-runner@v2
+      with:
+        api-level: 29
+        script: ./gradlew connectedAndroidTest
+      continue-on-error: true # IMPORTANT: allow pipeline to continue to Android Test Report step
+
+    - name: Upload Test Reports Folder
+      uses: actions/upload-artifact@v2
+      if: ${{ always() }} # IMPORTANT: Upload reports regardless of status
+      with:
+        name: reports
+        path: app/build/reports/androidTests/connected/ # path to where the xml test results are stored
+
+  ##5
+  report:
+    runs-on: [ ubuntu-latest ]
+    needs: android_tests # The report job will run after test job
+    if: ${{ always() }} # IMPORTANT: Execute report job regardless of status
+    steps:
+      - name: Download Test Reports Folder
+        uses: actions/download-artifact@v2
+        with:
+          name: reports
+      - name: Android  Report Action
+        uses: doanpt/AndroidTestReportAction@v1.1
+        if: ${{ always() }} # IMPORTANT: run Android Test Report regardless
+
 
       
       
