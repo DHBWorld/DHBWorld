@@ -53,6 +53,7 @@ jobs:
         api: 27
         tag: default
         abi: x86_64
+        cmdOptions: -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim
         
     - name: Upload Test Reports Folder
       uses: actions/upload-artifact@v2
