@@ -10,7 +10,7 @@ on:
 jobs:
   build:
 
-    runs-on: self-hosted
+    runs-on: macos-latest
 
     steps:
     - uses: actions/checkout@v3
@@ -45,7 +45,7 @@ jobs:
 
   ##5
   report:
-    runs-on: [ self-hosted ]
+    runs-on: [ macos-latest ]
     needs: build # The report job will run after test job
     if: ${{ always() }} # IMPORTANT: Execute report job regardless of status
     steps:
