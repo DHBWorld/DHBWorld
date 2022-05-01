@@ -42,6 +42,7 @@ import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import dhbw.timetable.rapla.data.event.Appointment;
 import dhbw.timetable.rapla.exceptions.NoConnectionException;
 
 public class DashboardActivity extends AppCompatActivity {
@@ -68,6 +69,7 @@ public class DashboardActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
         NavigationUtilities.setUpNavigation(this,R.id.dashboard);
+
 
 
         layoutCardMealPlan= findViewById(R.id.layoutCardMealPlan);
@@ -324,16 +326,15 @@ public class DashboardActivity extends AppCompatActivity {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                System.out.println("/////////////////////////////////////////7");
+                System.out.println("/////////////////////////////////////////");
 
                 try {
                     System.out.println("§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§");
                     nextEventsProvider nextEventsProvider= new nextEventsProvider();
-
-                    Event nextClass = nextEventsProvider.getNextEvent();
+                    Appointment nextClass = nextEventsProvider.getNextEvent();
                     System.out.println("nextClass"+nextClass);
-                    System.out.println("nextClass.getTitle()"+nextClass.title);
-                    System.out.println("nextClass.getTitle()"+nextClass.info);
+                    System.out.println("nextClass.getTitle()"+nextClass.getTitle());
+                    System.out.println("nextClass.getTitle()"+nextClass.getStartTime());
 
 
                     layoutCardMealPlan.post(new Runnable() {

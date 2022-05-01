@@ -7,6 +7,7 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Map;
+import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -18,8 +19,7 @@ public class nextEventsProvider {
     private String url = "https://rapla.dhbw-karlsruhe.de/rapla?page=calendar&user=eisenbiegler&file=TINF20B4";
     Map<LocalDate, ArrayList<Appointment>> rawData;
 
-
-    public Event getNextEvent() throws NoConnectionException, IllegalAccessException, MalformedURLException {
+    public Appointment getNextEvent() throws NoConnectionException, IllegalAccessException, MalformedURLException {
         Calendar thisWeekCal = Calendar.getInstance();
         Calendar nextWeekCal = (Calendar) thisWeekCal.clone();
         nextWeekCal.add(Calendar.WEEK_OF_YEAR,2);
@@ -35,7 +35,7 @@ public class nextEventsProvider {
         return(disectData(thisWeekData));
     }
 
-    public Event disectData(ArrayList<Appointment> data){
+    public Appointment disectData(ArrayList<Appointment> data){
         Calendar thisWeekCal = Calendar.getInstance();
         LocalDateTime thisWeek = LocalDateTime.ofInstant(thisWeekCal.toInstant(), ZoneId.systemDefault());
         Appointment nextEvent = data.get(0);
@@ -46,16 +46,6 @@ public class nextEventsProvider {
                     nextEvent = currentEvent;
                 }
             }
-            return(formatAppointment(nextEvent));
-    }
-    public Event formatAppointment(Appointment appointment){
-        Event event = new Event(
-                appointment.getStartDate(),
-                appointment.getEndDate(),
-                appointment.getPersons(),
-                appointment.getResources(),
-                appointment.getTitle(),
-                appointment.getInfo());
-        return  event;
+            return(nextEvent);
     }
 }
