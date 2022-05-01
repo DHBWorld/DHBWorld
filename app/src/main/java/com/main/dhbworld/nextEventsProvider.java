@@ -41,7 +41,7 @@ public class nextEventsProvider {
         Appointment nextEvent = data.get(0);
             for(int i = 0; i < data.size(); i++){
                 Appointment currentEvent = data.get(i);
-                if(currentEvent.getStartDate().isAfter(thisWeek)
+                if(currentEvent.getEndDate().isAfter(thisWeek)
                 && currentEvent.getStartDate().isBefore(nextEvent.getStartDate())){
                     nextEvent = currentEvent;
                 }

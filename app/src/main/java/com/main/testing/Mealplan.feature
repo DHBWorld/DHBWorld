@@ -1,4 +1,4 @@
-#noinspection CucumberPlusUndefinedStep
+#noinspectionLocalDateTime start=LocalDateTime.parse(nextClass.getStartTime()); CucumberPlusUndefinedStep
 Feature: Meal plan
 
   as a User
