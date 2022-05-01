@@ -19,6 +19,7 @@ import android.widget.TextView;
 import com.alamkanak.weekview.WeekView;
 import com.alamkanak.weekview.WeekViewEntity;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.main.dhbworld.Navigation.NavigationUtilities;
@@ -71,8 +72,6 @@ public class CalendarActivity extends AppCompatActivity{
 
     public void firstSetup(){
         setCalSettings();
-        url = checkURL();
-        System.out.println(url);
         blackList = getBlackList("blackList");
         ExecutorService executor = Executors.newCachedThreadPool();
         // immer nur auf montag scrollen, damit wochentage richtig angezeigt werden.
@@ -83,10 +82,8 @@ public class CalendarActivity extends AppCompatActivity{
         setOnTouchListener(cal, executor);
     }
 
-
-
     public String checkURL(){
-       String url = getURL();
+       url = getURL();
         if(url == null){
             createUrlDialog();
         }
@@ -122,6 +119,26 @@ public class CalendarActivity extends AppCompatActivity{
         cal.setTimeFormatter(time -> time + " Uhr");
     }
 
+    public void setDates(){
+        date.set(Calendar.DAY_OF_WEEK,
+                date.getActualMinimum(Calendar.DAY_OF_WEEK) + 1);
+
+        Calendar tempCal = Calendar.getInstance();
+        if(tempCal.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY){
+            tempCal.add(Calendar.DAY_OF_WEEK,2);
+            date = tempCal;
+        }
+        else if(tempCal.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY){
+            tempCal.add(Calendar.DAY_OF_WEEK,1);
+            date = tempCal;
+        }
+        else{
+            cal.scrollToDate(date);
+        }
+        cal.scrollToDate(date);
+    }
+
+
     public static String[] arrayConvertor(List<String> titleList){
         return titleList.toArray(new String[0]);
     }
@@ -137,7 +154,7 @@ public class CalendarActivity extends AppCompatActivity{
             checkedItems[i] = !blackList.contains(listItems[i]);
         }
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(CalendarActivity.this);
+        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(CalendarActivity.this);
                 builder.setTitle("Filter your classes");
                 builder.setMultiChoiceItems(listItems, checkedItems, (dialog, which, isChecked)
                         -> checkedItems[which] = isChecked);
@@ -167,7 +184,7 @@ public class CalendarActivity extends AppCompatActivity{
     }
 
     public void createUrlDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(CalendarActivity.this);
+        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(CalendarActivity.this);
         builder.setTitle("Please enter your Rapla-URL");
         SharedPreferences preferences = PreferenceManager
                 .getDefaultSharedPreferences(CalendarActivity.this);
@@ -184,6 +201,7 @@ public class CalendarActivity extends AppCompatActivity{
                 SharedPreferences.Editor editor = preferences.edit();
                 editor.putString("CurrentURL",urlString);
                 editor.apply();
+                restart(CalendarActivity.this);
             }
         });
         builder.create();
@@ -221,27 +239,6 @@ public class CalendarActivity extends AppCompatActivity{
         }
         else{
             return blackList;
-        }
-    }
-
-    //TODO Sundays do NOT work!!!!
-    public void setDates(){
-        date.set(Calendar.DAY_OF_WEEK,
-                date.getActualMinimum(Calendar.DAY_OF_WEEK) + 1);
-
-        Calendar tempCal = Calendar.getInstance();
-        if(tempCal.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY){
-            tempCal.add(Calendar.DAY_OF_WEEK,2);
-            cal.scrollToDate(tempCal);
-            date = tempCal;
-        }
-        else if(tempCal.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY){
-            tempCal.add(Calendar.DAY_OF_WEEK,1);
-            cal.scrollToDate(tempCal);
-            date = tempCal;
-        }
-        else{
-            cal.scrollToDateTime(date);
         }
     }
 
@@ -287,6 +284,7 @@ public class CalendarActivity extends AppCompatActivity{
         Calendar dateCopy = (Calendar) date.clone();
         dateCopy.add(Calendar.WEEK_OF_YEAR,1);
         LocalDate nextWeek = LocalDateTime.ofInstant(dateCopy.toInstant(), ZoneId.systemDefault()).toLocalDate();
+
             try {
                 data = DataImporter.ImportWeekRange(thisWeek,nextWeek, url);
             } catch (Exception e) {
