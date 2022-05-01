@@ -1,5 +1,12 @@
-name: Android All Tests
-on: [workflow_dispatch]
+name: Android Tests
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:    
+      - main
+  workflow_dispatch:
 
 jobs:
   build:
