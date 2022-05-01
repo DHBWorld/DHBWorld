@@ -1,4 +1,4 @@
-name: Android All Tests
+name: Android Tests
 on: [workflow_dispatch]
 
 jobs:
