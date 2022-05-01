@@ -80,11 +80,7 @@ public class DashboardActivity extends AppCompatActivity {
 
 
         layoutCardMealPlan= findViewById(R.id.layoutCardMealPlan);
-        TextView test= new TextView(DashboardActivity.this);
-        test.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT));
-        test.setText("test");
-        test.setTextColor(getResources().getColor(R.color.black));
-        layoutCardMealPlan.addView(test);
+
 
 
 
@@ -365,7 +361,6 @@ public class DashboardActivity extends AppCompatActivity {
                             Duration durationUntilEndOfClass= Duration.between(now, endClass);
 
 
-                            layoutCardMealPlan.removeAllViewsInLayout();
 
                             LinearLayout layoutCardCalendar = findViewById(R.id.layoutCardCalendar);
                             LinearLayout layoutNextClass = new LinearLayout(DashboardActivity.this);
