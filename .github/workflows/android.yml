@@ -37,6 +37,7 @@ jobs:
     #    script: ./gradlew connectedAndroidTest
     #  continue-on-error: true # IMPORTANT: allow pipeline to continue to Android Test Report step
     
+    - uses: malinskiy/action-android/install-sdk@release/0.1.2
       # Set up platform tools like adb.
     - run: sdkmanager platform-tools
 
