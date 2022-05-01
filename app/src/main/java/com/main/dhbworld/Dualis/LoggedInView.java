@@ -41,7 +41,7 @@ import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LoggedInView implements DualisAPI.DataLoadedListener, DualisAPI.ErrorListener {
+public class LoggedInView {
 
     private final AppCompatActivity activity;
     private final String arguments;
@@ -82,20 +82,15 @@ public class LoggedInView implements DualisAPI.DataLoadedListener, DualisAPI.Err
 
         toolbar.setOnMenuItemClickListener(item -> {
             if (item.getItemId() == R.id.dualis_refresh) {
-                DualisSemesterFragment.makeRequest(activity, arguments);
+                if (tabLayout.getSelectedTabPosition() == 0) {
+                    DualisOverallFragment.makeOverallRequest(activity, arguments);
+                } else {
+                    DualisSemesterFragment.makeCourseRequest(activity, arguments);
+                }
+
                 return true;
             }
             return false;
         });
-    }
-
-    @Override
-    public void onDataLoaded(JSONObject data) {
-
-    }
-
-    @Override
-    public void onError(VolleyError error) {
-        Toast.makeText(activity, "Error: " + error.toString(), Toast.LENGTH_LONG).show();
     }
 }

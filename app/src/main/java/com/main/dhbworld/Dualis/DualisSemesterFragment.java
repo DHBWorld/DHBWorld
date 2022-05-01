@@ -1,6 +1,5 @@
 package com.main.dhbworld.Dualis;
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -13,7 +12,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -34,7 +32,7 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DualisSemesterFragment extends Fragment implements DualisAPI.DataLoadedListener, DualisAPI.ErrorListener {
+public class DualisSemesterFragment extends Fragment implements DualisAPI.CourseDataLoadedListener, DualisAPI.CourseErrorListener {
 
     private final String arguments;
     private final List<HttpCookie> cookies;
@@ -49,7 +47,7 @@ public class DualisSemesterFragment extends Fragment implements DualisAPI.DataLo
     private static DualisAPI dualisAPI;
     private static CookieHandler cookieHandler;
 
-    View activity;
+    View mainView;
 
     public DualisSemesterFragment(String arguments, List<HttpCookie> cookies) {
         this.arguments = arguments;
@@ -62,19 +60,18 @@ public class DualisSemesterFragment extends Fragment implements DualisAPI.DataLo
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+    public void onViewCreated(@NonNull View v, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(mainView, savedInstanceState);
 
-        activity = this.getView();
+        mainView = this.getView();
 
-        semesterDropdown = activity.findViewById(R.id.autoComplete);
-        mainProgressIndicator = activity.findViewById(R.id.progress_main);
-        mainLayout = activity.findViewById(R.id.main_layout);
-        mainLayout.setVisibility(View.INVISIBLE);
+        semesterDropdown = mainView.findViewById(R.id.autoComplete);
+        mainProgressIndicator = mainView.findViewById(R.id.progress_main);
+        mainLayout = mainView.findViewById(R.id.main_layout);
 
         dualisAPI = new DualisAPI();
-        dualisAPI.setOnDataLoadedListener(this);
-        dualisAPI.setOnErrorListener(this);
+        dualisAPI.setOnCourseDataLoadedListener(this);
+        dualisAPI.setOnCourseErrorListener(this);
 
         CookieManager cookieManager = new CookieManager();
         try {
@@ -84,13 +81,13 @@ public class DualisSemesterFragment extends Fragment implements DualisAPI.DataLo
         }
         cookieHandler = CookieManager.getDefault();
 
-        dualisAPI.makeRequest(getContext(), arguments, cookieHandler);
+        makeCourseRequest(getContext(), arguments);
     }
 
-    static void makeRequest(Context context, String arguments) {
+    static void makeCourseRequest(Context context, String arguments) {
         mainLayout.setVisibility(View.INVISIBLE);
         mainProgressIndicator.setVisibility(View.VISIBLE);
-        dualisAPI.makeRequest(context, arguments, cookieHandler);
+        dualisAPI.makeClassRequest(context, arguments, cookieHandler);
     }
 
     @Nullable
@@ -100,7 +97,7 @@ public class DualisSemesterFragment extends Fragment implements DualisAPI.DataLo
     }
 
     @Override
-    public void onDataLoaded(JSONObject data) {
+    public void onCourseDataLoaded(JSONObject data) {
         ArrayList<String> items = new ArrayList<>();
         try {
             for (int i=0; i<data.getJSONArray("semester").length(); i++) {
@@ -121,7 +118,7 @@ public class DualisSemesterFragment extends Fragment implements DualisAPI.DataLo
 
 
         vorlesungModels = new ArrayList<>();
-        RecyclerView mRecyclerView = activity.findViewById(R.id.recycler_view);
+        RecyclerView mRecyclerView = mainView.findViewById(R.id.recycler_view);
         try {
             if (items.contains(currentSemester)) {
                 updateList(data, items.indexOf(currentSemester));
@@ -157,7 +154,7 @@ public class DualisSemesterFragment extends Fragment implements DualisAPI.DataLo
     }
 
     @Override
-    public void onError(VolleyError error) {
+    public void onCourseError(VolleyError error) {
         Toast.makeText(getContext(), "Error: " + error.toString(), Toast.LENGTH_LONG).show();
     }
 

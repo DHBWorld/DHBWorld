@@ -32,23 +32,127 @@ import java.io.IOException;
 import java.net.CookieHandler;
 import java.net.CookieManager;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public class DualisAPI {
 
     String mainArguments = "";
     JSONObject mainJson = new JSONObject();
 
-    private DataLoadedListener listener;
-    private ErrorListener errorListener;
+    private CourseDataLoadedListener courseListener;
+    private CourseErrorListener courseErrorListener;
+
+    private OverallDataLoadedListener overallListener;
+    private OverallErrorListener overallErrorListener;
 
     public DualisAPI() {
-        this.listener = null;
-        this.errorListener = null;
+        this.courseListener = null;
+        this.courseErrorListener = null;
+
+        this.overallListener = null;
+        this.overallErrorListener = null;
     }
 
-    public void makeRequest(Context context, String arguments, CookieHandler cookieHandler) {
+    public void makeOverallRequest(Context context, String arguments, CookieHandler cookieHandler) {
+        mainArguments = arguments.replace("-N000000000000000", "");
+        mainArguments = mainArguments.replace("-N000019,", "-N000307");
+
+        CookieManager.setDefault(cookieHandler);
+        RequestQueue queue = Volley.newRequestQueue(context);
+        String url = "https://dualis.dhbw.de/scripts/mgrqispi.dll?APPNAME=CampusNet&PRGNAME=STUDENT_RESULT&" + mainArguments;
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                response -> {
+                    response = new String(response.getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
+                    Document doc = Jsoup.parse(response);
+                    Elements resultTables = doc.select(".nb.list.students_results");
+
+                    Element resultModulesTable = resultTables.get(0);
+                    Element resultSum = resultTables.get(1);
+
+                    resultSum.select("tr").forEach(element -> {
+                        Elements columns = element.select("th");
+                        String name = columns.get(0).text();
+                        String value = columns.get(1).text();
+
+                        try {
+                            if (name.equalsIgnoreCase("Gesamt-GPA")) {
+                                mainJson.put("totalGPA", value);
+                            } else if (name.equalsIgnoreCase("Hauptfach-GPA")) {
+                                mainJson.put("majorCourseGPA", value);
+                            }
+                        } catch (JSONException ignored) { }
+                    });
+
+                    JSONArray coursesJsonArray = new JSONArray();
+
+                    Elements resultModules = resultModulesTable.select("tr:not(.subhead,.tbsubhead)");
+
+                    for (Element element : resultModules) {
+                        Elements data = element.select("td");
+
+                        if (data.size() < 6 && data.get(0).select(".level00").size() == 0) {
+                            continue;
+                        }
+
+                        if (data.get(0).select(".level00").size() > 0) {
+                            try {
+                                if (data.size() == 5) {
+                                    String totalSum = data.get(2).text().trim();
+                                    mainJson.put("totalSum", totalSum);
+                                } else if (data.size() == 1) {
+                                    String totalSumNeeded = data.get(0).text().replace("Erforderliche Credits für Abschluss: ", "").trim();
+                                    mainJson.put("totalSumNeeded", totalSumNeeded);
+                                }
+                            } catch (JSONException ignored) { }
+
+                            continue;
+                        }
+
+                        String moduleID = data.get(0).text();
+
+                        String moduleName;
+                        if (data.get(1).childrenSize() > 0) {
+                            moduleName = data.get(1).child(0).text();
+                        } else {
+                            moduleName = data.get(1).text();
+                        }
+
+                        String credits = data.get(3).text();
+                        String grade = data.get(4).text();
+                        String passedString = data.get(5).child(0).attr("title");
+                        boolean passed = passedString.equalsIgnoreCase("Bestanden");
+
+                        try {
+                            JSONObject courseObject = new JSONObject();
+                            courseObject.put("moduleID", moduleID);
+                            courseObject.put("moduleName", moduleName);
+                            courseObject.put("credits", credits);
+                            courseObject.put("grade", grade);
+                            courseObject.put("passed", passed);
+
+                            coursesJsonArray.put(courseObject);
+                        } catch (JSONException ignored) { }
+                    }
+
+                    try {
+                        mainJson.put("courses", coursesJsonArray);
+                    } catch (JSONException ignored) { }
+
+                    overallListener.onOverallDataLoaded(mainJson);
+
+                }, error -> {
+                    if (courseErrorListener != null) {
+                        courseErrorListener.onCourseError(error);
+                    }
+                });
+
+        queue.add(stringRequest);
+    }
+
+    public void makeClassRequest(Context context, String arguments, CookieHandler cookieHandler) {
         mainArguments = arguments.replace("-N000000000000000", "");
         mainArguments = mainArguments.replace("-N000019,", "-N000307");
 
@@ -84,12 +188,11 @@ public class DualisAPI {
                         e.printStackTrace();
                     }
                 }, error -> {
-            if (errorListener != null) {
-                errorListener.onError(error);
-            }
-        });
+                    if (courseErrorListener != null) {
+                        courseErrorListener.onCourseError(error);
+                    }
+                });
         queue.add(stringRequest);
-
     }
 
     private void requestSemester(int semesterIndex, Context context) throws JSONException {
@@ -149,8 +252,8 @@ public class DualisAPI {
                     }
 
                 }, error -> {
-            if (errorListener != null) {
-                errorListener.onError(error);
+            if (courseErrorListener != null) {
+                courseErrorListener.onCourseError(error);
             }
         });
         queue.add(stringRequest);
@@ -199,16 +302,16 @@ public class DualisAPI {
                                 }
                                 count[0]++;
                                 if (count[0] == anzahl[0]) {
-                                    if (listener != null) {
-                                        listener.onDataLoaded(mainJson);
+                                    if (courseListener != null) {
+                                        courseListener.onCourseDataLoaded(mainJson);
                                     }
                                 }
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
                         }, error -> {
-                    if (errorListener != null) {
-                        errorListener.onError(error);
+                    if (courseErrorListener != null) {
+                        courseErrorListener.onCourseError(error);
                     }
                 });
                 queue.add(stringRequest);
@@ -321,19 +424,35 @@ public class DualisAPI {
         }
     }
 
-    public void setOnDataLoadedListener(DataLoadedListener listener) {
-        this.listener = listener;
+    public void setOnCourseDataLoadedListener(CourseDataLoadedListener listener) {
+        this.courseListener = listener;
     }
 
-    public void setOnErrorListener(ErrorListener listener) {
-        this.errorListener = listener;
+    public void setOnCourseErrorListener(CourseErrorListener listener) {
+        this.courseErrorListener = listener;
     }
 
-    public interface DataLoadedListener {
-        void onDataLoaded(JSONObject data);
+    public void setOnOverallDataLoadedListener(OverallDataLoadedListener listener) {
+        this.overallListener = listener;
     }
 
-    public interface ErrorListener {
-        void onError(VolleyError error);
+    public void setOnOverallErrorListener(OverallErrorListener listener) {
+        this.overallErrorListener = listener;
+    }
+
+    public interface CourseDataLoadedListener {
+        void onCourseDataLoaded(JSONObject data);
+    }
+
+    public interface CourseErrorListener {
+        void onCourseError(VolleyError error);
+    }
+
+    public interface OverallDataLoadedListener {
+        void onOverallDataLoaded(JSONObject data);
+    }
+
+    public interface OverallErrorListener {
+        void onOverallError(VolleyError error);
     }
 }

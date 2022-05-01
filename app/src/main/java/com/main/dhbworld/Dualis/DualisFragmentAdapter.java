@@ -26,7 +26,7 @@ public class DualisFragmentAdapter extends FragmentStateAdapter {
     public Fragment createFragment(int position) {
         switch (position) {
             case 0:
-                return new DualisOverallFragment();
+                return new DualisOverallFragment(arguments, cookies);
             case 1:
                 return new DualisSemesterFragment(arguments, cookies);
             default:

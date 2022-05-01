@@ -300,4 +300,9 @@
     <string name="wrong_credentials">E-Mail-Adresse oder Passwort falsch</string>
     <string name="semester">Semester</string>
     <string name="refresh">Aktualisieren</string>
+
+    <string name="total_gpa">Gesamt GPA:</string>
+    <string name="major_gpa">Hauptfächer GPA:</string>
+    <string name="total_credits">Credits:</string>
+    <string name="values_credits">%1$s / %2$s</string>
 </resources>

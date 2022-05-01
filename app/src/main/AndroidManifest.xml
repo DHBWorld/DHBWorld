@@ -11,7 +11,8 @@
         android:theme="@style/Theme.DHBWorld">
         <activity
             android:name=".DualisActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".KVVActivity"
             android:exported="false" />
