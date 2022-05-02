@@ -1,4 +1,3 @@
-#noinspection CucumberPlusUndefinedStep
 Feature: configure visible information (on Dashboard)
 
   as a User
