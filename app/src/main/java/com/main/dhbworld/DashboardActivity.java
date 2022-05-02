@@ -367,7 +367,7 @@ public class DashboardActivity extends AppCompatActivity {
                             layoutNextClass.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                             layoutNextClass.setOrientation(LinearLayout.HORIZONTAL);
                             layoutNextClass.setVerticalGravity(View.TEXT_ALIGNMENT_CENTER);
-                            layoutNextClass.setGravity(Gravity.BOTTOM);
+                            layoutNextClass.setGravity(Gravity.CENTER_VERTICAL);
                             layoutCardCalendar.addView(layoutNextClass);
 
                             ImageView UniImage = new ImageView(DashboardActivity.this);
@@ -379,7 +379,7 @@ public class DashboardActivity extends AppCompatActivity {
                             TextView nextClassView = new TextView(DashboardActivity.this);
                             nextClassView.setTextSize(15);
                             nextClassView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT));
-                            nextClassView.setGravity(Gravity.BOTTOM);
+                            nextClassView.setGravity(Gravity.CENTER_VERTICAL);
                             nextClassView.setTextColor(getResources().getColor(R.color.black));
                             nextClassView.setPadding(0, 7, 5, 0);
                             layoutNextClass.addView(nextClassView);
@@ -391,7 +391,7 @@ public class DashboardActivity extends AppCompatActivity {
 
 
                                 LinearLayout layoutTime = new LinearLayout(DashboardActivity.this);
-                                layoutTime.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                                layoutTime.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                                 layoutTime.setOrientation(LinearLayout.VERTICAL);
                                 layoutTime.setVerticalGravity(View.TEXT_ALIGNMENT_CENTER);
 
@@ -404,6 +404,7 @@ public class DashboardActivity extends AppCompatActivity {
                                 layoutTimeDigit.setOrientation(LinearLayout.HORIZONTAL);
                                 layoutTime.setPadding(5,0,5,0);
                                 layoutTime.setVerticalGravity(Gravity.CENTER);
+                                layoutTime.setHorizontalGravity(Gravity.RIGHT);
 
 
                                 layoutTimeDigit.setBackgroundColor(getColor(R.color.grey_defect));
