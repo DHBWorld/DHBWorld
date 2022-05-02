@@ -1,4 +1,4 @@
-Feature: receiving notification
+Feature: view departures
 
   as a User
   I want to view tram departuren from the tram station near DHBW
