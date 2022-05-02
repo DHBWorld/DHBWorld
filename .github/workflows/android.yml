@@ -1,11 +1,5 @@
-name: Android CI
-on:
-  workflow_dispatch:
-    inputs:
-      version:
-        description: Bump Version
-        default: v1.0.0
-        required: true
+name: Android Tests
+on: [workflow_dispatch]
 
 jobs:
   build:
@@ -27,15 +21,25 @@ jobs:
       run: ./gradlew build
     - name: Android  Report Action
       uses: doanpt/AndroidTestReportAction@v1.1
-      
-      
-    - name: Instrumentation Tests
-      uses: reactivecircus/android-emulator-runner@v2
-      with:
-        api-level: 27
-        script: ./gradlew connectedAndroidTest
-      continue-on-error: true # IMPORTANT: allow pipeline to continue to Android Test Report step
+    
+    - uses: blitzdose/action-android/install-sdk@release/0.1.4
+      # Set up platform tools like adb.
+    - run: sdkmanager platform-tools
 
+    # Start ADB (and verify that pathing is working correctly).
+    - run: adb devices
+
+    # Verify $ANDROID_HOME is properly set for later Gradle commands.
+    - run: echo $ANDROID_HOME
+    
+    - uses: blitzdose/action-android/emulator-run-cmd@release/0.1.4
+      with:
+        cmd: ./gradlew connectedAndroidTest
+        api: 27
+        tag: default
+        abi: x86_64
+        cmdOptions: -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim
+        
     - name: Upload Test Reports Folder
       uses: actions/upload-artifact@v2
       if: ${{ always() }} # IMPORTANT: Upload reports regardless of status
@@ -56,9 +60,3 @@ jobs:
       - name: Android  Report Action
         uses: doanpt/AndroidTestReportAction@v1.1
         if: ${{ always() }} # IMPORTANT: run Android Test Report regardless
-
-
-      
-      
-      
-    
