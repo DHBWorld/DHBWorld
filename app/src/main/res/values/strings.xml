@@ -305,4 +305,8 @@
     <string name="major_gpa">Hauptfächer GPA:</string>
     <string name="total_credits">Credits:</string>
     <string name="values_credits">%1$s / %2$s</string>
+    <string name="tram_departure">Tram departure</string>
+    <string name="user_interaction">User Interaction</string>
+    <string name="calendar">Calendar</string>
+    <string name="home">Home</string>
 </resources>

@@ -15,7 +15,6 @@ import android.widget.Toast;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputLayout;
-import com.main.dhbworld.KVV.KVVDataLoader;
 import com.main.dhbworld.Navigation.NavigationUtilities;
 
 public class MainActivity extends AppCompatActivity{
@@ -61,7 +60,7 @@ public class MainActivity extends AppCompatActivity{
         //when the app is opened it loads the data if there is any
         loadAndUpdateData();
 
-        NavigationUtilities.setUpNavigation(this, R.id.personalInformationNav);
+        NavigationUtilities.setUpNavigation(this, R.id.personalInformation);
 
 
 

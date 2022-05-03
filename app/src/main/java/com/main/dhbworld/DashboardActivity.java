@@ -57,7 +57,6 @@ public class DashboardActivity extends AppCompatActivity {
 
     private LinearLayout layoutCardMealPlan;
     Boolean configurationModus;
-
     SharedPreferences sp;
 
     public static final String MyPREFERENCES = "myPreferencesKey" ;
@@ -67,9 +66,6 @@ public class DashboardActivity extends AppCompatActivity {
     Boolean cardPI_isVisible = true;
     Boolean cardMealPlan_isVisible = true;
     Boolean cardKvv_isVisible = true;
-
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

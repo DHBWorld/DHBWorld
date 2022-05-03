@@ -6,21 +6,20 @@
         android:checkableBehavior="single">
         <item
             android:id="@+id/dashboard"
-            android:title="Home" />
-
+            android:title="@string/home" />
         <item
-            android:id="@+id/personalInformationNav"
+            android:id="@+id/personalInformation"
             android:title="@string/personal_information" />
         <item
             android:id = "@+id/Calendar"
-            android:title = "Calendar" />
+            android:title = "@string/calendar" />
         <item
             android:id = "@+id/UserInteraction"
-            android:title = "User Interaction" />
+            android:title = "@string/user_interaction" />
 
         <item
             android:id="@+id/tram_departure"
-            android:title="Tram departure" />
+            android:title="@string/tram_departure" />
         <item
             android:id="@+id/cantine"
             android:title="@string/cantine"/>
@@ -28,7 +27,6 @@
         <item
             android:id="@+id/dualis"
             android:title="@string/dualis" />
-
     </group>
 
     <group
