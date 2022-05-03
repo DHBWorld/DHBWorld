@@ -385,6 +385,7 @@ public class DashboardActivity extends AppCompatActivity {
                             layoutNextClass.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                             layoutNextClass.setOrientation(LinearLayout.HORIZONTAL);
                             layoutNextClass.setVerticalGravity(View.TEXT_ALIGNMENT_CENTER);
+
                             layoutNextClass.setGravity(Gravity.CENTER_VERTICAL);
                             layoutCardCalendar.addView(layoutNextClass);
 
