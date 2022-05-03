@@ -8,26 +8,27 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.DHBWorld"
-        >
+        android:theme="@style/Theme.DHBWorld">
+        <activity
+            android:name=".DualisActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".KVVActivity"
             android:exported="false" />
         <activity
             android:name=".UserInteraction"
-            android:exported="false" >
-        </activity>
+            android:exported="false" />
         <activity
             android:name=".CantineActivity"
             android:exported="false"
             android:label="@string/title_activity_cantine"
-            android:theme="@style/Theme.DHBWorld.NoActionBar">
-        </activity>
+            android:theme="@style/Theme.DHBWorld.NoActionBar" />
         <activity
             android:name=".DashboardActivity"
             android:exported="false"
             android:label="@string/title_activity_cantine"
-            android:theme="@style/Theme.DHBWorld.NoActionBar"/>
+            android:theme="@style/Theme.DHBWorld.NoActionBar" />
         <activity
             android:name=".MainActivity"
             android:exported="true">
@@ -47,6 +48,7 @@
         <activity
             android:name=".CalendarActivity"
             android:exported="false" />
+
         <service
             android:name=".Services.UserInteractionMessagingService"
             android:exported="false">

@@ -4,6 +4,60 @@ plugins {
 
 apply plugin: 'com.google.gms.google-services'
 
+apply plugin: 'jacoco'
+
+jacoco {
+    toolVersion = "0.8.8"
+    reportsDirectory = file("$buildDir/reports/coverage")
+}
+
+tasks.withType(Test) {
+    jacoco.includeNoLocationClasses = true
+    jacoco.excludes = ['jdk.internal.*']
+}
+
+task jacocoCombinedTestReports(type: JacocoReport, dependsOn: ['testDebugUnitTest', 'createDebugCoverageReport']) {
+    group = "Verification"
+    description = "Creates JaCoCo test coverage report for Unit and Instrumented Tests (combined) on the Debug build"
+    reports {
+        xml.required = true
+        html.required = true
+    }
+
+    // Files to exclude:
+    // Generated classes, platform classes, etc.
+    def excludes = [
+            '**/R.class',
+            '**/R$*.class',
+            '**/BuildConfig.*',
+            '**/Manifest*.*',
+            '**/*Test*.*',
+            'android/**/*.*'
+    ]
+
+    // generated classes
+    classDirectories.from = fileTree(
+            dir: "$buildDir/intermediates/classes/debug",
+            excludes: excludes
+    ) + fileTree(
+            dir: "$buildDir/tmp/kotlin-classes/debug",
+            excludes: excludes
+    )
+    // sources
+    sourceDirectories.from = [
+            android.sourceSets.main.java.srcDirs,
+            "src/main/kotlin"
+    ]
+    // Output and existing data
+    // Combine Unit test and Instrumented test reports
+    executionData.from = fileTree(dir: "$buildDir", includes: [
+            // Unit tests coverage data
+            "outputs/unit_test_code_coverage/debugUnitTest/testDebugUnitTest.exec",
+            // Instrumented tests coverage data
+            "outputs/code_coverage/debugAndroidTest/connected/*coverage.ec"
+    ])
+}
+
 android {
     compileSdk 31
 
@@ -21,6 +75,9 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            testCoverageEnabled true
         }
     }
     compileOptions {
@@ -48,6 +105,8 @@ dependencies {
     implementation 'androidx.navigation:navigation-fragment:2.3.5'
     implementation 'androidx.navigation:navigation-ui:2.3.5'
     implementation 'com.github.dhbw-timetable:rapla-parser:0.3.3'
+    implementation 'androidx.biometric:biometric:1.1.0'
+
 
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
@@ -58,5 +117,8 @@ dependencies {
     implementation 'com.google.firebase:firebase-database'
     implementation 'com.google.firebase:firebase-auth'
     implementation 'com.google.code.gson:gson:2.8.7'
+
+    implementation 'org.jsoup:jsoup:1.14.3'
+    implementation 'com.android.volley:volley:1.2.1'
 
 }

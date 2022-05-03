@@ -1,6 +1,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Theme.DHBWorld" parent="Theme.MaterialComponents.Light.NoActionBar">
+    <style name="Theme.DHBWorld" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/red</item>
 
@@ -15,6 +15,7 @@
         <!-- Customize your theme here. -->
         <item name="materialAlertDialogTheme">@style/ThemeOverlay.App.MaterialAlertDialog</item>
 
+        <item name="android:forceDarkAllowed" tools:targetApi="q">false</item>
     </style>
 
     <style name="ThemeOverlay.App.MaterialAlertDialog" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
@@ -32,6 +33,19 @@
     </style>
 
 
+    <style name="Card_Bg">
+        <item name="cardElevation">2dp</item>
+    </style>
+
+    <style name="Theme.IconThemeWhite" parent="Theme.DHBWorld">
+        <item name="iconTint">@color/white</item>
+        <item name="tint">@color/white</item>
+    </style>
+
+    <style name="Theme.IconTheme" parent="Theme.DHBWorld">
+        <item name="iconTint">@color/white</item>
+        <item name="tint">@color/white</item>
+    </style>
 
 
 

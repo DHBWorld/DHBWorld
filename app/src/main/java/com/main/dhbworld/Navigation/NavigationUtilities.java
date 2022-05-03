@@ -63,8 +63,10 @@ public class NavigationUtilities {
                         break;
                     case R.id.cantine:
                         startActivity(activity, CantineActivity.class);
-                    case R.id.dashboard:
-                        startActivity(activity, DashboardActivity.class);
+                        break;
+                    case R.id.dualis:
+                        startActivity(activity, DualisActivity.class);
+                        break;
                 }
 
                 return true;
