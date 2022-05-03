@@ -47,6 +47,7 @@ public class NavigationUtilities {
                 switch (item.getItemId()) {
                     case R.id.dashboard:
                         startActivity(activity,DashboardActivity.class);
+                        break;
                     case R.id.personalInformation:
                         startActivity(activity, MainActivity.class);
                         break;
