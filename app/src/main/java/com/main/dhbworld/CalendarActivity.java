@@ -82,22 +82,6 @@ public class CalendarActivity extends AppCompatActivity{
         setOnTouchListener(cal, executor);
     }
 
-    public String checkURL(){
-       url = getURL();
-        if(url == null){
-            createUrlDialog();
-        }
-        url = getURL();
-        return url;
-    }
-
-    public String getURL(){
-        SharedPreferences preferences = PreferenceManager
-                .getDefaultSharedPreferences(CalendarActivity.this);
-        String url = preferences.getString("CurrentURL",null);
-        return  url;
-    }
-
     public void setCalSettings(){
         cal = findViewById(R.id.weekView);
         //Only show Mon-Fri
@@ -117,6 +101,22 @@ public class CalendarActivity extends AppCompatActivity{
             return date.format(calendar.getTime());
         });
         cal.setTimeFormatter(time -> time + " Uhr");
+    }
+
+    public String checkURL(){
+       url = getURL();
+        if(url == null){
+            createUrlDialog();
+        }
+        url = getURL();
+        return url;
+    }
+
+    public String getURL(){
+        SharedPreferences preferences = PreferenceManager
+                .getDefaultSharedPreferences(CalendarActivity.this);
+        String url = preferences.getString("CurrentURL",null);
+        return  url;
     }
 
     public void setDates(){

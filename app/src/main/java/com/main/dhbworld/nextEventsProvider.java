@@ -1,5 +1,9 @@
 package com.main.dhbworld;
 
+import android.content.SharedPreferences;
+
+import androidx.preference.PreferenceManager;
+
 import java.net.MalformedURLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -16,10 +20,11 @@ import dhbw.timetable.rapla.exceptions.NoConnectionException;
 import dhbw.timetable.rapla.parser.DataImporter;
 
 public class nextEventsProvider {
-    private String url = "https://rapla.dhbw-karlsruhe.de/rapla?page=calendar&user=eisenbiegler&file=TINF20B4";
+    private String url;
     Map<LocalDate, ArrayList<Appointment>> rawData;
 
     public Appointment getNextEvent() throws NoConnectionException, IllegalAccessException, MalformedURLException {
+        url = getUrl();
         Calendar thisWeekCal = Calendar.getInstance();
         Calendar nextWeekCal = (Calendar) thisWeekCal.clone();
         nextWeekCal.add(Calendar.WEEK_OF_YEAR,2);
@@ -47,5 +52,11 @@ public class nextEventsProvider {
                 }
             }
             return(nextEvent);
+    }
+
+    public String getUrl(){
+        CalendarActivity calendarActivity = new CalendarActivity();
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(calendarActivity);
+        return sp.getString("CurrentURL",null);
     }
 }

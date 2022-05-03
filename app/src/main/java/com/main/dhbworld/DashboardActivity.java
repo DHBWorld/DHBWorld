@@ -73,8 +73,6 @@ public class DashboardActivity extends AppCompatActivity {
         setContentView(R.layout.activity_dashboard);
         NavigationUtilities.setUpNavigation(this,R.id.dashboard);
 
-
-
         layoutCardMealPlan= findViewById(R.id.layoutCardMealPlan);
 
 
@@ -275,7 +273,6 @@ public class DashboardActivity extends AppCompatActivity {
         buttonCardPI.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
 
                 if (cardPI_isVisible){
                     cardPI_isVisible=false; //True = Card is visible
