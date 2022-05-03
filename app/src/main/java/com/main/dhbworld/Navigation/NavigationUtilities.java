@@ -26,6 +26,7 @@ public class NavigationUtilities {
     public static void setUpNavigation(AppCompatActivity activity, int checkedItem) {
         MaterialToolbar toolbar = activity.findViewById(R.id.topAppBar);
         activity.setSupportActionBar(toolbar);
+
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
