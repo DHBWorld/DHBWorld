@@ -14,6 +14,7 @@ import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.navigation.NavigationView;
 import com.main.dhbworld.CalendarActivity;
 import com.main.dhbworld.CantineActivity;
+import com.main.dhbworld.DashboardActivity;
 import com.main.dhbworld.KVVActivity;
 import com.main.dhbworld.MainActivity;
 import com.main.dhbworld.R;
@@ -62,6 +63,8 @@ public class NavigationUtilities {
                         break;
                     case R.id.cantine:
                         startActivity(activity, CantineActivity.class);
+                    case R.id.dashboard:
+                        startActivity(activity, DashboardActivity.class);
                 }
 
                 return true;

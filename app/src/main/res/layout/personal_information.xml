@@ -68,16 +68,25 @@ android:fitsSystemWindows="true">
 
     <com.google.android.material.textfield.TextInputLayout
 
+
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Name"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+
+        android:id="@+id/textInputLayoutPI_name"
+        app:endIconDrawable="@drawable/ic_copy"
+        app:endIconMode="custom"
+
+        >
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/studentName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="none">
+            android:inputType="none"
+
+            >
 
         </com.google.android.material.textfield.TextInputEditText>
 
@@ -88,6 +97,9 @@ android:fitsSystemWindows="true">
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Matrikelnummer"
+        android:id="@+id/textInputLayoutPI_matriculationNumber"
+        app:endIconDrawable="@drawable/ic_copy"
+        app:endIconMode="custom"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -102,6 +114,9 @@ android:fitsSystemWindows="true">
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Bibliotheksnummer"
+        android:id="@+id/textInputLayoutPI_libraryNummer"
+        app:endIconDrawable="@drawable/ic_copy"
+        app:endIconMode="custom"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -118,6 +133,9 @@ android:fitsSystemWindows="true">
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Studenten-E-Mail-Adresse"
+        android:id="@+id/textInputLayoutPI_adresse"
+        app:endIconDrawable="@drawable/ic_copy"
+        app:endIconMode="custom"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
         <com.google.android.material.textfield.TextInputEditText
