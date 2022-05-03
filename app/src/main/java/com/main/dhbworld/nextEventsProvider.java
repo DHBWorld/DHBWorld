@@ -20,11 +20,11 @@ import dhbw.timetable.rapla.exceptions.NoConnectionException;
 import dhbw.timetable.rapla.parser.DataImporter;
 
 public class nextEventsProvider {
-    private String url;
+    private String url = "https://rapla.dhbw-karlsruhe.de/rapla?page=calendar&user=eisenbiegler&file=TINF20B4";;
     Map<LocalDate, ArrayList<Appointment>> rawData;
 
     public Appointment getNextEvent() throws NoConnectionException, IllegalAccessException, MalformedURLException {
-        url = getUrl();
+       // url = getUrl();
         Calendar thisWeekCal = Calendar.getInstance();
         Calendar nextWeekCal = (Calendar) thisWeekCal.clone();
         nextWeekCal.add(Calendar.WEEK_OF_YEAR,2);
