@@ -1,6 +1,7 @@
 package com.main.dhbworld;
 
 
+import android.annotation.SuppressLint;
 import android.graphics.Color;
 import androidx.core.graphics.ColorUtils;
 import com.alamkanak.weekview.WeekViewEntity;
@@ -25,7 +26,6 @@ public class EventCreator {
    static ArrayList<Long> uniqueIds;
    static ArrayList<String> filterTitles;
 
-
    public static void instantiateVariables(){
        blackList = new ArrayList<>();
        filteredEvents = new ArrayList<>();
@@ -36,11 +36,11 @@ public class EventCreator {
        filterTitles = new ArrayList<>();
    }
 
+    //TODO merge fillData and createEvents methods, Event Class is unnecessary
     public static void fillData(Map<LocalDate, ArrayList<Appointment>> data, Calendar date){
-
-
         LocalDate asLocalDate = LocalDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault()).toLocalDate();
         ArrayList<Appointment> currentData = data.get(asLocalDate);
+        System.out.println("THE DATA IS" + data);
         for (int i = 0; i < Objects.requireNonNull(currentData).size(); i++){
             String resources = currentData.get(i).getResources().replace(",","\n");
             filterTitles.add(currentData.get(i).getTitle());
@@ -53,7 +53,26 @@ public class EventCreator {
                     currentData.get(i).getInfo()));
         }
         createEvents();
+    }
+
+    public static void createEvents(){
+        for(int i = 0; i< eventList.size(); i++){
+            long id = eventList.get(i).getId();
+            if(!uniqueIds.contains(id)) {
+                uniqueIds.add(id);
+                Events event = new Events(
+                        id,
+                        eventList.get(i).title,
+                        eventList.get(i).startDate,
+                        eventList.get(i).endDate,
+                        eventList.get(i).person + ", " +
+                                eventList.get(i).resource,
+                        setEventColor(i));
+                events.add(event);
+            }
+        }
         eventList.clear();
+        applyBlackList();
     }
 
     public static void setBlackList(ArrayList<String> blackList){
@@ -75,25 +94,7 @@ public class EventCreator {
         return CalendarActivity.getBlackList();
     }
 
-    public static void createEvents(){
-        for(int i = 0; i< eventList.size(); i++){
-            long id = eventList.get(i).getId();
-                if(!uniqueIds.contains(id)) {
-                    uniqueIds.add(id);
-                    Events event = new Events(
-                            id,
-                            eventList.get(i).title,
-                            eventList.get(i).startDate,
-                            eventList.get(i).endDate,
-                            eventList.get(i).person + ", " +
-                                    eventList.get(i).resource,
-                            setEventColor(i));
-                    events.add(event);
-                }
-        }
-       applyBlackList();
-    }
-
+    @SuppressLint("ResourceAsColor")
     public static WeekViewEntity.Style setEventColor(int i) throws NullPointerException{
         WeekViewEntity.Style style = null;
         Random rnd = new Random();
@@ -102,7 +103,7 @@ public class EventCreator {
             style = new WeekViewEntity.Style.Builder().setBackgroundColor(Color.parseColor("#86c5da")).build();
         }
         else if(eventList.get(i).title.contains("Klausur")){
-            style = new WeekViewEntity.Style.Builder().setBackgroundColor(Color.RED).build();
+            style = new WeekViewEntity.Style.Builder().setBackgroundColor(R.color.red).build();
         }
         else if(eventList.get(i).endDate.before(Calendar.getInstance())){
             style = new WeekViewEntity.Style.Builder().setBackgroundColor(Color.parseColor("#A9A9A9")).build();

@@ -24,7 +24,6 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.main.dhbworld.Navigation.NavigationUtilities;
 import java.lang.reflect.Type;
-import java.net.MalformedURLException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -37,7 +36,6 @@ import java.util.List;
 import java.util.Locale;
 import java.time.LocalDate;
 import dhbw.timetable.rapla.data.event.Appointment;
-import dhbw.timetable.rapla.exceptions.NoConnectionException;
 import dhbw.timetable.rapla.parser.DataImporter;
 import java.util.Map;
 import java.util.Objects;
@@ -50,6 +48,8 @@ public class CalendarActivity extends AppCompatActivity{
     WeekView cal;
     Calendar date = Calendar.getInstance();
     List<Instant> loadedDateList = new ArrayList<>();
+    BottomSheetDialog bottomSheetDialog;
+    AlertDialog alertDialog;
     static ArrayList<Events> events = new ArrayList<>();
     static ArrayList<String> blackList = new ArrayList<>();
     String url;
@@ -78,7 +78,7 @@ public class CalendarActivity extends AppCompatActivity{
         setDates();
         //reset Variables of EventCreator class. Relevant after applying filters.
         EventCreator.instantiateVariables();
-        executor.submit(runnableTask);
+        executor.submit(importWeek);
         setOnTouchListener(cal, executor);
     }
 
@@ -147,6 +147,7 @@ public class CalendarActivity extends AppCompatActivity{
         return blackList;
     }
 
+
     public void openFilterClick(@NonNull MenuItem item) throws NullPointerException{
         final String[] listItems = arrayConvertor(Objects.requireNonNull(EventCreator.uniqueTitles()));
         final boolean[] checkedItems = new boolean[listItems.length];
@@ -179,8 +180,8 @@ public class CalendarActivity extends AppCompatActivity{
                     //just close and do nothing, will not save the changed state.
                 });
                 builder.create();
-                AlertDialog dialog = builder.create();
-                dialog.show();
+                alertDialog = builder.create();
+                alertDialog.show();
     }
 
     public void createUrlDialog() {
@@ -260,14 +261,14 @@ public class CalendarActivity extends AppCompatActivity{
                         date.add(Calendar.WEEK_OF_YEAR,1);
                         cal.scrollToDate(date);
                         if(!loadedDateList.contains(date.toInstant())) {
-                            executor.submit(runnableTask);
+                            executor.submit(importWeek);
                         }
                         return true;
                     }else if(deltaX > 100){
                         date.add(Calendar.WEEK_OF_YEAR,-1);
                         cal.scrollToDate(date);
                         if(!loadedDateList.contains(date.toInstant())) {
-                            executor.submit(runnableTask);
+                            executor.submit(importWeek);
                         }
                         return true;
                     }
@@ -277,7 +278,7 @@ public class CalendarActivity extends AppCompatActivity{
         });
     }
 
-    Runnable runnableTask = () -> {
+    Runnable importWeek = () -> {
         Map<LocalDate, ArrayList<Appointment>> data = new HashMap<>();
         LocalDate thisWeek = LocalDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault()).toLocalDate();
         loadedDateList.add(date.toInstant());
@@ -315,7 +316,7 @@ public class CalendarActivity extends AppCompatActivity{
     }
 
     public void showBottomSheet(Events event){
-        final BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(this);
+        bottomSheetDialog = new BottomSheetDialog(this);
         LocalTime startTimeAsLocalDate = LocalDateTime.ofInstant(event.startTime.toInstant(), ZoneId.systemDefault()).toLocalTime();
         LocalTime endTimeAsLocalDate = LocalDateTime.ofInstant(event.endTime.toInstant(), ZoneId.systemDefault()).toLocalTime();
 
