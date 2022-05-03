@@ -6,6 +6,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
@@ -22,8 +23,9 @@ import com.main.dhbworld.UserInteraction;
 import java.util.Calendar;
 
 public class NavigationUtilities {
-    public static void setUpNavigation(Activity activity, int checkedItem) {
+    public static void setUpNavigation(AppCompatActivity activity, int checkedItem) {
         MaterialToolbar toolbar = activity.findViewById(R.id.topAppBar);
+        activity.setSupportActionBar(toolbar);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
