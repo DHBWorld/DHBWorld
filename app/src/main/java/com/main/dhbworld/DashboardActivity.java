@@ -17,9 +17,12 @@ import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -56,6 +59,8 @@ public class DashboardActivity extends AppCompatActivity {
 
 
     private LinearLayout layoutCardMealPlan;
+    private LinearLayout layoutCardCalendar;
+    private LinearLayout layoutCardKvv;
     Boolean configurationModus;
     SharedPreferences sp;
 
@@ -76,6 +81,8 @@ public class DashboardActivity extends AppCompatActivity {
 
 
         layoutCardMealPlan= findViewById(R.id.layoutCardMealPlan);
+        layoutCardCalendar = findViewById(R.id.layoutCardCalendar);
+        layoutCardKvv = findViewById(R.id.layoutCardKvv);
 
 
 
@@ -90,10 +97,25 @@ public class DashboardActivity extends AppCompatActivity {
 
 
         loadUserInteraction();
-        loadMealPlan();
-        loadKvv();
-        loadCalendar();
-        loadPersonalInformation();
+
+
+
+       if (isNetworkAvailable(DashboardActivity.this)){
+           loadMealPlan();
+           loadCalendar();
+           loadKvv();
+       }else{
+           layoutCardMealPlan.setVisibility(View.GONE);
+           layoutCardCalendar.setVisibility(View.GONE);
+           layoutCardKvv.setVisibility(View.GONE);
+           Toast.makeText(DashboardActivity.this, "Sie haben keine Internet-Verbindung, deshalb können die Daten nicht geladen werden.", Toast.LENGTH_LONG).show();
+
+
+
+
+       }
+
+       loadPersonalInformation();
 
 
 
@@ -342,7 +364,7 @@ public class DashboardActivity extends AppCompatActivity {
                     nextEventsProvider nextEventsProvider= new nextEventsProvider();
                     Appointment nextClass = nextEventsProvider.getNextEvent();
 
-                    layoutCardMealPlan.post(new Runnable() {
+                    layoutCardCalendar.post(new Runnable() {
                         @Override
                         public void run() {
 
@@ -358,7 +380,7 @@ public class DashboardActivity extends AppCompatActivity {
 
 
 
-                            LinearLayout layoutCardCalendar = findViewById(R.id.layoutCardCalendar);
+
                             LinearLayout layoutNextClass = new LinearLayout(DashboardActivity.this);
                             layoutNextClass.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                             layoutNextClass.setOrientation(LinearLayout.HORIZONTAL);
@@ -396,7 +418,7 @@ public class DashboardActivity extends AppCompatActivity {
 
 
                                 LinearLayout layoutTimeDigit = new LinearLayout(DashboardActivity.this);
-                                layoutTimeDigit.setLayoutParams(new ViewGroup.LayoutParams(200,120));
+                                layoutTimeDigit.setLayoutParams(new ViewGroup.LayoutParams(250,120));
                                 layoutTimeDigit.setOrientation(LinearLayout.HORIZONTAL);
                                 layoutTime.setPadding(5,0,5,0);
                                 layoutTime.setVerticalGravity(Gravity.CENTER);
@@ -412,7 +434,7 @@ public class DashboardActivity extends AppCompatActivity {
                                 timeView.setText(nextClass.getStartTime());
                                 timeView.setGravity(Gravity.CENTER);
                                 timeView.setPadding(12, 12, 0, 0);
-                                timeView.setLayoutParams(new ViewGroup.LayoutParams(100, ViewGroup.LayoutParams.WRAP_CONTENT));
+                                timeView.setLayoutParams(new ViewGroup.LayoutParams(150, ViewGroup.LayoutParams.WRAP_CONTENT));
                                 layoutTimeDigit.addView(timeView);
 
 
@@ -432,7 +454,7 @@ public class DashboardActivity extends AppCompatActivity {
                                 letterTimeView.setGravity(Gravity.CENTER);
 
                                 letterTimeView.setPadding(0, 2, 0, 5);
-                                letterTimeView.setLayoutParams(new ViewGroup.LayoutParams(200, ViewGroup.LayoutParams.WRAP_CONTENT));
+                                letterTimeView.setLayoutParams(new ViewGroup.LayoutParams(250, ViewGroup.LayoutParams.WRAP_CONTENT));
                                 letterTimeView.setBackgroundColor(getColor(R.color.even_lighter_gray));
                                 layoutTime.addView(letterTimeView);
 
@@ -517,8 +539,33 @@ public class DashboardActivity extends AppCompatActivity {
 
 
 
+
+    public static boolean isNetworkAvailable(Context context) {
+        ConnectivityManager connectivity = (ConnectivityManager) context
+                .getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (connectivity == null) {
+            Log.d("NetworkCheck", "isNetworkAvailable: No");
+            return false;
+        }
+
+        // get network info for all of the data interfaces (e.g. WiFi, 3G, LTE, etc.)
+        NetworkInfo[] info = connectivity.getAllNetworkInfo();
+
+        // make sure that there is at least one interface to test against
+        if (info != null) {
+            // iterate through the interfaces
+            for (int i = 0; i < info.length; i++) {
+                // check this interface for a connected state
+                if (info[i].getState() == NetworkInfo.State.CONNECTED) {
+                    Log.d("NetworkCheck", "isNetworkAvailable: Yes");
+                    return true;
+                }
+            }
+        }
+        return false;}
+
     private void loadKvv(){
-        LinearLayout layoutCardKvv = findViewById(R.id.layoutCardKvv);
+
 
         LinearLayout layoutTram = new LinearLayout(DashboardActivity.this);
         layoutTram.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
@@ -597,6 +644,11 @@ public class DashboardActivity extends AppCompatActivity {
         personalData.add("libraryNumberKey" );
         personalData.add("studentMailKey" );
 
+        List <String> markerTitle = new ArrayList<>();
+        markerTitle.add("Matrikelnummer: ");
+        markerTitle.add("Bibliotheksnummer: " );
+        markerTitle.add("E-Mail:\n" );
+
         SharedPreferences sp = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
         LinearLayout layoutCardPI = findViewById(R.id.layoutCardPI);
 
@@ -610,7 +662,7 @@ public class DashboardActivity extends AppCompatActivity {
                 LinearLayout layoutInfo = new LinearLayout(DashboardActivity.this);
                 layoutInfo.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                 layoutInfo.setOrientation(LinearLayout.HORIZONTAL);
-                layoutInfo.setVerticalGravity(Gravity.CENTER_VERTICAL);
+                layoutInfo.setVerticalGravity(Gravity.TOP);
                 layoutInfo.setPadding(0,15,0,15);
 
 
@@ -620,17 +672,18 @@ public class DashboardActivity extends AppCompatActivity {
                 ImageButton copyImage= new ImageButton(DashboardActivity.this);
                 copyImage.setLayoutParams(new ViewGroup.LayoutParams(60, 60));
                 copyImage.setImageDrawable(getResources().getDrawable(R.drawable.ic_copy));
+
                 copyImage.getDrawable().setColorFilter(ContextCompat.getColor(this, R.color.red), PorterDuff.Mode.SRC_ATOP);
                 layoutInfo.addView(copyImage);
 
 
                 TextView emailView = new TextView(DashboardActivity.this);
-                emailView.setTextSize(15);
+                emailView.setTextSize(13);
                 emailView.setGravity(Gravity.CENTER_VERTICAL);
                 emailView.setTextColor(getResources().getColor(R.color.black));
-                emailView.setText(info);
+                emailView.setText(markerTitle.get(personalData.indexOf(data))+info);
                 emailView.setPadding(10,0,5,0);
-                emailView.setLayoutParams(new ViewGroup.LayoutParams(250, ViewGroup.LayoutParams.WRAP_CONTENT));
+                emailView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                 layoutInfo.addView(emailView);
 
 
@@ -729,6 +782,9 @@ public class DashboardActivity extends AppCompatActivity {
             }
         }).start();
         }
+
+
+
 
 
 }
