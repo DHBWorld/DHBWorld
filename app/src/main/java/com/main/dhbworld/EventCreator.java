@@ -27,9 +27,6 @@ public class EventCreator {
    static ArrayList<Long> uniqueIds;
    static ArrayList<String> filterTitles;
 
-    Map<LocalDate, ArrayList<Appointment>> data = new HashMap<>();
-
-
     public static void instantiateVariables(){
        blackList = new ArrayList<>();
        filteredEvents = new ArrayList<>();
@@ -44,7 +41,6 @@ public class EventCreator {
     public static void fillData(Map<LocalDate, ArrayList<Appointment>> data, Calendar date){
         LocalDate asLocalDate = LocalDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault()).toLocalDate();
         ArrayList<Appointment> currentData = data.get(asLocalDate);
-        System.out.println("THE DATA IS" + data);
         for (int i = 0; i < Objects.requireNonNull(currentData).size(); i++){
             String resources = currentData.get(i).getResources().replace(",","\n");
             filterTitles.add(currentData.get(i).getTitle());
@@ -152,18 +148,6 @@ public class EventCreator {
         filteredEvents.clear();
         eventList.clear();
         events.clear();
-    }
-
-    public static Event getNextEvent(){
-       Calendar now = Calendar.getInstance();
-       Event nextEvent = eventList.get(0);
-       for(int i = 0; i < eventList.size(); i++){
-           Event currentEvent = eventList.get(i);
-           if(currentEvent.getStartDate().after(now) && currentEvent.getStartDate().before(nextEvent)){
-               nextEvent = currentEvent;
-           }
-       }
-       return nextEvent;
     }
     public static ArrayList<Events> getEvents() {
        return filteredEvents;

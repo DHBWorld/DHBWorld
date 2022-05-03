@@ -38,6 +38,7 @@ public class EventCreatorTest {
     @Before
     public void setUp(){
         eventCreator = new EventCreator();
+        new Thread(getData).start();
     }
 
 //    @Test
@@ -78,11 +79,11 @@ public class EventCreatorTest {
         cal.set(2022,5,2,12,0,0);
         EventCreator.fillData(data,cal);
 
-
         assertEquals(EventCreator.getEvents().size(),12);
     }
 
     Runnable getData = () -> {
+        System.out.println("calling getdata");
         Calendar cal = Calendar.getInstance();
         cal.set(2022,5,2,12,0,0);
         LocalDate thisWeek = LocalDateTime.ofInstant(cal.toInstant(), ZoneId.systemDefault()).toLocalDate();
@@ -91,8 +92,11 @@ public class EventCreatorTest {
         LocalDate nextWeek = LocalDateTime.ofInstant(dateCopy.toInstant(), ZoneId.systemDefault()).toLocalDate();
 
         try {
+            System.out.println("wtf");
             data = DataImporter.ImportWeekRange(thisWeek,nextWeek, "https://rapla.dhbw-karlsruhe.de/rapla?page=calendar&user=eisenbiegler&file=TINF20B4");
+            System.out.println(data + " is");
         } catch (Exception e) {
+            System.out.println("fail");
             e.printStackTrace();
         }
     };

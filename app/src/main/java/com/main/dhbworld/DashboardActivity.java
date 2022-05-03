@@ -335,8 +335,7 @@ public class DashboardActivity extends AppCompatActivity {
 
                 try {
 
-
-                    nextEventsProvider nextEventsProvider= new nextEventsProvider();
+                    nextEventsProvider nextEventsProvider= new nextEventsProvider(DashboardActivity.this);
                     Appointment nextClass = nextEventsProvider.getNextEvent();
 
                     layoutCardMealPlan.post(new Runnable() {
@@ -505,7 +504,7 @@ public class DashboardActivity extends AppCompatActivity {
 
 
 
-                } catch (NoConnectionException | IllegalAccessException | MalformedURLException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
 
                 }
