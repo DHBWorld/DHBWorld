@@ -16,6 +16,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Random;
 import dhbw.timetable.rapla.data.event.Appointment;
+import dhbw.timetable.rapla.parser.DataImporter;
 
 public class EventCreator {
     static List<String> blackList;
@@ -26,7 +27,10 @@ public class EventCreator {
    static ArrayList<Long> uniqueIds;
    static ArrayList<String> filterTitles;
 
-   public static void instantiateVariables(){
+    Map<LocalDate, ArrayList<Appointment>> data = new HashMap<>();
+
+
+    public static void instantiateVariables(){
        blackList = new ArrayList<>();
        filteredEvents = new ArrayList<>();
        events = new ArrayList<>();

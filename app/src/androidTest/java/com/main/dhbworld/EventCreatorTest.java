@@ -72,19 +72,15 @@ public class EventCreatorTest {
         assertEquals(expectedDate.getMinute(),outcomeDate.get(Calendar.MINUTE));
     }
 
-
     @Test
     public void createEventsTest(){
-        new Thread(getData).start();
         Calendar cal = Calendar.getInstance();
         cal.set(2022,5,2,12,0,0);
         EventCreator.fillData(data,cal);
 
 
-
         assertEquals(EventCreator.getEvents().size(),12);
     }
-
 
     Runnable getData = () -> {
         Calendar cal = Calendar.getInstance();
@@ -100,8 +96,6 @@ public class EventCreatorTest {
             e.printStackTrace();
         }
     };
-
-
 
 }
 
