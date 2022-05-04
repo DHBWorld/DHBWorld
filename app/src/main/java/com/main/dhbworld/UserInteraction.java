@@ -38,7 +38,7 @@ public class UserInteraction extends AppCompatActivity {
 
     private InteractionState stateCanteen;
     private InteractionState stateCoffee;
-    private InteractionState statePrinter;
+    private static InteractionState statePrinter;
 
     private long notificationCanteen;
     private long notificationCoffee;
@@ -323,7 +323,7 @@ public class UserInteraction extends AppCompatActivity {
         this.stateCoffee = stateCoffee;
     }
 
-    public InteractionState getStatePrinter() {
+    public static InteractionState getStatePrinter() {
         return statePrinter;
     }
 
@@ -354,4 +354,6 @@ public class UserInteraction extends AppCompatActivity {
     public void setNotificationPrinter(long notificationPrinter) {
         this.notificationPrinter = notificationPrinter;
     }
+
+
 }

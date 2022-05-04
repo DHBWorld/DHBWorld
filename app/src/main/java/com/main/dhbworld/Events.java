@@ -1,9 +1,8 @@
 package com.main.dhbworld;
 
-import android.graphics.Color;
-
 import com.alamkanak.weekview.WeekViewEntity;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 
 public class Events {
@@ -13,6 +12,7 @@ public class Events {
     Calendar endTime;
     String description;
     WeekViewEntity.Style style;
+    static ArrayList<Events> events = new ArrayList<>();
 
     Events(long id, String title, Calendar startTime, Calendar endTime, String description, WeekViewEntity.Style style) {
         this.id = id;
@@ -21,8 +21,12 @@ public class Events {
         this.endTime = endTime;
         this.description = description;
         this.style = style;
-
     }
-
+    public static void setEvents(ArrayList<Events> events) {
+        Events.events = events;
+    }
+    public static ArrayList<Events> getEvents() {
+        return events;
+    }
 
 }

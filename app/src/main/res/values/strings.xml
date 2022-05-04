@@ -160,7 +160,7 @@
    \n   (b) You must cause any modified files to carry prominent notices
    \n       stating that You changed the files; and
 \n
-   \n   (c) You must retain, in the Source form of any Derivative Works
+   \n   © You must retain, in the Source form of any Derivative Works
    \n       that You distribute, all copyright, patent, trademark, and
    \n       attribution notices from the Source form of the Work,
    \n       excluding those notices that do not pertain to any part of
@@ -285,4 +285,28 @@
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
     <string name="cantine">Cantine</string>
+
+    <string name="new_grade_exam">New exam grade</string>
+    <string name="new_grade_exam_text">
+        Es wurde eine neue Prüfungsnote eingetragen
+        \n%1$s: %2$s
+    </string>
+    <string name="new_grade_final">New final grade</string>
+    <string name="new_grade_final_text">
+        Es wurde eine neue Prüfungsnote eingetragen
+        \n%1$s: %2$s
+    </string>
+    <string name="dualis">Dualis</string>
+    <string name="wrong_credentials">E-Mail-Adresse oder Passwort falsch</string>
+    <string name="semester">Semester</string>
+    <string name="refresh">Aktualisieren</string>
+
+    <string name="total_gpa">Gesamt GPA:</string>
+    <string name="major_gpa">Hauptfächer GPA:</string>
+    <string name="total_credits">Credits:</string>
+    <string name="values_credits">%1$s / %2$s</string>
+    <string name="tram_departure">Tram departure</string>
+    <string name="user_interaction">User Interaction</string>
+    <string name="calendar">Calendar</string>
+    <string name="home">Home</string>
 </resources>

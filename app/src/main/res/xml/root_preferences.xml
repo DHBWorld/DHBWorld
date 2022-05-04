@@ -34,4 +34,10 @@
 
     </PreferenceCategory>
 
+    <PreferenceCategory app:title="Calendar">
+        <Preference
+        app:key="calendarURL"
+        app:title="Import from URL" />
+    </PreferenceCategory>
+
 </PreferenceScreen>

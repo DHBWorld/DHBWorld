@@ -44,8 +44,10 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
@@ -434,20 +436,10 @@ public class CantineActivity extends AppCompatActivity {
         }
     }
 
-    public static MealDailyPlan getMealPlanForDashboard() throws JSONException {
-        MealDailyPlan plan= new MealDailyPlan(inputForDashboard);
 
+    public static List<String> loadDataForDashboard() {
+        List <String> meals= new ArrayList<>();
 
-        return plan;
-    }
-
-    public static void loadDataForDashboard() {
-
-
-        new Thread(new Runnable() {
-            @RequiresApi(api = Build.VERSION_CODES.N)
-            @Override
-            public void run() {
 
                 Date now= new Date();
                 SimpleDateFormat format =new SimpleDateFormat("yyyy-MM-dd");
@@ -466,15 +458,23 @@ public class CantineActivity extends AppCompatActivity {
 
                         inputForDashboard = new BufferedReader(responseBodyReader).lines().collect(Collectors.joining("\n"));
 
+
+                        MealDailyPlan plan= new MealDailyPlan(inputForDashboard);
+
+                        for (Meal m: plan.getMeal()){
+                            if (!m.getCategory().equals("Wahlessen 3")){
+                            meals.add(m.getName());}
+                        }
+
                     }
 
 
-                } catch (IOException e) {
+                } catch (IOException | JSONException e) {
                 e.printStackTrace();
             }
-            }
 
-        }).start();
+                return meals;
+
 
 
 
