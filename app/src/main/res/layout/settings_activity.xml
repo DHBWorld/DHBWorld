@@ -33,10 +33,6 @@ android:id="@+id/drawerLayout">
     </com.google.android.material.appbar.AppBarLayout>
     <!-- everything above is for the topbar and navigation-->
 
-
-
-
-
     <FrameLayout
         android:layout_below="@id/topAppBarLayout"
         android:id="@+id/settings"
