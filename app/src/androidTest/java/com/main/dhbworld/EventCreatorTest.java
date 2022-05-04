@@ -1,6 +1,7 @@
 package com.main.dhbworld;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
@@ -38,26 +39,35 @@ public class EventCreatorTest {
     @Before
     public void setUp(){
         eventCreator = new EventCreator();
-        new Thread(getData).start();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Calendar cal = Calendar.getInstance();
+                cal.set(2022,5,2,12,0,0);
+                LocalDate thisWeek = LocalDateTime.ofInstant(cal.toInstant(), ZoneId.systemDefault()).toLocalDate();
+                Calendar dateCopy = (Calendar) cal.clone();
+                dateCopy.add(Calendar.WEEK_OF_YEAR,1);
+                LocalDate nextWeek = LocalDateTime.ofInstant(dateCopy.toInstant(), ZoneId.systemDefault()).toLocalDate();
+                try {
+                    data = DataImporter.ImportWeekRange(thisWeek,nextWeek, "https://rapla.dhbw-karlsruhe.de/rapla?page=calendar&user=eisenbiegler&file=TINF20B4");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            };
+        }).start();
     }
 
-//    @Test
-//    public void setEventColorTest(){
-//        ArrayList<Event> tempList = new ArrayList<>();
-//        Calendar start = Calendar.getInstance();
-//        Calendar end = Calendar.getInstance();
-//        end.add(Calendar.HOUR_OF_DAY,1);
-//
-//        tempList.add(new Event(start,end,"testPerson","testResource","testTitleKlausur","testInfo"));
-//        EventCreator.eventList = tempList;
-//        WeekViewEntity.Style outcomeStyle = EventCreator.setEventColor(0);
-//        WeekViewEntity.Style expectedStyle = new WeekViewEntity.Style.Builder().setBackgroundColor(R.color.red).build();
-//
-//        Events events = new Events(1,"1",start,end,"a",outcomeStyle);
-//        Events events2 = new Events(1,"1",start,end,"a",expectedStyle);
-//
-//        assertEquals(events,events2);
-//    }
+    @Test
+    public void setEventColorTest(){
+        ArrayList<Event> tempList = new ArrayList<>();
+        Calendar start = Calendar.getInstance();
+        Calendar end = Calendar.getInstance();
+        end.add(Calendar.HOUR_OF_DAY,1);
+        tempList.add(new Event(start,end,"testPerson","testResource","testTitleKlausur","testInfo"));
+        EventCreator.eventList = tempList;
+        WeekViewEntity.Style outcomeStyle = EventCreator.setEventColor(0);
+        assertFalse(outcomeStyle.toString().isEmpty());
+    }
 
     @Test
     public void localDateTimeToDateTest(){
@@ -81,25 +91,6 @@ public class EventCreatorTest {
 
         assertEquals(EventCreator.getEvents().size(),12);
     }
-
-    Runnable getData = () -> {
-        System.out.println("calling getdata");
-        Calendar cal = Calendar.getInstance();
-        cal.set(2022,5,2,12,0,0);
-        LocalDate thisWeek = LocalDateTime.ofInstant(cal.toInstant(), ZoneId.systemDefault()).toLocalDate();
-        Calendar dateCopy = (Calendar) cal.clone();
-        dateCopy.add(Calendar.WEEK_OF_YEAR,1);
-        LocalDate nextWeek = LocalDateTime.ofInstant(dateCopy.toInstant(), ZoneId.systemDefault()).toLocalDate();
-
-        try {
-            System.out.println("wtf");
-            data = DataImporter.ImportWeekRange(thisWeek,nextWeek, "https://rapla.dhbw-karlsruhe.de/rapla?page=calendar&user=eisenbiegler&file=TINF20B4");
-            System.out.println(data + " is");
-        } catch (Exception e) {
-            System.out.println("fail");
-            e.printStackTrace();
-        }
-    };
 
 }
 

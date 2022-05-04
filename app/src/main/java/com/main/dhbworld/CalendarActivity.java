@@ -225,6 +225,7 @@ public class CalendarActivity extends AppCompatActivity{
         SharedPreferences.Editor editor = prefs.edit();
         Gson gson = new Gson();
         String json = gson.toJson(list);
+        System.out.println(json);
         editor.putString(key, json);
         editor.apply();
     }

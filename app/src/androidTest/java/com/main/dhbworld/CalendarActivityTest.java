@@ -31,7 +31,7 @@ public class CalendarActivityTest{
 
     String url;
     String key;
-    ArrayList<String> expectedBlackList;
+    ArrayList<String> expectedBlackList = new ArrayList<>();
     SharedPreferences sp;
     Events bottomSheetEvent;
     Calendar cal;
@@ -43,6 +43,7 @@ public class CalendarActivityTest{
             scenario.onActivity(activity -> {
                 sp = PreferenceManager.getDefaultSharedPreferences(activity);
                 url = sp.getString("currentURL",null);
+                System.out.println(url);
                 assertEquals(activity.getURL(),url);
             });
         }
@@ -52,15 +53,16 @@ public class CalendarActivityTest{
     public void blackListTest() {
         try(ActivityScenario<CalendarActivity> scenario = ActivityScenario.launch(CalendarActivity.class)) {
             scenario.onActivity(activity -> {
-                sp = PreferenceManager.getDefaultSharedPreferences(activity);
+                String[] expectedBlackListArray = new String[2];
+                expectedBlackListArray[0] = "Element 1";
+                expectedBlackListArray[1] = "Element 2";
+                expectedBlackList.add(expectedBlackListArray[0]);
+                expectedBlackList.add(expectedBlackListArray[1]);
                 key = "blackList";
-                expectedBlackList = new ArrayList<>();
-                expectedBlackList.add("Element 1");
-                expectedBlackList.add("Element 2");
                 activity.saveBlackList(expectedBlackList,key);
 
                 ArrayList<String> realBlackList = CalendarActivity.getBlackList();
-                assertEquals(expectedBlackList,realBlackList);
+                assertTrue(realBlackList.contains(expectedBlackListArray[0]) && realBlackList.contains(expectedBlackListArray[1]));
             });
         }
     }
@@ -76,7 +78,6 @@ public class CalendarActivityTest{
                 bottomSheetEvent = new Events(1,"TestTitle",now,nextWeek,"TestDescription", style);
                 activity.showBottomSheet(bottomSheetEvent);
                 BottomSheetDialog bottomSheetDialog = activity.bottomSheetDialog;
-
                 assertTrue(bottomSheetDialog.isShowing());
             });
         }
