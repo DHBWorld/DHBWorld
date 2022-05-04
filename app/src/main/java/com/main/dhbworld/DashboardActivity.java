@@ -61,12 +61,13 @@ public class DashboardActivity extends AppCompatActivity {
     private LinearLayout layoutCardMealPlan;
     private LinearLayout layoutCardCalendar;
     private LinearLayout layoutCardKvv;
-    Boolean configurationModus;
+
     SharedPreferences sp;
 
     public static final String MyPREFERENCES = "myPreferencesKey" ;
     public static final String dashboardSettings="dashboardSettings";
 
+    Boolean configurationModus;
     Boolean cardCalendar_isVisible = true;
     Boolean cardPI_isVisible = true;
     Boolean cardMealPlan_isVisible = true;
@@ -78,27 +79,13 @@ public class DashboardActivity extends AppCompatActivity {
         setContentView(R.layout.activity_dashboard);
         NavigationUtilities.setUpNavigation(this,R.id.dashboard);
 
-
-
         layoutCardMealPlan= findViewById(R.id.layoutCardMealPlan);
         layoutCardCalendar = findViewById(R.id.layoutCardCalendar);
         layoutCardKvv = findViewById(R.id.layoutCardKvv);
 
 
-
-
-
-
-
-
-
         userConfigurationOfDashboard();
-
-
-
         loadUserInteraction();
-
-
 
        if (isNetworkAvailable(DashboardActivity.this)){
            loadMealPlan();
@@ -646,8 +633,8 @@ public class DashboardActivity extends AppCompatActivity {
         personalData.add("studentMailKey" );
 
         List <String> markerTitle = new ArrayList<>();
-        markerTitle.add("Matrikelnummer: ");
-        markerTitle.add("Bibliotheksnummer: " );
+        markerTitle.add("Matrikelnummer:\n");
+        markerTitle.add("Bibliotheksnummer:\n" );
         markerTitle.add("E-Mail:\n" );
 
         SharedPreferences sp = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
