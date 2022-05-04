@@ -61,7 +61,7 @@ public class CalendarActivityTest{
                 key = "blackList";
                 activity.saveBlackList(expectedBlackList,key);
 
-                ArrayList<String> realBlackList = CalendarActivity.getBlackList();
+                ArrayList<String> realBlackList = activity.getBlackList(key);
                 assertTrue(realBlackList.contains(expectedBlackListArray[0]) && realBlackList.contains(expectedBlackListArray[1]));
             });
         }

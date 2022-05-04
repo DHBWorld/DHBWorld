@@ -3,12 +3,17 @@ package com.main.dhbworld;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.InputType;
+import android.widget.EditText;
 
 import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
+import androidx.preference.PreferenceManager;
 import androidx.preference.SwitchPreference;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -81,6 +86,39 @@ public class SettingsActivity extends AppCompatActivity {
             mensaPreference.setOnPreferenceChangeListener(this);
             coffeePreference.setOnPreferenceChangeListener(this);
             printerPreference.setOnPreferenceChangeListener(this);
+
+
+            Preference calendar = findPreference("calendarURL");
+            calendar.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(context);
+                    builder.setTitle("Please enter your Rapla-URL");
+                    SharedPreferences preferences = PreferenceManager
+                            .getDefaultSharedPreferences(context);
+                    final EditText urlInput = new EditText(context);
+                    urlInput.setHint("Type URL here");
+                    urlInput.setInputType(InputType.TYPE_TEXT_VARIATION_WEB_EMAIL_ADDRESS);
+                    builder.setView(urlInput);
+                    builder.setCancelable(true);
+
+                    builder.setPositiveButton("Submit", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            String urlString = urlInput.getText().toString();
+                            SharedPreferences.Editor editor = preferences.edit();
+                            editor.putString("CurrentURL", urlString);
+                            editor.apply();
+                        }
+                    });
+                    builder.create();
+
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
+                    return true;
+                }
+            });
+
         }
 
         @Override
