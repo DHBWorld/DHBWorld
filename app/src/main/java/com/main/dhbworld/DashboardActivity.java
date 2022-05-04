@@ -6,7 +6,9 @@ import androidx.appcompat.app.AppCompatDelegate;
 import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.ColorUtils;
+import androidx.preference.PreferenceManager;
 
+import java.text.SimpleDateFormat;
 import java.time.*;
 
 import android.annotation.SuppressLint;
@@ -41,12 +43,16 @@ import com.google.android.material.card.MaterialCardView;
 import com.main.dhbworld.CantineClasses.MealDailyPlan;
 import com.main.dhbworld.Enums.InteractionState;
 import com.main.dhbworld.Firebase.Utilities;
+import com.main.dhbworld.KVV.DataLoaderListener;
+import com.main.dhbworld.KVV.Departure;
+import com.main.dhbworld.KVV.KVVDataLoader;
 import com.main.dhbworld.Navigation.NavigationUtilities;
 
 import org.json.JSONException;
 
 import java.net.MalformedURLException;
 import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -92,7 +98,11 @@ public class DashboardActivity extends AppCompatActivity {
 
        if (isNetworkAvailable(DashboardActivity.this)){
            loadMealPlan();
-           loadCalendar();
+
+
+               loadCalendar();
+
+
            loadKvv();
        }else{
            layoutCardMealPlan.setVisibility(View.GONE);
@@ -342,188 +352,190 @@ public class DashboardActivity extends AppCompatActivity {
     }
 
     private void loadCalendar(){
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
+
+        SharedPreferences preferences = PreferenceManager
+                .getDefaultSharedPreferences(DashboardActivity.this);
+        String url = preferences.getString("CurrentURL",null);
+
+        if (!(url ==null)) {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
 
 
-                try {
+                    try {
 
-                    nextEventsProvider nextEventsProvider= new nextEventsProvider(DashboardActivity.this);
-                    Appointment nextClass = nextEventsProvider.getNextEvent();
+                        nextEventsProvider nextEventsProvider = new nextEventsProvider(DashboardActivity.this);
+                        Appointment nextClass = nextEventsProvider.getNextEvent();
 
-                    layoutCardCalendar.post(new Runnable() {
-                        @Override
-                        public void run() {
-
-
+                        layoutCardCalendar.post(new Runnable() {
+                            @Override
+                            public void run() {
 
 
-
-                            LocalDateTime now=LocalDateTime.now();
-                            LocalDateTime startClass=nextClass.getStartDate();
-                            LocalDateTime endClass=nextClass.getEndDate();
-                            Duration durationUntilStartOfClass= Duration.between(now, startClass);
-                            Duration durationUntilEndOfClass= Duration.between(now, endClass);
-
+                                LocalDateTime now = LocalDateTime.now();
+                                LocalDateTime startClass = nextClass.getStartDate();
+                                LocalDateTime endClass = nextClass.getEndDate();
+                                Duration durationUntilStartOfClass = Duration.between(now, startClass);
+                                Duration durationUntilEndOfClass = Duration.between(now, endClass);
 
 
+                                LinearLayout layoutNextClass = new LinearLayout(DashboardActivity.this);
+                                layoutNextClass.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                                layoutNextClass.setOrientation(LinearLayout.HORIZONTAL);
+                                layoutNextClass.setVerticalGravity(View.TEXT_ALIGNMENT_CENTER);
 
-                            LinearLayout layoutNextClass = new LinearLayout(DashboardActivity.this);
-                            layoutNextClass.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                            layoutNextClass.setOrientation(LinearLayout.HORIZONTAL);
-                            layoutNextClass.setVerticalGravity(View.TEXT_ALIGNMENT_CENTER);
+                                layoutNextClass.setGravity(Gravity.CENTER_VERTICAL);
+                                layoutCardCalendar.addView(layoutNextClass);
 
-                            layoutNextClass.setGravity(Gravity.CENTER_VERTICAL);
-                            layoutCardCalendar.addView(layoutNextClass);
+                                ImageView UniImage = new ImageView(DashboardActivity.this);
+                                UniImage.setLayoutParams(new ViewGroup.LayoutParams(65, 65));
 
-                            ImageView UniImage = new ImageView(DashboardActivity.this);
-                            UniImage.setLayoutParams(new ViewGroup.LayoutParams(65, 65));
+                                UniImage.setPadding(0, 7, 10, 0);
+                                layoutNextClass.addView(UniImage);
 
-                            UniImage.setPadding(0, 7, 10, 0);
-                            layoutNextClass.addView(UniImage);
+                                TextView nextClassView = new TextView(DashboardActivity.this);
+                                nextClassView.setTextSize(15);
+                                nextClassView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT));
+                                nextClassView.setGravity(Gravity.CENTER_VERTICAL);
+                                nextClassView.setTextColor(getResources().getColor(R.color.black));
+                                nextClassView.setPadding(0, 7, 5, 0);
+                                layoutNextClass.addView(nextClassView);
+                                if ((durationUntilStartOfClass.toHours() <= 8) && (durationUntilEndOfClass.toMinutes() >= 0)) {
 
-                            TextView nextClassView = new TextView(DashboardActivity.this);
-                            nextClassView.setTextSize(15);
-                            nextClassView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT));
-                            nextClassView.setGravity(Gravity.CENTER_VERTICAL);
-                            nextClassView.setTextColor(getResources().getColor(R.color.black));
-                            nextClassView.setPadding(0, 7, 5, 0);
-                            layoutNextClass.addView(nextClassView);
-                            if ((durationUntilStartOfClass.toHours()<=8) && (durationUntilEndOfClass.toMinutes()>=0)){
-
-                                //nextClassView.setLayoutParams(new ViewGroup.LayoutParams(550, ViewGroup.LayoutParams.WRAP_CONTENT));
-                                UniImage.setImageResource(R.drawable.ic_uni);
-                                nextClassView.setText(nextClass.getTitle());
-
-
-                                LinearLayout layoutTime = new LinearLayout(DashboardActivity.this);
-                                layoutTime.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                                layoutTime.setOrientation(LinearLayout.VERTICAL);
-                                layoutTime.setVerticalGravity(View.TEXT_ALIGNMENT_CENTER);
-
-                                layoutNextClass.addView(layoutTime);
+                                    //nextClassView.setLayoutParams(new ViewGroup.LayoutParams(550, ViewGroup.LayoutParams.WRAP_CONTENT));
+                                    UniImage.setImageResource(R.drawable.ic_uni);
+                                    nextClassView.setText(nextClass.getTitle());
 
 
+                                    LinearLayout layoutTime = new LinearLayout(DashboardActivity.this);
+                                    layoutTime.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                                    layoutTime.setOrientation(LinearLayout.VERTICAL);
+                                    layoutTime.setVerticalGravity(View.TEXT_ALIGNMENT_CENTER);
 
-                                LinearLayout layoutTimeDigit = new LinearLayout(DashboardActivity.this);
-                                layoutTimeDigit.setLayoutParams(new ViewGroup.LayoutParams(250,120));
-                                layoutTimeDigit.setOrientation(LinearLayout.HORIZONTAL);
-                                layoutTime.setPadding(5,0,5,0);
-                                layoutTime.setVerticalGravity(Gravity.CENTER);
-                                layoutTime.setHorizontalGravity(Gravity.RIGHT);
-
-
-                                layoutTimeDigit.setBackgroundColor(getColor(R.color.grey_defect));
-                                layoutTime.addView(layoutTimeDigit);
-
-                                TextView timeView = new TextView(DashboardActivity.this);
-                                timeView.setTextSize(23);
-                                timeView.setTextColor(getResources().getColor(R.color.black));
-                                timeView.setText(nextClass.getStartTime());
-                                timeView.setGravity(Gravity.CENTER);
-                                timeView.setPadding(12, 12, 0, 0);
-                                timeView.setLayoutParams(new ViewGroup.LayoutParams(150, ViewGroup.LayoutParams.WRAP_CONTENT));
-                                layoutTimeDigit.addView(timeView);
+                                    layoutNextClass.addView(layoutTime);
 
 
-
-                                TextView timeViewMin = new TextView(DashboardActivity.this);
-                                timeViewMin.setTextSize(12);
-                                timeViewMin.setTextColor(getResources().getColor(R.color.black));
-                                timeViewMin.setText("Min");
-                                timeViewMin.setGravity(Gravity.CENTER);
-                                timeViewMin.setPadding(0, 0, 0, 0);
-                                timeViewMin.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                                layoutTimeDigit.addView(timeViewMin);
-
-                                TextView letterTimeView = new TextView(DashboardActivity.this);
-                                letterTimeView.setTextSize(12);
-                                letterTimeView.setTextColor(getResources().getColor(R.color.black));
-                                letterTimeView.setGravity(Gravity.CENTER);
-
-                                letterTimeView.setPadding(0, 2, 0, 5);
-                                letterTimeView.setLayoutParams(new ViewGroup.LayoutParams(250, ViewGroup.LayoutParams.WRAP_CONTENT));
-                                letterTimeView.setBackgroundColor(getColor(R.color.even_lighter_gray));
-                                layoutTime.addView(letterTimeView);
-
-                                if (durationUntilStartOfClass.toMinutes()>=0){
+                                    LinearLayout layoutTimeDigit = new LinearLayout(DashboardActivity.this);
+                                    layoutTimeDigit.setLayoutParams(new ViewGroup.LayoutParams(250, 120));
+                                    layoutTimeDigit.setOrientation(LinearLayout.HORIZONTAL);
+                                    layoutTime.setPadding(5, 0, 5, 0);
+                                    layoutTime.setVerticalGravity(Gravity.CENTER);
+                                    layoutTime.setHorizontalGravity(Gravity.RIGHT);
 
 
+                                    layoutTimeDigit.setBackgroundColor(getColor(R.color.grey_defect));
+                                    layoutTime.addView(layoutTimeDigit);
 
-                                    System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
-                                    System.out.printf("%dD %dH %dMin%n", durationUntilStartOfClass.toDays(), durationUntilStartOfClass.toHours() % 24, durationUntilStartOfClass.toMinutes() % 60);
-
-
-                                    new CountDownTimer(durationUntilStartOfClass.toMinutes() * 60000, 60000) {
-                                        public void onTick(long millisUtilFinished) {
-                                            timeView.setText(Long.toString(millisUtilFinished / 60000 + 1));
-                                            letterTimeView.setText("start in ");
-                                            timeViewMin.setText("Min");
-
-                                        }
-
-                                        @Override
-                                        public void onFinish() {
-                                            timeView.setText("now");
-                                            letterTimeView.setText("");
-                                            timeViewMin.setText("");
-                                        }
-                                    }.start();
-                                }else{
-                                    System.out.println("ßßßßßßßßßßßßßßßßßßßßßßßßßßßßßß");
-                                    System.out.printf("%dD %dH %dMin%n", durationUntilEndOfClass.toDays(), durationUntilEndOfClass.toHours() % 24, durationUntilEndOfClass.toMinutes() % 60);
+                                    TextView timeView = new TextView(DashboardActivity.this);
+                                    timeView.setTextSize(23);
+                                    timeView.setTextColor(getResources().getColor(R.color.black));
+                                    timeView.setText(nextClass.getStartTime());
+                                    timeView.setGravity(Gravity.CENTER);
+                                    timeView.setPadding(12, 12, 0, 0);
+                                    timeView.setLayoutParams(new ViewGroup.LayoutParams(150, ViewGroup.LayoutParams.WRAP_CONTENT));
+                                    layoutTimeDigit.addView(timeView);
 
 
-                                    new CountDownTimer(durationUntilEndOfClass.toMinutes() * 60000, 60000) {
-                                        public void onTick(long millisUtilFinished) {
-                                            timeView.setText(Long.toString(millisUtilFinished / 60000 + 1));
-                                            letterTimeView.setText("end in ");
-                                            timeViewMin.setText("Min");
+                                    TextView timeViewMin = new TextView(DashboardActivity.this);
+                                    timeViewMin.setTextSize(12);
+                                    timeViewMin.setTextColor(getResources().getColor(R.color.black));
+                                    timeViewMin.setText("Min");
+                                    timeViewMin.setGravity(Gravity.CENTER);
+                                    timeViewMin.setPadding(0, 0, 0, 0);
+                                    timeViewMin.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                                    layoutTimeDigit.addView(timeViewMin);
 
-                                        }
+                                    TextView letterTimeView = new TextView(DashboardActivity.this);
+                                    letterTimeView.setTextSize(12);
+                                    letterTimeView.setTextColor(getResources().getColor(R.color.black));
+                                    letterTimeView.setGravity(Gravity.CENTER);
 
-                                        @Override
-                                        public void onFinish() {
-                                            timeView.setText("");
-                                            nextClassView.setText("Pause!");
-                                            letterTimeView.setText("");
-                                            timeViewMin.setText("");
-                                            UniImage.setImageResource(R.drawable.ic_pause);
+                                    letterTimeView.setPadding(0, 2, 0, 5);
+                                    letterTimeView.setLayoutParams(new ViewGroup.LayoutParams(250, ViewGroup.LayoutParams.WRAP_CONTENT));
+                                    letterTimeView.setBackgroundColor(getColor(R.color.even_lighter_gray));
+                                    layoutTime.addView(letterTimeView);
+
+                                    if (durationUntilStartOfClass.toMinutes() >= 0) {
 
 
 
+                                        new CountDownTimer(durationUntilStartOfClass.toMinutes() * 60000, 60000) {
+                                            public void onTick(long millisUtilFinished) {
+                                                timeView.setText(Long.toString(millisUtilFinished / 60000 + 1));
+                                                letterTimeView.setText("start in ");
+                                                timeViewMin.setText("Min");
+
+                                            }
+
+                                            @Override
+                                            public void onFinish() {
+                                                timeView.setText("now");
+                                                letterTimeView.setText("");
+                                                timeViewMin.setText("");
+                                            }
+                                        }.start();
+                                    } else {
 
 
-                                        }
-                                    }.start();
+                                        new CountDownTimer(durationUntilEndOfClass.toMinutes() * 60000, 60000) {
+                                            public void onTick(long millisUtilFinished) {
+                                                timeView.setText(Long.toString(millisUtilFinished / 60000 + 1));
+                                                letterTimeView.setText("end in ");
+                                                timeViewMin.setText("Min");
+
+                                            }
+
+                                            @Override
+                                            public void onFinish() {
+                                                timeView.setText("");
+                                                nextClassView.setText("Pause!");
+                                                letterTimeView.setText("");
+                                                timeViewMin.setText("");
+                                                UniImage.setImageResource(R.drawable.ic_pause);
+
+
+                                            }
+                                        }.start();
+
+                                    }
+
+                                } else if (durationUntilStartOfClass.toHours() > 9) {
+                                    UniImage.setImageResource(R.drawable.ic_celebration);
+                                    nextClassView.setText("Sie haben keine Vorlesungen mehr heute");
+
 
                                 }
 
-                            }
-
-
-
-                            else if (durationUntilStartOfClass.toHours()>9){
-                                UniImage.setImageResource(R.drawable.ic_celebration);
-                                nextClassView.setText("Sie haben keine Vorlesungen mehr heute");
-
 
                             }
+                        });
 
 
+                    } catch (Exception e) {
+                        e.printStackTrace();
 
-
-                        }
-                    });
-
-
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-
+                    }
                 }
-            }}).start();
+            }).start();
+        }else{
+            LinearLayout layoutNextClass = new LinearLayout(DashboardActivity.this);
+            layoutNextClass.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            layoutNextClass.setOrientation(LinearLayout.HORIZONTAL);
+            layoutNextClass.setVerticalGravity(View.TEXT_ALIGNMENT_CENTER);
+            layoutNextClass.setGravity(Gravity.CENTER_VERTICAL);
+            layoutCardCalendar.addView(layoutNextClass);
+
+
+            TextView nextClassView = new TextView(DashboardActivity.this);
+            nextClassView.setTextSize(15);
+            nextClassView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT));
+            nextClassView.setGravity(Gravity.CENTER_VERTICAL);
+            nextClassView.setTextColor(getResources().getColor(R.color.black));
+            nextClassView.setPadding(0, 7, 5, 0);
+            nextClassView.setText("Damit Sie die Daten aus dem Rapla hier sehen können, fügen Sie bitte den Link in dem Kalender hinzu.");
+            layoutNextClass.addView(nextClassView);
+        }
     }
 
 
@@ -556,48 +568,101 @@ public class DashboardActivity extends AppCompatActivity {
     private void loadKvv(){
 
 
-        LinearLayout layoutTram = new LinearLayout(DashboardActivity.this);
-        layoutTram.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-        layoutTram.setOrientation(LinearLayout.HORIZONTAL);
-        layoutTram.setVerticalGravity(View.TEXT_ALIGNMENT_CENTER);
+
+
+        KVVDataLoader dataLoader = new KVVDataLoader(this);
+
+        dataLoader.setDataLoaderListener(new DataLoaderListener() {
+            @Override
+            public void onDataLoaded(ArrayList<Departure> departures) {
+
+                if (departures.size()<1){
+                    LinearLayout layoutTram = new LinearLayout(DashboardActivity.this);
+                    layoutTram.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    layoutTram.setOrientation(LinearLayout.HORIZONTAL);
+                    layoutTram.setVerticalGravity(View.TEXT_ALIGNMENT_CENTER);
+                    layoutCardKvv.addView(layoutTram);
+
+                    ImageView tramImage= new ImageView(DashboardActivity.this);
+                    tramImage.setLayoutParams(new ViewGroup.LayoutParams(60, 60));
+                    tramImage.setImageResource(R.drawable.ic_tram);
+                    tramImage.setPadding(0,0,10,0);
+                    layoutTram.addView(tramImage);
+
+                    TextView tramView = new TextView(DashboardActivity.this);
+                    tramView.setTextSize(15);
+                    tramView.setTextColor(getResources().getColor(R.color.black));
+                    tramView.setText("Server Problem");
+                    tramView.setPadding(0,7,5,7);
+                    tramView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    layoutTram.addView(tramView);
+
+                }else{
 
 
 
-        layoutCardKvv.addView(layoutTram);
-
-        ImageView tramImage= new ImageView(DashboardActivity.this);
-
-        tramImage.setLayoutParams(new ViewGroup.LayoutParams(60, 60));
-        tramImage.setImageResource(R.drawable.ic_tram);
-        tramImage.setPadding(0,0,10,0);
-
-        layoutTram.addView(tramImage);
 
 
-        TextView tramView = new TextView(DashboardActivity.this);
-        tramView.setTextSize(13);
-        tramView.setTextColor(getResources().getColor(R.color.black));
-        tramView.setText("1 (Durlach)");
-        tramView.setPadding(0,7,5,7);
-        tramView.setLayoutParams(new ViewGroup.LayoutParams(250, ViewGroup.LayoutParams.WRAP_CONTENT));
-        layoutTram.addView(tramView);
-
-        TextView platformView = new TextView(DashboardActivity.this);
-        platformView.setTextSize(13);
-        platformView.setTextColor(getResources().getColor(R.color.black));
-        platformView.setText("Gleis 2");
-        platformView.setPadding(20,7,0,7);
-        platformView.setLayoutParams(new ViewGroup.LayoutParams(250, ViewGroup.LayoutParams.WRAP_CONTENT));
-        layoutTram.addView(platformView);
+                //HIER DEINEN CODE EINFÜGEN
 
 
-        TextView timeView = new TextView(DashboardActivity.this);
-        timeView.setTextSize(13);
-        timeView.setTextColor(getResources().getColor(R.color.black));
-        timeView.setText("12:20");
-        timeView.setPadding(20,7,0,7);
-        timeView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-        layoutTram.addView(timeView);
+
+
+                LinearLayout layoutTram = new LinearLayout(DashboardActivity.this);
+                layoutTram.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                layoutTram.setOrientation(LinearLayout.HORIZONTAL);
+                layoutTram.setVerticalGravity(View.TEXT_ALIGNMENT_CENTER);
+
+
+
+                layoutCardKvv.addView(layoutTram);
+
+                ImageView tramImage= new ImageView(DashboardActivity.this);
+
+                tramImage.setLayoutParams(new ViewGroup.LayoutParams(60, 60));
+                tramImage.setImageResource(R.drawable.ic_tram);
+                tramImage.setPadding(0,0,10,0);
+
+                layoutTram.addView(tramImage);
+
+
+                TextView tramView = new TextView(DashboardActivity.this);
+                tramView.setTextSize(15);
+                tramView.setTextColor(getResources().getColor(R.color.black));
+               // tramView.setText("1 (Durlach)");
+                    tramView.setText(departures.get(0).getLine().substring(departures.get(0).getLine().length()-1)+" ("+departures.get(0).getDestination()+")");
+                   // tramView.setText("&&&&");
+                tramView.setPadding(0,7,5,7);
+                tramView.setLayoutParams(new ViewGroup.LayoutParams(250, ViewGroup.LayoutParams.WRAP_CONTENT));
+                layoutTram.addView(tramView);
+
+                TextView platformView = new TextView(DashboardActivity.this);
+                platformView.setTextSize(15);
+                platformView.setTextColor(getResources().getColor(R.color.black));
+                platformView.setText(departures.get(0).getPlatform());
+                platformView.setPadding(20,7,0,7);
+                platformView.setLayoutParams(new ViewGroup.LayoutParams(250, ViewGroup.LayoutParams.WRAP_CONTENT));
+                layoutTram.addView(platformView);
+
+
+                TextView timeView = new TextView(DashboardActivity.this);
+                timeView.setTextSize(15);
+                timeView.setTextColor(getResources().getColor(R.color.black));
+
+                    DateTimeFormatter formatter = DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT);
+                timeView.setText(departures.get(0).getDepartureTime().format(formatter));
+                timeView.setPadding(20,7,0,7);
+                timeView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                layoutTram.addView(timeView);
+                }
+            }
+
+
+        });
+        LocalDateTime now = LocalDateTime.now();
+        dataLoader.loadData(now);
+
+
 
 
 
@@ -612,8 +677,8 @@ public class DashboardActivity extends AppCompatActivity {
         InteractionState statePrinter= UserInteraction.getStatePrinter();
 
 
-        image_canteen.setColorFilter(ContextCompat.getColor(this, R.color.orange_queue));
-        image_coffee.setColorFilter(ContextCompat.getColor(this, R.color.blue_cleaning));
+        image_canteen.setColorFilter(ContextCompat.getColor(this, R.color.grey_light));
+        image_coffee.setColorFilter(ContextCompat.getColor(this, R.color.grey_light));
         image_printer.setColorFilter(ContextCompat.getColor(this, R.color.grey_light));
 
 
@@ -667,7 +732,7 @@ public class DashboardActivity extends AppCompatActivity {
 
 
                 TextView emailView = new TextView(DashboardActivity.this);
-                emailView.setTextSize(13);
+                emailView.setTextSize(15);
                 emailView.setGravity(Gravity.CENTER_VERTICAL);
                 emailView.setTextColor(getResources().getColor(R.color.black));
                 emailView.setText(markerTitle.get(personalData.indexOf(data))+info);
@@ -702,9 +767,9 @@ public class DashboardActivity extends AppCompatActivity {
                 messageView.setTextSize(15);
                 messageView.setGravity(Gravity.CENTER_VERTICAL);
                 messageView.setTextColor(getResources().getColor(R.color.black));
-                messageView.setText("Sie haben noch keine personale Daten gespeichert");
+                messageView.setText("Sie haben noch keine persönlichen Daten gespeichert");
                 messageView.setPadding(10,0,5,0);
-                messageView.setLayoutParams(new ViewGroup.LayoutParams(250, ViewGroup.LayoutParams.WRAP_CONTENT));
+                messageView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                 layoutCardPI.addView(messageView);}
             }
         }
@@ -746,7 +811,7 @@ public class DashboardActivity extends AppCompatActivity {
 
 
                                 TextView mealView = new TextView(DashboardActivity.this);
-                                mealView.setTextSize(13);
+                                mealView.setTextSize(15);
                                 mealView.setTextColor(getResources().getColor(R.color.black));
                                 mealView.setText(m);
                                 mealView.setPadding(0,7,5,7);
@@ -756,7 +821,7 @@ public class DashboardActivity extends AppCompatActivity {
                         }
                         }else{
                             TextView mealView = new TextView(DashboardActivity.this);
-                            mealView.setTextSize(13);
+                            mealView.setTextSize(15);
                             mealView.setTextColor(getResources().getColor(R.color.black));
                             mealView.setText("Cantine ist heute wahrscheinlich geschlossen.");
                             mealView.setPadding(0,7,5,7);
