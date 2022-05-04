@@ -23,7 +23,6 @@ import dhbw.timetable.rapla.parser.DataImporter;
 
 public class nextEventsProvider {
     private String url;
-    Map<LocalDate, ArrayList<Appointment>> rawData;
     Context context;
     SharedPreferences sp;
 

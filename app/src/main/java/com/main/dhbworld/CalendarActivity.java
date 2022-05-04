@@ -138,7 +138,6 @@ public class CalendarActivity extends AppCompatActivity{
         cal.scrollToDate(date);
     }
 
-
     public static String[] arrayConvertor(List<String> titleList){
         return titleList.toArray(new String[0]);
     }
