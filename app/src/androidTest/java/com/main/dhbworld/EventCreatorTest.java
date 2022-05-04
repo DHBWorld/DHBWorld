@@ -39,22 +39,6 @@ public class EventCreatorTest {
     @Before
     public void setUp(){
         eventCreator = new EventCreator();
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                Calendar cal = Calendar.getInstance();
-                cal.set(2022,5,2,12,0,0);
-                LocalDate thisWeek = LocalDateTime.ofInstant(cal.toInstant(), ZoneId.systemDefault()).toLocalDate();
-                Calendar dateCopy = (Calendar) cal.clone();
-                dateCopy.add(Calendar.WEEK_OF_YEAR,1);
-                LocalDate nextWeek = LocalDateTime.ofInstant(dateCopy.toInstant(), ZoneId.systemDefault()).toLocalDate();
-                try {
-                    data = DataImporter.ImportWeekRange(thisWeek,nextWeek, "https://rapla.dhbw-karlsruhe.de/rapla?page=calendar&user=eisenbiegler&file=TINF20B4");
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            };
-        }).start();
     }
 
     @Test

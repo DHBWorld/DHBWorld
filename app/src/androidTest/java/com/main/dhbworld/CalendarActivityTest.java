@@ -42,7 +42,7 @@ public class CalendarActivityTest{
         try(ActivityScenario<CalendarActivity> scenario = ActivityScenario.launch(CalendarActivity.class)) {
             scenario.onActivity(activity -> {
                 sp = PreferenceManager.getDefaultSharedPreferences(activity);
-                url = sp.getString("currentURL",null);
+                url = sp.getString("CurrentURL",null);
                 System.out.println(url);
                 assertEquals(activity.getURL(),url);
             });
