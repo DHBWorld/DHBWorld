@@ -25,6 +25,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 app:title="@string/page_title"
+                app:menu="@menu/calendar_top_app_bar"
 
                 app:navigationIcon="@drawable/navitem"
 

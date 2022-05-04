@@ -144,8 +144,8 @@ public class DualisAPI {
                     overallListener.onOverallDataLoaded(mainJson);
 
                 }, error -> {
-                    if (courseErrorListener != null) {
-                        courseErrorListener.onCourseError(error);
+                    if (overallErrorListener != null) {
+                        overallErrorListener.onOverallError(error);
                     }
                 });
 

@@ -40,8 +40,6 @@ public class MainActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.personal_information);
 
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-
         //instantiate buttons, text fields
         editButton = findViewById(R.id.edit_Button);
         saveButton = findViewById(R.id.save_Button);
