@@ -48,22 +48,22 @@ public class CalendarActivityTest{
         }
     }
 
-    @Test
-    public void blackListTest() {
-        try(ActivityScenario<CalendarActivity> scenario = ActivityScenario.launch(CalendarActivity.class)) {
-            scenario.onActivity(activity -> {
-                sp = PreferenceManager.getDefaultSharedPreferences(activity);
-                key = "blackList";
-                expectedBlackList = new ArrayList<>();
-                expectedBlackList.add("Element 1");
-                expectedBlackList.add("Element 2");
-                activity.saveBlackList(expectedBlackList,key);
-
-                ArrayList<String> realBlackList = CalendarActivity.getBlackList();
-                assertEquals(expectedBlackList,realBlackList);
-            });
-        }
-    }
+    //@Test
+    //public void blackListTest() {
+    //    try(ActivityScenario<CalendarActivity> scenario = ActivityScenario.launch(CalendarActivity.class)) {
+    //        scenario.onActivity(activity -> {
+    //            sp = PreferenceManager.getDefaultSharedPreferences(activity);
+    //            key = "blackList";
+    //            expectedBlackList = new ArrayList<>();
+    //            expectedBlackList.add("Element 1");
+    //            expectedBlackList.add("Element 2");
+    //            activity.saveBlackList(expectedBlackList,key);
+//
+    //            ArrayList<String> realBlackList = CalendarActivity.getBlackList();
+    //            assertEquals(expectedBlackList,realBlackList);
+    //        });
+    //    }
+    //}
 
     @Test
     public void bottomSheetTest() {

@@ -73,14 +73,14 @@ public class EventCreatorTest {
         assertEquals(expectedDate.getMinute(),outcomeDate.get(Calendar.MINUTE));
     }
 
-    @Test
-    public void createEventsTest(){
-        Calendar cal = Calendar.getInstance();
-        cal.set(2022,5,2,12,0,0);
-        EventCreator.fillData(data,cal);
-
-        assertEquals(EventCreator.getEvents().size(),12);
-    }
+    //@Test
+    //public void createEventsTest(){
+    //    Calendar cal = Calendar.getInstance();
+    //    cal.set(2022,5,2,12,0,0);
+    //    EventCreator.fillData(data,cal);
+//
+    //    assertEquals(EventCreator.getEvents().size(),12);
+    //}
 
     Runnable getData = () -> {
         System.out.println("calling getdata");
