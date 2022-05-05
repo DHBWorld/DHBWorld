@@ -98,11 +98,7 @@ public class DashboardActivity extends AppCompatActivity {
 
        if (isNetworkAvailable(DashboardActivity.this)){
            loadMealPlan();
-
-
-               loadCalendar();
-
-
+           loadCalendar();
            loadKvv();
        }else{
            layoutCardMealPlan.setVisibility(View.GONE);
@@ -396,7 +392,7 @@ public class DashboardActivity extends AppCompatActivity {
 
                                 TextView nextClassView = new TextView(DashboardActivity.this);
                                 nextClassView.setTextSize(15);
-                                nextClassView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT));
+                                nextClassView.setLayoutParams(new ViewGroup.LayoutParams(600, ViewGroup.LayoutParams.MATCH_PARENT));
                                 nextClassView.setGravity(Gravity.CENTER_VERTICAL);
                                 nextClassView.setTextColor(getResources().getColor(R.color.black));
                                 nextClassView.setPadding(0, 7, 5, 0);
@@ -674,7 +670,7 @@ public class DashboardActivity extends AppCompatActivity {
         ImageView image_coffee= findViewById(R.id.imageBox_dashboard_coffee);
         ImageView image_printer = findViewById(R.id.imageBox_dashboard_printer);
 
-        InteractionState statePrinter= UserInteraction.getStatePrinter();
+       // InteractionState statePrinter= UserInteraction.getStatePrinter();
 
 
         image_canteen.setColorFilter(ContextCompat.getColor(this, R.color.grey_light));
@@ -682,9 +678,9 @@ public class DashboardActivity extends AppCompatActivity {
         image_printer.setColorFilter(ContextCompat.getColor(this, R.color.grey_light));
 
 
-      if (statePrinter!=null){
+      /*if (statePrinter!=null){
         image_printer.setColorFilter(statePrinter.getColor());
-      }
+      }*/
 
     }
 
