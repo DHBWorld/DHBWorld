@@ -39,6 +39,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
@@ -473,12 +474,8 @@ public class CantineActivity extends AppCompatActivity {
                 SimpleDateFormat format =new SimpleDateFormat("yyyy-MM-dd");
                 URL urlOpenMensa= null;
 
-                try {
-
-
-                        urlOpenMensa = new URL("https://openmensa.org/api/v2/canteens/33/days/" + format.format(now) + "/meals");
-
-                    HttpsURLConnection connection = (HttpsURLConnection) urlOpenMensa.openConnection();
+                try { urlOpenMensa = new URL("https://openmensa.org/api/v2/canteens/33/days/" + format.format(now) + "/meals");
+                        HttpsURLConnection connection = (HttpsURLConnection) urlOpenMensa.openConnection();
 
                     if (connection.getResponseCode() == 200) { // something wrong
                         InputStream responseBody = connection.getInputStream();
@@ -488,11 +485,34 @@ public class CantineActivity extends AppCompatActivity {
 
 
                         MealDailyPlan plan= new MealDailyPlan(inputForDashboard);
+                        Boolean basicMealOne=true;
+                        Boolean basicMealTwo=true;
+                        Boolean basicMealThree=true;
 
-                        for (Meal m: plan.getMeal()){
-                            if (!m.getCategory().equals("Wahlessen 3")){
-                            meals.add(m.getName());}
-                        }
+                        for (int i=0;i<plan.getMeal().length; i++){
+
+                            // "Künstliche Intelligenz" zur Erkennunung von Haupgerichten
+                            if((plan.getMeal()[i].getCategory().equals("Wahlessen 1")) && basicMealOne){
+                                basicMealOne=false;
+                                meals.add(plan.getMeal()[i].getName());
+                            }else if((plan.getMeal()[i].getCategory().equals("Wahlessen 2")) && basicMealTwo){
+                                basicMealTwo=false;
+                                meals.add(plan.getMeal()[i].getName());
+                            }else if((plan.getMeal()[i].getCategory().equals("Wahlessen 3")) && basicMealThree  ){
+                                try {
+                                    Double price= Double.parseDouble(plan.getMeal()[i].getPrice());
+
+                                    if (price>1.80){
+                                        basicMealThree=false;
+                                        meals.add(plan.getMeal()[i].getName());
+                                    }
+                                } catch (NumberFormatException e) {
+                                    e.printStackTrace();
+                                    meals.add(plan.getMeal()[i].getName());
+                                    basicMealThree=false;
+                                } }}
+
+
 
                     }
 
@@ -511,4 +531,4 @@ public class CantineActivity extends AppCompatActivity {
     }
 
 
-}
+    }
