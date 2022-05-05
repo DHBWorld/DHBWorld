@@ -320,7 +320,7 @@ public class DualisAPI {
         }
     }
 
-    static void copareAndSave(Context context, JSONObject mainJson) {
+    static void compareAndSave(Context context, JSONObject mainJson) {
         File file = new File(context.getFilesDir() + "/data.json");
         String fileContent = "";
         if (file.exists()) {
@@ -370,7 +370,7 @@ public class DualisAPI {
                                 String noteCurrent = pruefungen.getJSONObject(k).getString("note");
                                 String noteSaved = savedJson.getJSONArray("semester").getJSONObject(i).getJSONArray("Vorlesungen").getJSONObject(j).getJSONArray("pruefungen").getJSONObject(k).getString("note");
                                 if (!noteCurrent.equals(noteSaved)) {
-                                    NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "1234")
+                                    NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "dualis_new_grade")
                                             .setSmallIcon(R.drawable.ic_baseline_school_24)
                                             .setContentTitle(context.getResources().getString(R.string.new_grade_exam))
                                             .setContentText(context.getResources().getString(R.string.new_grade_exam_text, vorlesung.getString("name"), noteCurrent))
@@ -389,7 +389,7 @@ public class DualisAPI {
                                 }
                             }
                             if (!endnoteCurrent.equals(endnoteSaved)) {
-                                NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "1234")
+                                NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "dualis_new_grade")
                                         .setSmallIcon(R.drawable.ic_baseline_school_24)
                                         .setContentTitle(context.getResources().getString(R.string.new_grade_final))
                                         .setContentText(context.getResources().getString(R.string.new_grade_final_text, vorlesung.getString("name"), endnoteCurrent))

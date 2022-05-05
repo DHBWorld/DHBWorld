@@ -1,6 +1,7 @@
 package com.main.dhbworld.Dualis;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,8 +14,14 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.work.Constraints;
+import androidx.work.ExistingPeriodicWorkPolicy;
+import androidx.work.NetworkType;
+import androidx.work.PeriodicWorkRequest;
+import androidx.work.WorkManager;
 
 import com.android.volley.VolleyError;
 import com.google.android.material.progressindicator.CircularProgressIndicator;
@@ -31,6 +38,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class DualisSemesterFragment extends Fragment implements DualisAPI.CourseDataLoadedListener, DualisAPI.CourseErrorListener {
 
@@ -98,6 +106,9 @@ public class DualisSemesterFragment extends Fragment implements DualisAPI.Course
 
     @Override
     public void onCourseDataLoaded(JSONObject data) {
+        setAlarmManager(getContext());
+        DualisAPI.compareAndSave(getContext(), data);
+
         ArrayList<String> items = new ArrayList<>();
         try {
             for (int i=0; i<data.getJSONArray("semester").length(); i++) {
@@ -115,7 +126,6 @@ public class DualisSemesterFragment extends Fragment implements DualisAPI.Course
         } else {
             semesterDropdown.setText(items.get(0), false);
         }
-
 
         vorlesungModels = new ArrayList<>();
         RecyclerView mRecyclerView = mainView.findViewById(R.id.recycler_view);
@@ -136,7 +146,6 @@ public class DualisSemesterFragment extends Fragment implements DualisAPI.Course
         mRecyclerView.setAdapter(vorlesungAdapter);
 
 
-
         semesterDropdown.setOnItemClickListener((adapterView, view, i, l) -> {
             currentSemester = semesterDropdown.getText().toString();
             try {
@@ -147,10 +156,30 @@ public class DualisSemesterFragment extends Fragment implements DualisAPI.Course
             }
         });
 
-
         semesterDropdown.setEnabled(true);
         mainProgressIndicator.setVisibility(View.GONE);
         mainLayout.setVisibility(View.VISIBLE);
+    }
+
+    static void setAlarmManager(Context context) {
+        SharedPreferences settingsPref = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences sharedPref = context.getSharedPreferences(context.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+        if (!sharedPref.getBoolean("saveCredentials", false) || !settingsPref.getBoolean("sync", true)) {
+            return;
+        }
+
+        int time = Integer.parseInt(settingsPref.getString("sync_time", "15"));
+
+        Constraints constraints = new Constraints.Builder()
+                .setRequiredNetworkType(NetworkType.CONNECTED)
+                .build();
+
+        PeriodicWorkRequest periodicWorkRequest = new PeriodicWorkRequest.Builder(BackgroundWorker.class, time, TimeUnit.MINUTES)
+                .setConstraints(constraints)
+                .build();
+
+        WorkManager workManager = WorkManager.getInstance(context.getApplicationContext());
+        workManager.enqueueUniquePeriodicWork("DualisNotifier", ExistingPeriodicWorkPolicy.REPLACE, periodicWorkRequest);
     }
 
     @Override
