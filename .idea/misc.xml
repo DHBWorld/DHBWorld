@@ -3,43 +3,23 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/Christian/AndroidStudioProjects/DHBWorld/app/src/main/res/layout/activity_licence.xml" value="0.16904120138621487" />
-        <entry key="..\:/Christian/AndroidStudioProjects/DHBWorld/app/src/main/res/layout/activity_main.xml" value="0.34512820512820513" />
-        <entry key="..\:/Christian/AndroidStudioProjects/DHBWorld/app/src/main/res/layout/defaultlayout.xml" value="0.35052083333333334" />
-        <entry key="..\:/Christian/AndroidStudioProjects/DHBWorld/app/src/main/res/layout/personal_information.xml" value="0.34512820512820513" />
-        <entry key="..\:/Christian/AndroidStudioProjects/DHBWorld/app/src/main/res/layout/schedule_layout.xml" value="0.35052083333333334" />
-        <entry key="..\:/Christian/AndroidStudioProjects/DHBWorld/app/src/main/res/layout/settings_activity.xml" value="0.2838541666666667" />
         <entry key="..\:/Christian/AndroidStudioProjects/DHBWorld/app/src/main/res/layout/user_interaction_layout.xml" value="0.35052083333333334" />
-        <entry key="..\:/Christian/AndroidStudioProjects/DHBWorld/app/src/main/res/menu/navigation_drawer.xml" value="0.35052083333333334" />
-        <entry key="..\:/Christian/AndroidStudioProjects/DHBWorld/app/src/main/res/xml/root_preferences.xml" value="0.2838541666666667" />
         <entry key="..\:/Code/DHBWorld/app/src/main/res/drawable/ic_launcher_background.xml" value="0.22179487179487178" />
         <entry key="..\:/Code/DHBWorld/app/src/main/res/drawable/triple_point.xml" value="0.22179487179487178" />
-        <entry key="..\:/Code/DHBWorld/app/src/main/res/layout/activity_main.xml" value="0.1" />
-        <entry key="..\:/Code/DHBWorld/app/src/main/res/layout/calendar_enterurl.xml" value="0.20854700854700856" />
-        <entry key="..\:/Code/DHBWorld/app/src/main/res/layout/calendarfilter.xml" value="0.2" />
-        <entry key="..\:/Code/DHBWorld/app/src/main/res/layout/calendaritembottonsheet.xml" value="0.4547008547008547" />
+        <entry key="..\:/Code/DHBWorld/app/src/main/res/layout/activity_main.xml" value="0.264" />
+        <entry key="..\:/Code/DHBWorld/app/src/main/res/layout/activity_main2.xml" value="0.24947916666666667" />
         <entry key="..\:/Code/DHBWorld/app/src/main/res/layout/defaultlayout.xml" value="0.264" />
-        <entry key="..\:/Code/DHBWorld/app/src/main/res/layout/eventviewer.xml" value="0.20854700854700856" />
+        <entry key="..\:/Code/DHBWorld/app/src/main/res/layout/event_layout.xml" value="0.2604166666666667" />
         <entry key="..\:/Code/DHBWorld/app/src/main/res/layout/header_nav.xml" value="0.1" />
         <entry key="..\:/Code/DHBWorld/app/src/main/res/layout/nav_drawer.xml" value="0.20854700854700856" />
         <entry key="..\:/Code/DHBWorld/app/src/main/res/layout/navigation.xml" value="0.20854700854700856" />
-        <entry key="..\:/Code/DHBWorld/app/src/main/res/layout/personal_information.xml" value="0.3282051282051282" />
-        <entry key="..\:/Code/DHBWorld/app/src/main/res/layout/raplafilter.xml" value="0.17777777777777778" />
-        <entry key="..\:/Code/DHBWorld/app/src/main/res/layout/schedule.xml" value="0.17777777777777778" />
-        <entry key="..\:/Code/DHBWorld/app/src/main/res/layout/schedule_layout.xml" value="0.21682242990654205" />
-        <entry key="..\:/Code/DHBWorld/app/src/main/res/layout/style.xml" value="0.4547008547008547" />
-        <entry key="..\:/Code/DHBWorld/app/src/main/res/menu/calendar_top_app_bar.xml" value="0.20854700854700856" />
+        <entry key="..\:/Code/DHBWorld/app/src/main/res/layout/personal_information.xml" value="0.22135416666666666" />
+        <entry key="..\:/Code/DHBWorld/app/src/main/res/layout/schedule_layout.xml" value="0.264" />
+        <entry key="..\:/Code/DHBWorld/app/src/main/res/layout/user_interaction_layout.xml" value="0.3177083333333333" />
         <entry key="..\:/Code/DHBWorld/app/src/main/res/menu/navigation_drawer.xml" value="0.20854700854700856" />
-        <entry key="..\:/Code/DHBWorld/app/src/main/res/menu/schedule_top_app_bar.xml" value="0.20854700854700856" />
         <entry key="..\:/Code/DHBWorld/app/src/main/res/menu/top_app_bar.xml" value="0.10683760683760683" />
-        <entry key="..\:/StudioProjects/DHBWorld/app/src/main/res/layout/activity_dashboard.xml" value="0.1" />
-        <entry key="..\:/StudioProjects/DHBWorld/app/src/main/res/layout/user_interaction_layout.xml" value="0.22604166666666667" />
-        <entry key="..\:/StudioProjects/DHBWorld/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.1" />
-        <entry key="..\:/Users/adria/AndroidStudioProjects/DHBWorld/app/src/main/res/layout/activity_main.xml" value="0.2006340579710145" />
-        <entry key="..\:/Users/adria/AndroidStudioProjects/DHBWorld/app/src/main/res/layout/defaultlayout.xml" value="0.25416666666666665" />
-        <entry key="..\:/Users/adria/AndroidStudioProjects/DHBWorld/app/src/main/res/layout/personal_information.xml" value="0.25416666666666665" />
-        <entry key="..\:/Users/adria/AndroidStudioProjects/DHBWorld/app/src/main/res/layout/settings_activity.xml" value="0.25416666666666665" />
-        <entry key="..\:/Users/adria/AndroidStudioProjects/DHBWorld/app/src/main/res/xml/root_preferences.xml" value="0.25416666666666665" />
+        <entry key="..\:/Code/DHBWorld/app/src/main/res/xml/root_preferences.xml" value="0.3177083333333333" />
+        <entry key="..\:/Users/blitz/StudioProjects/DHBWorld/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.1375" />
       </map>
     </option>
   </component>

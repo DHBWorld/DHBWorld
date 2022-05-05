@@ -22,9 +22,9 @@ public class Utilities {
     public static final String CATEGORY_CAFETERIA = "cafeteria";
     public static final String CATEGORY_PRINTER = "printer";
 
-    private static final long invalidateTime = 0 * 15 * 1000 * 60;
-    private static final long invalidateTimeSwitch = 0 * 5 * 1000 * 60;
-    private static final long invalidateTimeClicks = 0 * 1000 * 60;
+    private static final long invalidateTime = 15 * 1000 * 60;
+    private static final long invalidateTimeSwitch = 5 * 1000 * 60;
+    private static final long invalidateTimeClicks = 1000 * 60;
 
     private final FirebaseAuth mAuth;
     private FirebaseUser user;
