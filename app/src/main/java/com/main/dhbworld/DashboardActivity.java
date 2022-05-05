@@ -80,6 +80,11 @@ public class DashboardActivity extends AppCompatActivity {
     Boolean cardMealPlan_isVisible = true;
     Boolean cardKvv_isVisible = true;
 
+   private MaterialCardView card_dash_calendar;
+    private MaterialCardView card_dash_pi;
+    private MaterialCardView card_dash_kvv;
+    private MaterialCardView card_dash_mealPlan;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -92,6 +97,11 @@ public class DashboardActivity extends AppCompatActivity {
         layoutCardCalendar = findViewById(R.id.layoutCardCalendar);
         layoutCardKvv = findViewById(R.id.layoutCardKvv);
 
+        card_dash_calendar = findViewById(R.id.card_dash_calendar);
+        card_dash_pi = findViewById(R.id.card_dash_pi);
+        card_dash_kvv = findViewById(R.id.card_dash_kvv);
+        card_dash_mealPlan = findViewById(R.id.card_dash_mealPlan);
+
 
         userConfigurationOfDashboard();
         loadUserInteraction();
@@ -101,9 +111,9 @@ public class DashboardActivity extends AppCompatActivity {
            loadCalendar();
            loadKvv();
        }else{
-           layoutCardMealPlan.setVisibility(View.GONE);
-           layoutCardCalendar.setVisibility(View.GONE);
-           layoutCardKvv.setVisibility(View.GONE);
+           card_dash_mealPlan.setVisibility(View.GONE);
+           card_dash_calendar.setVisibility(View.GONE);
+           card_dash_kvv.setVisibility(View.GONE);
            Toast.makeText(DashboardActivity.this, "Sie haben keine Internet-Verbindung, deshalb können die Daten nicht geladen werden.", Toast.LENGTH_LONG).show();
 
 
@@ -128,9 +138,6 @@ public class DashboardActivity extends AppCompatActivity {
         sp = getSharedPreferences(dashboardSettings, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
 
-
-
-
         ImageButton settings = findViewById(R.id.dashboard_settings);
         configurationModus=false;
         Button buttonCardCalendar= findViewById(R.id.buttonCardCalendar);
@@ -148,30 +155,15 @@ public class DashboardActivity extends AppCompatActivity {
         buttonCardMealPlan.setVisibility(View.INVISIBLE);
         buttonCardKvv.setVisibility(View.INVISIBLE);
 
-        MaterialCardView card_dash_calendar = findViewById(R.id.card_dash_calendar);
-        MaterialCardView card_dash_pi = findViewById(R.id.card_dash_pi);
-        MaterialCardView card_dash_kvv = findViewById(R.id.card_dash_kvv);
-        MaterialCardView card_dash_mealPlan = findViewById(R.id.card_dash_mealPlan);
         LinearLayout card_dash_calendar_layout = findViewById(R.id.card_dash_calendar_layout);
         LinearLayout card_dash_pi_layout = findViewById(R.id.card_dash_pi_layout);
         LinearLayout card_dash_kvv_layout = findViewById(R.id.card_dash_kvv_layout);
         LinearLayout card_dash_mealPlan_layout = findViewById(R.id.card_dash_mealPlan_layout);
 
 
-
-
-     //   card_dash_calendar.setLayoutParams(new MaterialCardView.LayoutParams(0,0));
-      //  card_dash_calendar_layout.setLayoutParams(new ViewGroup.LayoutParams(CardView.LayoutParams.MATCH_PARENT,0 ));
-     //   card_dash_calendar.setMinimumHeight(0);
-
-        // card_dash_calendar.setLayoutParams(new MaterialCardView.LayoutParams(0,0));
-
-      //  card_dash_pi.setLayoutParams(new  CardView.LayoutParams(CardView.LayoutParams.MATCH_PARENT, 0));
-
-
-      cardCalendar_isVisible = sp.getBoolean("cardCalendar", true);
+        cardCalendar_isVisible = sp.getBoolean("cardCalendar", true);
         cardPI_isVisible = sp.getBoolean("cardPI", true);
-       cardMealPlan_isVisible = sp.getBoolean("cardMealPlan", true);
+        cardMealPlan_isVisible = sp.getBoolean("cardMealPlan", true);
         cardKvv_isVisible = sp.getBoolean("cardKvv", true);
 
        if (!cardCalendar_isVisible){
@@ -186,13 +178,6 @@ public class DashboardActivity extends AppCompatActivity {
         if (!cardKvv_isVisible){
             card_dash_kvv.setVisibility(View.GONE);
         }
-
-
-
-
-
-
-
 
         settings.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -214,7 +199,6 @@ public class DashboardActivity extends AppCompatActivity {
                     if (!cardCalendar_isVisible){
                         card_dash_calendar.setStrokeColor(ColorUtils.setAlphaComponent(card_dash_calendar.getStrokeColor(),50));
                         card_dash_calendar_layout.setBackgroundColor(ColorUtils.setAlphaComponent(card_dash_calendar.getStrokeColor(),50));
-
                     }
                     if (!cardPI_isVisible){
                         card_dash_pi.setStrokeColor(ColorUtils.setAlphaComponent(card_dash_pi.getStrokeColor(),50));
@@ -230,8 +214,6 @@ public class DashboardActivity extends AppCompatActivity {
                     }
 
                    configurationModus=true;
-
-
                 } else{
                     settings.setBackground(getResources().getDrawable(R.drawable.ic_construction));
                     buttonCardCalendar.setVisibility(View.INVISIBLE);
@@ -262,7 +244,6 @@ public class DashboardActivity extends AppCompatActivity {
                         card_dash_kvv.setVisibility(View.GONE);
                     }
 
-
                     editor.putBoolean("cardCalendar", cardCalendar_isVisible);
                     editor.putBoolean("cardPI", cardPI_isVisible);
                     editor.putBoolean("cardMealPlan", cardMealPlan_isVisible);
@@ -272,7 +253,6 @@ public class DashboardActivity extends AppCompatActivity {
                 }
             }
         });
-
 
         buttonCardCalendar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -286,14 +266,12 @@ public class DashboardActivity extends AppCompatActivity {
                     card_dash_calendar.setStrokeColor(ColorUtils.setAlphaComponent(card_dash_calendar.getStrokeColor(),255));
                     card_dash_calendar_layout.setBackgroundColor(ColorUtils.setAlphaComponent(card_dash_calendar.getStrokeColor(),255));
                 }
-
             }
         });
 
         buttonCardPI.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 if (cardPI_isVisible){
                     cardPI_isVisible=false; //True = Card is visible
                     card_dash_pi.setStrokeColor(ColorUtils.setAlphaComponent(card_dash_pi.getStrokeColor(),50));
@@ -322,7 +300,6 @@ public class DashboardActivity extends AppCompatActivity {
 
             }
         });
-
         buttonCardKvv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -338,37 +315,26 @@ public class DashboardActivity extends AppCompatActivity {
             }
         });
 
-
-
-
-
-
-
-
     }
 
     private void loadCalendar(){
-
         SharedPreferences preferences = PreferenceManager
                 .getDefaultSharedPreferences(DashboardActivity.this);
         String url = preferences.getString("CurrentURL",null);
 
-        if (!(url ==null)) {
+        if (!(url ==null) && (!url.equals(""))) {
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-
-
                     try {
-
                         nextEventsProvider nextEventsProvider = new nextEventsProvider(DashboardActivity.this);
                         Appointment nextClass = nextEventsProvider.getNextEvent();
 
+                        System.out.println("nextClass.getTitle()");
+                        System.out.println(nextClass.getTitle());
                         layoutCardCalendar.post(new Runnable() {
                             @Override
                             public void run() {
-
-
                                 LocalDateTime now = LocalDateTime.now();
                                 LocalDateTime startClass = nextClass.getStartDate();
                                 LocalDateTime endClass = nextClass.getEndDate();
@@ -382,6 +348,7 @@ public class DashboardActivity extends AppCompatActivity {
                                 layoutNextClass.setVerticalGravity(View.TEXT_ALIGNMENT_CENTER);
 
                                 layoutNextClass.setGravity(Gravity.CENTER_VERTICAL);
+
                                 layoutCardCalendar.addView(layoutNextClass);
 
                                 ImageView UniImage = new ImageView(DashboardActivity.this);
@@ -392,25 +359,20 @@ public class DashboardActivity extends AppCompatActivity {
 
                                 TextView nextClassView = new TextView(DashboardActivity.this);
                                 nextClassView.setTextSize(15);
-                                nextClassView.setLayoutParams(new ViewGroup.LayoutParams(600, ViewGroup.LayoutParams.MATCH_PARENT));
+                                nextClassView.setLayoutParams(new ViewGroup.LayoutParams(560, ViewGroup.LayoutParams.MATCH_PARENT));
                                 nextClassView.setGravity(Gravity.CENTER_VERTICAL);
                                 nextClassView.setTextColor(getResources().getColor(R.color.black));
                                 nextClassView.setPadding(0, 7, 5, 0);
                                 layoutNextClass.addView(nextClassView);
                                 if ((durationUntilStartOfClass.toHours() <= 8) && (durationUntilEndOfClass.toMinutes() >= 0)) {
-
-                                    //nextClassView.setLayoutParams(new ViewGroup.LayoutParams(550, ViewGroup.LayoutParams.WRAP_CONTENT));
                                     UniImage.setImageResource(R.drawable.ic_uni);
                                     nextClassView.setText(nextClass.getTitle());
-
 
                                     LinearLayout layoutTime = new LinearLayout(DashboardActivity.this);
                                     layoutTime.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                                     layoutTime.setOrientation(LinearLayout.VERTICAL);
                                     layoutTime.setVerticalGravity(View.TEXT_ALIGNMENT_CENTER);
-
                                     layoutNextClass.addView(layoutTime);
-
 
                                     LinearLayout layoutTimeDigit = new LinearLayout(DashboardActivity.this);
                                     layoutTimeDigit.setLayoutParams(new ViewGroup.LayoutParams(250, 120));
@@ -418,7 +380,6 @@ public class DashboardActivity extends AppCompatActivity {
                                     layoutTime.setPadding(5, 0, 5, 0);
                                     layoutTime.setVerticalGravity(Gravity.CENTER);
                                     layoutTime.setHorizontalGravity(Gravity.RIGHT);
-
 
                                     layoutTimeDigit.setBackgroundColor(getColor(R.color.grey_defect));
                                     layoutTime.addView(layoutTimeDigit);
@@ -510,6 +471,32 @@ public class DashboardActivity extends AppCompatActivity {
 
                     } catch (Exception e) {
                         e.printStackTrace();
+
+                        /*layoutCardCalendar.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                LinearLayout layoutNextClass = new LinearLayout(DashboardActivity.this);
+                                layoutNextClass.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                                layoutNextClass.setOrientation(LinearLayout.HORIZONTAL);
+                                layoutNextClass.setVerticalGravity(View.TEXT_ALIGNMENT_CENTER);
+                                layoutNextClass.setGravity(Gravity.CENTER_VERTICAL);
+                                layoutCardCalendar.addView(layoutNextClass);
+
+
+                                TextView nextClassView = new TextView(DashboardActivity.this);
+                                nextClassView.setTextSize(15);
+                                nextClassView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT));
+                                nextClassView.setGravity(Gravity.CENTER_VERTICAL);
+                                nextClassView.setTextColor(getResources().getColor(R.color.black));
+                                nextClassView.setPadding(0, 7, 5, 0);
+                                nextClassView.setText("Die Daten aus dem Kalender können hier nicht gezeigt werden.");
+                                layoutNextClass.addView(nextClassView);
+
+                            }
+                        });*/
+
+
+
 
                     }
                 }

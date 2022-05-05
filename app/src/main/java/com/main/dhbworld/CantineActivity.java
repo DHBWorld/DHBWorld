@@ -93,7 +93,9 @@ public class CantineActivity extends AppCompatActivity {
 
         scroll= findViewById(R.id.scrollViewCantine);
 
-        final AtomicReference<Float>[] x1 = new AtomicReference[]{new AtomicReference<>((float) 0)};
+        //Scrollen zwischen den Tabs
+
+       /* final AtomicReference<Float>[] x1 = new AtomicReference[]{new AtomicReference<>((float) 0)};
         final float[] x2 = {0};
         scroll.setOnTouchListener((v, event) -> {
             // TODO Auto-generated method stub
@@ -117,7 +119,7 @@ public class CantineActivity extends AppCompatActivity {
             }
 
             return false;
-        });
+        });*/
 
 
 
@@ -268,17 +270,43 @@ public class CantineActivity extends AppCompatActivity {
         pageTitleExtra.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         layoutMealCardsExtra.addView(pageTitleExtra);
 
+        boolean basicMealOne=true;
+        boolean basicMealTwo=true;
+        boolean basicMealThree=true;
+
+
         for (int i=0;i<mealDailyPlan.getMeal().length; i++){
             MaterialCardView mealCard= new MaterialCardView(CantineActivity.this);
             mealCard.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
             mealCard.setStrokeColor(getResources().getColor(R.color.grey_dark));
 
-            if(mealDailyPlan.getMeal()[i].getCategory().equals("Wahlessen 3")){
-                layoutMealCardsExtra.addView(mealCard);
-            }else{
-                layoutMealCardsBasic.addView(mealCard);
-            }
 
+
+            // "Künstliche Intelligenz" zur Erkennunung von Haupgerichten
+            if((mealDailyPlan.getMeal()[i].getCategory().equals("Wahlessen 1")) && basicMealOne){
+                layoutMealCardsBasic.addView(mealCard);
+                basicMealOne=false;
+            }else if((mealDailyPlan.getMeal()[i].getCategory().equals("Wahlessen 2")) && basicMealTwo){
+                layoutMealCardsBasic.addView(mealCard);
+                basicMealTwo=false;
+            }else if((mealDailyPlan.getMeal()[i].getCategory().equals("Wahlessen 3")) && basicMealThree  ){
+                try {
+                    Double price= Double.parseDouble(mealDailyPlan.getMeal()[i].getPrice());
+
+                    if (price>1.80){
+                        layoutMealCardsBasic.addView(mealCard);
+                        basicMealThree=false;
+                    }else{
+                        layoutMealCardsExtra.addView(mealCard);
+                    }
+                } catch (NumberFormatException e) {
+                    e.printStackTrace();
+                    layoutMealCardsBasic.addView(mealCard);
+                    basicMealThree=false;
+                }
+            }else{
+                layoutMealCardsExtra.addView(mealCard);}
+            //----------------------
 
             LinearLayout cardLayout = new LinearLayout(CantineActivity.this);
             cardLayout.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
@@ -298,7 +326,6 @@ public class CantineActivity extends AppCompatActivity {
             mealView.setText(mealDailyPlan.getMeal()[i].getName());
             mealView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
             mealLayout.addView(mealView);
-
 
             HorizontalScrollView chipScroll = new HorizontalScrollView(CantineActivity.this);
             chipScroll.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
@@ -327,7 +354,6 @@ public class CantineActivity extends AppCompatActivity {
             preisLayout.setOrientation(LinearLayout.VERTICAL);
             preisLayout.setBackgroundColor(getResources().getColor(R.color.grey_light));
             preisLayout.setGravity(Gravity.CENTER);
-
             cardLayout.addView(preisLayout);
 
             TextView preisView = new TextView(CantineActivity.this);
@@ -371,6 +397,8 @@ public class CantineActivity extends AppCompatActivity {
                             public void run() {
                                 try {
                                     MealDailyPlan mealDailyPlan = new MealDailyPlan( inputFromApi);
+
+
                                     loadLayout(mealDailyPlan, date);
                                 } catch (JSONException e) {
                                     e.printStackTrace();
