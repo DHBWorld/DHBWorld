@@ -585,57 +585,61 @@ public class DashboardActivity extends AppCompatActivity {
 
 
 
-                //HIER DEINEN CODE EINFÜGEN
+               for (int i=0; i<departures.size();i++){
+                   if (i<3){
+
+                       LinearLayout layoutTram = new LinearLayout(DashboardActivity.this);
+                       layoutTram.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                       layoutTram.setOrientation(LinearLayout.HORIZONTAL);
+                       layoutTram.setVerticalGravity(View.TEXT_ALIGNMENT_CENTER);
+
+
+
+                       layoutCardKvv.addView(layoutTram);
+
+                       ImageView tramImage= new ImageView(DashboardActivity.this);
+
+                       tramImage.setLayoutParams(new ViewGroup.LayoutParams(60, 60));
+                       tramImage.setImageResource(R.drawable.ic_tram);
+                       tramImage.setPadding(0,0,10,0);
+
+                       layoutTram.addView(tramImage);
+
+
+                       TextView tramView = new TextView(DashboardActivity.this);
+                       tramView.setTextSize(15);
+                       tramView.setTextColor(getResources().getColor(R.color.black));
+                       // tramView.setText("1 (Durlach)");
+                       tramView.setText(departures.get(i).getLine().substring(departures.get(i).getLine().length()-1)+" ("+departures.get(i).getDestination()+")");
+                       // tramView.setText("&&&&");
+                       tramView.setPadding(0,7,5,7);
+                       tramView.setLayoutParams(new ViewGroup.LayoutParams(300, ViewGroup.LayoutParams.WRAP_CONTENT));
+                       layoutTram.addView(tramView);
+
+                       TextView platformView = new TextView(DashboardActivity.this);
+                       platformView.setTextSize(15);
+                       platformView.setTextColor(getResources().getColor(R.color.black));
+                       platformView.setText(departures.get(i).getPlatform());
+                       platformView.setPadding(20,7,0,7);
+                       platformView.setLayoutParams(new ViewGroup.LayoutParams(250, ViewGroup.LayoutParams.WRAP_CONTENT));
+                       layoutTram.addView(platformView);
+
+
+                       TextView timeView = new TextView(DashboardActivity.this);
+                       timeView.setTextSize(15);
+                       timeView.setTextColor(getResources().getColor(R.color.black));
+
+                       DateTimeFormatter formatter = DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT);
+                       timeView.setText(departures.get(i).getDepartureTime().format(formatter));
+                       timeView.setPadding(20,7,0,7);
+                       timeView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                       layoutTram.addView(timeView);
+                   }
+               }
 
 
 
 
-                LinearLayout layoutTram = new LinearLayout(DashboardActivity.this);
-                layoutTram.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                layoutTram.setOrientation(LinearLayout.HORIZONTAL);
-                layoutTram.setVerticalGravity(View.TEXT_ALIGNMENT_CENTER);
-
-
-
-                layoutCardKvv.addView(layoutTram);
-
-                ImageView tramImage= new ImageView(DashboardActivity.this);
-
-                tramImage.setLayoutParams(new ViewGroup.LayoutParams(60, 60));
-                tramImage.setImageResource(R.drawable.ic_tram);
-                tramImage.setPadding(0,0,10,0);
-
-                layoutTram.addView(tramImage);
-
-
-                TextView tramView = new TextView(DashboardActivity.this);
-                tramView.setTextSize(15);
-                tramView.setTextColor(getResources().getColor(R.color.black));
-               // tramView.setText("1 (Durlach)");
-                    tramView.setText(departures.get(0).getLine().substring(departures.get(0).getLine().length()-1)+" ("+departures.get(0).getDestination()+")");
-                   // tramView.setText("&&&&");
-                tramView.setPadding(0,7,5,7);
-                tramView.setLayoutParams(new ViewGroup.LayoutParams(250, ViewGroup.LayoutParams.WRAP_CONTENT));
-                layoutTram.addView(tramView);
-
-                TextView platformView = new TextView(DashboardActivity.this);
-                platformView.setTextSize(15);
-                platformView.setTextColor(getResources().getColor(R.color.black));
-                platformView.setText(departures.get(0).getPlatform());
-                platformView.setPadding(20,7,0,7);
-                platformView.setLayoutParams(new ViewGroup.LayoutParams(250, ViewGroup.LayoutParams.WRAP_CONTENT));
-                layoutTram.addView(platformView);
-
-
-                TextView timeView = new TextView(DashboardActivity.this);
-                timeView.setTextSize(15);
-                timeView.setTextColor(getResources().getColor(R.color.black));
-
-                    DateTimeFormatter formatter = DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT);
-                timeView.setText(departures.get(0).getDepartureTime().format(formatter));
-                timeView.setPadding(20,7,0,7);
-                timeView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                layoutTram.addView(timeView);
                 }
             }
 
