@@ -166,18 +166,10 @@ public class CalendarActivity extends AppCompatActivity{
                 builder.setCancelable(false);
                 builder.setPositiveButton("Done", (dialog, which) -> {
                     for (int i = 0; i < checkedItems.length; i++) {
-                        if(!checkedItems[i]){
-                            blackList.add(listItems[i]);
-                        }
+                        if(!checkedItems[i]){ blackList.add(listItems[i]); }
                         else blackList.remove(listItems[i]);
                     }
-                    blackList = removeDuplicates(blackList);
-                    EventCreator.clearEvents();
-                    EventCreator.setBlackList(blackList);
-                    EventCreator.applyBlackList();
-                    loadedDateList.clear();
-                    saveBlackList(blackList,"blackList");
-                    restart(CalendarActivity.this);
+                    positiveButtonAction();
                 });
                 builder.setNegativeButton("CANCEL", (dialog, which) -> {
                     //just close and do nothing, will not save the changed state.
@@ -185,6 +177,16 @@ public class CalendarActivity extends AppCompatActivity{
                 builder.create();
                 alertDialog = builder.create();
                 alertDialog.show();
+    }
+
+    public void positiveButtonAction(){
+        blackList = removeDuplicates(blackList);
+        EventCreator.clearEvents();
+        EventCreator.setBlackList(blackList);
+        EventCreator.applyBlackList();
+        loadedDateList.clear();
+        saveBlackList(blackList,"blackList");
+        restart(CalendarActivity.this);
     }
 
     public void createUrlDialog() {
@@ -249,6 +251,7 @@ public class CalendarActivity extends AppCompatActivity{
 
     @SuppressLint("ClickableViewAccessibility")
     public void setOnTouchListener(WeekView cal, ExecutorService executor){
+        //calculate the delta between initial touch and release of finger. If over 100 pixels, switch pages.
         final AtomicReference<Float>[] x1 = new AtomicReference[]{new AtomicReference<>((float) 0)};
         final float[] x2 = {0};
 
