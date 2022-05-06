@@ -73,6 +73,7 @@ public class UserInteraction extends AppCompatActivity {
             @Override
             public void onSignedIn(FirebaseUser user) {
                 progressDialog.dismiss();
+                updateInteractionState();
             }
 
             @Override
@@ -127,8 +128,6 @@ public class UserInteraction extends AppCompatActivity {
         });
 
         firebaseUtilities.signIn();
-
-        updateInteractionState();
 
     }
 

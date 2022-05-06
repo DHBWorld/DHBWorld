@@ -18,8 +18,6 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 public class Utilities {
-    private static final String emulatorIpData = "data.firebase.blitzdose.de";
-    private static final String emulatorIpAuth = "auth.firebase.blitzdose.de";
 
     public static final String CATEGORY_COFFEE = "coffee";
     public static final String CATEGORY_CAFETERIA = "cafeteria";
@@ -27,7 +25,7 @@ public class Utilities {
 
     private static final long invalidateTime = 15 * 1000 * 60;
     private static final long invalidateTimeSwitch = 5 * 1000 * 60;
-    private static final long invalidateTimeClicks = 1000 * 60 * 0;
+    private static final long invalidateTimeClicks = 1000 * 60;
 
     private final FirebaseAuth mAuth;
     private FirebaseUser user;
@@ -67,6 +65,7 @@ public class Utilities {
         mAuth.addAuthStateListener(new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                System.out.println();
                 if (firebaseAuth.getCurrentUser() != null) {
                     user = firebaseAuth.getCurrentUser();
                     signedInListener.onSignedIn(user);
@@ -124,40 +123,39 @@ public class Utilities {
         }
         lastClick = System.currentTimeMillis();
         DatabaseReference issuesDatabase = getIssueDatabaseWithUser(category);
-        issuesDatabase.addValueEventListener(new ValueEventListener() {
+        issuesDatabase.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                System.out.println(123);
-                Issue issue = snapshot.getValue(Issue.class);
-                if (issue == null || issue.getProblem() != problem || issue.getTimestamp() + invalidateTime < System.currentTimeMillis()) {
-                    if (issue != null && issue.getProblem() != problem && issue.getTimestamp() + invalidateTimeSwitch >= System.currentTimeMillis()) {
-                        if (preferences.getLong("last_switch_time", 0) + invalidateTimeSwitch >= System.currentTimeMillis()) {
-                            if (dataSendListener != null) {
-                                dataSendListener.failed(new TooManyClicksException("Clicked too often"));
+            public void onComplete(@NonNull Task<DataSnapshot> task) {
+                if (task.isSuccessful() && task.getResult() != null) {
+                    DataSnapshot snapshot = task.getResult();
+                    Issue issue = snapshot.getValue(Issue.class);
+                    if (issue == null || issue.getProblem() != problem || issue.getTimestamp() + invalidateTime < System.currentTimeMillis()) {
+                        if (issue != null && issue.getProblem() != problem && issue.getTimestamp() + invalidateTimeSwitch >= System.currentTimeMillis()) {
+                            if (preferences.getLong("last_switch_time", 0) + invalidateTimeSwitch >= System.currentTimeMillis()) {
+                                if (dataSendListener != null) {
+                                    dataSendListener.failed(new TooManyClicksException("Clicked too often"));
+                                }
+                                return;
                             }
-                            return;
+                            editor.putLong("last_switch_time", System.currentTimeMillis());
+                            editor.apply();
                         }
-                        editor.putLong("last_switch_time", System.currentTimeMillis());
-                        editor.apply();
+                        issuesDatabase.setValue(new Issue(System.currentTimeMillis(), problem)).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if (task.getException() != null) {
+                                    dataSendListener.failed(task.getException());
+                                    task.getException().printStackTrace();
+                                } else {
+                                    System.out.println("TASK: " + task.isSuccessful());
+                                }
+                            }
+                        });
+                        dataSendListener.success();
                     }
-                    issuesDatabase.setValue(new Issue(System.currentTimeMillis(), problem)).addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            if (task.getException() != null) {
-                                dataSendListener.failed(task.getException());
-                                task.getException().printStackTrace();
-                            } else {
-                                System.out.println("TASK: " + task.isSuccessful());
-                            }
-                        }
-                    });
-                    dataSendListener.success();
+                } else {
+                    dataSendListener.failed(task.getException());
                 }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                dataSendListener.failed(error.toException());
             }
         });
     }
@@ -168,26 +166,26 @@ public class Utilities {
      */
     public void removeFromDatabase(String category) {
         DatabaseReference issuesDatabase = getIssueDatabaseWithUser(category);
-        issuesDatabase.addValueEventListener(new ValueEventListener() {
+        issuesDatabase.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (dataSendListener != null) {
-                    dataSendListener.success();
-                }
-                Issue issue = snapshot.getValue(Issue.class);
-                if (issue == null) {
-                    return;
-                }
-                if (issue.getTimestamp() + invalidateTime < System.currentTimeMillis()) {
-                    issuesDatabase.setValue(null);
+            public void onComplete(@NonNull Task<DataSnapshot> task) {
+                if (task.isSuccessful() && task.getResult() != null) {
+                    DataSnapshot snapshot = task.getResult();
+                    if (dataSendListener != null) {
+                        dataSendListener.success();
+                    }
+                    Issue issue = snapshot.getValue(Issue.class);
+                    if (issue == null) {
+                        return;
+                    }
+                    if (issue.getTimestamp() + invalidateTime < System.currentTimeMillis()) {
+                        issuesDatabase.setValue(null);
+                    } else {
+                        issuesDatabase.setValue(issue);
+                    }
                 } else {
-                    issuesDatabase.setValue(issue);
+                    dataSendListener.failed(task.getException());
                 }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                dataSendListener.failed(error.toException());
             }
         });
     }
@@ -203,7 +201,7 @@ public class Utilities {
         }
 
         DatabaseReference issueDatabase = getStatusDatabase().child(category);
-        ValueEventListener valueEventListener = new ValueEventListener() {
+        issueDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.getValue() == null) {
@@ -219,10 +217,13 @@ public class Utilities {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                error.toException().printStackTrace();
+                if (category.equals(CATEGORY_CAFETERIA)) {
+                    currentStatusListener.onStatusReceived(category, 3);
+                } else {
+                    currentStatusListener.onStatusReceived(category, 0);
+                }
             }
-        };
-        issueDatabase.addValueEventListener(valueEventListener);
+        });
     }
 
     /**
@@ -235,15 +236,15 @@ public class Utilities {
             return;
         }
         DatabaseReference issueDatabase = getIssueDatabase(category);
-        issueDatabase.addValueEventListener(new ValueEventListener() {
+        issueDatabase.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                reportCountListener.onReportCountReceived(category, snapshot.getChildrenCount());
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                reportCountListener.onReportCountReceived(category, 0);
+            public void onComplete(@NonNull Task<DataSnapshot> task) {
+                if (task.isSuccessful() && task.getResult() != null) {
+                    DataSnapshot snapshot = task.getResult();
+                    reportCountListener.onReportCountReceived(category, snapshot.getChildrenCount());
+                } else {
+                    reportCountListener.onReportCountReceived(category, 0);
+                }
             }
         });
     }
