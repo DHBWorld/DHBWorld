@@ -11,6 +11,7 @@ import org.xmlpull.v1.XmlPullParserFactory;
 
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,7 +32,9 @@ public class OrganizerActivity extends AppCompatActivity {
     }
 
     public List parse() throws Exception {
-        InputStream in = new FileInputStream("D:\\Code\\DHBWorld\\rapla.xml");
+        URL url = new URL("https://rapla.dhbw-karlsruhe.de/rapla?key=2llRzrjV9Yj0yY4JKsO9cneRD8XIxxCqFeg5tRpzABg");
+
+        InputStream in = url.openStream();
 
         try {
             XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
@@ -49,7 +52,10 @@ public class OrganizerActivity extends AppCompatActivity {
                             Course course = new Course();
                         }
                         break;
-
+                    case XmlPullParser.END_TAG:
+                        if (tag.equalsIgnoreCase("kurs")) {
+                            courses.add(course);
+                        }
 
                 }
             }
