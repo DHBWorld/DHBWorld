@@ -30,7 +30,19 @@ public class Course {
         return roomNo;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
 
+    public void setYear(int year) {
+        this.year = year;
+    }
 
+    public void setStudy(String study) {
+        this.study = study;
+    }
 
+    public void setRoomNo(String roomNo) {
+        this.roomNo = roomNo;
+    }
 }

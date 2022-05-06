@@ -49,6 +49,9 @@
         <activity
             android:name=".CalendarActivity"
             android:exported="false" />
+        <activity
+            android:name=".OrganizerActivity"
+            android:exported="false" />
 
         <service
             android:name=".Services.UserInteractionMessagingService"

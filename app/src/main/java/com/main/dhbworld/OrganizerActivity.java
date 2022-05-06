@@ -1,42 +1,51 @@
 package com.main.dhbworld;
 
 import android.os.Bundle;
-
 import androidx.appcompat.app.AppCompatActivity;
-
 import com.main.dhbworld.Navigation.NavigationUtilities;
-
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserFactory;
 
-import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.List;
+
 
 public class OrganizerActivity extends AppCompatActivity {
     private ArrayList<Course> courses = new ArrayList<>();
-
-
+    private Course course;
+    private String text;
+    InputStream in;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.organizer_layout);
+        NavigationUtilities.setUpNavigation(this, R.id.navigationView);
+        t.start();
         try {
-            parse();
+            parseXml();
         } catch (Exception e) {
             e.printStackTrace();
         }
-        setContentView(R.layout.schedule_layout);
-        NavigationUtilities.setUpNavigation(this, R.id.Calendar);
     }
 
-    public List parse() throws Exception {
-        URL url = new URL("https://rapla.dhbw-karlsruhe.de/rapla?key=2llRzrjV9Yj0yY4JKsO9cneRD8XIxxCqFeg5tRpzABg");
+    Thread t = new Thread(new Runnable() {
+        @Override
+        public void run() {
+            try {
+                URL url = new URL("https://rapla.dhbw-karlsruhe.de/rapla?key=2llRzrjV9Yj0yY4JKsO9cneRD8XIxxCqFeg5tRpzABg");
+                in = url.openStream();
+                System.out.println(in);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }});
 
-        InputStream in = url.openStream();
-
+    public void parseXml() throws Exception {
         try {
+            t.join();
             XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
             factory.setNamespaceAware(false);
             XmlPullParser parser = factory.newPullParser();
@@ -49,44 +58,40 @@ public class OrganizerActivity extends AppCompatActivity {
                 switch (eventType) {
                     case XmlPullParser.START_TAG:
                         if (tag.equalsIgnoreCase("kurs")) {
-                            Course course = new Course();
+                            course = new Course();
                         }
+                        break;
+                    case XmlPullParser.TEXT:
+                        text = parser.getText();
                         break;
                     case XmlPullParser.END_TAG:
                         if (tag.equalsIgnoreCase("kurs")) {
                             courses.add(course);
+                        } else if (tag.equalsIgnoreCase("name")) {
+                            course.setName(text);
+                        } else if (tag.equalsIgnoreCase("jahrgang")) {
+                            course.setYear(Integer.parseInt(text));
+                        } else if (tag.equalsIgnoreCase("studiengang")) {
+                            course.setStudy(text);
+                        } else if (tag.equalsIgnoreCase("raumnr")) {
+                            course.setRoomNo(text);
                         }
-
+                    default:
+                        break;
                 }
             }
-        } finally {
-            in.close();
         }
-        return x;
+        catch (Exception e){
+            e.printStackTrace();
+        }
+        displayCourses();
     }
 
 
+    public void displayCourses(){
+        for(Course e : courses) {
+            System.out.println(e);
+        }
+    }
 
-
-//
-//    public static String convertStreamToString(InputStream is) throws Exception {
-//        BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-//        StringBuilder sb = new StringBuilder();
-//        String line = null;
-//        while ((line = reader.readLine()) != null) {
-//            sb.append(line).append("\n");
-//        }
-//        reader.close();
-//        return sb.toString();
-//    }
-//
-//
-//    public static String getStringFromFile (String filePath) throws Exception {
-//        File fl = new File(filePath);
-//        FileInputStream fin = new FileInputStream(fl);
-//        String ret = convertStreamToString(fin);
-//        //Make sure you close all streams.
-//        fin.close();
-//        return ret;
-//    }
 }
