@@ -24,6 +24,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.main.dhbworld.Navigation.NavigationUtilities;
 import java.lang.reflect.Type;
+import java.net.MalformedURLException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -36,6 +37,7 @@ import java.util.List;
 import java.util.Locale;
 import java.time.LocalDate;
 import dhbw.timetable.rapla.data.event.Appointment;
+import dhbw.timetable.rapla.exceptions.NoConnectionException;
 import dhbw.timetable.rapla.parser.DataImporter;
 import java.util.Map;
 import java.util.Objects;
@@ -57,7 +59,7 @@ public class CalendarActivity extends AppCompatActivity{
     @SuppressLint("ClickableViewAccessibility")
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //check url here so the schedule layout isnt displayed yet.
+        //check url here so the schedule layout isn't displayed yet.
         checkURL();
         setContentView(R.layout.schedule_layout);
         NavigationUtilities.setUpNavigation(this, R.id.Calendar);
