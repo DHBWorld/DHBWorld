@@ -6,12 +6,17 @@ import android.view.View;
 
 import androidx.preference.PreferenceManager;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Type;
 import java.net.MalformedURLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.ExecutorService;
@@ -25,6 +30,7 @@ public class nextEventsProvider {
     private String url;
     Context context;
     SharedPreferences sp;
+    static ArrayList<String> blackList = new ArrayList<>();
 
     public nextEventsProvider(Context context){
         this.context = context;
@@ -33,6 +39,7 @@ public class nextEventsProvider {
 
     public Appointment getNextEvent() throws NoConnectionException, IllegalAccessException, MalformedURLException {
         url = getUrl();
+        blackList = getBlackList(context);
         Calendar thisWeekCal = Calendar.getInstance();
         Calendar nextWeekCal = (Calendar) thisWeekCal.clone();
         nextWeekCal.add(Calendar.WEEK_OF_YEAR,2);
@@ -43,23 +50,53 @@ public class nextEventsProvider {
         LocalDate thisWeek = LocalDateTime.ofInstant(mondayCal.toInstant(), ZoneId.systemDefault()).toLocalDate();
 
         Map<LocalDate, ArrayList<Appointment>> rawData = DataImporter.ImportWeekRange(thisWeek,nextWeek,url);
-        System.out.println(thisWeek + "    " + rawData);
-        ArrayList<Appointment> thisWeekData = rawData.get(thisWeek);
-        return(disectData(thisWeekData));
+        return(disectData(mergeData(rawData)));
+    }
+
+    //merge all the ArrayLists of incoming Map into single ArrayList
+    public ArrayList<Appointment> mergeData(Map<LocalDate, ArrayList<Appointment>> rawData){
+        ArrayList<Appointment> allAppointments = new ArrayList<>();
+        Collection<ArrayList<Appointment>> a = rawData.values();
+        for (ArrayList<Appointment> b : a){
+            allAppointments.addAll(b);
+        }
+        return allAppointments;
     }
 
     public Appointment disectData(ArrayList<Appointment> data){
-        Calendar thisWeekCal = Calendar.getInstance();
-        LocalDateTime thisWeek = LocalDateTime.ofInstant(thisWeekCal.toInstant(), ZoneId.systemDefault());
-        Appointment nextEvent = data.get(0);
-            for(int i = 0; i < data.size(); i++){
-                Appointment currentEvent = data.get(i);
-                if(currentEvent.getEndDate().isAfter(thisWeek)
-                && currentEvent.getStartDate().isBefore(nextEvent.getStartDate())){
-                    nextEvent = currentEvent;
+        ArrayList<Appointment> futureEvents = getFutureEvents(data);
+        Appointment nextEvent = futureEvents.get(0);
+            for(int i = 0; i < futureEvents.size(); i++){
+                if(futureEvents.get(i).getStartDate().isBefore(nextEvent.getStartDate())){
+                    nextEvent = futureEvents.get(i);
                 }
             }
             return(nextEvent);
+    }
+
+    public ArrayList<Appointment> getFutureEvents(ArrayList<Appointment> data){
+        ArrayList<Appointment> futureEvents = new ArrayList<>();
+        for(int i = 0; i < data.size(); i++){
+            if(data.get(i).getEndDate().isAfter(LocalDateTime.now()) &&
+                    !blackList.contains(data.get(i).getTitle())){
+                futureEvents.add(data.get(i));
+            }
+        }
+        return futureEvents;
+    }
+
+    public ArrayList<String> getBlackList(Context context){
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        Gson gson = new Gson();
+        String json = prefs.getString("blackList", null);
+        Type type = new TypeToken<ArrayList<String>>() {}.getType();
+        ArrayList<String> blackList = gson.fromJson(json, type);
+        if (blackList == null){
+            return new ArrayList<>();
+        }
+        else{
+            return blackList;
+        }
     }
 
     public String getUrl(){
