@@ -330,8 +330,6 @@ public class DashboardActivity extends AppCompatActivity {
                         nextEventsProvider nextEventsProvider = new nextEventsProvider(DashboardActivity.this);
                         Appointment nextClass = nextEventsProvider.getNextEvent();
 
-                        System.out.println("nextClass.getTitle()");
-                        System.out.println(nextClass.getTitle());
                         layoutCardCalendar.post(new Runnable() {
                             @Override
                             public void run() {
@@ -341,30 +339,28 @@ public class DashboardActivity extends AppCompatActivity {
                                 Duration durationUntilStartOfClass = Duration.between(now, startClass);
                                 Duration durationUntilEndOfClass = Duration.between(now, endClass);
 
-
                                 LinearLayout layoutNextClass = new LinearLayout(DashboardActivity.this);
                                 layoutNextClass.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                                 layoutNextClass.setOrientation(LinearLayout.HORIZONTAL);
                                 layoutNextClass.setVerticalGravity(View.TEXT_ALIGNMENT_CENTER);
-
                                 layoutNextClass.setGravity(Gravity.CENTER_VERTICAL);
-
                                 layoutCardCalendar.addView(layoutNextClass);
 
                                 ImageView UniImage = new ImageView(DashboardActivity.this);
                                 UniImage.setLayoutParams(new ViewGroup.LayoutParams(65, 65));
-
                                 UniImage.setPadding(0, 7, 10, 0);
                                 layoutNextClass.addView(UniImage);
 
-                                TextView nextClassView = new TextView(DashboardActivity.this);
-                                nextClassView.setTextSize(15);
-                                nextClassView.setLayoutParams(new ViewGroup.LayoutParams(560, ViewGroup.LayoutParams.MATCH_PARENT));
-                                nextClassView.setGravity(Gravity.CENTER_VERTICAL);
-                                nextClassView.setTextColor(getResources().getColor(R.color.black));
-                                nextClassView.setPadding(0, 7, 5, 0);
-                                layoutNextClass.addView(nextClassView);
                                 if ((durationUntilStartOfClass.toHours() <= 8) && (durationUntilEndOfClass.toMinutes() >= 0)) {
+
+                                    TextView nextClassView = new TextView(DashboardActivity.this);
+                                    nextClassView.setTextSize(15);
+                                    nextClassView.setLayoutParams(new ViewGroup.LayoutParams(560, ViewGroup.LayoutParams.MATCH_PARENT));
+                                    nextClassView.setGravity(Gravity.CENTER_VERTICAL);
+                                    nextClassView.setTextColor(getResources().getColor(R.color.black));
+                                    nextClassView.setPadding(0, 7, 5, 0);
+                                    layoutNextClass.addView(nextClassView);
+
                                     UniImage.setImageResource(R.drawable.ic_uni);
                                     nextClassView.setText(nextClass.getTitle());
 
@@ -375,7 +371,7 @@ public class DashboardActivity extends AppCompatActivity {
                                     layoutNextClass.addView(layoutTime);
 
                                     LinearLayout layoutTimeDigit = new LinearLayout(DashboardActivity.this);
-                                    layoutTimeDigit.setLayoutParams(new ViewGroup.LayoutParams(250, 120));
+                                    layoutTimeDigit.setLayoutParams(new ViewGroup.LayoutParams(235, 120));
                                     layoutTimeDigit.setOrientation(LinearLayout.HORIZONTAL);
                                     layoutTime.setPadding(5, 0, 5, 0);
                                     layoutTime.setVerticalGravity(Gravity.CENTER);
@@ -409,13 +405,11 @@ public class DashboardActivity extends AppCompatActivity {
                                     letterTimeView.setGravity(Gravity.CENTER);
 
                                     letterTimeView.setPadding(0, 2, 0, 5);
-                                    letterTimeView.setLayoutParams(new ViewGroup.LayoutParams(250, ViewGroup.LayoutParams.WRAP_CONTENT));
+                                    letterTimeView.setLayoutParams(new ViewGroup.LayoutParams(235, ViewGroup.LayoutParams.WRAP_CONTENT));
                                     letterTimeView.setBackgroundColor(getColor(R.color.even_lighter_gray));
                                     layoutTime.addView(letterTimeView);
 
                                     if (durationUntilStartOfClass.toMinutes() >= 0) {
-
-
 
                                         new CountDownTimer(durationUntilStartOfClass.toMinutes() * 60000, 60000) {
                                             public void onTick(long millisUtilFinished) {
@@ -459,12 +453,17 @@ public class DashboardActivity extends AppCompatActivity {
 
                                 } else if (durationUntilStartOfClass.toHours() > 9) {
                                     UniImage.setImageResource(R.drawable.ic_celebration);
+
+                                    TextView nextClassView = new TextView(DashboardActivity.this);
+                                    nextClassView.setTextSize(15);
+                                    nextClassView.setLayoutParams(new ViewGroup.LayoutParams(760, ViewGroup.LayoutParams.MATCH_PARENT));
+                                    nextClassView.setGravity(Gravity.CENTER_VERTICAL);
+                                    nextClassView.setTextColor(getResources().getColor(R.color.black));
+                                    nextClassView.setPadding(0, 7, 5, 0);
+                                    layoutNextClass.addView(nextClassView);
                                     nextClassView.setText("Sie haben keine Vorlesungen mehr heute");
 
-
                                 }
-
-
                             }
                         });
 
@@ -472,7 +471,7 @@ public class DashboardActivity extends AppCompatActivity {
                     } catch (Exception e) {
                         e.printStackTrace();
 
-                        /*layoutCardCalendar.post(new Runnable() {
+                        layoutCardCalendar.post(new Runnable() {
                             @Override
                             public void run() {
                                 LinearLayout layoutNextClass = new LinearLayout(DashboardActivity.this);
@@ -493,7 +492,7 @@ public class DashboardActivity extends AppCompatActivity {
                                 layoutNextClass.addView(nextClassView);
 
                             }
-                        });*/
+                        });
 
 
 
