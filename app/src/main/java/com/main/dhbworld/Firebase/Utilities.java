@@ -236,15 +236,15 @@ public class Utilities {
             return;
         }
         DatabaseReference issueDatabase = getIssueDatabase(category);
-        issueDatabase.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+        issueDatabase.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onComplete(@NonNull Task<DataSnapshot> task) {
-                if (task.isSuccessful() && task.getResult() != null) {
-                    DataSnapshot snapshot = task.getResult();
-                    reportCountListener.onReportCountReceived(category, snapshot.getChildrenCount());
-                } else {
-                    reportCountListener.onReportCountReceived(category, 0);
-                }
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                reportCountListener.onReportCountReceived(category, snapshot.getChildrenCount());
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                reportCountListener.onReportCountReceived(category, 0);
             }
         });
     }
