@@ -24,6 +24,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.main.dhbworld.Navigation.NavigationUtilities;
 import java.lang.reflect.Type;
+import java.net.MalformedURLException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -36,6 +37,7 @@ import java.util.List;
 import java.util.Locale;
 import java.time.LocalDate;
 import dhbw.timetable.rapla.data.event.Appointment;
+import dhbw.timetable.rapla.exceptions.NoConnectionException;
 import dhbw.timetable.rapla.parser.DataImporter;
 import java.util.Map;
 import java.util.Objects;
@@ -53,11 +55,13 @@ public class CalendarActivity extends AppCompatActivity{
     static ArrayList<Events> events = new ArrayList<>();
     static ArrayList<String> blackList = new ArrayList<>();
     String url;
+    boolean allowScrolling = false;
+
 
     @SuppressLint("ClickableViewAccessibility")
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //check url here so the schedule layout isnt displayed yet.
+        //check url here so the schedule layout isn't displayed yet.
         checkURL();
         setContentView(R.layout.schedule_layout);
         NavigationUtilities.setUpNavigation(this, R.id.Calendar);
@@ -162,18 +166,10 @@ public class CalendarActivity extends AppCompatActivity{
                 builder.setCancelable(false);
                 builder.setPositiveButton("Done", (dialog, which) -> {
                     for (int i = 0; i < checkedItems.length; i++) {
-                        if(!checkedItems[i]){
-                            blackList.add(listItems[i]);
-                        }
+                        if(!checkedItems[i]){ blackList.add(listItems[i]); }
                         else blackList.remove(listItems[i]);
                     }
-                    blackList = removeDuplicates(blackList);
-                    EventCreator.clearEvents();
-                    EventCreator.setBlackList(blackList);
-                    EventCreator.applyBlackList();
-                    loadedDateList.clear();
-                    saveBlackList(blackList,"blackList");
-                    restart(CalendarActivity.this);
+                    positiveButtonAction();
                 });
                 builder.setNegativeButton("CANCEL", (dialog, which) -> {
                     //just close and do nothing, will not save the changed state.
@@ -181,6 +177,16 @@ public class CalendarActivity extends AppCompatActivity{
                 builder.create();
                 alertDialog = builder.create();
                 alertDialog.show();
+    }
+
+    public void positiveButtonAction(){
+        blackList = removeDuplicates(blackList);
+        EventCreator.clearEvents();
+        EventCreator.setBlackList(blackList);
+        EventCreator.applyBlackList();
+        loadedDateList.clear();
+        saveBlackList(blackList,"blackList");
+        restart(CalendarActivity.this);
     }
 
     public void createUrlDialog() {
@@ -245,6 +251,7 @@ public class CalendarActivity extends AppCompatActivity{
 
     @SuppressLint("ClickableViewAccessibility")
     public void setOnTouchListener(WeekView cal, ExecutorService executor){
+        //calculate the delta between initial touch and release of finger. If over 100 pixels, switch pages.
         final AtomicReference<Float>[] x1 = new AtomicReference[]{new AtomicReference<>((float) 0)};
         final float[] x2 = {0};
 
@@ -257,14 +264,14 @@ public class CalendarActivity extends AppCompatActivity{
                 case MotionEvent.ACTION_UP:
                     x2[0] = event.getX();
                     float deltaX = x2[0] - x1[0].get();
-                    if (deltaX < -100) {
+                    if (deltaX < -100 && allowScrolling) {
                         date.add(Calendar.WEEK_OF_YEAR,1);
                         cal.scrollToDate(date);
                         if(!loadedDateList.contains(date.toInstant())) {
                             executor.submit(importWeek);
                         }
                         return true;
-                    }else if(deltaX > 100){
+                    }else if(deltaX > 100 && allowScrolling){
                         date.add(Calendar.WEEK_OF_YEAR,-1);
                         cal.scrollToDate(date);
                         if(!loadedDateList.contains(date.toInstant())) {
@@ -279,6 +286,7 @@ public class CalendarActivity extends AppCompatActivity{
     }
 
     Runnable importWeek = () -> {
+        allowScrolling = false;
         Map<LocalDate, ArrayList<Appointment>> data = new HashMap<>();
         LocalDate thisWeek = LocalDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault()).toLocalDate();
         loadedDateList.add(date.toInstant());
@@ -293,6 +301,7 @@ public class CalendarActivity extends AppCompatActivity{
             }
             try {
                 assert data != null;
+                allowScrolling = true;
                 saveValues(data);
             } catch (Exception e) {
                 e.printStackTrace();
