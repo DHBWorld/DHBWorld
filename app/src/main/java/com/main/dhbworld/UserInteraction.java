@@ -170,6 +170,7 @@ public class UserInteraction extends AppCompatActivity {
 
                                 @Override
                                 public void failed(Exception reason) {
+                                    Toast.makeText(UserInteraction.this, reason.getMessage(), Toast.LENGTH_LONG).show();
                                     Toast.makeText(UserInteraction.this, "Fehler", Toast.LENGTH_SHORT).show();
                                 }
                             });

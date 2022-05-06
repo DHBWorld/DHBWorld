@@ -11,12 +11,15 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 public class Utilities {
-    private static final String emulatorIp = "blitzdose.de";
+    private static final String emulatorIpData = "data.firebase.blitzdose.de";
+    private static final String emulatorIpAuth = "auth.firebase.blitzdose.de";
 
     public static final String CATEGORY_COFFEE = "coffee";
     public static final String CATEGORY_CAFETERIA = "cafeteria";
@@ -24,7 +27,7 @@ public class Utilities {
 
     private static final long invalidateTime = 15 * 1000 * 60;
     private static final long invalidateTimeSwitch = 5 * 1000 * 60;
-    private static final long invalidateTimeClicks = 1000 * 60;
+    private static final long invalidateTimeClicks = 1000 * 60 * 0;
 
     private final FirebaseAuth mAuth;
     private FirebaseUser user;
@@ -46,11 +49,11 @@ public class Utilities {
      */
 
     public Utilities(Context context) {
-        database = FirebaseDatabase.getInstance();
-        database.useEmulator(emulatorIp, 9000);
+        database = FirebaseDatabase.getInstance("https://dhbworld-d9c39-default-rtdb.europe-west1.firebasedatabase.app");
+        //database.useEmulator(emulatorIpData, 80);
 
-        FirebaseAuth.getInstance().useEmulator(emulatorIp, 9099);
         mAuth = FirebaseAuth.getInstance();
+        //mAuth.useEmulator(emulatorIpAuth, 80);
 
         preferences = context.getApplicationContext().getSharedPreferences("firebase", Context.MODE_PRIVATE);
         editor = preferences.edit();
@@ -61,18 +64,20 @@ public class Utilities {
      * @see #setSignedInListener(SignedInListener)
      */
     public void signIn() {
-        mAuth.signInAnonymously()
-                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        user = mAuth.getCurrentUser();
-                        if (task.isSuccessful() && signedInListener != null) {
-                            signedInListener.onSignedIn(mAuth.getCurrentUser());
-                        } else if (signedInListener != null){
-                            signedInListener.onSignInError();
-                        }
-                    }
-                });
+        mAuth.addAuthStateListener(new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                if (firebaseAuth.getCurrentUser() != null) {
+                    user = firebaseAuth.getCurrentUser();
+                    signedInListener.onSignedIn(user);
+                } else {
+                    signedInListener.onSignInError();
+                }
+
+            }
+        });
+
+        mAuth.signInAnonymously();
     }
 
     /**
@@ -119,28 +124,40 @@ public class Utilities {
         }
         lastClick = System.currentTimeMillis();
         DatabaseReference issuesDatabase = getIssueDatabaseWithUser(category);
-        issuesDatabase.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+        issuesDatabase.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onComplete(@NonNull Task<DataSnapshot> task) {
-                if (task.isSuccessful()) {
-                    Issue issue = task.getResult().getValue(Issue.class);
-                    if (issue == null || issue.getProblem() != problem || issue.getTimestamp() + invalidateTime < System.currentTimeMillis()) {
-                        if (issue != null && issue.getProblem() != problem && issue.getTimestamp() + invalidateTimeSwitch >= System.currentTimeMillis()) {
-                            if (preferences.getLong("last_switch_time", 0) + invalidateTimeSwitch >= System.currentTimeMillis()) {
-                                if (dataSendListener != null) {
-                                    dataSendListener.failed(new TooManyClicksException("Clicked too often"));
-                                }
-                                return;
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                System.out.println(123);
+                Issue issue = snapshot.getValue(Issue.class);
+                if (issue == null || issue.getProblem() != problem || issue.getTimestamp() + invalidateTime < System.currentTimeMillis()) {
+                    if (issue != null && issue.getProblem() != problem && issue.getTimestamp() + invalidateTimeSwitch >= System.currentTimeMillis()) {
+                        if (preferences.getLong("last_switch_time", 0) + invalidateTimeSwitch >= System.currentTimeMillis()) {
+                            if (dataSendListener != null) {
+                                dataSendListener.failed(new TooManyClicksException("Clicked too often"));
                             }
-                            editor.putLong("last_switch_time", System.currentTimeMillis());
-                            editor.apply();
+                            return;
                         }
-                        issuesDatabase.setValue(new Issue(System.currentTimeMillis(), problem));
-                        dataSendListener.success();
+                        editor.putLong("last_switch_time", System.currentTimeMillis());
+                        editor.apply();
                     }
-                } else {
-                    dataSendListener.failed(task.getException());
+                    issuesDatabase.setValue(new Issue(System.currentTimeMillis(), problem)).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.getException() != null) {
+                                dataSendListener.failed(task.getException());
+                                task.getException().printStackTrace();
+                            } else {
+                                System.out.println("TASK: " + task.isSuccessful());
+                            }
+                        }
+                    });
+                    dataSendListener.success();
                 }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                dataSendListener.failed(error.toException());
             }
         });
     }
@@ -151,25 +168,26 @@ public class Utilities {
      */
     public void removeFromDatabase(String category) {
         DatabaseReference issuesDatabase = getIssueDatabaseWithUser(category);
-        issuesDatabase.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+        issuesDatabase.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onComplete(@NonNull Task<DataSnapshot> task) {
-                if (task.isSuccessful() && dataSendListener != null) {
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (dataSendListener != null) {
                     dataSendListener.success();
-                } else if (dataSendListener != null) {
-                    dataSendListener.failed(task.getException());
                 }
-                if (task.isSuccessful() && task.getResult() != null) {
-                    Issue issue = task.getResult().getValue(Issue.class);
-                    if (issue == null) {
-                        return;
-                    }
-                    if (issue.getTimestamp() + invalidateTime < System.currentTimeMillis()) {
-                        issuesDatabase.setValue(null);
-                    } else {
-                        issuesDatabase.setValue(issue);
-                    }
+                Issue issue = snapshot.getValue(Issue.class);
+                if (issue == null) {
+                    return;
                 }
+                if (issue.getTimestamp() + invalidateTime < System.currentTimeMillis()) {
+                    issuesDatabase.setValue(null);
+                } else {
+                    issuesDatabase.setValue(issue);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                dataSendListener.failed(error.toException());
             }
         });
     }
@@ -184,23 +202,27 @@ public class Utilities {
             return;
         }
 
-        DatabaseReference issueDatabase = getIssueDatabase().child(category + "Status");
-        issueDatabase.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+        DatabaseReference issueDatabase = getStatusDatabase().child(category);
+        ValueEventListener valueEventListener = new ValueEventListener() {
             @Override
-            public void onComplete(@NonNull Task<DataSnapshot> task) {
-                if (task.isSuccessful() && task.getResult() != null) {
-                    if (task.getResult().getValue() == null) {
-                        if (category.equals(CATEGORY_CAFETERIA)) {
-                            currentStatusListener.onStatusReceived(category, 3);
-                        } else {
-                            currentStatusListener.onStatusReceived(category, 0);
-                        }
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.getValue() == null) {
+                    if (category.equals(CATEGORY_CAFETERIA)) {
+                        currentStatusListener.onStatusReceived(category, 3);
                     } else {
-                        currentStatusListener.onStatusReceived(category, task.getResult().getValue(int.class));
+                        currentStatusListener.onStatusReceived(category, 0);
                     }
+                } else {
+                    currentStatusListener.onStatusReceived(category, snapshot.getValue(int.class));
                 }
             }
-        });
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                error.toException().printStackTrace();
+            }
+        };
+        issueDatabase.addValueEventListener(valueEventListener);
     }
 
     /**
@@ -213,14 +235,15 @@ public class Utilities {
             return;
         }
         DatabaseReference issueDatabase = getIssueDatabase(category);
-        issueDatabase.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+        issueDatabase.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onComplete(@NonNull Task<DataSnapshot> task) {
-                if (task.isSuccessful()) {
-                    reportCountListener.onReportCountReceived(category, task.getResult().getChildrenCount());
-                } else {
-                    reportCountListener.onReportCountReceived(category, 0);
-                }
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                reportCountListener.onReportCountReceived(category, snapshot.getChildrenCount());
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                reportCountListener.onReportCountReceived(category, 0);
             }
         });
     }
@@ -285,6 +308,10 @@ public class Utilities {
 
     private DatabaseReference getIssueDatabase() {
         return database.getReference().child("issues");
+    }
+
+    private DatabaseReference getStatusDatabase() {
+        return database.getReference().child("status");
     }
 
 }
