@@ -55,6 +55,8 @@ public class CalendarActivity extends AppCompatActivity{
     static ArrayList<Events> events = new ArrayList<>();
     static ArrayList<String> blackList = new ArrayList<>();
     String url;
+    boolean allowScrolling = false;
+
 
     @SuppressLint("ClickableViewAccessibility")
     protected void onCreate(Bundle savedInstanceState) {
@@ -259,14 +261,14 @@ public class CalendarActivity extends AppCompatActivity{
                 case MotionEvent.ACTION_UP:
                     x2[0] = event.getX();
                     float deltaX = x2[0] - x1[0].get();
-                    if (deltaX < -100) {
+                    if (deltaX < -100 && allowScrolling) {
                         date.add(Calendar.WEEK_OF_YEAR,1);
                         cal.scrollToDate(date);
                         if(!loadedDateList.contains(date.toInstant())) {
                             executor.submit(importWeek);
                         }
                         return true;
-                    }else if(deltaX > 100){
+                    }else if(deltaX > 100 && allowScrolling){
                         date.add(Calendar.WEEK_OF_YEAR,-1);
                         cal.scrollToDate(date);
                         if(!loadedDateList.contains(date.toInstant())) {
@@ -281,6 +283,7 @@ public class CalendarActivity extends AppCompatActivity{
     }
 
     Runnable importWeek = () -> {
+        allowScrolling = false;
         Map<LocalDate, ArrayList<Appointment>> data = new HashMap<>();
         LocalDate thisWeek = LocalDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault()).toLocalDate();
         loadedDateList.add(date.toInstant());
@@ -295,6 +298,7 @@ public class CalendarActivity extends AppCompatActivity{
             }
             try {
                 assert data != null;
+                allowScrolling = true;
                 saveValues(data);
             } catch (Exception e) {
                 e.printStackTrace();
