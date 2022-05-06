@@ -25,7 +25,7 @@ public class OrganizerActivity extends AppCompatActivity {
         NavigationUtilities.setUpNavigation(this, R.id.navigationView);
         t.start();
         try {
-            parseXml();
+            new Thread(parseXml).start();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -43,13 +43,15 @@ public class OrganizerActivity extends AppCompatActivity {
             }
         }});
 
-    public void parseXml() throws Exception {
+
+    Runnable parseXml = () -> {
+
         try {
             t.join();
+            System.out.println(in);
             XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
-            factory.setNamespaceAware(false);
+            factory.setNamespaceAware(true);
             XmlPullParser parser = factory.newPullParser();
-
             parser.setInput(in, null);
 
             int eventType = parser.getEventType();
@@ -73,24 +75,26 @@ public class OrganizerActivity extends AppCompatActivity {
                             course.setYear(Integer.parseInt(text));
                         } else if (tag.equalsIgnoreCase("studiengang")) {
                             course.setStudy(text);
-                        } else if (tag.equalsIgnoreCase("raumnr")) {
-                            course.setRoomNo(text);
                         }
+//                        else if (tag.equalsIgnoreCase("raumnr")) {
+//                            course.setRoomNo(text);
+//                        }
                     default:
                         break;
                 }
+                eventType = parser.next();
             }
         }
         catch (Exception e){
             e.printStackTrace();
         }
         displayCourses();
-    }
 
+    };
 
     public void displayCourses(){
         for(Course e : courses) {
-            System.out.println(e);
+            System.out.println(e.toString());
         }
     }
 

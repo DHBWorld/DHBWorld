@@ -7,12 +7,15 @@ public class Course {
     String roomNo;
 
 
-//    public Course(String name, int year, String study, String roomNo) {
-//        this.name = name;
-//        this.year = year;
-//        this.study = study;
-//        this.roomNo = roomNo;
-//    }
+    @Override
+    public String toString() {
+        return "Course{" +
+                "name='" + name + '\'' +
+                ", year=" + year +
+                ", study='" + study + '\'' +
+                ", roomNo='" + roomNo + '\'' +
+                '}';
+    }
 
     public String getName() {
         return name;
