@@ -175,6 +175,7 @@ public class CantineActivity extends AppCompatActivity {
     private void generateCurrentWeek()  {
         Date date= new Date();
         currentWeek = new Date[5];
+
         Calendar c= Calendar.getInstance();
         c.setFirstDayOfWeek(Calendar.SUNDAY);
         c.setTime(date);
@@ -182,7 +183,20 @@ public class CantineActivity extends AppCompatActivity {
 
         Integer dayOfWeek = c.get(Calendar.DAY_OF_WEEK); // dayOfWeek= 2 ->Mo
         dayOfWeek=dayOfWeek-2; // dayOfWeek= 0 ->Mo
-        if ((dayOfWeek<0) || (dayOfWeek>4)){
+
+
+        // Am Samstag
+        if ( (dayOfWeek>4)){
+
+            dayOfWeek=0;
+            c.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+            c.add(Calendar.DATE, 7);
+           System.out.println(c.get(Calendar.DAY_OF_MONTH));
+        }
+
+
+        //Am Sonntag
+        if ((dayOfWeek<0) ){
             dayOfWeek=0;
             c.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
         }
@@ -198,6 +212,8 @@ public class CantineActivity extends AppCompatActivity {
 
 
         }
+
+
 
 
     }
