@@ -40,8 +40,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.card.MaterialCardView;
+import com.google.firebase.auth.FirebaseUser;
 import com.main.dhbworld.CantineClasses.MealDailyPlan;
 import com.main.dhbworld.Enums.InteractionState;
+import com.main.dhbworld.Firebase.CurrentStatusListener;
+import com.main.dhbworld.Firebase.SignedInListener;
 import com.main.dhbworld.Firebase.Utilities;
 import com.main.dhbworld.KVV.DataLoaderListener;
 import com.main.dhbworld.KVV.Departure;
@@ -654,7 +657,7 @@ public class DashboardActivity extends AppCompatActivity {
 
     }
     private void loadUserInteraction(){
-
+        Utilities utilities = new Utilities(this);
 
         ImageView image_canteen = findViewById(R.id.imageBox_dashboard_canteen);
         ImageView image_coffee= findViewById(R.id.imageBox_dashboard_coffee);
@@ -666,6 +669,40 @@ public class DashboardActivity extends AppCompatActivity {
         image_canteen.setColorFilter(ContextCompat.getColor(this, R.color.grey_light));
         image_coffee.setColorFilter(ContextCompat.getColor(this, R.color.grey_light));
         image_printer.setColorFilter(ContextCompat.getColor(this, R.color.grey_light));
+
+        utilities.setSignedInListener(new SignedInListener() {
+            @Override
+            public void onSignedIn(FirebaseUser user) {
+                utilities.setCurrentStatusListener(new CurrentStatusListener() {
+                    @Override
+                    public void onStatusReceived(String category, int status) {
+                        switch (category) {
+                            case Utilities.CATEGORY_CAFETERIA:
+                                InteractionState stateCanteen = InteractionState.parseId(status);
+                                image_canteen.setColorFilter(getColor(stateCanteen.getColor()));
+                                break;
+                            case Utilities.CATEGORY_COFFEE:
+                                InteractionState stateCoffee = InteractionState.parseId(status);
+                                image_coffee.setColorFilter(getColor(stateCoffee.getColor()));
+                                break;
+                            case Utilities.CATEGORY_PRINTER:
+                                InteractionState statePrinter = InteractionState.parseId(status);
+                                image_printer.setColorFilter(getColor(statePrinter.getColor()));
+                                break;
+                        }
+                    }
+                });
+                utilities.getCurrentStatus(Utilities.CATEGORY_CAFETERIA);
+                utilities.getCurrentStatus(Utilities.CATEGORY_PRINTER);
+                utilities.getCurrentStatus(Utilities.CATEGORY_COFFEE);
+            }
+
+            @Override
+            public void onSignInError() {
+
+            }
+        });
+        utilities.signIn();
 
 
       /*if (statePrinter!=null){

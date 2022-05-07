@@ -73,6 +73,7 @@ public class UserInteraction extends AppCompatActivity {
             @Override
             public void onSignedIn(FirebaseUser user) {
                 progressDialog.dismiss();
+                updateInteractionState();
             }
 
             @Override
@@ -128,8 +129,6 @@ public class UserInteraction extends AppCompatActivity {
 
         firebaseUtilities.signIn();
 
-        updateInteractionState();
-
     }
 
     private void yesNoButtonsManagement(){
@@ -170,7 +169,7 @@ public class UserInteraction extends AppCompatActivity {
 
                                 @Override
                                 public void failed(Exception reason) {
-                                    Toast.makeText(UserInteraction.this, "Fehler", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(UserInteraction.this, reason.getMessage(), Toast.LENGTH_LONG).show();
                                 }
                             });
 
@@ -205,7 +204,7 @@ public class UserInteraction extends AppCompatActivity {
 
                             @Override
                             public void failed(Exception reason) {
-                                Toast.makeText(UserInteraction.this, "Fehler", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(UserInteraction.this, reason.getMessage(), Toast.LENGTH_LONG).show();
                             }
                         });
 
@@ -235,7 +234,7 @@ public class UserInteraction extends AppCompatActivity {
 
                                 @Override
                                 public void failed(Exception reason) {
-                                    Toast.makeText(UserInteraction.this, "Fehler", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(UserInteraction.this, reason.getMessage(), Toast.LENGTH_LONG).show();
                                 }
                             });
 
