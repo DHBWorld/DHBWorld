@@ -18,7 +18,7 @@ import com.main.dhbworld.DashboardActivity;
 import com.main.dhbworld.DualisActivity;
 import com.main.dhbworld.KVVActivity;
 import com.main.dhbworld.MainActivity;
-import com.main.dhbworld.OrganizerActivity;
+import com.main.dhbworld.Organizer.OrganizerActivity;
 import com.main.dhbworld.R;
 import com.main.dhbworld.SettingsActivity;
 import com.main.dhbworld.UserInteraction;

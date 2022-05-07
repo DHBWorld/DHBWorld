@@ -50,7 +50,7 @@
             android:name=".CalendarActivity"
             android:exported="false" />
         <activity
-            android:name=".OrganizerActivity"
+            android:name=".Organizer.OrganizerActivity"
             android:exported="false" />
 
         <service

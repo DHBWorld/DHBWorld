@@ -1,4 +1,4 @@
-package com.main.dhbworld;
+package com.main.dhbworld.Organizer;
 
 public class Course {
     String name;

@@ -1,14 +1,15 @@
-package com.main.dhbworld;
+package com.main.dhbworld.Organizer;
 
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import com.main.dhbworld.Navigation.NavigationUtilities;
+import com.main.dhbworld.R;
+
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 
