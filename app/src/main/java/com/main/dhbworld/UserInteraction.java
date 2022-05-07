@@ -1,6 +1,7 @@
 package com.main.dhbworld;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
@@ -54,6 +55,8 @@ public class UserInteraction extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.user_interaction_layout);
+
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
 
         NavigationUtilities.setUpNavigation(this, R.id.UserInteraction);
 
