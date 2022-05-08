@@ -1,7 +1,10 @@
 package com.main.dhbworld.Dualis;
 
 import android.app.Activity;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Intent;
+import android.os.Build;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -57,7 +60,6 @@ public class LoggedInView {
         activity.setContentView(R.layout.activity_dualis);
         NavigationUtilities.setUpNavigation(activity, R.id.dualis);
 
-
         TabLayout tabLayout = activity.findViewById(R.id.dualisTabLayout);
 
         ViewPager2 viewPager2 = activity.findViewById(R.id.dualisViewPager);
@@ -93,5 +95,17 @@ public class LoggedInView {
             }
             return false;
         });
+
+        createNotificationChannelNewGrade();
+    }
+
+    private void createNotificationChannelNewGrade() {
+        CharSequence name = activity.getResources().getString(R.string.channel_name);
+        String description = activity.getResources().getString(R.string.channel_description);
+        int importance = NotificationManager.IMPORTANCE_DEFAULT;
+        NotificationChannel channel = new NotificationChannel("dualis_new_grade", name, importance);
+        channel.setDescription(description);
+        NotificationManager notificationManager = activity.getSystemService(NotificationManager.class);
+        notificationManager.createNotificationChannel(channel);
     }
 }
