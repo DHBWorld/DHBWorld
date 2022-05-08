@@ -102,8 +102,6 @@ public class DualisSemesterFragment extends Fragment implements DualisAPI.Course
         DualisAPI.setAlarmManager(getContext());
 
         DualisAPI.copareAndSave(getContext(), data);
-
-        DualisAPI.copareAndSave(getContext(), data);
         ArrayList<String> items = new ArrayList<>();
         try {
             for (int i=0; i<data.getJSONArray("semester").length(); i++) {

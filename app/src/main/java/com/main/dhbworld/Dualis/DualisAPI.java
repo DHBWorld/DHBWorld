@@ -464,8 +464,8 @@ public class DualisAPI {
     }
 
     public static void createNotificationChannelNewGrade(Context context) {
-        CharSequence name = context.getString(R.string.channel_name);
-        String description = context.getString(R.string.channel_description);
+        CharSequence name = context.getString(R.string.channel_name_dualis);
+        String description = context.getString(R.string.channel_description_dualis);
         int importance = NotificationManager.IMPORTANCE_DEFAULT;
         NotificationChannel channel = new NotificationChannel("1234", name, importance);
         channel.setDescription(description);
