@@ -93,6 +93,11 @@ public class DualisActivity extends AppCompatActivity {
 
         NavigationUtilities.setUpNavigation(this, R.id.dualis);
 
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+
+        DualisAPI.createNotificationChannelGeneral(this);
+        DualisAPI.createNotificationChannelNewGrade(this);
+
         sharedPreferences = getSharedPreferences("Dualis", MODE_PRIVATE);
         editor = sharedPreferences.edit();
 

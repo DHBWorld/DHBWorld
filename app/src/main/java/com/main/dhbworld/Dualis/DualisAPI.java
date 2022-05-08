@@ -1,12 +1,22 @@
 package com.main.dhbworld.Dualis;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.Build;
 import android.util.Log;
 
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
+import androidx.preference.PreferenceManager;
+import androidx.work.Constraints;
+import androidx.work.ExistingPeriodicWorkPolicy;
+import androidx.work.NetworkType;
+import androidx.work.PeriodicWorkRequest;
+import androidx.work.WorkManager;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -33,6 +43,7 @@ import java.net.CookieHandler;
 import java.net.CookieManager;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -144,8 +155,8 @@ public class DualisAPI {
                     overallListener.onOverallDataLoaded(mainJson);
 
                 }, error -> {
-                    if (courseErrorListener != null) {
-                        courseErrorListener.onCourseError(error);
+                    if (overallErrorListener != null) {
+                        overallErrorListener.onOverallError(error);
                     }
                 });
 
@@ -292,7 +303,9 @@ public class DualisAPI {
                                             pruefung.put("note", note);
                                             pruefungen.put(pruefung);
                                         }
-                                    } catch (IndexOutOfBoundsException ignored) {}
+                                    } catch (IndexOutOfBoundsException ignored) {
+                                        ignored.printStackTrace();
+                                    }
 
                                 }
                                 try {
@@ -354,8 +367,11 @@ public class DualisAPI {
                 e.printStackTrace();
             }
 
-            if (fileContent.equals(mainJson.toString())) {
+            System.out.println(mainJson);
+            System.out.println(savedJson.toString());
+            if (savedJson.toString().equals(mainJson.toString())) {
                 Log.d("DualisAPI", "No new grades");
+                System.out.println(123123);
             } else {
                 try {
                     for (int i=0; i<mainJson.getJSONArray("semester").length(); i++) {
@@ -370,6 +386,7 @@ public class DualisAPI {
                                 String noteCurrent = pruefungen.getJSONObject(k).getString("note");
                                 String noteSaved = savedJson.getJSONArray("semester").getJSONObject(i).getJSONArray("Vorlesungen").getJSONObject(j).getJSONArray("pruefungen").getJSONObject(k).getString("note");
                                 if (!noteCurrent.equals(noteSaved)) {
+                                    System.out.println("noti");
                                     NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "1234")
                                             .setSmallIcon(R.drawable.ic_baseline_school_24)
                                             .setContentTitle(context.getResources().getString(R.string.new_grade_exam))
@@ -389,6 +406,7 @@ public class DualisAPI {
                                 }
                             }
                             if (!endnoteCurrent.equals(endnoteSaved)) {
+                                System.out.println("endnoti");
                                 NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "1234")
                                         .setSmallIcon(R.drawable.ic_baseline_school_24)
                                         .setContentTitle(context.getResources().getString(R.string.new_grade_final))
@@ -422,6 +440,47 @@ public class DualisAPI {
         catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    static void setAlarmManager(Context context) {
+        SharedPreferences settingsPref = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences sharedPref = context.getSharedPreferences("Dualis", Context.MODE_PRIVATE);
+        if (!sharedPref.getBoolean("saveCredentials", false) || !settingsPref.getBoolean("sync", true)) {
+            return;
+        }
+
+        int time = Integer.parseInt(settingsPref.getString("sync_time", "15"));
+
+        Constraints constraints = new Constraints.Builder()
+                .setRequiredNetworkType(NetworkType.CONNECTED)
+                .build();
+
+        PeriodicWorkRequest periodicWorkRequest = new PeriodicWorkRequest.Builder(BackgroundWorker.class, time, TimeUnit.MINUTES)
+                .setConstraints(constraints)
+                .build();
+
+        WorkManager workManager = WorkManager.getInstance(context.getApplicationContext());
+        workManager.enqueueUniquePeriodicWork("DualisNotifier", ExistingPeriodicWorkPolicy.REPLACE, periodicWorkRequest);
+    }
+
+    public static void createNotificationChannelNewGrade(Context context) {
+        CharSequence name = context.getString(R.string.channel_name);
+        String description = context.getString(R.string.channel_description);
+        int importance = NotificationManager.IMPORTANCE_DEFAULT;
+        NotificationChannel channel = new NotificationChannel("1234", name, importance);
+        channel.setDescription(description);
+        NotificationManager notificationManager = context.getSystemService(NotificationManager.class);
+        notificationManager.createNotificationChannel(channel);
+    }
+
+    public static void createNotificationChannelGeneral(Context context) {
+        CharSequence name = context.getString(R.string.channel_name_general_dualis);
+        String description = context.getString(R.string.channel_description_general_dualis);
+        int importance = NotificationManager.IMPORTANCE_DEFAULT;
+        NotificationChannel channel = new NotificationChannel("4321", name, importance);
+        channel.setDescription(description);
+        NotificationManager notificationManager = context.getSystemService(NotificationManager.class);
+        notificationManager.createNotificationChannel(channel);
     }
 
     public void setOnCourseDataLoadedListener(CourseDataLoadedListener listener) {

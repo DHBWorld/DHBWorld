@@ -63,6 +63,7 @@ public class LoggedInView {
         ViewPager2 viewPager2 = activity.findViewById(R.id.dualisViewPager);
         DualisFragmentAdapter dualisFragmentAdapter = new DualisFragmentAdapter(activity, arguments, cookies);
         viewPager2.setAdapter(dualisFragmentAdapter);
+        viewPager2.setOffscreenPageLimit(1);
 
         TabLayoutMediator tabLayoutMediator = new TabLayoutMediator(tabLayout, viewPager2, new TabLayoutMediator.TabConfigurationStrategy() {
             @Override

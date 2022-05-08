@@ -300,6 +300,12 @@
     <string name="wrong_credentials">E-Mail-Adresse oder Passwort falsch</string>
     <string name="semester">Semester</string>
     <string name="refresh">Aktualisieren</string>
+    <string name="authentication_expired">Credentials expired</string>
+    <string name="authentication_expired_expl">Maybe you have changed the password? Please log in to the app again.</string>
+    <string name="channel_name_general_dualis">Dualis Info</string>
+    <string name="channel_description_general_dualis">General information about Dualis</string>
+    <string name="channel_name">New grade (Dualis)</string>
+    <string name="channel_description">Notification for new grades (Dualis)</string>
 
     <string name="total_gpa">Gesamt GPA:</string>
     <string name="major_gpa">Hauptfächer GPA:</string>
