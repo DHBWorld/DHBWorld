@@ -40,8 +40,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.card.MaterialCardView;
+import com.google.firebase.auth.FirebaseUser;
 import com.main.dhbworld.CantineClasses.MealDailyPlan;
 import com.main.dhbworld.Enums.InteractionState;
+import com.main.dhbworld.Firebase.CurrentStatusListener;
+import com.main.dhbworld.Firebase.SignedInListener;
 import com.main.dhbworld.Firebase.Utilities;
 import com.main.dhbworld.KVV.DataLoaderListener;
 import com.main.dhbworld.KVV.Departure;
@@ -80,6 +83,11 @@ public class DashboardActivity extends AppCompatActivity {
     Boolean cardMealPlan_isVisible = true;
     Boolean cardKvv_isVisible = true;
 
+   private MaterialCardView card_dash_calendar;
+    private MaterialCardView card_dash_pi;
+    private MaterialCardView card_dash_kvv;
+    private MaterialCardView card_dash_mealPlan;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -92,6 +100,11 @@ public class DashboardActivity extends AppCompatActivity {
         layoutCardCalendar = findViewById(R.id.layoutCardCalendar);
         layoutCardKvv = findViewById(R.id.layoutCardKvv);
 
+        card_dash_calendar = findViewById(R.id.card_dash_calendar);
+        card_dash_pi = findViewById(R.id.card_dash_pi);
+        card_dash_kvv = findViewById(R.id.card_dash_kvv);
+        card_dash_mealPlan = findViewById(R.id.card_dash_mealPlan);
+
 
         userConfigurationOfDashboard();
         loadUserInteraction();
@@ -101,9 +114,9 @@ public class DashboardActivity extends AppCompatActivity {
            loadCalendar();
            loadKvv();
        }else{
-           layoutCardMealPlan.setVisibility(View.GONE);
-           layoutCardCalendar.setVisibility(View.GONE);
-           layoutCardKvv.setVisibility(View.GONE);
+           card_dash_mealPlan.setVisibility(View.GONE);
+           card_dash_calendar.setVisibility(View.GONE);
+           card_dash_kvv.setVisibility(View.GONE);
            Toast.makeText(DashboardActivity.this, "Sie haben keine Internet-Verbindung, deshalb können die Daten nicht geladen werden.", Toast.LENGTH_LONG).show();
 
 
@@ -128,9 +141,6 @@ public class DashboardActivity extends AppCompatActivity {
         sp = getSharedPreferences(dashboardSettings, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
 
-
-
-
         ImageButton settings = findViewById(R.id.dashboard_settings);
         configurationModus=false;
         Button buttonCardCalendar= findViewById(R.id.buttonCardCalendar);
@@ -148,30 +158,15 @@ public class DashboardActivity extends AppCompatActivity {
         buttonCardMealPlan.setVisibility(View.INVISIBLE);
         buttonCardKvv.setVisibility(View.INVISIBLE);
 
-        MaterialCardView card_dash_calendar = findViewById(R.id.card_dash_calendar);
-        MaterialCardView card_dash_pi = findViewById(R.id.card_dash_pi);
-        MaterialCardView card_dash_kvv = findViewById(R.id.card_dash_kvv);
-        MaterialCardView card_dash_mealPlan = findViewById(R.id.card_dash_mealPlan);
         LinearLayout card_dash_calendar_layout = findViewById(R.id.card_dash_calendar_layout);
         LinearLayout card_dash_pi_layout = findViewById(R.id.card_dash_pi_layout);
         LinearLayout card_dash_kvv_layout = findViewById(R.id.card_dash_kvv_layout);
         LinearLayout card_dash_mealPlan_layout = findViewById(R.id.card_dash_mealPlan_layout);
 
 
-
-
-     //   card_dash_calendar.setLayoutParams(new MaterialCardView.LayoutParams(0,0));
-      //  card_dash_calendar_layout.setLayoutParams(new ViewGroup.LayoutParams(CardView.LayoutParams.MATCH_PARENT,0 ));
-     //   card_dash_calendar.setMinimumHeight(0);
-
-        // card_dash_calendar.setLayoutParams(new MaterialCardView.LayoutParams(0,0));
-
-      //  card_dash_pi.setLayoutParams(new  CardView.LayoutParams(CardView.LayoutParams.MATCH_PARENT, 0));
-
-
-      cardCalendar_isVisible = sp.getBoolean("cardCalendar", true);
+        cardCalendar_isVisible = sp.getBoolean("cardCalendar", true);
         cardPI_isVisible = sp.getBoolean("cardPI", true);
-       cardMealPlan_isVisible = sp.getBoolean("cardMealPlan", true);
+        cardMealPlan_isVisible = sp.getBoolean("cardMealPlan", true);
         cardKvv_isVisible = sp.getBoolean("cardKvv", true);
 
        if (!cardCalendar_isVisible){
@@ -186,13 +181,6 @@ public class DashboardActivity extends AppCompatActivity {
         if (!cardKvv_isVisible){
             card_dash_kvv.setVisibility(View.GONE);
         }
-
-
-
-
-
-
-
 
         settings.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -214,7 +202,6 @@ public class DashboardActivity extends AppCompatActivity {
                     if (!cardCalendar_isVisible){
                         card_dash_calendar.setStrokeColor(ColorUtils.setAlphaComponent(card_dash_calendar.getStrokeColor(),50));
                         card_dash_calendar_layout.setBackgroundColor(ColorUtils.setAlphaComponent(card_dash_calendar.getStrokeColor(),50));
-
                     }
                     if (!cardPI_isVisible){
                         card_dash_pi.setStrokeColor(ColorUtils.setAlphaComponent(card_dash_pi.getStrokeColor(),50));
@@ -230,8 +217,6 @@ public class DashboardActivity extends AppCompatActivity {
                     }
 
                    configurationModus=true;
-
-
                 } else{
                     settings.setBackground(getResources().getDrawable(R.drawable.ic_construction));
                     buttonCardCalendar.setVisibility(View.INVISIBLE);
@@ -262,7 +247,6 @@ public class DashboardActivity extends AppCompatActivity {
                         card_dash_kvv.setVisibility(View.GONE);
                     }
 
-
                     editor.putBoolean("cardCalendar", cardCalendar_isVisible);
                     editor.putBoolean("cardPI", cardPI_isVisible);
                     editor.putBoolean("cardMealPlan", cardMealPlan_isVisible);
@@ -272,7 +256,6 @@ public class DashboardActivity extends AppCompatActivity {
                 }
             }
         });
-
 
         buttonCardCalendar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -286,14 +269,12 @@ public class DashboardActivity extends AppCompatActivity {
                     card_dash_calendar.setStrokeColor(ColorUtils.setAlphaComponent(card_dash_calendar.getStrokeColor(),255));
                     card_dash_calendar_layout.setBackgroundColor(ColorUtils.setAlphaComponent(card_dash_calendar.getStrokeColor(),255));
                 }
-
             }
         });
 
         buttonCardPI.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 if (cardPI_isVisible){
                     cardPI_isVisible=false; //True = Card is visible
                     card_dash_pi.setStrokeColor(ColorUtils.setAlphaComponent(card_dash_pi.getStrokeColor(),50));
@@ -322,7 +303,6 @@ public class DashboardActivity extends AppCompatActivity {
 
             }
         });
-
         buttonCardKvv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -338,87 +318,67 @@ public class DashboardActivity extends AppCompatActivity {
             }
         });
 
-
-
-
-
-
-
-
     }
 
     private void loadCalendar(){
-
         SharedPreferences preferences = PreferenceManager
                 .getDefaultSharedPreferences(DashboardActivity.this);
         String url = preferences.getString("CurrentURL",null);
 
-        if (!(url ==null)) {
+        if (!(url ==null) && (!url.equals(""))) {
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-
-
                     try {
-
                         nextEventsProvider nextEventsProvider = new nextEventsProvider(DashboardActivity.this);
                         Appointment nextClass = nextEventsProvider.getNextEvent();
 
                         layoutCardCalendar.post(new Runnable() {
                             @Override
                             public void run() {
-
-
                                 LocalDateTime now = LocalDateTime.now();
                                 LocalDateTime startClass = nextClass.getStartDate();
                                 LocalDateTime endClass = nextClass.getEndDate();
                                 Duration durationUntilStartOfClass = Duration.between(now, startClass);
                                 Duration durationUntilEndOfClass = Duration.between(now, endClass);
 
-
                                 LinearLayout layoutNextClass = new LinearLayout(DashboardActivity.this);
                                 layoutNextClass.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                                 layoutNextClass.setOrientation(LinearLayout.HORIZONTAL);
                                 layoutNextClass.setVerticalGravity(View.TEXT_ALIGNMENT_CENTER);
-
                                 layoutNextClass.setGravity(Gravity.CENTER_VERTICAL);
                                 layoutCardCalendar.addView(layoutNextClass);
 
                                 ImageView UniImage = new ImageView(DashboardActivity.this);
                                 UniImage.setLayoutParams(new ViewGroup.LayoutParams(65, 65));
-
                                 UniImage.setPadding(0, 7, 10, 0);
                                 layoutNextClass.addView(UniImage);
 
-                                TextView nextClassView = new TextView(DashboardActivity.this);
-                                nextClassView.setTextSize(15);
-                                nextClassView.setLayoutParams(new ViewGroup.LayoutParams(600, ViewGroup.LayoutParams.MATCH_PARENT));
-                                nextClassView.setGravity(Gravity.CENTER_VERTICAL);
-                                nextClassView.setTextColor(getResources().getColor(R.color.black));
-                                nextClassView.setPadding(0, 7, 5, 0);
-                                layoutNextClass.addView(nextClassView);
                                 if ((durationUntilStartOfClass.toHours() <= 8) && (durationUntilEndOfClass.toMinutes() >= 0)) {
 
-                                    //nextClassView.setLayoutParams(new ViewGroup.LayoutParams(550, ViewGroup.LayoutParams.WRAP_CONTENT));
+                                    TextView nextClassView = new TextView(DashboardActivity.this);
+                                    nextClassView.setTextSize(15);
+                                    nextClassView.setLayoutParams(new ViewGroup.LayoutParams(560, ViewGroup.LayoutParams.MATCH_PARENT));
+                                    nextClassView.setGravity(Gravity.CENTER_VERTICAL);
+                                    nextClassView.setTextColor(getResources().getColor(R.color.black));
+                                    nextClassView.setPadding(0, 7, 5, 0);
+                                    layoutNextClass.addView(nextClassView);
+
                                     UniImage.setImageResource(R.drawable.ic_uni);
                                     nextClassView.setText(nextClass.getTitle());
-
 
                                     LinearLayout layoutTime = new LinearLayout(DashboardActivity.this);
                                     layoutTime.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                                     layoutTime.setOrientation(LinearLayout.VERTICAL);
                                     layoutTime.setVerticalGravity(View.TEXT_ALIGNMENT_CENTER);
-
                                     layoutNextClass.addView(layoutTime);
 
-
                                     LinearLayout layoutTimeDigit = new LinearLayout(DashboardActivity.this);
-                                    layoutTimeDigit.setLayoutParams(new ViewGroup.LayoutParams(250, 120));
+                                    layoutTimeDigit.setLayoutParams(new ViewGroup.LayoutParams(235, 120));
                                     layoutTimeDigit.setOrientation(LinearLayout.HORIZONTAL);
                                     layoutTime.setPadding(5, 0, 5, 0);
                                     layoutTime.setVerticalGravity(Gravity.CENTER);
                                     layoutTime.setHorizontalGravity(Gravity.RIGHT);
-
 
                                     layoutTimeDigit.setBackgroundColor(getColor(R.color.grey_defect));
                                     layoutTime.addView(layoutTimeDigit);
@@ -448,13 +408,11 @@ public class DashboardActivity extends AppCompatActivity {
                                     letterTimeView.setGravity(Gravity.CENTER);
 
                                     letterTimeView.setPadding(0, 2, 0, 5);
-                                    letterTimeView.setLayoutParams(new ViewGroup.LayoutParams(250, ViewGroup.LayoutParams.WRAP_CONTENT));
+                                    letterTimeView.setLayoutParams(new ViewGroup.LayoutParams(235, ViewGroup.LayoutParams.WRAP_CONTENT));
                                     letterTimeView.setBackgroundColor(getColor(R.color.even_lighter_gray));
                                     layoutTime.addView(letterTimeView);
 
                                     if (durationUntilStartOfClass.toMinutes() >= 0) {
-
-
 
                                         new CountDownTimer(durationUntilStartOfClass.toMinutes() * 60000, 60000) {
                                             public void onTick(long millisUtilFinished) {
@@ -498,18 +456,49 @@ public class DashboardActivity extends AppCompatActivity {
 
                                 } else if (durationUntilStartOfClass.toHours() > 9) {
                                     UniImage.setImageResource(R.drawable.ic_celebration);
+
+                                    TextView nextClassView = new TextView(DashboardActivity.this);
+                                    nextClassView.setTextSize(15);
+                                    nextClassView.setLayoutParams(new ViewGroup.LayoutParams(760, ViewGroup.LayoutParams.MATCH_PARENT));
+                                    nextClassView.setGravity(Gravity.CENTER_VERTICAL);
+                                    nextClassView.setTextColor(getResources().getColor(R.color.black));
+                                    nextClassView.setPadding(0, 7, 5, 0);
+                                    layoutNextClass.addView(nextClassView);
                                     nextClassView.setText("Sie haben keine Vorlesungen mehr heute");
 
-
                                 }
-
-
                             }
                         });
 
 
                     } catch (Exception e) {
                         e.printStackTrace();
+
+                        layoutCardCalendar.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                LinearLayout layoutNextClass = new LinearLayout(DashboardActivity.this);
+                                layoutNextClass.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                                layoutNextClass.setOrientation(LinearLayout.HORIZONTAL);
+                                layoutNextClass.setVerticalGravity(View.TEXT_ALIGNMENT_CENTER);
+                                layoutNextClass.setGravity(Gravity.CENTER_VERTICAL);
+                                layoutCardCalendar.addView(layoutNextClass);
+
+
+                                TextView nextClassView = new TextView(DashboardActivity.this);
+                                nextClassView.setTextSize(15);
+                                nextClassView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT));
+                                nextClassView.setGravity(Gravity.CENTER_VERTICAL);
+                                nextClassView.setTextColor(getResources().getColor(R.color.black));
+                                nextClassView.setPadding(0, 7, 5, 0);
+                                nextClassView.setText("Die Daten aus dem Kalender können hier nicht gezeigt werden.");
+                                layoutNextClass.addView(nextClassView);
+
+                            }
+                        });
+
+
+
 
                     }
                 }
@@ -599,57 +588,61 @@ public class DashboardActivity extends AppCompatActivity {
 
 
 
-                //HIER DEINEN CODE EINFÜGEN
+               for (int i=0; i<departures.size();i++){
+                   if (i<3){
+
+                       LinearLayout layoutTram = new LinearLayout(DashboardActivity.this);
+                       layoutTram.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                       layoutTram.setOrientation(LinearLayout.HORIZONTAL);
+                       layoutTram.setVerticalGravity(View.TEXT_ALIGNMENT_CENTER);
+
+
+
+                       layoutCardKvv.addView(layoutTram);
+
+                       ImageView tramImage= new ImageView(DashboardActivity.this);
+
+                       tramImage.setLayoutParams(new ViewGroup.LayoutParams(60, 60));
+                       tramImage.setImageResource(R.drawable.ic_tram);
+                       tramImage.setPadding(0,0,10,0);
+
+                       layoutTram.addView(tramImage);
+
+
+                       TextView tramView = new TextView(DashboardActivity.this);
+                       tramView.setTextSize(15);
+                       tramView.setTextColor(getResources().getColor(R.color.black));
+                       // tramView.setText("1 (Durlach)");
+                       tramView.setText(departures.get(i).getLine().substring(departures.get(i).getLine().length()-1)+" ("+departures.get(i).getDestination()+")");
+                       // tramView.setText("&&&&");
+                       tramView.setPadding(0,7,5,7);
+                       tramView.setLayoutParams(new ViewGroup.LayoutParams(300, ViewGroup.LayoutParams.WRAP_CONTENT));
+                       layoutTram.addView(tramView);
+
+                       TextView platformView = new TextView(DashboardActivity.this);
+                       platformView.setTextSize(15);
+                       platformView.setTextColor(getResources().getColor(R.color.black));
+                       platformView.setText(departures.get(i).getPlatform());
+                       platformView.setPadding(20,7,0,7);
+                       platformView.setLayoutParams(new ViewGroup.LayoutParams(250, ViewGroup.LayoutParams.WRAP_CONTENT));
+                       layoutTram.addView(platformView);
+
+
+                       TextView timeView = new TextView(DashboardActivity.this);
+                       timeView.setTextSize(15);
+                       timeView.setTextColor(getResources().getColor(R.color.black));
+
+                       DateTimeFormatter formatter = DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT);
+                       timeView.setText(departures.get(i).getDepartureTime().format(formatter));
+                       timeView.setPadding(20,7,0,7);
+                       timeView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                       layoutTram.addView(timeView);
+                   }
+               }
 
 
 
 
-                LinearLayout layoutTram = new LinearLayout(DashboardActivity.this);
-                layoutTram.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                layoutTram.setOrientation(LinearLayout.HORIZONTAL);
-                layoutTram.setVerticalGravity(View.TEXT_ALIGNMENT_CENTER);
-
-
-
-                layoutCardKvv.addView(layoutTram);
-
-                ImageView tramImage= new ImageView(DashboardActivity.this);
-
-                tramImage.setLayoutParams(new ViewGroup.LayoutParams(60, 60));
-                tramImage.setImageResource(R.drawable.ic_tram);
-                tramImage.setPadding(0,0,10,0);
-
-                layoutTram.addView(tramImage);
-
-
-                TextView tramView = new TextView(DashboardActivity.this);
-                tramView.setTextSize(15);
-                tramView.setTextColor(getResources().getColor(R.color.black));
-               // tramView.setText("1 (Durlach)");
-                    tramView.setText(departures.get(0).getLine().substring(departures.get(0).getLine().length()-1)+" ("+departures.get(0).getDestination()+")");
-                   // tramView.setText("&&&&");
-                tramView.setPadding(0,7,5,7);
-                tramView.setLayoutParams(new ViewGroup.LayoutParams(250, ViewGroup.LayoutParams.WRAP_CONTENT));
-                layoutTram.addView(tramView);
-
-                TextView platformView = new TextView(DashboardActivity.this);
-                platformView.setTextSize(15);
-                platformView.setTextColor(getResources().getColor(R.color.black));
-                platformView.setText(departures.get(0).getPlatform());
-                platformView.setPadding(20,7,0,7);
-                platformView.setLayoutParams(new ViewGroup.LayoutParams(250, ViewGroup.LayoutParams.WRAP_CONTENT));
-                layoutTram.addView(platformView);
-
-
-                TextView timeView = new TextView(DashboardActivity.this);
-                timeView.setTextSize(15);
-                timeView.setTextColor(getResources().getColor(R.color.black));
-
-                    DateTimeFormatter formatter = DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT);
-                timeView.setText(departures.get(0).getDepartureTime().format(formatter));
-                timeView.setPadding(20,7,0,7);
-                timeView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                layoutTram.addView(timeView);
                 }
             }
 
@@ -664,7 +657,7 @@ public class DashboardActivity extends AppCompatActivity {
 
     }
     private void loadUserInteraction(){
-
+        Utilities utilities = new Utilities(this);
 
         ImageView image_canteen = findViewById(R.id.imageBox_dashboard_canteen);
         ImageView image_coffee= findViewById(R.id.imageBox_dashboard_coffee);
@@ -676,6 +669,40 @@ public class DashboardActivity extends AppCompatActivity {
         image_canteen.setColorFilter(ContextCompat.getColor(this, R.color.grey_light));
         image_coffee.setColorFilter(ContextCompat.getColor(this, R.color.grey_light));
         image_printer.setColorFilter(ContextCompat.getColor(this, R.color.grey_light));
+
+        utilities.setSignedInListener(new SignedInListener() {
+            @Override
+            public void onSignedIn(FirebaseUser user) {
+                utilities.setCurrentStatusListener(new CurrentStatusListener() {
+                    @Override
+                    public void onStatusReceived(String category, int status) {
+                        switch (category) {
+                            case Utilities.CATEGORY_CAFETERIA:
+                                InteractionState stateCanteen = InteractionState.parseId(status);
+                                image_canteen.setColorFilter(getColor(stateCanteen.getColor()));
+                                break;
+                            case Utilities.CATEGORY_COFFEE:
+                                InteractionState stateCoffee = InteractionState.parseId(status);
+                                image_coffee.setColorFilter(getColor(stateCoffee.getColor()));
+                                break;
+                            case Utilities.CATEGORY_PRINTER:
+                                InteractionState statePrinter = InteractionState.parseId(status);
+                                image_printer.setColorFilter(getColor(statePrinter.getColor()));
+                                break;
+                        }
+                    }
+                });
+                utilities.getCurrentStatus(Utilities.CATEGORY_CAFETERIA);
+                utilities.getCurrentStatus(Utilities.CATEGORY_PRINTER);
+                utilities.getCurrentStatus(Utilities.CATEGORY_COFFEE);
+            }
+
+            @Override
+            public void onSignInError() {
+
+            }
+        });
+        utilities.signIn();
 
 
       /*if (statePrinter!=null){

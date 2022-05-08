@@ -26,6 +26,9 @@ public class MainActivity extends AppCompatActivity{
     TextView lNumber;
     TextView studentMail;
     TextView freeNotes;
+
+    TextInputLayout textInputLayout_matriculationNumber;
+    TextInputLayout textInputLayout_libraryNummer;
     SharedPreferences sp;
 
     public static final String MyPREFERENCES = "myPreferencesKey" ;
@@ -76,9 +79,9 @@ public class MainActivity extends AppCompatActivity{
             }
         };
         TextInputLayout textInputLayout_name = findViewById(R.id.textInputLayoutPI_name);
-        TextInputLayout textInputLayout_matriculationNumber = findViewById(R.id.textInputLayoutPI_matriculationNumber);
+        textInputLayout_matriculationNumber = findViewById(R.id.textInputLayoutPI_matriculationNumber);
         TextInputLayout textInputLayout_adresse = findViewById(R.id.textInputLayoutPI_adresse);
-        TextInputLayout textInputLayout_libraryNummer = findViewById(R.id.textInputLayoutPI_libraryNummer);
+        textInputLayout_libraryNummer = findViewById(R.id.textInputLayoutPI_libraryNummer);
 
 
         textInputLayout_name.setEndIconOnClickListener(new View.OnClickListener() {
@@ -149,6 +152,10 @@ public class MainActivity extends AppCompatActivity{
                     editButton.setVisibility(View.VISIBLE);
                     saveButton.setVisibility(View.INVISIBLE);
                     cancelButton.setVisibility(View.INVISIBLE);
+
+                    textInputLayout_matriculationNumber.setErrorEnabled(false);
+                    textInputLayout_libraryNummer.setErrorEnabled(false);
+
                     //disabling text field
                     name.setEnabled(false);
                     mNumber.setEnabled(false);
@@ -173,6 +180,9 @@ public class MainActivity extends AppCompatActivity{
             studentMail.setEnabled(false);
             freeNotes.setEnabled(false);
 
+            textInputLayout_matriculationNumber.setErrorEnabled(false);
+            textInputLayout_libraryNummer.setErrorEnabled(false);
+
             loadAndUpdateData();
         });
 
@@ -186,13 +196,13 @@ public class MainActivity extends AppCompatActivity{
             try{
                 long libraryNumberLength = Long.parseLong(l);
                 if(libraryNumberLength>999999999999l){
-                    lNumber.setError("Can only contain 12 digits");
+                    textInputLayout_libraryNummer.setError("Can only contain 12 digits");
                     return false;
                 }else{
                     return true;
                 }
             }catch(NumberFormatException g){
-                lNumber.setError("No letters, only digits");
+                textInputLayout_libraryNummer.setError("No letters, only digits");
                 return false;
             }
         }
@@ -205,13 +215,13 @@ public class MainActivity extends AppCompatActivity{
             try{
                 long matriculationNumberLength = Long.parseLong(m);
                 if(matriculationNumberLength>9999999){
-                    mNumber.setError("Can only contain 7 digits");
+                    textInputLayout_matriculationNumber.setError("Can only contain 7 digits");
                     return false;
                 }else{
                     return true;
                 }
             }catch (NumberFormatException g){
-                mNumber.setError("No letters, only digits");
+                textInputLayout_matriculationNumber.setError("No letters, only digits");
                 return false;
             }
         }

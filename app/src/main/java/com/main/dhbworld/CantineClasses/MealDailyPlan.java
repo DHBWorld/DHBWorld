@@ -24,7 +24,7 @@ public class MealDailyPlan {
             meals[i].setCategory(jsonMeal.getString("category"));
 
             JSONObject jsonPrices = new JSONObject(jsonMeal.getString("prices"));
-            meals[i].setPrice(jsonPrices.getDouble("students"));
+            meals[i].setPrice(jsonPrices.getString("students"));
 
             JSONArray jsonNotes = new JSONArray(jsonMeal.getString("notes"));
             for (int j=0; j<jsonNotes.length();j++){
