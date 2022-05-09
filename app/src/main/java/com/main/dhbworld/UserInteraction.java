@@ -23,6 +23,7 @@ import com.main.dhbworld.Firebase.SignedInListener;
 import com.main.dhbworld.Firebase.Utilities;
 import com.main.dhbworld.Fragments.DialogCofirmationUserInteraction;
 import com.main.dhbworld.Navigation.NavigationUtilities;
+import com.main.dhbworld.Services.UserInteractionMessagingService;
 
 import java.util.ArrayList;
 
@@ -59,6 +60,8 @@ public class UserInteraction extends AppCompatActivity {
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
 
         NavigationUtilities.setUpNavigation(this, R.id.UserInteraction);
+
+        UserInteractionMessagingService.createNotificationChannel(this);
 
         stateManagement();
         yesNoButtonsManagement();
