@@ -442,7 +442,7 @@ public class DualisAPI {
         }
     }
 
-    static void setAlarmManager(Context context) {
+    public static void setAlarmManager(Context context) {
         SharedPreferences settingsPref = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences sharedPref = context.getSharedPreferences("Dualis", Context.MODE_PRIVATE);
         if (!sharedPref.getBoolean("saveCredentials", false) || !settingsPref.getBoolean("sync", true)) {

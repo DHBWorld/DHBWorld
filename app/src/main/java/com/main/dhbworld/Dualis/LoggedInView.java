@@ -1,47 +1,16 @@
 package com.main.dhbworld.Dualis;
 
-import android.app.Activity;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-import android.content.Intent;
-import android.os.Build;
-import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
-import android.widget.LinearLayout;
-import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
-import androidx.fragment.app.FragmentPagerAdapter;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
-import com.android.volley.VolleyError;
-import com.google.android.material.progressindicator.CircularProgressIndicator;
-import com.google.android.material.snackbar.BaseTransientBottomBar;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
-import com.google.android.material.textfield.TextInputLayout;
-import com.main.dhbworld.DualisActivity;
 import com.main.dhbworld.Navigation.NavigationUtilities;
 import com.main.dhbworld.R;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.net.CookieHandler;
-import java.net.CookieManager;
 import java.net.HttpCookie;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.nio.file.StandardOpenOption;
-import java.util.ArrayList;
 import java.util.List;
 
 public class LoggedInView {
@@ -95,17 +64,5 @@ public class LoggedInView {
             }
             return false;
         });
-
-        createNotificationChannelNewGrade();
-    }
-
-    private void createNotificationChannelNewGrade() {
-        CharSequence name = activity.getResources().getString(R.string.channel_name);
-        String description = activity.getResources().getString(R.string.channel_description);
-        int importance = NotificationManager.IMPORTANCE_DEFAULT;
-        NotificationChannel channel = new NotificationChannel("dualis_new_grade", name, importance);
-        channel.setDescription(description);
-        NotificationManager notificationManager = activity.getSystemService(NotificationManager.class);
-        notificationManager.createNotificationChannel(channel);
     }
 }

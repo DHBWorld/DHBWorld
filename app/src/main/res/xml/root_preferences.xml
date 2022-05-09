@@ -20,6 +20,40 @@
             app:title="Benachrichtigungen Drucker" />
     </PreferenceCategory>
 
+    <PreferenceCategory
+        app:title="Dualis" >
+
+        <SwitchPreference
+            app:key="useBiometrics"
+            app:title="@string/biometrics"
+            app:defaultValue="false"
+            app:summary="@string/biometrics_summary"
+            app:icon="@drawable/ic_baseline_fingerprint_24"/>
+
+        <SwitchPreference
+            app:key="sync"
+            app:title="Benachrichtigungen"
+            app:defaultValue="true"
+            app:icon="@drawable/ic_baseline_notifications_active_24"/>
+
+        <ListPreference
+            app:dependency="sync"
+            app:defaultValue="15"
+            app:entries="@array/sync_entries"
+            app:entryValues="@array/sync_values"
+            app:key="sync_time"
+            app:title="@string/check_new_grades"
+            app:useSimpleSummaryProvider="true"
+            app:icon="@drawable/ic_baseline_access_time_24" />
+
+        <Preference
+            app:key="customize_notification"
+            app:title="Benachrichtigungen anpassen"
+            app:icon="@drawable/ic_baseline_brush_24" />
+
+
+    </PreferenceCategory>
+
     <PreferenceCategory app:title="Über">
 
         <Preference

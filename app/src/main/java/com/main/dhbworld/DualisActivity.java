@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.biometric.BiometricManager;
 import androidx.biometric.BiometricPrompt;
+import androidx.preference.PreferenceManager;
 
 import android.accounts.AccountManager;
 import android.app.Activity;
@@ -84,6 +85,9 @@ public class DualisActivity extends AppCompatActivity {
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
 
+    SharedPreferences settingsPrefs;
+    SharedPreferences.Editor settingsEditor;
+
     CircularProgressIndicator progressIndicator;
 
     @Override
@@ -101,6 +105,9 @@ public class DualisActivity extends AppCompatActivity {
         sharedPreferences = getSharedPreferences("Dualis", MODE_PRIVATE);
         editor = sharedPreferences.edit();
 
+        settingsPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+        settingsEditor = settingsPrefs.edit();
+
         dualisEmail = findViewById(R.id.dualisEmail);
         dualisPassword = findViewById(R.id.dualisPassword);
         dualisEmailLayout = findViewById(R.id.dualisEmailLayout);
@@ -115,7 +122,7 @@ public class DualisActivity extends AppCompatActivity {
         SecureStore secureStore = new SecureStore(this, sharedPreferences);
 
         if (saveCredentials) {
-            if (sharedPreferences.getBoolean("useBiometrics", false)) {
+            if (settingsPrefs.getBoolean("useBiometrics", false)) {
                 dualisPasswordLayout.setEndIconMode(TextInputLayout.END_ICON_CUSTOM);
                 fillSavedCredentialsWithBiometrics(secureStore);
             } else {
@@ -220,9 +227,11 @@ public class DualisActivity extends AppCompatActivity {
                                         @Override
                                         public void onAuthenticationError(int errorCode, @NonNull CharSequence errString) {
                                             super.onAuthenticationError(errorCode, errString);
+
                                             editor.putBoolean("alreadyAskedBiometrics", true);
-                                            editor.putBoolean("useBiometrics", false);
+                                            settingsEditor.putBoolean("useBiometrics", false);
                                             editor.apply();
+                                            settingsEditor.apply();
 
                                             try {
                                                 secureStore.saveCredentials(email, password);
@@ -237,8 +246,9 @@ public class DualisActivity extends AppCompatActivity {
                                         public void onAuthenticationSucceeded(@NonNull BiometricPrompt.AuthenticationResult result) {
                                             super.onAuthenticationSucceeded(result);
                                             editor.putBoolean("alreadyAskedBiometrics", true);
-                                            editor.putBoolean("useBiometrics", true);
+                                            settingsEditor.putBoolean("useBiometrics", true);
                                             editor.apply();
+                                            settingsEditor.apply();
                                             try {
                                                 secureStore.saveCredentials(email, password);
                                             } catch (Exception e) {
@@ -251,8 +261,9 @@ public class DualisActivity extends AppCompatActivity {
                                         public void onAuthenticationFailed() {
                                             super.onAuthenticationFailed();
                                             editor.putBoolean("alreadyAskedBiometrics", true);
-                                            editor.putBoolean("useBiometrics", false);
+                                            settingsEditor.putBoolean("useBiometrics", false);
                                             editor.apply();
+                                            settingsEditor.apply();
                                             try {
                                                 secureStore.saveCredentials(email, password);
                                             } catch (Exception e) {
@@ -271,8 +282,9 @@ public class DualisActivity extends AppCompatActivity {
                                 }
                             } else {
                                 editor.putBoolean("alreadyAskedBiometrics", false);
-                                editor.putBoolean("useBiometrics", false);
+                                settingsEditor.putBoolean("useBiometrics", false);
                                 editor.apply();
+                                settingsEditor.apply();
                                 try {
                                     secureStore.clearCredentials();
                                 } catch (Exception e) {
