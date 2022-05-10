@@ -34,6 +34,7 @@ body:
         - 0.8 (current)
     validations:
       required: true
+      
   - type: textarea
     id: device
     attributes:
