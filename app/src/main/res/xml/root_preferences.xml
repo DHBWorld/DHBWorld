@@ -1,77 +1,83 @@
 <PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <PreferenceCategory app:title="Benachrichtigungseinstellungen">
+    <PreferenceCategory app:title="@string/user_interaction">
 
         <SwitchPreference
             app:defaultValue="true"
+            app:icon="@drawable/ic_baseline_restaurant_24"
             app:key="notifications_mensa"
-            app:title="Benachrichtigungen Mensa"
+            app:title="@string/notifications_mensa"
 
             />
         <SwitchPreference
             app:defaultValue="true"
+            app:icon="@drawable/baseline_coffee_maker_24"
             app:key="notifications_coffee"
-            app:title="Benachrichtigungen Kaffeemaschine"
+            app:title="@string/notifications_coffee"
 
             />
         <SwitchPreference
             app:defaultValue="true"
+            app:icon="@drawable/ic_baseline_print_24"
             app:key="notifications_printer"
-            app:title="Benachrichtigungen Drucker" />
+            app:title="@string/notifications_printer" />
     </PreferenceCategory>
 
-    <PreferenceCategory
-        app:title="Dualis" >
+    <PreferenceCategory app:title="@string/dualis">
 
         <SwitchPreference
-            app:key="useBiometrics"
-            app:title="@string/biometrics"
             app:defaultValue="false"
+            app:icon="@drawable/ic_baseline_fingerprint_24"
+            app:key="useBiometrics"
             app:summary="@string/biometrics_summary"
-            app:icon="@drawable/ic_baseline_fingerprint_24"/>
+            app:title="@string/biometrics" />
 
         <SwitchPreference
-            app:key="sync"
-            app:title="Benachrichtigungen"
             app:defaultValue="true"
-            app:icon="@drawable/ic_baseline_notifications_active_24"/>
+            app:icon="@drawable/ic_baseline_notifications_active_24"
+            app:key="sync"
+            app:title="@string/notifications" />
 
         <ListPreference
-            app:dependency="sync"
             app:defaultValue="15"
+            app:dependency="sync"
             app:entries="@array/sync_entries"
             app:entryValues="@array/sync_values"
+            app:icon="@drawable/ic_baseline_access_time_24"
             app:key="sync_time"
             app:title="@string/check_new_grades"
-            app:useSimpleSummaryProvider="true"
-            app:icon="@drawable/ic_baseline_access_time_24" />
+            app:useSimpleSummaryProvider="true" />
 
         <Preference
+            app:icon="@drawable/ic_baseline_brush_24"
             app:key="customize_notification"
-            app:title="Benachrichtigungen anpassen"
-            app:icon="@drawable/ic_baseline_brush_24" />
+            app:title="@string/customize_notifications" />
 
 
     </PreferenceCategory>
 
-    <PreferenceCategory app:title="Über">
+    <PreferenceCategory app:title="@string/about">
 
         <Preference
+            app:icon="@drawable/ic_baseline_info_24"
             app:key="informations"
-            app:title="Informationen über DHBWorld" />
+            app:title="@string/information_about" />
         <Preference
+            app:icon="@drawable/ic_baseline_gavel_24"
             app:key="licenses"
-            app:title="Lizenzen" />
+            app:title="@string/licenses" />
         <Preference
+            app:icon="@drawable/ic_outline_admin_panel_settings_24"
             app:key="dataprivacy"
-            app:title="Datenschutz" />
+            app:title="@string/data_privacy_title" />
 
     </PreferenceCategory>
 
-    <PreferenceCategory app:title="Calendar">
+    <PreferenceCategory app:title="@string/calendar">
         <Preference
-        app:key="calendarURL"
-        app:title="Import from URL" />
+            app:key="calendarURL"
+            app:icon="@drawable/ic_baseline_calendar_month_24"
+            app:title="@string/import_from_url" />
     </PreferenceCategory>
 
 </PreferenceScreen>
