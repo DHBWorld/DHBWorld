@@ -5,6 +5,7 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.TaskStackBuilder;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -90,7 +91,7 @@ public class UserInteractionMessagingService extends FirebaseMessagingService {
                             .setContentIntent(resultPendingIntent);
 
                     if (notificationManager.getNotificationChannel("warnings") == null) {
-                        createNotificationChannel();
+                        createNotificationChannel(UserInteractionMessagingService.this);
                     }
                     notificationManager.notify(icon, builder.build());
                 }
@@ -119,13 +120,11 @@ public class UserInteractionMessagingService extends FirebaseMessagingService {
         MessagingAnalytics.logNotificationReceived(intent);
     }
 
-    private void createNotificationChannel() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            int importance = NotificationManager.IMPORTANCE_HIGH;
-            NotificationChannel channel = new NotificationChannel("warnings", "Warnungen", importance);
-            channel.setDescription(getResources().getString(R.string.event_notifications));
-            NotificationManager notificationManager = getSystemService(NotificationManager.class);
-            notificationManager.createNotificationChannel(channel);
-        }
+    public static void createNotificationChannel(Context context) {
+        int importance = NotificationManager.IMPORTANCE_HIGH;
+        NotificationChannel channel = new NotificationChannel("warnings", "Warnungen (User Interaction)", importance);
+        channel.setDescription(context.getResources().getString(R.string.event_notifications));
+        NotificationManager notificationManager = context.getSystemService(NotificationManager.class);
+        notificationManager.createNotificationChannel(channel);
     }
 }
