@@ -38,8 +38,11 @@ body:
   - type: textarea
     id: device
     attributes:
-      label: On which device did the bug occur?
+      label: Device
+      description: On which device did the bug occur?
       placeholder: e.g. Samsung Galaxy S20
+    validations:
+      required: true
      
     - type: textarea
     id: android-version
@@ -50,9 +53,4 @@ body:
   id: additional_info
   attributes:
     label: Anything else you want to tell us?
-    placeholder: Possbile solution, extra information
-  
-  
-  
-  
-  
+    placeholder: Possbile solution, extra informations
