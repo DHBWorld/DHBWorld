@@ -285,6 +285,7 @@
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
     <string name="cantine">Cantine</string>
+
     <string name="new_grade_exam">New exam grade</string>
     <string name="new_grade_exam_text">
         Es wurde eine neue Prüfungsnote eingetragen
@@ -299,6 +300,12 @@
     <string name="wrong_credentials">E-Mail-Adresse oder Passwort falsch</string>
     <string name="semester">Semester</string>
     <string name="refresh">Aktualisieren</string>
+    <string name="authentication_expired">Credentials expired</string>
+    <string name="authentication_expired_expl">Maybe you have changed the password? Please log in to the app again.</string>
+    <string name="channel_name_general_dualis">Dualis Info</string>
+    <string name="channel_description_general_dualis">General information about Dualis</string>
+    <string name="channel_name_dualis">New grade (Dualis)</string>
+    <string name="channel_description_dualis">Notification for new grades (Dualis)</string>
 
     <string name="total_gpa">Gesamt GPA:</string>
     <string name="major_gpa">Hauptfächer GPA:</string>
@@ -334,4 +341,11 @@ E-Mail-Adresse: <p><a href="mailto:zaeske.christian@gmail.com">zaeske.christian@
         ]]>
     </string>
     <string name="close">Schließen</string>
+    <string name="channel_name">Dualis</string>
+    <string name="channel_description">Neue Note erhalten</string>
+    <string name="preference_file_key">Dualis</string>
+    <string name="biometrics">Biometrie</string>
+    <string name="biometrics_summary">Nutze biometrische Sensoren zur Anmeldung</string>
+    <string name="check_new_grades">Überprüfung auf neue Noten</string>
+    <string name="sync_makes_no_difference">Dies hat keine Auswirkungen, da du deine Anmeldedaten nicht gespeichert hast</string>
 </resources>

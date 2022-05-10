@@ -106,6 +106,7 @@ dependencies {
     implementation 'androidx.navigation:navigation-ui:2.3.5'
     implementation 'com.github.dhbw-timetable:rapla-parser:0.3.3'
     implementation 'androidx.biometric:biometric:1.1.0'
+    implementation 'androidx.work:work-runtime:2.7.1'
 
 
     testImplementation 'junit:junit:4.+'
@@ -120,5 +121,6 @@ dependencies {
 
     implementation 'org.jsoup:jsoup:1.14.3'
     implementation 'com.android.volley:volley:1.2.1'
+    implementation 'androidx.work:work-runtime:2.7.1'
 
 }

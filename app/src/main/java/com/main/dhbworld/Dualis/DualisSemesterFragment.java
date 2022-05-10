@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.VolleyError;
 import com.google.android.material.progressindicator.CircularProgressIndicator;
+import com.main.dhbworld.DualisActivity;
 import com.main.dhbworld.R;
 
 import org.json.JSONArray;
@@ -98,6 +99,9 @@ public class DualisSemesterFragment extends Fragment implements DualisAPI.Course
 
     @Override
     public void onCourseDataLoaded(JSONObject data) {
+        DualisAPI.setAlarmManager(getContext());
+
+        DualisAPI.copareAndSave(getContext(), data);
         ArrayList<String> items = new ArrayList<>();
         try {
             for (int i=0; i<data.getJSONArray("semester").length(); i++) {

@@ -4,19 +4,27 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.InputType;
 import android.widget.EditText;
+import android.provider.Settings;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.biometric.BiometricManager;
+import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
 import androidx.preference.SwitchPreference;
+import androidx.work.WorkManager;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.snackbar.Snackbar;
+import com.main.dhbworld.Dualis.DualisAPI;
 import com.main.dhbworld.Firebase.Utilities;
 import com.main.dhbworld.Navigation.NavigationUtilities;
 
@@ -132,10 +140,35 @@ public class SettingsActivity extends AppCompatActivity {
                 }
             });
 
+
+            SwitchPreference useBiometricsPreference = findPreference("useBiometrics");
+            SwitchPreference notificationPreference = findPreference("sync");
+            ListPreference notificationTimePreference = findPreference("sync_time");
+            Preference customizeNotificationPreference = findPreference("customize_notification");
+
+
+            BiometricManager biometricManager = BiometricManager.from(getContext());
+            if (biometricManager.canAuthenticate(BiometricManager.Authenticators.BIOMETRIC_STRONG | BiometricManager.Authenticators.BIOMETRIC_WEAK | BiometricManager.Authenticators.DEVICE_CREDENTIAL) != BiometricManager.BIOMETRIC_SUCCESS){
+                useBiometricsPreference.setEnabled(false);
+            }
+            notificationPreference.setOnPreferenceChangeListener(this);
+            notificationTimePreference.setOnPreferenceChangeListener(this);
+            customizeNotificationPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    Intent settingsIntent = new Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS)
+                            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                            .putExtra(Settings.EXTRA_APP_PACKAGE, getActivity().getPackageName());
+
+                    startActivity(settingsIntent);
+                    return true;
+                }
+            });
         }
 
         @Override
         public boolean onPreferenceChange(Preference preference, Object newValue) {
+            SharedPreferences sharedPref = getContext().getSharedPreferences("Dualis", MODE_PRIVATE);
             switch (preference.getKey()) {
                 case "notifications_mensa":
                     if ((boolean) newValue) {
@@ -158,6 +191,22 @@ public class SettingsActivity extends AppCompatActivity {
                         Utilities.unsubscribeFromTopic(Utilities.CATEGORY_PRINTER);
                     }
                     break;
+                case "sync":
+                    if (!sharedPref.getBoolean("saveCredentials", true)) {
+                        Snackbar.make(getActivity().findViewById(android.R.id.content), getContext().getResources().getString(R.string.sync_makes_no_difference), Snackbar.LENGTH_LONG).show();
+                    }
+                    if (!(boolean) newValue) {
+                        WorkManager.getInstance(getContext()).cancelUniqueWork("DualisNotifier");
+                    } else {
+                        DualisAPI.setAlarmManager(getContext());
+                    }
+                    return true;
+                case "sync_time":
+                    if (!sharedPref.getBoolean("saveCredentials", true)) {
+                        Snackbar.make(getActivity().findViewById(android.R.id.content), getContext().getResources().getString(R.string.sync_makes_no_difference), Snackbar.LENGTH_LONG).show();
+                    }
+                    DualisAPI.setAlarmManager(getContext());
+                    return true;
             }
             return true;
         }
