@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".LicenseActivity"
+    tools:context=".DataPrivacyActivity"
     android:orientation="vertical">
 
     <LinearLayout
@@ -25,11 +25,11 @@
             android:paddingBottom="8dp"/>
 
         <TextView
+            android:id="@+id/dataprivacytext"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/grey_light"
             android:fontFamily="monospace"
-            android:text="@string/data_privacy"
             android:textColor="@color/black"
             android:textSize="12sp"
             android:padding="4dp"/>
