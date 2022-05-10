@@ -102,6 +102,47 @@
 
             </LinearLayout>
 
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/tram_disruption_title_view"
+                android:layout_width="match_parent"
+                android:layout_height="62dp"
+                android:layout_margin="4dp"
+                android:elevation="0dp"
+                app:strokeColor="@android:color/tab_indicator_text"
+                app:strokeWidth="1dp"
+                android:clickable="true"
+                android:visibility="gone">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:layout_margin="8dp">
+
+                    <ImageView
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:layout_marginEnd="8dp"
+                        android:src="@drawable/ic_baseline_info_24"
+                        android:layout_gravity="center"
+                        android:contentDescription="@string/marker_destination"
+                        app:tint="@color/red"/>
+                    <TextView
+                        android:layout_gravity="center"
+                        android:id="@+id/tram_disruption_title_text"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text=""
+                        android:textSize="20sp"
+                        android:ellipsize="end"
+                        android:maxLines="2"
+                        android:textColor="@color/red"/>
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
             <androidx.recyclerview.widget.RecyclerView
                 android:layout_marginTop="8dp"
                 android:id="@+id/tram_recyclerview"

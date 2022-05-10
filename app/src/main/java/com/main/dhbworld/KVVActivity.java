@@ -1,6 +1,7 @@
 package com.main.dhbworld;
 
 import android.os.Bundle;
+import android.text.Html;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -12,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.datepicker.MaterialDatePicker;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.progressindicator.CircularProgressIndicator;
 import com.google.android.material.timepicker.MaterialTimePicker;
 import com.google.android.material.timepicker.TimeFormat;
@@ -41,6 +43,9 @@ public class KVVActivity extends AppCompatActivity {
     MaterialCardView tramDepartureDateSelectCardView;
     MaterialButton refreshButton;
 
+    MaterialCardView tramDisruptionCardView;
+    TextView tramDisruptionTitle;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,12 +63,15 @@ public class KVVActivity extends AppCompatActivity {
         tramDepartureDateSelectCardView = findViewById(R.id.tram_departure_date_select);
         refreshButton = findViewById(R.id.tram_refresh);
 
+        tramDisruptionCardView = findViewById(R.id.tram_disruption_title_view);
+        tramDisruptionTitle = findViewById(R.id.tram_disruption_title_text);
+
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         kvvListAdapter = new KVVListAdapter(departures);
         recyclerView.setAdapter(kvvListAdapter);
 
         KVVDataLoader dataLoader = new KVVDataLoader(this);
-        dataLoader.setDataLoaderListener(returnedDepartures -> {
+        dataLoader.setDataLoaderListener((returnedDepartures, disruption) -> {
             departures.clear();
             departures.addAll(returnedDepartures);
             kvvListAdapter.notifyItemRangeInserted(0, departures.size());
@@ -73,6 +81,25 @@ public class KVVActivity extends AppCompatActivity {
                         R.string.error_getting_kvv_data,
                         Toast.LENGTH_LONG
                 ).show();
+            }
+
+            if (disruption != null) {
+                tramDisruptionTitle.setText(disruption.getSummary());
+                tramDisruptionCardView.setVisibility(View.VISIBLE);
+                tramDisruptionCardView.setOnClickListener(view -> {
+                    String builder = "<h1>" +
+                            disruption.getSummary() +
+                            "</h1><h3>" +
+                            disruption.getLines() +
+                            "</h3>" +
+                            disruption.getDetails();
+                    new MaterialAlertDialogBuilder(KVVActivity.this)
+                            .setMessage(Html.fromHtml(builder, Html.FROM_HTML_MODE_LEGACY))
+                            .setPositiveButton(R.string.close, null)
+                            .show();
+                });
+            } else {
+                tramDisruptionCardView.setVisibility(View.GONE);
             }
         });
 
