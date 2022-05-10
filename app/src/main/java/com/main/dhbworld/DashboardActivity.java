@@ -48,6 +48,7 @@ import com.main.dhbworld.Firebase.SignedInListener;
 import com.main.dhbworld.Firebase.Utilities;
 import com.main.dhbworld.KVV.DataLoaderListener;
 import com.main.dhbworld.KVV.Departure;
+import com.main.dhbworld.KVV.Disruption;
 import com.main.dhbworld.KVV.KVVDataLoader;
 import com.main.dhbworld.Navigation.NavigationUtilities;
 
@@ -559,7 +560,7 @@ public class DashboardActivity extends AppCompatActivity {
 
         dataLoader.setDataLoaderListener(new DataLoaderListener() {
             @Override
-            public void onDataLoaded(ArrayList<Departure> departures) {
+            public void onDataLoaded(ArrayList<Departure> departures, Disruption disruption) {
 
                 if (departures.size()<1){
                     LinearLayout layoutTram = new LinearLayout(DashboardActivity.this);
