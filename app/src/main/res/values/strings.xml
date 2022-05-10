@@ -309,4 +309,5 @@
     <string name="user_interaction">User Interaction</string>
     <string name="calendar">Calendar</string>
     <string name="home">Home</string>
+    <string name="data_privacy">a</string>
 </resources>

@@ -79,6 +79,16 @@ public class SettingsActivity extends AppCompatActivity {
                 }
             });
 
+            Preference privacy = findPreference("dataprivacy");
+            licenses.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    Intent intent = new Intent(context, LicenseActivity.class);
+                    startActivity(intent);
+                    return true;
+                }
+            });
+
             SwitchPreference mensaPreference = findPreference("notifications_mensa");
             SwitchPreference coffeePreference = findPreference("notifications_coffee");
             SwitchPreference printerPreference = findPreference("notifications_printer");
