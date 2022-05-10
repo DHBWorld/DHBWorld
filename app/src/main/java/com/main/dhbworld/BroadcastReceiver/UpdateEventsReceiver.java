@@ -37,7 +37,7 @@ public class UpdateEventsReceiver extends BroadcastReceiver {
         Intent intent = new Intent("com.main.dhbworld");
         intent.putExtra("category", category);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent,
-                PendingIntent.FLAG_UPDATE_CURRENT);
+                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
         ((AlarmManager)context.getSystemService(Context.ALARM_SERVICE)).setInexactRepeating(AlarmManager.RTC_WAKEUP,
                 System.currentTimeMillis() + (AlarmManager.INTERVAL_FIFTEEN_MINUTES), AlarmManager.INTERVAL_FIFTEEN_MINUTES, pendingIntent);
 

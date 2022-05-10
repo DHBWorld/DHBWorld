@@ -39,6 +39,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
@@ -93,7 +94,9 @@ public class CantineActivity extends AppCompatActivity {
 
         scroll= findViewById(R.id.scrollViewCantine);
 
-        final AtomicReference<Float>[] x1 = new AtomicReference[]{new AtomicReference<>((float) 0)};
+        //Scrollen zwischen den Tabs
+
+       /* final AtomicReference<Float>[] x1 = new AtomicReference[]{new AtomicReference<>((float) 0)};
         final float[] x2 = {0};
         scroll.setOnTouchListener((v, event) -> {
             // TODO Auto-generated method stub
@@ -117,7 +120,7 @@ public class CantineActivity extends AppCompatActivity {
             }
 
             return false;
-        });
+        });*/
 
 
 
@@ -172,6 +175,7 @@ public class CantineActivity extends AppCompatActivity {
     private void generateCurrentWeek()  {
         Date date= new Date();
         currentWeek = new Date[5];
+
         Calendar c= Calendar.getInstance();
         c.setFirstDayOfWeek(Calendar.SUNDAY);
         c.setTime(date);
@@ -179,7 +183,20 @@ public class CantineActivity extends AppCompatActivity {
 
         Integer dayOfWeek = c.get(Calendar.DAY_OF_WEEK); // dayOfWeek= 2 ->Mo
         dayOfWeek=dayOfWeek-2; // dayOfWeek= 0 ->Mo
-        if ((dayOfWeek<0) || (dayOfWeek>4)){
+
+
+        // Am Samstag
+        if ( (dayOfWeek>4)){
+
+            dayOfWeek=0;
+            c.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+            c.add(Calendar.DATE, 7);
+           System.out.println(c.get(Calendar.DAY_OF_MONTH));
+        }
+
+
+        //Am Sonntag
+        if ((dayOfWeek<0) ){
             dayOfWeek=0;
             c.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
         }
@@ -195,6 +212,8 @@ public class CantineActivity extends AppCompatActivity {
 
 
         }
+
+
 
 
     }
@@ -268,17 +287,43 @@ public class CantineActivity extends AppCompatActivity {
         pageTitleExtra.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         layoutMealCardsExtra.addView(pageTitleExtra);
 
+        boolean basicMealOne=true;
+        boolean basicMealTwo=true;
+        boolean basicMealThree=true;
+
+
         for (int i=0;i<mealDailyPlan.getMeal().length; i++){
             MaterialCardView mealCard= new MaterialCardView(CantineActivity.this);
             mealCard.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
             mealCard.setStrokeColor(getResources().getColor(R.color.grey_dark));
 
-            if(mealDailyPlan.getMeal()[i].getCategory().equals("Wahlessen 3")){
-                layoutMealCardsExtra.addView(mealCard);
-            }else{
-                layoutMealCardsBasic.addView(mealCard);
-            }
 
+
+            // "Künstliche Intelligenz" zur Erkennunung von Haupgerichten
+            if((mealDailyPlan.getMeal()[i].getCategory().equals("Wahlessen 1")) && basicMealOne){
+                layoutMealCardsBasic.addView(mealCard);
+                basicMealOne=false;
+            }else if((mealDailyPlan.getMeal()[i].getCategory().equals("Wahlessen 2")) && basicMealTwo){
+                layoutMealCardsBasic.addView(mealCard);
+                basicMealTwo=false;
+            }else if((mealDailyPlan.getMeal()[i].getCategory().equals("Wahlessen 3")) && basicMealThree  ){
+                try {
+                    Double price= Double.parseDouble(mealDailyPlan.getMeal()[i].getPrice());
+
+                    if (price>1.80){
+                        layoutMealCardsBasic.addView(mealCard);
+                        basicMealThree=false;
+                    }else{
+                        layoutMealCardsExtra.addView(mealCard);
+                    }
+                } catch (NumberFormatException e) {
+                    e.printStackTrace();
+                    layoutMealCardsBasic.addView(mealCard);
+                    basicMealThree=false;
+                }
+            }else{
+                layoutMealCardsExtra.addView(mealCard);}
+            //----------------------
 
             LinearLayout cardLayout = new LinearLayout(CantineActivity.this);
             cardLayout.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
@@ -298,7 +343,6 @@ public class CantineActivity extends AppCompatActivity {
             mealView.setText(mealDailyPlan.getMeal()[i].getName());
             mealView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
             mealLayout.addView(mealView);
-
 
             HorizontalScrollView chipScroll = new HorizontalScrollView(CantineActivity.this);
             chipScroll.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
@@ -327,7 +371,6 @@ public class CantineActivity extends AppCompatActivity {
             preisLayout.setOrientation(LinearLayout.VERTICAL);
             preisLayout.setBackgroundColor(getResources().getColor(R.color.grey_light));
             preisLayout.setGravity(Gravity.CENTER);
-
             cardLayout.addView(preisLayout);
 
             TextView preisView = new TextView(CantineActivity.this);
@@ -371,6 +414,8 @@ public class CantineActivity extends AppCompatActivity {
                             public void run() {
                                 try {
                                     MealDailyPlan mealDailyPlan = new MealDailyPlan( inputFromApi);
+
+
                                     loadLayout(mealDailyPlan, date);
                                 } catch (JSONException e) {
                                     e.printStackTrace();
@@ -445,12 +490,8 @@ public class CantineActivity extends AppCompatActivity {
                 SimpleDateFormat format =new SimpleDateFormat("yyyy-MM-dd");
                 URL urlOpenMensa= null;
 
-                try {
-
-
-                        urlOpenMensa = new URL("https://openmensa.org/api/v2/canteens/33/days/" + format.format(now) + "/meals");
-
-                    HttpsURLConnection connection = (HttpsURLConnection) urlOpenMensa.openConnection();
+                try { urlOpenMensa = new URL("https://openmensa.org/api/v2/canteens/33/days/" + format.format(now) + "/meals");
+                        HttpsURLConnection connection = (HttpsURLConnection) urlOpenMensa.openConnection();
 
                     if (connection.getResponseCode() == 200) { // something wrong
                         InputStream responseBody = connection.getInputStream();
@@ -460,11 +501,34 @@ public class CantineActivity extends AppCompatActivity {
 
 
                         MealDailyPlan plan= new MealDailyPlan(inputForDashboard);
+                        Boolean basicMealOne=true;
+                        Boolean basicMealTwo=true;
+                        Boolean basicMealThree=true;
 
-                        for (Meal m: plan.getMeal()){
-                            if (!m.getCategory().equals("Wahlessen 3")){
-                            meals.add(m.getName());}
-                        }
+                        for (int i=0;i<plan.getMeal().length; i++){
+
+                            // "Künstliche Intelligenz" zur Erkennunung von Haupgerichten
+                            if((plan.getMeal()[i].getCategory().equals("Wahlessen 1")) && basicMealOne){
+                                basicMealOne=false;
+                                meals.add(plan.getMeal()[i].getName());
+                            }else if((plan.getMeal()[i].getCategory().equals("Wahlessen 2")) && basicMealTwo){
+                                basicMealTwo=false;
+                                meals.add(plan.getMeal()[i].getName());
+                            }else if((plan.getMeal()[i].getCategory().equals("Wahlessen 3")) && basicMealThree  ){
+                                try {
+                                    Double price= Double.parseDouble(plan.getMeal()[i].getPrice());
+
+                                    if (price>1.80){
+                                        basicMealThree=false;
+                                        meals.add(plan.getMeal()[i].getName());
+                                    }
+                                } catch (NumberFormatException e) {
+                                    e.printStackTrace();
+                                    meals.add(plan.getMeal()[i].getName());
+                                    basicMealThree=false;
+                                } }}
+
+
 
                     }
 
@@ -483,4 +547,4 @@ public class CantineActivity extends AppCompatActivity {
     }
 
 
-}
+    }

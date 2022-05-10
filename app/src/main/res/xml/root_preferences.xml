@@ -11,7 +11,7 @@
         <SwitchPreference
             app:defaultValue="true"
             app:key="notifications_coffee"
-            app:title="Benachrichtigungen Kaffe Maschine"
+            app:title="Benachrichtigungen Kaffeemaschine"
 
             />
         <SwitchPreference

@@ -1,6 +1,7 @@
 package com.main.dhbworld;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
@@ -55,6 +56,8 @@ public class UserInteraction extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.user_interaction_layout);
 
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+
         NavigationUtilities.setUpNavigation(this, R.id.UserInteraction);
 
         stateManagement();
@@ -73,6 +76,7 @@ public class UserInteraction extends AppCompatActivity {
             @Override
             public void onSignedIn(FirebaseUser user) {
                 progressDialog.dismiss();
+                updateInteractionState();
             }
 
             @Override
@@ -128,8 +132,6 @@ public class UserInteraction extends AppCompatActivity {
 
         firebaseUtilities.signIn();
 
-        updateInteractionState();
-
     }
 
     private void yesNoButtonsManagement(){
@@ -170,7 +172,7 @@ public class UserInteraction extends AppCompatActivity {
 
                                 @Override
                                 public void failed(Exception reason) {
-                                    Toast.makeText(UserInteraction.this, "Fehler", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(UserInteraction.this, reason.getMessage(), Toast.LENGTH_LONG).show();
                                 }
                             });
 
@@ -205,7 +207,7 @@ public class UserInteraction extends AppCompatActivity {
 
                             @Override
                             public void failed(Exception reason) {
-                                Toast.makeText(UserInteraction.this, "Fehler", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(UserInteraction.this, reason.getMessage(), Toast.LENGTH_LONG).show();
                             }
                         });
 
@@ -235,7 +237,7 @@ public class UserInteraction extends AppCompatActivity {
 
                                 @Override
                                 public void failed(Exception reason) {
-                                    Toast.makeText(UserInteraction.this, "Fehler", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(UserInteraction.this, reason.getMessage(), Toast.LENGTH_LONG).show();
                                 }
                             });
 
