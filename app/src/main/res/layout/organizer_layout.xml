@@ -33,22 +33,17 @@
         </com.google.android.material.appbar.AppBarLayout>
         <!-- everything above is for the topbar and navigation-->
 
-
-        <ScrollView
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/organizerTabLayout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            android:layout_below="@id/topAppBarLayout" />
 
-            <ListView
-                android:id="@+id/listviewitem"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:layout_marginLeft="40dp"
-                android:layout_marginRight="16dp"
-                android:layout_marginTop="16dp"
-                android:layout_weight="8"
-                />
-        </ScrollView>
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/organizerViewPager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/organizerTabLayout" />
 
 
     </RelativeLayout>

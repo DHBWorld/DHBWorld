@@ -57,7 +57,6 @@ public class LoggedInView {
         activity.setContentView(R.layout.activity_dualis);
         NavigationUtilities.setUpNavigation(activity, R.id.dualis);
 
-
         TabLayout tabLayout = activity.findViewById(R.id.dualisTabLayout);
 
         ViewPager2 viewPager2 = activity.findViewById(R.id.dualisViewPager);

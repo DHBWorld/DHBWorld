@@ -2,7 +2,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#ff9b999a"
     android:orientation="horizontal">
 
     <TextView
@@ -11,8 +10,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
         android:layout_weight="7"
-        android:text="Item"
-        android:textColor="@android:color/white"/>
+        />
 
     <TextView
         android:id="@+id/course_info2"
@@ -20,8 +18,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
         android:layout_weight="16"
-        android:gravity="right"
-        android:text="Amount"
-        android:textColor="@android:color/white"/>
+        android:gravity="end"
+        />
 
 </LinearLayout>

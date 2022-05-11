@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class OrganizerActivity extends AppCompatActivity {
@@ -23,11 +24,14 @@ public class OrganizerActivity extends AppCompatActivity {
     private Course course;
     private String text;
     InputStream in;
+    organizerListAdapter adapter;
+    ListView listView;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.organizer_layout);
         NavigationUtilities.setUpNavigation(this, R.id.navigationView);
+        listView = findViewById(R.id.listviewitem);
         t.start();
         parseXml.start();
     }
@@ -95,9 +99,11 @@ public class OrganizerActivity extends AppCompatActivity {
     });
 
 
+
+
+
         public void displayCourses() {
-            ArrayList<Course> addedCourses = new ArrayList<>();
-            organizerListAdapter adapter = new organizerListAdapter(this, addedCourses);
+            adapter = new organizerListAdapter(this, courses);
             ListView listView = findViewById(R.id.listviewitem);
             this.runOnUiThread(new Runnable() {
                 @Override
@@ -105,10 +111,6 @@ public class OrganizerActivity extends AppCompatActivity {
                     listView.setAdapter(adapter);
                 }
             });
-            for(Course c : courses){
-                adapter.add(c);
-                System.out.println(c.name);
-            }
             }
 
 }
