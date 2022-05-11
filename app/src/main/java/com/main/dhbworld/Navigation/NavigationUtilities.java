@@ -24,7 +24,7 @@ import com.main.dhbworld.SettingsActivity;
 import com.main.dhbworld.UserInteraction;
 
 public class NavigationUtilities {
-    public static void setUpNavigation(AppCompatActivity activity, int checkedItem) {
+    public static void setUpNavigation(Activity activity, int checkedItem) {
         MaterialToolbar toolbar = activity.findViewById(R.id.topAppBar);
 
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {

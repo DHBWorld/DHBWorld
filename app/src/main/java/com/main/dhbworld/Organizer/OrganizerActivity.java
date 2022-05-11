@@ -4,7 +4,12 @@ import android.os.Bundle;
 import android.widget.ListView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.viewpager2.adapter.FragmentStateAdapter;
+import androidx.viewpager2.widget.ViewPager2;
 
+import com.google.android.material.tabs.TabLayout;
 import com.main.dhbworld.CalendarActivity;
 import com.main.dhbworld.Navigation.NavigationUtilities;
 import com.main.dhbworld.R;
@@ -19,22 +24,51 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class OrganizerActivity extends AppCompatActivity {
+public class OrganizerActivity extends FragmentActivity {
     private ArrayList<Course> courses = new ArrayList<>();
     private Course course;
     private String text;
     InputStream in;
     organizerListAdapter adapter;
     ListView listView;
+    private ViewPager2 viewPager;
+    private FragmentStateAdapter fragmentStateAdapter;
 
+    private static final int NUM_PAGES = 3;
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.organizer_layout);
         NavigationUtilities.setUpNavigation(this, R.id.navigationView);
+        crateTabs();
+
         listView = findViewById(R.id.listviewitem);
         t.start();
         parseXml.start();
     }
+
+    @Override
+    public void onBackPressed(){
+        if (viewPager.getCurrentItem() == 0) {
+            // If the user is currently looking at the first step, allow the system to handle the
+            // Back button. This calls finish() on this activity and pops the back stack.
+            super.onBackPressed();
+        } else {
+            // Otherwise, select the previous step.
+            viewPager.setCurrentItem(viewPager.getCurrentItem() - 1);
+        }
+    }
+
+    public void crateTabs(){
+        viewPager = findViewById(R.id.organizerViewPager);
+        fragmentStateAdapter = new ScreenSlidePagerAdapter(this);
+        viewPager.setAdapter(fragmentStateAdapter);
+        TabLayout tabLayout = findViewById(R.id.organizerTabLayout);
+
+
+    }
+
 
     Thread t = new Thread(new Runnable() {
         @Override
@@ -113,4 +147,22 @@ public class OrganizerActivity extends AppCompatActivity {
             });
             }
 
+
+    private class ScreenSlidePagerAdapter extends FragmentStateAdapter {
+        public ScreenSlidePagerAdapter(FragmentActivity fa) {
+            super(fa);
+        }
+
+        @Override
+        public Fragment createFragment(int position) {
+            return new organizerTabFragment();
+        }
+
+        @Override
+        public int getItemCount() {
+            return NUM_PAGES;
+        }
+    }
 }
+
+
