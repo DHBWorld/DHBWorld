@@ -123,6 +123,7 @@ public class CalendarActivity extends AppCompatActivity{
         return  url;
     }
 
+    //set dates to always display a monday. If it's a weekend, go to next monday.
     public void setDates(){
         date.set(Calendar.DAY_OF_WEEK,
                 date.getActualMinimum(Calendar.DAY_OF_WEEK) + 1);
@@ -135,9 +136,6 @@ public class CalendarActivity extends AppCompatActivity{
         else if(tempCal.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY){
             tempCal.add(Calendar.DAY_OF_WEEK,1);
             date = tempCal;
-        }
-        else{
-            cal.scrollToDate(date);
         }
         cal.scrollToDate(date);
     }
@@ -179,6 +177,7 @@ public class CalendarActivity extends AppCompatActivity{
                 alertDialog.show();
     }
 
+    //Set and apply new blackList with selected elements. Then restart Activity to display only whitelisted events.
     public void positiveButtonAction(){
         blackList = removeDuplicates(blackList);
         EventCreator.clearEvents();
@@ -189,6 +188,7 @@ public class CalendarActivity extends AppCompatActivity{
         restart(CalendarActivity.this);
     }
 
+    //Create AlertDialog when Activity is first started. Prompt user to enter URL for calendar (can be changed in settings).
     public void createUrlDialog() {
         MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(CalendarActivity.this);
         builder.setTitle("Please enter your Rapla-URL");

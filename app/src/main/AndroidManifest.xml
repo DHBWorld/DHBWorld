@@ -36,8 +36,7 @@
         </activity>
         <activity
             android:name=".MainActivity"
-            android:exported="false">
-        </activity>
+            android:exported="false"/>
         <activity
             android:name=".SettingsActivity"
             android:exported="false"
@@ -46,10 +45,13 @@
             android:name=".LicenseActivity"
             android:exported="false" />
         <activity
+            android:name=".DataPrivacyActivity"
+            android:exported="false" />
+        <activity
             android:name=".CalendarActivity"
             android:exported="false" />
         <activity
-            android:name=".OrganizerActivity"
+            android:name=".Organizer.OrganizerActivity"
             android:exported="false" />
 
         <service

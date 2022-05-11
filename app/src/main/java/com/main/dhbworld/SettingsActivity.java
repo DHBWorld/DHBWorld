@@ -50,6 +50,7 @@ public class SettingsActivity extends AppCompatActivity {
         public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
             setPreferencesFromResource(R.xml.root_preferences, rootKey);
             Preference informations = findPreference("informations");
+            assert informations != null;
             informations.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
@@ -70,10 +71,22 @@ public class SettingsActivity extends AppCompatActivity {
             });
 
             Preference licenses = findPreference("licenses");
+            assert licenses != null;
             licenses.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
                     Intent intent = new Intent(context, LicenseActivity.class);
+                    startActivity(intent);
+                    return true;
+                }
+            });
+
+            Preference privacy = findPreference("dataprivacy");
+            assert privacy != null;
+            privacy.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    Intent intent = new Intent(context, DataPrivacyActivity.class);
                     startActivity(intent);
                     return true;
                 }
