@@ -1,7 +1,11 @@
 package com.main.dhbworld.Organizer;
 
 import android.os.Bundle;
+import android.widget.ListView;
+
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.main.dhbworld.CalendarActivity;
 import com.main.dhbworld.Navigation.NavigationUtilities;
 import com.main.dhbworld.R;
 
@@ -25,11 +29,7 @@ public class OrganizerActivity extends AppCompatActivity {
         setContentView(R.layout.organizer_layout);
         NavigationUtilities.setUpNavigation(this, R.id.navigationView);
         t.start();
-        try {
-            new Thread(parseXml).start();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        parseXml.start();
     }
 
     Thread t = new Thread(new Runnable() {
@@ -45,58 +45,70 @@ public class OrganizerActivity extends AppCompatActivity {
         }});
 
 
-    Runnable parseXml = () -> {
 
-        try {
-            t.join();
-            System.out.println(in);
-            XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
-            factory.setNamespaceAware(true);
-            XmlPullParser parser = factory.newPullParser();
-            parser.setInput(in, null);
+    Thread parseXml = new Thread(new Runnable() {
+        @Override
+        public void run() {
+            try {
+                t.join();
+                System.out.println(in);
+                XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
+                factory.setNamespaceAware(true);
+                XmlPullParser parser = factory.newPullParser();
+                parser.setInput(in, null);
 
-            int eventType = parser.getEventType();
-            while (eventType != XmlPullParser.END_DOCUMENT) {
-                String tag = parser.getName();
-                switch (eventType) {
-                    case XmlPullParser.START_TAG:
-                        if (tag.equalsIgnoreCase("kurs")) {
-                            course = new Course();
-                        }
-                        break;
-                    case XmlPullParser.TEXT:
-                        text = parser.getText();
-                        break;
-                    case XmlPullParser.END_TAG:
-                        if (tag.equalsIgnoreCase("kurs")) {
-                            courses.add(course);
-                        } else if (tag.equalsIgnoreCase("name")) {
-                            course.setName(text);
-                        } else if (tag.equalsIgnoreCase("jahrgang")) {
-                            course.setYear(Integer.parseInt(text));
-                        } else if (tag.equalsIgnoreCase("studiengang")) {
-                            course.setStudy(text);
-                        }
+                int eventType = parser.getEventType();
+                while (eventType != XmlPullParser.END_DOCUMENT) {
+                    String tag = parser.getName();
+                    switch (eventType) {
+                        case XmlPullParser.START_TAG:
+                            if (tag.equalsIgnoreCase("kurs")) {
+                                course = new Course();
+                            }
+                            break;
+                        case XmlPullParser.TEXT:
+                            text = parser.getText();
+                            break;
+                        case XmlPullParser.END_TAG:
+                            if (tag.equalsIgnoreCase("kurs")) {
+                                courses.add(course);
+                            } else if (tag.equalsIgnoreCase("name")) {
+                                course.setName(text);
+                            } else if (tag.equalsIgnoreCase("jahrgang")) {
+                                course.setYear(Integer.parseInt(text));
+                            } else if (tag.equalsIgnoreCase("studiengang")) {
+                                course.setStudy(text);
+                            }
 //                        else if (tag.equalsIgnoreCase("raumnr")) {
 //                            course.setRoomNo(text);
 //                        }
-                    default:
-                        break;
+                        default:
+                            break;
+                    }
+                    eventType = parser.next();
                 }
-                eventType = parser.next();
+            } catch (Exception e) {
+                e.printStackTrace();
             }
+            displayCourses();
         }
-        catch (Exception e){
-            e.printStackTrace();
-        }
-        displayCourses();
+    });
 
-    };
 
-    public void displayCourses(){
-        for(Course e : courses) {
-            System.out.println(e.toString());
-        }
-    }
+        public void displayCourses() {
+            ArrayList<Course> addedCourses = new ArrayList<>();
+            organizerListAdapter adapter = new organizerListAdapter(this, addedCourses);
+            ListView listView = findViewById(R.id.listviewitem);
+            this.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    listView.setAdapter(adapter);
+                }
+            });
+            for(Course c : courses){
+                adapter.add(c);
+                System.out.println(c.name);
+            }
+            }
 
 }
