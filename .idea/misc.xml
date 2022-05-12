@@ -22,6 +22,8 @@
         <entry key="..\:/Users/blitz/StudioProjects/DHBWorld/app/src/main/res/drawable/baseline_coffee_maker_24.xml" value="0.1545" />
         <entry key="..\:/Users/blitz/StudioProjects/DHBWorld/app/src/main/res/drawable/edit_icon.xml" value="0.1545" />
         <entry key="..\:/Users/blitz/StudioProjects/DHBWorld/app/src/main/res/drawable/ic_baseline_access_time_24.xml" value="0.1545" />
+        <entry key="..\:/Users/blitz/StudioProjects/DHBWorld/app/src/main/res/drawable/ic_baseline_arrow_back_24.xml" value="0.1545" />
+        <entry key="..\:/Users/blitz/StudioProjects/DHBWorld/app/src/main/res/drawable/ic_baseline_arrow_forward_24.xml" value="0.1545" />
         <entry key="..\:/Users/blitz/StudioProjects/DHBWorld/app/src/main/res/drawable/ic_baseline_brush_24.xml" value="0.1545" />
         <entry key="..\:/Users/blitz/StudioProjects/DHBWorld/app/src/main/res/drawable/ic_baseline_calendar_month_24.xml" value="0.1545" />
         <entry key="..\:/Users/blitz/StudioProjects/DHBWorld/app/src/main/res/drawable/ic_baseline_check_box_24.xml" value="0.1545" />
@@ -32,6 +34,10 @@
         <entry key="..\:/Users/blitz/StudioProjects/DHBWorld/app/src/main/res/drawable/ic_baseline_print_24.xml" value="0.1545" />
         <entry key="..\:/Users/blitz/StudioProjects/DHBWorld/app/src/main/res/drawable/ic_baseline_restaurant_24.xml" value="0.1545" />
         <entry key="..\:/Users/blitz/StudioProjects/DHBWorld/app/src/main/res/drawable/ic_outline_admin_panel_settings_24.xml" value="0.1545" />
+        <entry key="..\:/Users/blitz/StudioProjects/DHBWorld/app/src/main/res/layout/activity_dataprivacy.xml" value="0.2261650277896537" />
+        <entry key="..\:/Users/blitz/StudioProjects/DHBWorld/app/src/main/res/layout/activity_licence.xml" value="0.11944444444444445" />
+        <entry key="..\:/Users/blitz/StudioProjects/DHBWorld/app/src/main/res/layout/defaultlayout.xml" value="0.2261650277896537" />
+        <entry key="..\:/Users/blitz/StudioProjects/DHBWorld/app/src/main/res/menu/top_app_bar.xml" value="0.2261650277896537" />
         <entry key="..\:/Users/blitz/StudioProjects/DHBWorld/app/src/main/res/xml/root_preferences.xml" value="0.25" />
       </map>
     </option>
