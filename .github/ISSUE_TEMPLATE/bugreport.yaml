@@ -1,0 +1,47 @@
+name: Bug Report
+description: File a bug report
+title: "[Bug]: "
+labels: ["bug"]
+assignees:
+  - octocat
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to fill out this bug report!
+  - type: input
+    id: contact
+    attributes:
+      label: Contact Details
+      description: How can we get in touch with you if we need more info?
+      placeholder: ex. email@example.com
+    validations:
+      required: false
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: Also tell us, what did you expect to happen?
+      placeholder: Tell us what you see!
+    validations:
+      required: true
+      
+  - type: textarea
+    id: device
+    attributes:
+      label: Device
+      description: On which device did the bug occur?
+      placeholder: e.g. Samsung Galaxy S20
+    validations:
+      required: true
+     
+    - type: textarea
+    id: android-version
+    attributes:
+      label: Which Android version did you use when the bug happened?
+      placeholder: e.g. Android 10.3.5
+  - type: textarea
+  id: additional_info
+  attributes:
+    label: Anything else you want to tell us?
+    placeholder: Possbile solution, extra informations

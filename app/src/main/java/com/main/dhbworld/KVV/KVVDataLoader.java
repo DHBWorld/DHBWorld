@@ -1,6 +1,7 @@
 package com.main.dhbworld.KVV;
 
 import android.app.Activity;
+import android.util.Log;
 
 import com.main.dhbworld.R;
 
@@ -87,6 +88,7 @@ public class KVVDataLoader {
     public void loadData(LocalDateTime time) {
         new Thread(() -> {
             ArrayList<Departure> departures = new ArrayList<>();
+            Disruption disruption = null;
 
             String kvvXMLData;
             try {
@@ -97,7 +99,7 @@ public class KVVDataLoader {
             } catch (IOException e) {
                 context.runOnUiThread(() -> {
                     if (dataLoaderListener != null) {
-                        dataLoaderListener.onDataLoaded(departures);
+                        dataLoaderListener.onDataLoaded(departures, null);
                     }
                 });
                 return;
@@ -106,11 +108,35 @@ public class KVVDataLoader {
             JSONObject jsonObject = XML.toJSONObject(kvvXMLData);
 
             try {
-                JSONArray stopResultArray = jsonObject.getJSONObject("Trias")
+                JSONObject stopEventResponse = jsonObject.getJSONObject("Trias")
                         .getJSONObject("ServiceDelivery")
                         .getJSONObject("DeliveryPayload")
-                        .getJSONObject("StopEventResponse")
+                        .getJSONObject("StopEventResponse");
+
+                JSONArray stopResultArray = stopEventResponse
                         .getJSONArray("StopEventResult");
+
+                if (stopEventResponse.getJSONObject("StopEventResponseContext").get("Situations") instanceof JSONObject) {
+                    JSONObject situations = stopEventResponse.getJSONObject("StopEventResponseContext")
+                            .getJSONObject("Situations");
+
+                    if (situations.has("PtSituation")) {
+
+                        String summary = situations.getJSONObject("PtSituation")
+                                .getJSONObject("Summary")
+                                .getString("content");
+
+                        String details = situations.getJSONObject("PtSituation")
+                                .getJSONObject("Detail")
+                                .getString("content");
+
+                        String lines = situations.getJSONObject("PtSituation")
+                                .getJSONObject("Description")
+                                .getString("content");
+
+                        disruption = new Disruption(summary, details, lines);
+                    }
+                }
 
                 for (int i=0; i<stopResultArray.length(); i++) {
                     JSONObject stopResult = stopResultArray.getJSONObject(i);
@@ -152,11 +178,14 @@ public class KVVDataLoader {
                     Departure departure = new Departure(line, platform, attribute, destination, departureTime);
                     departures.add(departure);
                 }
-            } catch (JSONException ignored) { }
+            } catch (JSONException ignored) {
+                ignored.printStackTrace();
+            }
 
+            Disruption finalDisruption = disruption;
             context.runOnUiThread(() -> {
                 if (dataLoaderListener != null) {
-                    dataLoaderListener.onDataLoaded(departures);
+                    dataLoaderListener.onDataLoaded(departures, finalDisruption);
                 }
             });
 

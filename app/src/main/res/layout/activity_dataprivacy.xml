@@ -1,39 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".DataPrivacyActivity"
-    android:orientation="vertical">
+    android:fitsSystemWindows="true">
 
-    <LinearLayout
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/topAppBarLayout"
+        style="@style/Widget.MaterialComponents.AppBarLayout.Primary"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:fitsSystemWindows="true">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/topAppBar"
+            style="@style/Widget.MaterialComponents.Toolbar.Primary"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@android:color/transparent"
+            android:elevation="0dp"
+
+            app:menu="@menu/top_app_bar"
+            app:navigationIcon="@drawable/ic_baseline_arrow_back_24"
+            app:title="@string/data_privacy_title" />
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <ScrollView
+        android:layout_below="@id/topAppBarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:orientation="vertical"
-        android:padding="16dp">
+        tools:context=".DataPrivacyActivity">
 
-        <TextView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/grey_light"
-            android:textSize="20sp"
-            android:textColor="@color/black"
-            android:gravity="center"
-            android:text="Material Components: "
-            android:fontFamily="monospace"
-            android:paddingBottom="8dp"/>
+            android:orientation="vertical"
+            android:padding="16dp">
 
-        <TextView
-            android:id="@+id/dataprivacytext"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/grey_light"
-            android:fontFamily="monospace"
-            android:textColor="@color/black"
-            android:textSize="12sp"
-            android:padding="4dp"/>
+            <TextView
+                android:id="@+id/dataprivacytext"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="monospace"
+                android:padding="4dp"
+                android:textColor="@color/black"
+                android:textSize="12sp" />
 
-    </LinearLayout>
+        </LinearLayout>
 
-</ScrollView>
+    </ScrollView>
+
+</RelativeLayout>
