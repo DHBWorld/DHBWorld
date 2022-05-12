@@ -59,12 +59,76 @@ public class DualisAPI {
     private OverallDataLoadedListener overallListener;
     private OverallErrorListener overallErrorListener;
 
+    private DocumentsLoadedListener documentsLoadedListener;
+    private DocumentsErrorListener documentsErrorListener;
+
     public DualisAPI() {
         this.courseListener = null;
         this.courseErrorListener = null;
 
         this.overallListener = null;
         this.overallErrorListener = null;
+    }
+
+    public void makeDocumentsRequest(Context context, String arguments, CookieHandler cookieHandler) {
+        mainArguments = arguments.replace("-N000000000000000", "");
+        mainArguments = mainArguments.replace("-N000019,", "-N000307");
+
+        CookieManager.setDefault(cookieHandler);
+        RequestQueue queue = Volley.newRequestQueue(context);
+        String url = "https://dualis.dhbw.de/scripts/mgrqispi.dll?APPNAME=CampusNet&PRGNAME=CREATEDOCUMENT&" + mainArguments;
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                response -> {
+                    response = new String(response.getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
+                    Document doc = Jsoup.parse(response);
+
+                    System.out.println(doc);
+                    Element table = doc.select("#form1").get(0);
+                    Elements tableRows = table.select("tr");
+
+                    JSONArray documentsArray = new JSONArray();
+
+                    for (Element row : tableRows) {
+                        Elements data = row.select(".tbdata");
+                        if (data.size() == 0) {
+                            continue;
+                        }
+
+                        String name = data.get(0).text();
+                        String date = data.get(1).text();
+
+                        String download = null;
+                        if (data.get(4).select("a").size() > 0) {
+                            Element downloadElement = data.get(4).select("a").get(0);
+                            download = downloadElement.attr("href");
+                        }
+
+                        if (download != null && !download.isEmpty()) {
+                            try {
+                                JSONObject documentObject = new JSONObject();
+                                documentObject.put("name", name);
+                                documentObject.put("date", date);
+                                documentObject.put("url", download);
+                                documentsArray.put(documentObject);
+                            } catch (JSONException ignored) { }
+                        }
+
+                    }
+
+                    try {
+                        mainJson.put("documents", documentsArray);
+                    } catch (JSONException ignored) { }
+
+                    if (documentsLoadedListener != null) {
+                        documentsLoadedListener.onDocumentsLoaded(mainJson);
+                    }
+
+                }, error -> {
+                    if (documentsErrorListener != null) {
+                        documentsErrorListener.onDocumentsError(error);
+                    }
+                });
+        queue.add(stringRequest);
     }
 
     public void makeOverallRequest(Context context, String arguments, CookieHandler cookieHandler) {
@@ -152,7 +216,9 @@ public class DualisAPI {
                         mainJson.put("courses", coursesJsonArray);
                     } catch (JSONException ignored) { }
 
-                    overallListener.onOverallDataLoaded(mainJson);
+                    if (overallListener != null) {
+                        overallListener.onOverallDataLoaded(mainJson);
+                    }
 
                 }, error -> {
                     if (overallErrorListener != null) {
@@ -499,6 +565,14 @@ public class DualisAPI {
         this.overallErrorListener = listener;
     }
 
+    public void setDocumentsLoadedListener(DocumentsLoadedListener listener) {
+        this.documentsLoadedListener = listener;
+    }
+
+    public void setDocumentsErrorListener(DocumentsErrorListener listener) {
+        this.documentsErrorListener = listener;
+    }
+
     public interface CourseDataLoadedListener {
         void onCourseDataLoaded(JSONObject data);
     }
@@ -513,5 +587,13 @@ public class DualisAPI {
 
     public interface OverallErrorListener {
         void onOverallError(VolleyError error);
+    }
+
+    public interface DocumentsLoadedListener {
+        void onDocumentsLoaded(JSONObject jsonObject);
+    }
+
+    public interface DocumentsErrorListener {
+        void onDocumentsError(VolleyError error);
     }
 }
