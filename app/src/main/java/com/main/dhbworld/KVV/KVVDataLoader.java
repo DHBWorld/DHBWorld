@@ -1,6 +1,7 @@
 package com.main.dhbworld.KVV;
 
 import android.app.Activity;
+import android.content.Context;
 
 import com.main.dhbworld.R;
 
@@ -51,7 +52,7 @@ public class KVVDataLoader {
      * @return Returns the XML-response
      * @throws IOException If something went wrong calling the server
      */
-    protected String loadfromKVVServers(LocalDateTime time) throws IOException {
+    protected static String loadfromKVVServers(LocalDateTime time, Context context) throws IOException {
         URL apiUrl = new URL(context.getResources().getString(R.string.url_kvv));
 
         String apiKey = context.getResources().getString(R.string.api_key_kvv);
@@ -89,7 +90,7 @@ public class KVVDataLoader {
 
             String kvvXMLData;
             try {
-                kvvXMLData = loadfromKVVServers(time);
+                kvvXMLData = loadfromKVVServers(time, context);
                 if (kvvXMLData == null) {
                     throw new IOException();
                 }
