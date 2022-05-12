@@ -23,7 +23,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class OrganizerActivity extends FragmentActivity {
     private ArrayList<Course> courses = new ArrayList<>();
     private Course course;
@@ -32,7 +31,7 @@ public class OrganizerActivity extends FragmentActivity {
     organizerListAdapter adapter;
     ListView listView;
     private ViewPager2 viewPager;
-    private FragmentStateAdapter fragmentStateAdapter;
+    private ScreenSlidePagerAdapter fragmentStateAdapter;
 
     private static final int NUM_PAGES = 3;
 
@@ -42,6 +41,7 @@ public class OrganizerActivity extends FragmentActivity {
         setContentView(R.layout.organizer_layout);
         NavigationUtilities.setUpNavigation(this, R.id.navigationView);
         crateTabs();
+
 
         listView = findViewById(R.id.listviewitem);
         t.start();
