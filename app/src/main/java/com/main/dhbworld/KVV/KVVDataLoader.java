@@ -1,7 +1,6 @@
 package com.main.dhbworld.KVV;
 
 import android.app.Activity;
-import android.util.Log;
 
 import com.main.dhbworld.R;
 
@@ -52,7 +51,7 @@ public class KVVDataLoader {
      * @return Returns the XML-response
      * @throws IOException If something went wrong calling the server
      */
-    private String loadfromKVVServers(LocalDateTime time) throws IOException {
+    protected String loadfromKVVServers(LocalDateTime time) throws IOException {
         URL apiUrl = new URL(context.getResources().getString(R.string.url_kvv));
 
         String apiKey = context.getResources().getString(R.string.api_key_kvv);
@@ -60,9 +59,7 @@ public class KVVDataLoader {
         String currentTimeString = Instant.now().toString();
         String data = context.getResources().getString(R.string.request_data_kvv, apiKey, currentTimeString, timeStr);
 
-        HttpsURLConnection connection = (HttpsURLConnection) apiUrl.openConnection();
-        connection.setRequestMethod("POST");
-        connection.addRequestProperty("Content-Type", "application/xml");
+        HttpsURLConnection connection = createPostConnection(apiUrl);
 
         OutputStream outputStream = connection.getOutputStream();
         BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(outputStream, StandardCharsets.UTF_8));
@@ -122,65 +119,19 @@ public class KVVDataLoader {
 
                     if (situations.has("PtSituation")) {
 
-                        String summary = situations.getJSONObject("PtSituation")
-                                .getJSONObject("Summary")
-                                .getString("content");
-
-                        String details = situations.getJSONObject("PtSituation")
-                                .getJSONObject("Detail")
-                                .getString("content");
-
-                        String lines = situations.getJSONObject("PtSituation")
-                                .getJSONObject("Description")
-                                .getString("content");
-
-                        disruption = new Disruption(summary, details, lines);
+                        disruption = parseDisruption(situations);
                     }
                 }
 
                 for (int i=0; i<stopResultArray.length(); i++) {
+
                     JSONObject stopResult = stopResultArray.getJSONObject(i);
 
-                    JSONObject service = stopResult.getJSONObject("StopEvent")
-                            .getJSONObject("Service");
+                    Departure departure = parseDeparture(stopResult);
 
-                    JSONObject callAtStop = stopResult.getJSONObject("StopEvent")
-                            .getJSONObject("ThisCall")
-                            .getJSONObject("CallAtStop");
-
-                    String platform = callAtStop.getJSONObject("PlannedBay")
-                            .getString("Text");
-
-
-                    String departureTimeString = callAtStop.getJSONObject("ServiceDeparture")
-                            .getString("TimetabledTime");
-
-                    if (callAtStop.getJSONObject("ServiceDeparture").has("EstimatedTime")) {
-                        departureTimeString = callAtStop.getJSONObject("ServiceDeparture")
-                                .getString("EstimatedTime");
-                    }
-
-                    String line = service.getJSONObject("PublishedLineName")
-                            .getString("Text");
-
-                    String attribute = null;
-                    if (service.has("Attribute")) {
-                        attribute = service.getJSONObject("Attribute")
-                                .getJSONObject("Text")
-                                .getString("Text");
-                    }
-
-                    String destination = service.getJSONObject("DestinationText")
-                            .getString("Text");
-
-                    LocalDateTime departureTime = LocalDateTime.ofInstant(Instant.parse(departureTimeString), ZoneOffset.UTC);
-
-                    Departure departure = new Departure(line, platform, attribute, destination, departureTime);
                     departures.add(departure);
                 }
-            } catch (JSONException ignored) {
-                ignored.printStackTrace();
-            }
+            } catch (JSONException ignored) { }
 
             Disruption finalDisruption = disruption;
             context.runOnUiThread(() -> {
@@ -190,5 +141,66 @@ public class KVVDataLoader {
             });
 
         }).start();
+    }
+
+    protected static Departure parseDeparture(JSONObject stopResult) {
+        JSONObject service = stopResult.getJSONObject("StopEvent")
+                .getJSONObject("Service");
+
+        JSONObject callAtStop = stopResult.getJSONObject("StopEvent")
+                .getJSONObject("ThisCall")
+                .getJSONObject("CallAtStop");
+
+        String platform = callAtStop.getJSONObject("PlannedBay")
+                .getString("Text");
+
+
+        String departureTimeString = callAtStop.getJSONObject("ServiceDeparture")
+                .getString("TimetabledTime");
+
+        if (callAtStop.getJSONObject("ServiceDeparture").has("EstimatedTime")) {
+            departureTimeString = callAtStop.getJSONObject("ServiceDeparture")
+                    .getString("EstimatedTime");
+        }
+
+        String line = service.getJSONObject("PublishedLineName")
+                .getString("Text");
+
+        String attribute = null;
+        if (service.has("Attribute")) {
+            attribute = service.getJSONObject("Attribute")
+                    .getJSONObject("Text")
+                    .getString("Text");
+        }
+
+        String destination = service.getJSONObject("DestinationText")
+                .getString("Text");
+
+        LocalDateTime departureTime = LocalDateTime.ofInstant(Instant.parse(departureTimeString), ZoneOffset.UTC);
+
+        return new Departure(line, platform, attribute, destination, departureTime);
+    }
+
+    protected static Disruption parseDisruption(JSONObject situations) {
+        String summary = situations.getJSONObject("PtSituation")
+                .getJSONObject("Summary")
+                .getString("content");
+
+        String details = situations.getJSONObject("PtSituation")
+                .getJSONObject("Detail")
+                .getString("content");
+
+        String lines = situations.getJSONObject("PtSituation")
+                .getJSONObject("Description")
+                .getString("content");
+
+        return new Disruption(summary, details, lines);
+    }
+
+    protected static HttpsURLConnection createPostConnection(URL url) throws IOException{
+        HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
+        connection.setRequestMethod("POST");
+        connection.addRequestProperty("Content-Type", "application/xml");
+        return connection;
     }
 }
