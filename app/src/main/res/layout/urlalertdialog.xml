@@ -1,0 +1,45 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="?dialogPreferredPadding">
+
+
+    <EditText
+        android:id="@+id/urlEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="bottom"
+        android:hint="@string/enter_url_here"
+        android:inputType="textUri"
+        />
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="OR"
+        android:paddingTop="15dp"
+        android:paddingBottom="15dp"
+        android:textAlignment="center"/>
+
+    <EditText
+        android:id="@+id/urlCourseName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="bottom"
+        android:paddingVertical="?dialogPreferredPadding"
+        android:hint="Enter Course name here"
+        android:inputType="text"
+        />
+    <EditText
+        android:id="@+id/urlCourseDirector"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="bottom"
+        android:paddingVertical="?dialogPreferredPadding"
+        android:hint="@string/enter_studiengangsleiter_name_here"
+        android:inputType="text"
+        />
+
+</LinearLayout>

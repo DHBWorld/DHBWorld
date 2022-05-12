@@ -11,14 +11,17 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.InputType;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 import com.alamkanak.weekview.WeekView;
 import com.alamkanak.weekview.WeekViewEntity;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -191,27 +194,46 @@ public class CalendarActivity extends AppCompatActivity{
     //Create AlertDialog when Activity is first started. Prompt user to enter URL for calendar (can be changed in settings).
     public void createUrlDialog() {
         MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(CalendarActivity.this);
+
+        builder.setView(R.layout.urlalertdialog);
         builder.setTitle("Please enter your Rapla-URL");
         SharedPreferences preferences = PreferenceManager
                 .getDefaultSharedPreferences(CalendarActivity.this);
-        final EditText urlInput = new EditText(this);
-        urlInput.setHint("Type URL here");
-        urlInput.setInputType(InputType.TYPE_TEXT_VARIATION_WEB_EMAIL_ADDRESS);
-        builder.setView(urlInput);
         builder.setCancelable(false);
 
         builder.setPositiveButton("Submit", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                String urlString = urlInput.getText().toString();
-                SharedPreferences.Editor editor = preferences.edit();
-                editor.putString("CurrentURL",urlString);
-                editor.apply();
+                AlertDialog tempView = (AlertDialog) dialog;
+                EditText urlEditText = tempView.findViewById(R.id.urlEditText);
+                EditText courseEditText = tempView.findViewById(R.id.urlCourseName);
+                EditText courseDirEditText = tempView.findViewById(R.id.urlCourseDirector);
+                String courseDirector = courseDirEditText.getText().toString();
+                String courseName = courseEditText.getText().toString();
+                String urlString = urlEditText.getText().toString();
+
+                if(!courseName.isEmpty() && !urlString.isEmpty()){
+                    SharedPreferences.Editor editor = preferences.edit();
+                    editor.putString("CurrentURL", urlString);
+                    editor.apply();
+                }
+                else if(urlString.isEmpty() && !courseName.isEmpty()){
+                    System.out.println("here");
+                    String formedURL = ("https://rapla.dhbw-karlsruhe.de/rapla?page=calendar&user=" + courseDirector.toLowerCase() + "&file=" + courseName.toUpperCase());
+                    System.out.println(formedURL);
+                    SharedPreferences.Editor editor = preferences.edit();
+                    editor.putString("CurrentURL", formedURL);
+                    editor.apply();
+                }
+                else if(!urlString.isEmpty()) {
+                    SharedPreferences.Editor editor = preferences.edit();
+                    editor.putString("CurrentURL", urlString);
+                    editor.apply();
+                }
                 restart(CalendarActivity.this);
             }
         });
         builder.create();
-
         AlertDialog dialog = builder.create();
         dialog.show();
     }

@@ -2,11 +2,14 @@ package com.main.dhbworld;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.text.InputType;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.EditText;
 
 import androidx.appcompat.app.ActionBar;
@@ -20,6 +23,7 @@ import androidx.preference.PreferenceManager;
 import androidx.preference.SwitchPreference;
 import androidx.work.WorkManager;
 
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 import com.main.dhbworld.Dualis.DualisAPI;
@@ -167,25 +171,45 @@ public class SettingsActivity extends AppCompatActivity {
                     return true;
                 case "calendarURL":
                     MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(context);
-                    builder.setTitle(R.string.enter_rapla_url);
+                    LayoutInflater inflater = getLayoutInflater();
+                    View tempView = inflater.inflate(R.layout.urlalertdialog,null);
+                    builder.setView(tempView);
+                    builder.setTitle("Please enter your Rapla-URL");
                     SharedPreferences preferences = PreferenceManager
                             .getDefaultSharedPreferences(context);
-                    final EditText urlInput = new EditText(context);
-                    urlInput.setHint(R.string.type_url_here);
-                    urlInput.setInputType(InputType.TYPE_TEXT_VARIATION_WEB_EMAIL_ADDRESS);
-                    builder.setView(urlInput);
-                    builder.setCancelable(true);
-
-                    builder.setPositiveButton(R.string.submit, (dialog12, which) -> {
-                        String urlString = urlInput.getText().toString();
-                        SharedPreferences.Editor editor = preferences.edit();
-                        editor.putString("CurrentURL", urlString);
-                        editor.apply();
+                    builder.setCancelable(false);
+                    EditText urlEditText = tempView.findViewById(R.id.urlEditText);
+                    EditText courseEditText = tempView.findViewById(R.id.urlCourseName);
+                    EditText courseDirEditText = tempView.findViewById(R.id.urlCourseDirector);
+                    String courseDirector = courseDirEditText.getText().toString();
+                    String courseName = courseEditText.getText().toString();
+                    String urlString = urlEditText.getText().toString();
+                    builder.setPositiveButton("Submit", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            if(!courseName.isEmpty() && !urlString.isEmpty()){
+                                String urlString = urlEditText.getText().toString();
+                                SharedPreferences.Editor editor = preferences.edit();
+                                editor.putString("CurrentURL", urlString);
+                                editor.apply();
+                            }
+                            else if(urlString.isEmpty() && !courseName.isEmpty()){
+                                String formedURL = ("https://rapla.dhbw-karlsruhe.de/rapla?page=calendar&user=" + courseDirector.toLowerCase() + "&file=" + courseName.toLowerCase());
+                                System.out.println(formedURL);
+                                SharedPreferences.Editor editor = preferences.edit();
+                                editor.putString("CurrentURL", formedURL);
+                                editor.apply();
+                            }
+                            else if(!urlString.isEmpty()) {
+                                SharedPreferences.Editor editor = preferences.edit();
+                                editor.putString("CurrentURL", urlString);
+                                editor.apply();
+                            }
+                        }
                     });
                     builder.create();
-
-                    AlertDialog dialogCalendar = builder.create();
-                    dialogCalendar.show();
+                    AlertDialog urlDialog = builder.create();
+                    urlDialog.show();
                     return true;
                 case "customize_notification":
                     Intent settingsIntent = new Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS)
