@@ -207,6 +207,12 @@ public class SettingsActivity extends AppCompatActivity {
                             }
                         }
                     });
+                    builder.setNegativeButton("Close", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    });
                     builder.create();
                     AlertDialog urlDialog = builder.create();
                     urlDialog.show();

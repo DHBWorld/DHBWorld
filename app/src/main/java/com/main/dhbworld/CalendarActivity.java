@@ -158,7 +158,6 @@ public class CalendarActivity extends AppCompatActivity{
         for(int i = 0; i < listItems.length; i++){
             checkedItems[i] = !blackList.contains(listItems[i]);
         }
-
         MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(CalendarActivity.this);
                 builder.setTitle("Filter your classes");
                 builder.setMultiChoiceItems(listItems, checkedItems, (dialog, which, isChecked)
@@ -230,9 +229,18 @@ public class CalendarActivity extends AppCompatActivity{
                     editor.putString("CurrentURL", urlString);
                     editor.apply();
                 }
+
                 restart(CalendarActivity.this);
             }
+
         });
+        builder.setNegativeButton("Close", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+
         builder.create();
         AlertDialog dialog = builder.create();
         dialog.show();
