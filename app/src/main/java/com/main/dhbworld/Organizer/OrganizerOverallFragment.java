@@ -22,6 +22,7 @@ public class OrganizerOverallFragment extends Fragment{
     ArrayList<Course> courses;
     ArrayList<Person> people;
     ArrayList<Room> rooms;
+    View view;
 
     public OrganizerOverallFragment(int position) {
         this.position = position;
@@ -36,9 +37,8 @@ public class OrganizerOverallFragment extends Fragment{
     @Override
     public void onViewCreated(@NonNull View v, @Nullable Bundle savedInstanceState) {
         LayoutInflater inflater  = getLayoutInflater();
-        View organizerTab = inflater.inflate(R.layout.organizertab, null);
-        super.onViewCreated(organizerTab,savedInstanceState);
-        listView = organizerTab.findViewById(R.id.listviewitem);
+        super.onViewCreated(view,savedInstanceState);
+        listView = view.findViewById(R.id.listviewitem);
 
         try {
             parseThread.join();
@@ -70,7 +70,8 @@ public class OrganizerOverallFragment extends Fragment{
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.organizer_layout, container, false);
+        view = inflater.inflate(R.layout.organizertab,container,false);
+        return view;
     }
 
     Thread parseThread = new Thread(new Runnable() {
