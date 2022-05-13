@@ -17,17 +17,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class OrganizerActivity extends FragmentActivity {
-    private ArrayList<Course> courses = new ArrayList<>();
-    static ArrayList<Person> people = new ArrayList<>();
-    static ArrayList<Room> rooms = new ArrayList<>();
-    public Map<String,ArrayList> entryMap = new HashMap<>();
-
-    organizerListAdapter adapter;
     ListView listView;
-    private ViewPager2 viewPager;
-    private ScreenSlidePagerAdapter fragmentStateAdapter;
+    ViewPager2 viewPager;
 
-    private static final int NUM_PAGES = 3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,15 +27,15 @@ public class OrganizerActivity extends FragmentActivity {
         setContentView(R.layout.organizer_layout);
         NavigationUtilities.setUpNavigation(this, R.id.navigationView);
         createView();
+        viewPager = findViewById(R.id.organizerViewPager);
+
 
         listView = findViewById(R.id.listviewitem);
-        parseThread.start();
     }
 
     public void createView() {
         TabLayout tabLayout = findViewById(R.id.organizerTabLayout);
         ViewPager2 viewPager2 = findViewById(R.id.organizerViewPager);
-
         OrganizerFragmentAdapter organizerFragmentAdapter = new OrganizerFragmentAdapter(this);
         viewPager2.setAdapter(organizerFragmentAdapter);
         viewPager2.setOffscreenPageLimit(2);
@@ -78,15 +70,6 @@ public class OrganizerActivity extends FragmentActivity {
         }
     }
 
-    Thread parseThread = new Thread(new Runnable() {
-        @Override
-        public void run() {
-            OrganizerParser organizerParser = new OrganizerParser();
-            entryMap = organizerParser.getAllElements();
-            courses = entryMap.get("courses");
-            people = entryMap.get("people");
-            rooms = entryMap.get("rooms");
-        }});
 
 }
 
