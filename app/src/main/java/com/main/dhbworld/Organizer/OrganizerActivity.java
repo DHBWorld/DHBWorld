@@ -1,23 +1,18 @@
 package com.main.dhbworld.Organizer;
 
 import android.os.Bundle;
-import android.view.View;
 import android.widget.ListView;
-
 import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.widget.ViewPager2;
-
 import com.main.dhbworld.Navigation.NavigationUtilities;
 import com.main.dhbworld.R;
-
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 public class OrganizerActivity extends FragmentActivity {
-    private ArrayList courses = new ArrayList<>();
-    static ArrayList people = new ArrayList<>();
+    private ArrayList<Course> courses = new ArrayList<>();
+    static ArrayList<Person> people = new ArrayList<>();
     static ArrayList<Room> rooms = new ArrayList<>();
     public Map<String,ArrayList> entryMap = new HashMap<>();
 
@@ -71,7 +66,7 @@ public class OrganizerActivity extends FragmentActivity {
 
         public void displayCourses() {
             adapter = new organizerListAdapter(this, courses);
-            setContentView(R.layout.organizertab);
+
             ListView listView = findViewById(R.id.listviewitem);
             this.runOnUiThread(new Runnable() {
                 @Override
