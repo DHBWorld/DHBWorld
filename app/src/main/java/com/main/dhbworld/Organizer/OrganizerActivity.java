@@ -2,8 +2,14 @@ package com.main.dhbworld.Organizer;
 
 import android.os.Bundle;
 import android.widget.ListView;
+
+import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.widget.ViewPager2;
+
+import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.tabs.TabLayoutMediator;
+import com.main.dhbworld.Dualis.DualisFragmentAdapter;
 import com.main.dhbworld.Navigation.NavigationUtilities;
 import com.main.dhbworld.R;
 import java.util.ArrayList;
@@ -28,10 +34,36 @@ public class OrganizerActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.organizer_layout);
         NavigationUtilities.setUpNavigation(this, R.id.navigationView);
-//        createTabs();
+        createView();
 
         listView = findViewById(R.id.listviewitem);
         parseThread.start();
+    }
+
+    public void createView() {
+        TabLayout tabLayout = findViewById(R.id.organizerTabLayout);
+        ViewPager2 viewPager2 = findViewById(R.id.organizerViewPager);
+
+        OrganizerFragmentAdapter organizerFragmentAdapter = new OrganizerFragmentAdapter(this);
+        viewPager2.setAdapter(organizerFragmentAdapter);
+        viewPager2.setOffscreenPageLimit(2);
+
+        TabLayoutMediator tabLayoutMediator = new TabLayoutMediator(tabLayout, viewPager2, new TabLayoutMediator.TabConfigurationStrategy() {
+            @Override
+            public void onConfigureTab(@NonNull TabLayout.Tab tab, int position) {
+                if (position == 0) {
+                    tab.setText("Courses");
+                    //tab.setIcon(R.drawable.ic_baseline_dashboard_24);
+                } else if (position == 1) {
+                    tab.setText("People");
+                    // tab.setIcon(R.drawable.ic_baseline_book_24);
+                } else {
+                    tab.setText("Rooms");
+                }
+            }
+        });
+        tabLayoutMediator.attach();
+
     }
 
     @Override
@@ -46,13 +78,6 @@ public class OrganizerActivity extends FragmentActivity {
         }
     }
 
-//    public void createTabs(){
-//        viewPager = findViewById(R.id.organizerViewPager);
-//        fragmentStateAdapter = new ScreenSlidePagerAdapter(this);
-//        viewPager.setAdapter(fragmentStateAdapter);
-//        TabLayout tabLayout = findViewById(R.id.organizerTabLayout);
-//    }
-
     Thread parseThread = new Thread(new Runnable() {
         @Override
         public void run() {
@@ -61,20 +86,7 @@ public class OrganizerActivity extends FragmentActivity {
             courses = entryMap.get("courses");
             people = entryMap.get("people");
             rooms = entryMap.get("rooms");
-            displayCourses();
         }});
-
-        public void displayCourses() {
-            adapter = new organizerListAdapter(this, courses);
-
-            ListView listView = findViewById(R.id.listviewitem);
-            this.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    listView.setAdapter(adapter);
-                }
-            });
-            }
 
 }
 
