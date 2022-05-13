@@ -11,7 +11,6 @@ import androidx.fragment.app.Fragment;
 import com.main.dhbworld.R;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class OrganizerOverallFragment extends Fragment{
@@ -19,7 +18,7 @@ public class OrganizerOverallFragment extends Fragment{
     private String arguments;
     static ListView listView;
     private Map<String,ArrayList> entryMap = new HashMap<>();
-    ArrayList courses;
+    ArrayList<Course> courses;
     ArrayList<Person> people;
     ArrayList<Room> rooms;
 
@@ -40,7 +39,9 @@ public class OrganizerOverallFragment extends Fragment{
         listView = organizerTab.findViewById(R.id.listviewitem);
         parseThread.start();
 
-
+        OrganizerCourseAdapter listAdapter1 = new OrganizerCourseAdapter(this.getContext(),courses);
+        OrganizerCourseAdapter listAdapter2 = new OrganizerCourseAdapter(this.getContext(),people);
+        OrganizerCourseAdapter listAdapter3 = new OrganizerCourseAdapter(this.getContext(),rooms);
 
 
 
@@ -52,7 +53,6 @@ public class OrganizerOverallFragment extends Fragment{
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.organizer_layout, container, false);
     }
-
 
     Thread parseThread = new Thread(new Runnable() {
         @Override
