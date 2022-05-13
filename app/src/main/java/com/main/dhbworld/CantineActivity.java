@@ -1,11 +1,13 @@
 package com.main.dhbworld;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.common.util.IOUtils;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.chip.Chip;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.progressindicator.BaseProgressIndicatorSpec;
 import com.google.android.material.progressindicator.CircularProgressIndicator;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
@@ -14,10 +16,15 @@ import com.google.android.material.tabs.TabLayout;
 import org.json.JSONException;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.format.DateUtils;
+import android.util.Log;
 import android.view.Gravity;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -68,6 +75,12 @@ public class CantineActivity extends AppCompatActivity {
 
     static String inputForDashboard;
 
+    private LinearLayout titleLayout;
+    private TextView pageTitleBasic;
+    private TextView pageTitleExtra;
+    private  TextView todayIs;
+
+
 
 
 
@@ -78,99 +91,29 @@ public class CantineActivity extends AppCompatActivity {
         layoutMealCardsBasic= findViewById(R.id.layoutMealCardsBasic);
         layoutMealCardsExtra= findViewById(R.id.layoutMealCardsExtra);
         tabLayout= findViewById(R.id.tabTags);
+
+
+        titleLayout = findViewById(R.id.layoutTitleCanteen);
+        pageTitleBasic = findViewById(R.id.textView_pageTitleBasic_canteen);
+        pageTitleExtra = findViewById(R.id.textView_pageTitleExtra_canteen);
+        todayIs = findViewById(R.id.textView_todayIs_canteen);
+        scroll= findViewById(R.id.scrollViewCantine);
+
         NavigationUtilities.setUpNavigation(this,R.id.cantine);
 
-
-
         loadProgressIndikator();
+        if (!isNetworkAvailable(CantineActivity.this)){
+            loadDisplay("Die Daten können nicht geladen werden, weil Sie keine Internet-Verbindung haben.");
+        }else{
 
         generateCurrentWeek();
         showTabs();
-
-
-
-
-
-
-        scroll= findViewById(R.id.scrollViewCantine);
-
-        //Scrollen zwischen den Tabs
-
-       /* final AtomicReference<Float>[] x1 = new AtomicReference[]{new AtomicReference<>((float) 0)};
-        final float[] x2 = {0};
-        scroll.setOnTouchListener((v, event) -> {
-            // TODO Auto-generated method stub
-            switch (event.getAction()) {
-                case MotionEvent.ACTION_DOWN:
-                    x1[0].set(event.getX());
-                    break;
-                case MotionEvent.ACTION_UP:
-                    x2[0] = event.getX();
-                    System.out.println(x1[0] + "     " + x2[0]);
-                    float deltaX = x2[0] - x1[0].get();
-                    if (deltaX < -100) {
-                        tabLayout.selectTab(tabLayout.getTabAt(tabLayout.getSelectedTabPosition()+1));
-                        return true;
-                    }else if(deltaX > 100){
-                        tabLayout.selectTab(tabLayout.getTabAt(tabLayout.getSelectedTabPosition()-1));
-                        return true;
-
-                    }
-                    break;
-            }
-
-            return false;
-        });*/
-
-
-
-
-        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                try {
-
-                    switch (tab.getPosition()){
-                        case 0:
-                            loadProgressIndikator();
-                            mealPlanFromOpenMensa(currentWeek[0]);
-                            break;
-                        case 1:
-                            loadProgressIndikator();
-                            mealPlanFromOpenMensa(currentWeek[1]);
-                            break;
-                        case 2:
-                            loadProgressIndikator();
-                            mealPlanFromOpenMensa(currentWeek[2]);
-                            break;
-                        case 3:
-                            loadProgressIndikator();
-                            mealPlanFromOpenMensa(currentWeek[3]);
-                            break;
-                        case 4:
-                            loadProgressIndikator();
-                            mealPlanFromOpenMensa(currentWeek[4]);
-                            break;
-                    }
-                } catch ( IOException e) {
-                            loadDisplay("Es ist ein Fehler aufgetaucht...");
-                            e.printStackTrace();
-                        }
-
-            }
-
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {}
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) { }
-        });
-
-
-
-
+        fillTabsWithData();
+        }
 
     }
+
+
 
     private void generateCurrentWeek()  {
         Date date= new Date();
@@ -251,41 +194,93 @@ public class CantineActivity extends AppCompatActivity {
 
     }
 
+    private void fillTabsWithData(){
+
+        //Scrollen zwischen den Tabs
+
+       /* final AtomicReference<Float>[] x1 = new AtomicReference[]{new AtomicReference<>((float) 0)};
+        final float[] x2 = {0};
+        scroll.setOnTouchListener((v, event) -> {
+            // TODO Auto-generated method stub
+            switch (event.getAction()) {
+                case MotionEvent.ACTION_DOWN:
+                    x1[0].set(event.getX());
+                    break;
+                case MotionEvent.ACTION_UP:
+                    x2[0] = event.getX();
+                    System.out.println(x1[0] + "     " + x2[0]);
+                    float deltaX = x2[0] - x1[0].get();
+                    if (deltaX < -100) {
+                        tabLayout.selectTab(tabLayout.getTabAt(tabLayout.getSelectedTabPosition()+1));
+                        return true;
+                    }else if(deltaX > 100){
+                        tabLayout.selectTab(tabLayout.getTabAt(tabLayout.getSelectedTabPosition()-1));
+                        return true;
+
+                    }
+                    break;
+            }
+
+            return false;
+        });*/
+
+
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                try {
+
+                    switch (tab.getPosition()){
+                        case 0:
+                            loadProgressIndikator();
+                            mealPlanFromOpenMensa(currentWeek[0]);
+                            break;
+                        case 1:
+                            loadProgressIndikator();
+                            mealPlanFromOpenMensa(currentWeek[1]);
+                            break;
+                        case 2:
+                            loadProgressIndikator();
+                            mealPlanFromOpenMensa(currentWeek[2]);
+                            break;
+                        case 3:
+                            loadProgressIndikator();
+                            mealPlanFromOpenMensa(currentWeek[3]);
+                            break;
+                        case 4:
+                            loadProgressIndikator();
+                            mealPlanFromOpenMensa(currentWeek[4]);
+                            break;
+                    }
+                } catch ( IOException e) {
+                    loadDisplay("Die Daten können nicht geladen werden.");
+                    e.printStackTrace();
+                }
+
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {}
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) { }
+        });
+    }
+
     private void loadLayout (MealDailyPlan mealDailyPlan, Date today){
+        pageTitleExtra.setVisibility(View.VISIBLE);
+        pageTitleBasic.setVisibility(View.VISIBLE);
+        todayIs.setVisibility(View.VISIBLE);
 
         layoutMealCardsBasic.removeAllViews();
         layoutMealCardsExtra.removeAllViews();
-        LinearLayout titleLayout = new LinearLayout(CantineActivity.this);
-        titleLayout.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-        titleLayout.setOrientation(LinearLayout.HORIZONTAL);
-        layoutMealCardsBasic.addView(titleLayout);
 
-        TextView pageTitleBasic = new TextView(CantineActivity.this);
-        pageTitleBasic.setTextSize(25);
-        pageTitleBasic.setTextColor(getResources().getColor(R.color.black));
-        pageTitleBasic.setText("Hauptgerichte");
-        pageTitleBasic.setPadding(0,0,0,15);
-        pageTitleBasic.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-        titleLayout.addView(pageTitleBasic);
 
-        TextView todayIs = new TextView(CantineActivity.this);
-        todayIs.setTextSize(18);
-        todayIs.setTextColor(getResources().getColor(R.color.grey_light));
         SimpleDateFormat format =new SimpleDateFormat("dd.MM.yyyy");
         todayIs.setText(format.format(today));
-        todayIs.setPadding(250,0,0,15);
-        todayIs.setGravity(Gravity.RIGHT);
-        todayIs.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-        titleLayout.addView(todayIs);
 
-        TextView pageTitleExtra = new TextView(CantineActivity.this);
-        pageTitleExtra.setTextSize(25);
-        pageTitleExtra.setTextColor(getResources().getColor(R.color.black));
-        pageTitleExtra.setText("Sonstiges");
-        pageTitleExtra.setPadding(0,0,0,15);
 
-        pageTitleExtra.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-        layoutMealCardsExtra.addView(pageTitleExtra);
+
 
         boolean basicMealOne=true;
         boolean basicMealTwo=true;
@@ -296,6 +291,7 @@ public class CantineActivity extends AppCompatActivity {
             MaterialCardView mealCard= new MaterialCardView(CantineActivity.this);
             mealCard.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
             mealCard.setStrokeColor(getResources().getColor(R.color.grey_dark));
+            mealCard.setElevation(0);
 
 
 
@@ -332,16 +328,16 @@ public class CantineActivity extends AppCompatActivity {
             mealCard.addView(cardLayout);
 
             LinearLayout mealLayout = new LinearLayout(CantineActivity.this);
-            mealLayout.setLayoutParams(new ViewGroup.LayoutParams(810, ViewGroup.LayoutParams.WRAP_CONTENT));
+            mealLayout.setLayoutParams(new ViewGroup.LayoutParams(pageTitleExtra.getWidth()-120, ViewGroup.LayoutParams.WRAP_CONTENT));
             mealLayout.setOrientation(LinearLayout.VERTICAL);
-            mealLayout.setPadding(0,0,20,0);
+            mealLayout.setPadding(0,0,10,0);
             cardLayout.addView(mealLayout);
 
             TextView mealView = new TextView(CantineActivity.this);
             mealView.setTextSize(15);
             mealView.setTextColor(getResources().getColor(R.color.black));
             mealView.setText(mealDailyPlan.getMeal()[i].getName());
-            mealView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            mealView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
             mealLayout.addView(mealView);
 
             HorizontalScrollView chipScroll = new HorizontalScrollView(CantineActivity.this);
@@ -367,7 +363,7 @@ public class CantineActivity extends AppCompatActivity {
             }
 
             LinearLayout preisLayout = new LinearLayout(CantineActivity.this);
-            preisLayout.setLayoutParams(new ViewGroup.LayoutParams(150, ViewGroup.LayoutParams.MATCH_PARENT));
+            preisLayout.setLayoutParams(new ViewGroup.LayoutParams(120, ViewGroup.LayoutParams.MATCH_PARENT));
             preisLayout.setOrientation(LinearLayout.VERTICAL);
             preisLayout.setBackgroundColor(getResources().getColor(R.color.grey_light));
             preisLayout.setGravity(Gravity.CENTER);
@@ -398,7 +394,7 @@ public class CantineActivity extends AppCompatActivity {
                 URL urlOpenMensa= null;
                 try {
                     urlOpenMensa = new URL("https://openmensa.org/api/v2/canteens/33/days/"+format.format(date)+"/meals");
-                    //urlOpenMensa = new URL("https://openmensa.org/api/v2/canteens/33/days/2021-10-25/meals");
+
                     HttpsURLConnection connection=(HttpsURLConnection) urlOpenMensa.openConnection();
 
 
@@ -440,7 +436,7 @@ public class CantineActivity extends AppCompatActivity {
                     layoutMealCardsBasic.post(new Runnable() {
                         @Override
                         public void run() {
-                            loadDisplay("Es ist ein Fehler aufgetaucht...");
+                            loadDisplay("Die Daten können nicht geladen werden.");
                         }
                     });
                     e.printStackTrace();
@@ -455,6 +451,10 @@ public class CantineActivity extends AppCompatActivity {
     }
 
     private void loadDisplay(String message)  {
+
+        pageTitleExtra.setVisibility(View.GONE);
+        pageTitleBasic.setVisibility(View.GONE);
+        todayIs.setVisibility(View.GONE);
 
         layoutMealCardsBasic.removeAllViews();
         layoutMealCardsExtra.removeAllViews();
@@ -476,11 +476,9 @@ public class CantineActivity extends AppCompatActivity {
         progressIndicator.setIndeterminate(true);
         progressIndicator.setPadding(400,0,400,0);
         layoutMealCardsBasic.addView(progressIndicator);
-        progressIndicator.setVisibility(View.GONE);
         progressIndicator.setVisibility(View.VISIBLE);
         }
     }
-
 
     public static List<String> loadDataForDashboard() {
         List <String> meals= new ArrayList<>();
@@ -546,5 +544,44 @@ public class CantineActivity extends AppCompatActivity {
 
     }
 
+    public static boolean isNetworkAvailable(Context context) {
+        ConnectivityManager connectivity = (ConnectivityManager) context
+                .getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (connectivity == null) {
+            Log.d("NetworkCheck", "isNetworkAvailable: No");
+            return false;
+        }
+        NetworkInfo[] info = connectivity.getAllNetworkInfo();
+
+        if (info != null) {
+            for (int i = 0; i < info.length; i++) {
+                if (info[i].getState() == NetworkInfo.State.CONNECTED) {
+                    Log.d("NetworkCheck", "isNetworkAvailable: Yes");
+                    return true;
+                }
+            }
+        }
+        return false;}
+
+    public void refreshClick(@NonNull MenuItem item) throws NullPointerException{
+
+        loadProgressIndikator();
+        if (!isNetworkAvailable(CantineActivity.this)){
+            loadDisplay("Die Daten können nicht geladen werden, weil Sie keine Internet-Verbindung haben.");
+        }else{
+
+
+
+            generateCurrentWeek();
+            showTabs();
+            pageTitleExtra.setVisibility(View.INVISIBLE);
+            fillTabsWithData();
+
+        }
+
+
+
+
+    }
 
     }
