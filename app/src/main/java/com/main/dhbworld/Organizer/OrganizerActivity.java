@@ -1,6 +1,7 @@
 package com.main.dhbworld.Organizer;
 
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ListView;
 
 import androidx.fragment.app.FragmentActivity;
@@ -65,15 +66,12 @@ public class OrganizerActivity extends FragmentActivity {
             courses = entryMap.get("courses");
             people = entryMap.get("people");
             rooms = entryMap.get("rooms");
-
-            System.out.println(courses);
-            System.out.println(people);
-            System.out.println(rooms);
             displayCourses();
         }});
 
         public void displayCourses() {
             adapter = new organizerListAdapter(this, courses);
+            setContentView(R.layout.organizertab);
             ListView listView = findViewById(R.id.listviewitem);
             this.runOnUiThread(new Runnable() {
                 @Override

@@ -6,7 +6,6 @@ import org.xmlpull.v1.XmlPullParserFactory;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -19,8 +18,7 @@ public class OrganizerParser {
     static ArrayList<Room> rooms = new ArrayList<>();
     static Map<String, ArrayList> entryMap = new HashMap<>();
     static String text;
-
-    XmlPullParser parser;
+    static XmlPullParser parser;
 
     public Map<String, ArrayList> getAllElements(){
         try {
@@ -42,16 +40,14 @@ public class OrganizerParser {
         int eventType = parser.getEventType();
         while (eventType != XmlPullParser.END_DOCUMENT) {
             String tag = parser.getName();
-            switch (tag) {
-                case "kurs":
+            if(eventType == XmlPullParser.START_TAG) {
+                if(tag.equals("kurs")){
                     parseCourse(tag,eventType);
-                case "person":
-                    parsePerson(tag,eventType);
-                case "raum":
-                    parseRoom(tag,eventType);
-                default:
-                    break;
-
+                } else if(tag.equals("person")){
+                    parsePerson(tag, eventType);
+                }else if(tag.equals("raum")){
+                    parseRoom(tag, eventType);
+                }
             }
             eventType = parser.next();
         }
@@ -62,6 +58,7 @@ public class OrganizerParser {
         course = new Course();
         boolean stop = false;
         while(!stop) {
+            tag = parser.getName();
             switch (eventType) {
                 case XmlPullParser.TEXT:
                     text = parser.getText();
@@ -84,11 +81,11 @@ public class OrganizerParser {
         }
     }
 
-
     public void parsePerson(String tag, int eventType) throws Exception{
         person = new Person();
         boolean stop = false;
         while(!stop) {
+            tag = parser.getName();
             switch (eventType) {
                 case XmlPullParser.TEXT:
                     text = parser.getText();
@@ -117,11 +114,11 @@ public class OrganizerParser {
         }
     }
 
-
-    public void parseRoom(String tag, int eventType){
+    public void parseRoom(String tag, int eventType) throws Exception{
         room = new Room();
         boolean stop = false;
         while(!stop) {
+            tag = parser.getName();
             switch (eventType) {
                 case XmlPullParser.TEXT:
                     text = parser.getText();
@@ -140,6 +137,7 @@ public class OrganizerParser {
                 default:
                     break;
             }
+            eventType = parser.next();
         }
     }
 
@@ -148,7 +146,4 @@ public class OrganizerParser {
         entryMap.put("people",people);
         entryMap.put("rooms",rooms);
     }
-
-
-
 }
