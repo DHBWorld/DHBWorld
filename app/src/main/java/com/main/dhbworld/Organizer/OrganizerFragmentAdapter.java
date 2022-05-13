@@ -19,7 +19,7 @@ public class OrganizerFragmentAdapter extends FragmentStateAdapter {
     @NonNull
     @Override
     public Fragment createFragment(int position) {
-        return new OrganizerOverallFragment();
+        return new OrganizerOverallFragment(position);
     }
 
     @Override
