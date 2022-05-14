@@ -70,6 +70,8 @@ public class OrganizerParser {
                         course.setYear(Integer.parseInt(text));
                     } else if (tag.equalsIgnoreCase("studiengang")) {
                         course.setStudy(text);
+                    } else if (tag.equalsIgnoreCase("resourceURL")){
+                        course.setUrl(text);
                     } else if (tag.equalsIgnoreCase("kurs")) {
                         courses.add(course);
                         stop = true;
@@ -96,7 +98,7 @@ public class OrganizerParser {
                     } else if (tag.equalsIgnoreCase("abteilung")) {
                         person.setAbteilung(text);
                     } else if (tag.equalsIgnoreCase("studiengang")) {
-                        person.setStudiengang(text);
+                        person.setStudy(text);
                     } else if (tag.equalsIgnoreCase("email")) {
                         person.setEmail(text);
                     } else if (tag.equalsIgnoreCase("telefon")) {

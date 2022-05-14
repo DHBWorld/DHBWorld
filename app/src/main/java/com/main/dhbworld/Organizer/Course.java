@@ -5,7 +5,17 @@ public class Course {
     int year;
     String study;
     String roomNo;
+    String url;
 
+    public String getUrl() {
+
+
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
 
     @Override
     public String toString() {
@@ -14,6 +24,7 @@ public class Course {
                 ", year=" + year +
                 ", study='" + study + '\'' +
                 ", roomNo='" + roomNo + '\'' +
+                ", url='" + url + '\'' +
                 '}';
     }
 

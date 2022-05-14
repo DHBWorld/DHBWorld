@@ -12,6 +12,7 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import com.main.dhbworld.R;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -83,5 +84,6 @@ public class OrganizerOverallFragment extends Fragment{
             people = entryMap.get("people");
             rooms = entryMap.get("rooms");
         }});
+
 }
 

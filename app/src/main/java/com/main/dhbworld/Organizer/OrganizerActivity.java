@@ -61,8 +61,6 @@ public class OrganizerActivity extends FragmentActivity {
             viewPager.setCurrentItem(viewPager.getCurrentItem() - 1);
         }
     }
-
-
 }
 
 

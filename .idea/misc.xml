@@ -13,9 +13,12 @@
         <entry key="..\:/Code/DHBWorld/app/src/main/res/layout/header_nav.xml" value="0.1" />
         <entry key="..\:/Code/DHBWorld/app/src/main/res/layout/nav_drawer.xml" value="0.20854700854700856" />
         <entry key="..\:/Code/DHBWorld/app/src/main/res/layout/navigation.xml" value="0.20854700854700856" />
-        <entry key="..\:/Code/DHBWorld/app/src/main/res/layout/organizer_entry.xml" value="0.18795289855072464" />
+        <entry key="..\:/Code/DHBWorld/app/src/main/res/layout/organizer_entry.xml" value="0.4" />
         <entry key="..\:/Code/DHBWorld/app/src/main/res/layout/organizer_layout.xml" value="0.17831813576494426" />
+        <entry key="..\:/Code/DHBWorld/app/src/main/res/layout/organizercoursebottomsheet.xml" value="0.264" />
         <entry key="..\:/Code/DHBWorld/app/src/main/res/layout/organizerentrybottomsheet.xml" value="0.17831813576494426" />
+        <entry key="..\:/Code/DHBWorld/app/src/main/res/layout/organizerpersonbottomsheet.xml" value="0.2864583333333333" />
+        <entry key="..\:/Code/DHBWorld/app/src/main/res/layout/organizerroombottomsheet.xml" value="0.2864583333333333" />
         <entry key="..\:/Code/DHBWorld/app/src/main/res/layout/organizertab.xml" value="0.18795289855072464" />
         <entry key="..\:/Code/DHBWorld/app/src/main/res/layout/personal_information.xml" value="0.22135416666666666" />
         <entry key="..\:/Code/DHBWorld/app/src/main/res/layout/schedule_layout.xml" value="0.264" />

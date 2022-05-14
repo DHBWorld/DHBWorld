@@ -3,7 +3,7 @@ package com.main.dhbworld.Organizer;
 public class Person {
     String name;
     String abteilung;
-    String studiengang;
+    String study;
     String email;
     String phoneNumber;
     String roomNo;
@@ -11,7 +11,7 @@ public class Person {
     public Person(String name, String abteilung, String studiengang, String email, String phoneNumber, String roomNo) {
         this.name = name;
         this.abteilung = abteilung;
-        this.studiengang = studiengang;
+        this.study = studiengang;
         this.email = email;
         this.phoneNumber = phoneNumber;
         this.roomNo = roomNo;
@@ -33,8 +33,8 @@ public class Person {
         this.abteilung = abteilung;
     }
 
-    public void setStudiengang(String studiengang) {
-        this.studiengang = studiengang;
+    public void setStudy(String study) {
+        this.study = study;
     }
 
     public void setEmail(String email) {
@@ -53,8 +53,8 @@ public class Person {
         return abteilung;
     }
 
-    public String getStudiengang() {
-        return studiengang;
+    public String getStudy() {
+        return study;
     }
 
     public String getEmail() {

@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:id="@+id/organizerEntryView"
+        android:id="@+id/organizerCourseEntryView"
         android:gravity="center"
         android:background="?android:attr/selectableItemBackground"
         android:padding="8dp">
@@ -18,7 +18,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/organizerEntryText"
+            android:id="@+id/organizerCourseEntryText"
             android:text="TINF20B4"
             android:textSize="11pt"
             android:layout_gravity="center_vertical"
@@ -30,7 +30,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:id="@+id/organizerStudyView"
+        android:id="@+id/organizerCourseStudyView"
         android:background="?android:attr/selectableItemBackground"
         android:padding="8dp">
 
@@ -38,7 +38,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/organizerStudyText"
+            android:id="@+id/organizerCourseStudyText"
             android:text="Informatik"
             android:layout_gravity="center_vertical"
             android:textSize="9pt"
@@ -51,7 +51,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:id="@+id/organizerYearView"
+        android:id="@+id/organizerCourseYearView"
         android:background="?android:attr/selectableItemBackground"
         android:padding="8dp">
 
@@ -59,7 +59,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/organizerYearText"
+            android:id="@+id/organizerCourseYearText"
             android:text="Jahrgang: 2020"
             android:layout_gravity="center_vertical"
             android:padding="8dp"/>
@@ -70,7 +70,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:id="@+id/organizerRoomView"
+        android:id="@+id/organizerCourseRoomView"
         android:background="?android:attr/selectableItemBackground"
         android:padding="8dp">
 
@@ -78,9 +78,28 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/organizerRoomText"
+            android:id="@+id/organizerCourseRoomText"
             android:text="Raum-Nr: C201 "
             android:layout_gravity="center_vertical"
+            android:padding="8dp"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:id="@+id/organizerCourseUrlView"
+        android:background="?android:attr/selectableItemBackground"
+        android:padding="8dp">
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/organizerCourseUrlText"
+            android:layout_gravity="center_vertical"
+            android:autoLink="web"
             android:padding="8dp"/>
 
     </LinearLayout>
