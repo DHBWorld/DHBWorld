@@ -61,6 +61,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/organizerPersonEmailText"
             android:text="johannes.freudenmann@dhbw-karlsruhe.de"
+            android:autoLink="email"
             android:layout_gravity="center_vertical"
             android:padding="8dp"/>
 
@@ -80,6 +81,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/organizerPersonPhoneText"
             android:text="0171 442 / 045214"
+            android:autoLink="phone"
             android:layout_gravity="center_vertical"
             android:padding="8dp"/>
 
