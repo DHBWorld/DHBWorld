@@ -98,6 +98,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/organizerCourseUrlText"
+            android:textIsSelectable="true"
             android:layout_gravity="center_vertical"
             android:autoLink="web"
             android:padding="8dp"/>
