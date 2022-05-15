@@ -28,6 +28,10 @@ public class Course {
                 '}';
     }
 
+    public String filterString(){
+        return name + year + study + roomNo + url;
+    }
+
     public String getName() {
         return name;
     }

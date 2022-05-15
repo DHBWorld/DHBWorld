@@ -11,6 +11,8 @@ import java.net.HttpCookie;
 import java.util.List;
 
 public class OrganizerFragmentAdapter extends FragmentStateAdapter {
+    String currentQuery = "";
+    OrganizerOverallFragment fragment;
 
     public OrganizerFragmentAdapter(@NonNull FragmentActivity fragmentActivity) {
         super(fragmentActivity);
@@ -19,11 +21,18 @@ public class OrganizerFragmentAdapter extends FragmentStateAdapter {
     @NonNull
     @Override
     public Fragment createFragment(int position) {
-        return new OrganizerOverallFragment(position);
+        fragment = new OrganizerOverallFragment(position,currentQuery);
+        return fragment;
     }
 
     @Override
     public int getItemCount() {
         return 3;
     }
+
+    public void setQuery(String query){
+        currentQuery = query;
+        fragment.setQuery(query);
+    }
+
 }

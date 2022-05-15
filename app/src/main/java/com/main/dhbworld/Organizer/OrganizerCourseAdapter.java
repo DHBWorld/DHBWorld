@@ -7,6 +7,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -14,13 +16,33 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.main.dhbworld.R;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
-public class OrganizerCourseAdapter extends ArrayAdapter{
+public class OrganizerCourseAdapter extends ArrayAdapter implements Filterable {
+    ArrayList<Course> courses;
+    ArrayList<Course> filteredData;
 
     public OrganizerCourseAdapter(Context context, ArrayList<Course> courses) {
         super(context, 0, courses);
+        this.courses = courses;
+        this.filteredData = courses;
     }
+
+
+    @Override
+    public int getCount() {
+        return filteredData.size();
+    }
+
+    public Object getItem(int position) {
+        return filteredData.get(position);
+    }
+
+    public long getItemId(int position) {
+        return position;
+    }
+
 
     @Override
     public View getView(int position, View newRow, ViewGroup parent) {
@@ -86,4 +108,38 @@ public class OrganizerCourseAdapter extends ArrayAdapter{
     }
 
 
+    @Override
+    public Filter getFilter(){
+        return new Filter(){
+            @Override
+            protected FilterResults performFiltering(CharSequence constraint) {
+                constraint = constraint.toString().toLowerCase();
+                FilterResults result = new FilterResults();
+
+                if (constraint.toString().length() > 0) {
+                    List<Course> founded = new ArrayList<>();
+                    for(Course item: courses ){
+                        if(item.filterString().toLowerCase().contains(constraint)){
+                            founded.add(item);
+                        }
+                    }
+                    result.values = founded;
+                    result.count = founded.size();
+                }else {
+                    result.values = courses;
+                    result.count = courses.size();
+                }
+                return result;
+
+            }
+
+            @Override
+            protected void publishResults(CharSequence charSequence, FilterResults filterResults)
+            {
+                filteredData = (ArrayList<Course>)filterResults.values;
+                notifyDataSetChanged();
+            }
+
+        };
+    }
 }

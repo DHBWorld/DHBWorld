@@ -19,14 +19,19 @@ import java.util.Map;
 public class OrganizerOverallFragment extends Fragment{
 
     int position;
+    String currentQuery;
     ListView listView;
     ArrayList<Course> courses;
     ArrayList<Person> people;
     ArrayList<Room> rooms;
     View view;
+    OrganizerCourseAdapter courseAdapter;
 
-    public OrganizerOverallFragment(int position) {
+
+
+    public OrganizerOverallFragment(int position, String currentQuery) {
         this.position = position;
+        this.currentQuery = currentQuery;
     }
 
     @Override
@@ -39,11 +44,12 @@ public class OrganizerOverallFragment extends Fragment{
     public void onViewCreated(@NonNull View v, @Nullable Bundle savedInstanceState) {
         LayoutInflater inflater  = getLayoutInflater();
         super.onViewCreated(view,savedInstanceState);
+        setHasOptionsMenu(true);
         listView = view.findViewById(R.id.listviewitem);
 
         try {
             parseThread.join();
-            OrganizerCourseAdapter courseAdapter = new OrganizerCourseAdapter(this.getContext(),courses);
+            courseAdapter = new OrganizerCourseAdapter(this.getContext(),courses);
             OrganizerPersonAdapter personAdapter = new OrganizerPersonAdapter(this.getContext(),people);
             OrganizerRoomAdapter roomAdapter = new OrganizerRoomAdapter(this.getContext(),rooms);
             switch(position) {
@@ -84,6 +90,13 @@ public class OrganizerOverallFragment extends Fragment{
             people = entryMap.get("people");
             rooms = entryMap.get("rooms");
         }});
+
+    public void setQuery(String query){
+        currentQuery = query;
+        courseAdapter.getFilter().filter(query);
+
+    }
+
 
 }
 
