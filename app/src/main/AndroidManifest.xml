@@ -52,7 +52,18 @@
             android:exported="false" />
         <activity
             android:name=".Organizer.OrganizerActivity"
-            android:exported="false" />
+            android:exported="false" >
+            <meta-data android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
+        </activity>
+        <activity
+            android:name=".Organizer.SearchResultsActivity"
+            android:exported="false"
+            >
+        <intent-filter>
+            <action android:name="android.intent.action.SEARCH" />
+        </intent-filter>
+    </activity>
 
         <service
             android:name=".Services.UserInteractionMessagingService"

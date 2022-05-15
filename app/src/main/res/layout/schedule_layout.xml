@@ -26,16 +26,13 @@
                 android:layout_height="?attr/actionBarSize"
                 app:title="@string/page_title"
                 app:menu="@menu/calendar_top_app_bar"
-
                 app:navigationIcon="@drawable/navitem"
-
                 style="@style/Widget.MaterialComponents.Toolbar.Primary"
                 android:background="@android:color/transparent"
                 android:elevation="0dp"
                 />
         </com.google.android.material.appbar.AppBarLayout>
         <!-- everything above is for the topbar and navigation-->
-
 
         <com.alamkanak.weekview.WeekView
             android:id="@+id/weekView"
