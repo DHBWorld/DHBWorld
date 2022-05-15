@@ -1,5 +1,6 @@
 package com.main.dhbworld;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
@@ -27,6 +28,7 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -863,6 +865,30 @@ public class DashboardActivity extends AppCompatActivity {
 
 
 
+
+    public void refreshClick(@NonNull MenuItem item) throws NullPointerException{
+
+        userConfigurationOfDashboard();
+        loadUserInteraction();
+
+        if (isNetworkAvailable(DashboardActivity.this)){
+            loadMealPlan();
+            loadCalendar();
+            loadKvv();
+        }else{
+            card_dash_mealPlan.setVisibility(View.GONE);
+            card_dash_calendar.setVisibility(View.GONE);
+            card_dash_kvv.setVisibility(View.GONE);
+            Toast.makeText(DashboardActivity.this, "Sie haben keine Internet-Verbindung, deshalb können die Daten nicht geladen werden.", Toast.LENGTH_LONG).show();
+        }
+
+        loadPersonalInformation();
+
+
+
+
+
+    }
 
 
 }
