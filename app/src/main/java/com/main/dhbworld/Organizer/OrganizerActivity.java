@@ -55,7 +55,7 @@ public class OrganizerActivity extends AppCompatActivity {
                 return false;
             }
         });
-       return super.onCreateOptionsMenu(menu);
+        return super.onCreateOptionsMenu(menu);
     }
 
     public void createView() {

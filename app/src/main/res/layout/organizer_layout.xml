@@ -16,10 +16,11 @@
             android:id="@+id/topAppBarLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            tools:menu="@menu/organizer_top_app_bar"
             style="@style/Widget.MaterialComponents.AppBarLayout.Primary"
             android:fitsSystemWindows="true">
             <com.google.android.material.appbar.MaterialToolbar
-                android:id="@+id/topAppBar"
+                android:id="@+id/organizerTopAppBar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 app:title="@string/page_title"
