@@ -8,10 +8,13 @@ import android.view.MenuInflater;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.SearchView;
+import android.widget.Toolbar;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.widget.ViewPager2;
+
+import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.main.dhbworld.Navigation.NavigationUtilities;
@@ -22,18 +25,20 @@ public class OrganizerActivity extends AppCompatActivity {
     ListView listView;
     ViewPager2 viewPager;
     OrganizerFragmentAdapter organizerFragmentAdapter;
+    MaterialToolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.organizer_layout);
+        toolbar = findViewById(R.id.topAppBar);
+        setSupportActionBar(toolbar);
         NavigationUtilities.setUpNavigation(this, R.id.organizer);
         createView();
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        System.out.println("a");
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.organizer_top_app_bar, menu);
 
@@ -51,11 +56,12 @@ public class OrganizerActivity extends AppCompatActivity {
 
             @Override
             public boolean onQueryTextChange(String newText) {
+                System.out.println(newText);
                 organizerFragmentAdapter.setQuery(newText);
                 return false;
             }
         });
-        return super.onCreateOptionsMenu(menu);
+       return super.onCreateOptionsMenu(menu);
     }
 
     public void createView() {
