@@ -115,16 +115,15 @@ public class OrganizerCourseAdapter extends ArrayAdapter implements Filterable {
             protected FilterResults performFiltering(CharSequence constraint) {
                 constraint = constraint.toString().toLowerCase();
                 FilterResults result = new FilterResults();
-
                 if (constraint.toString().length() > 0) {
-                    List<Course> founded = new ArrayList<>();
+                   filteredData = new ArrayList<>();
                     for(Course item: courses ){
                         if(item.filterString().toLowerCase().contains(constraint)){
-                            founded.add(item);
+                            filteredData.add(item);
                         }
                     }
-                    result.values = founded;
-                    result.count = founded.size();
+                    result.values = filteredData;
+                    result.count = filteredData.size();
                 }else {
                     result.values = courses;
                     result.count = courses.size();
@@ -137,6 +136,7 @@ public class OrganizerCourseAdapter extends ArrayAdapter implements Filterable {
             protected void publishResults(CharSequence charSequence, FilterResults filterResults)
             {
                 filteredData = (ArrayList<Course>)filterResults.values;
+                System.out.println(filteredData);
                 notifyDataSetChanged();
             }
 
