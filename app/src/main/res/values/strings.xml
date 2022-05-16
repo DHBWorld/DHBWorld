@@ -158,4 +158,7 @@ E-Mail-Adresse: <p><a href="mailto:zaeske.christian@gmail.com">zaeske.christian@
     <string name="import_from_url">Import from URL</string>
     <string name="enter_url_here">Enter URL here</string>
     <string name="enter_studiengangsleiter_name_here">Enter \'Studiengangsleiter\'</string>
+    <string name="debugging">Debugging</string>
+    <string name="export_debug_log">Debug-Log exportieren</string>
+    <string name="file_saved">Datei gespeichert</string>
 </resources>

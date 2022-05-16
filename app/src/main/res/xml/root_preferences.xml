@@ -80,4 +80,11 @@
             app:title="@string/import_from_url" />
     </PreferenceCategory>
 
+    <PreferenceCategory app:title="@string/debugging">
+        <Preference
+            app:key="exportDebugLog"
+            app:icon="@drawable/ic_outline_account_tree_24"
+            app:title="@string/export_debug_log" />
+    </PreferenceCategory>
+
 </PreferenceScreen>

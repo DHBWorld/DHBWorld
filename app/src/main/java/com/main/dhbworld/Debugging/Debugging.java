@@ -3,7 +3,6 @@ package com.main.dhbworld.Debugging;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.provider.DocumentsContract;
 
 import java.io.BufferedInputStream;
@@ -12,6 +11,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.URI;
 
 public class Debugging {
 
@@ -55,7 +55,7 @@ public class Debugging {
         }
 
         try {
-            Process process = Runtime.getRuntime().exec("logcat -f /data/data/com.main.dhbworld/files/debug.log -r 100000");
+            Runtime.getRuntime().exec("logcat -f /data/data/com.main.dhbworld/files/debug.log -r 100000");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -65,7 +65,7 @@ public class Debugging {
         return new File(context.getFilesDir().getAbsolutePath() + "/debug.log");
     }
 
-    public static void createFile(Activity activity, Uri pickerInitialUri) {
+    public static void createFile(Activity activity, URI pickerInitialUri) {
         Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         intent.setType("text/plain");

@@ -6,12 +6,13 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.Settings;
-import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -23,13 +24,17 @@ import androidx.preference.PreferenceManager;
 import androidx.preference.SwitchPreference;
 import androidx.work.WorkManager;
 
-import com.google.android.material.button.MaterialButton;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
+import com.main.dhbworld.Debugging.Debugging;
 import com.main.dhbworld.Dualis.DualisAPI;
 import com.main.dhbworld.Firebase.Utilities;
 import com.main.dhbworld.Navigation.NavigationUtilities;
 
+import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.file.Files;
 import java.util.Objects;
 
 public class SettingsActivity extends AppCompatActivity {
@@ -50,6 +55,22 @@ public class SettingsActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK && requestCode == 1 && data != null) {
+            try {
+                OutputStream outputStream = getContentResolver().openOutputStream(data.getData());
+                Files.copy(Debugging.getLog(this).toPath(), outputStream);
+                Snackbar.make(this.findViewById(android.R.id.content), this.getString(R.string.file_saved), BaseTransientBottomBar.LENGTH_SHORT).show();
+            } catch (IOException e) {
+                e.printStackTrace();
+                Snackbar.make(this.findViewById(android.R.id.content), this.getString(R.string.default_error_msg), BaseTransientBottomBar.LENGTH_SHORT).show();
+            }
+
         }
     }
 
@@ -85,6 +106,8 @@ public class SettingsActivity extends AppCompatActivity {
 
             Preference calendar = findPreference("calendarURL");
 
+            Preference debugLog = findPreference("exportDebugLog");
+
             Objects.requireNonNull(information).setOnPreferenceClickListener(this);
             Objects.requireNonNull(licenses).setOnPreferenceClickListener(this);
             Objects.requireNonNull(privacy).setOnPreferenceClickListener(this);
@@ -102,6 +125,8 @@ public class SettingsActivity extends AppCompatActivity {
             }
 
             Objects.requireNonNull(calendar).setOnPreferenceClickListener(this);
+
+            Objects.requireNonNull(debugLog).setOnPreferenceClickListener(this);
         }
 
         @Override
@@ -224,7 +249,9 @@ public class SettingsActivity extends AppCompatActivity {
 
                     startActivity(settingsIntent);
                     return true;
-
+                case "exportDebugLog":
+                    Debugging.createFile(activity, context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS).toURI());
+                    return true;
             }
             return false;
         }
