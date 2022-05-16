@@ -26,7 +26,8 @@ public class OrganizerCourseAdapter extends ArrayAdapter implements Filterable {
     public OrganizerCourseAdapter(Context context, ArrayList<Course> courses) {
         super(context, 0, courses);
         this.courses = courses;
-        this.filteredData = courses;
+        this.filteredData = new ArrayList<>(courses);
+
     }
 
 
@@ -115,32 +116,30 @@ public class OrganizerCourseAdapter extends ArrayAdapter implements Filterable {
             protected FilterResults performFiltering(CharSequence constraint) {
                 constraint = constraint.toString().toLowerCase();
                 FilterResults result = new FilterResults();
-                if (constraint.toString().length() > 0) {
-                   final ArrayList<Course> nList = new ArrayList<>();
-                    for(Course item: filteredData ){
+                if (constraint.toString().length() == 0 | constraint.toString().isEmpty()) {
+                    filteredData.clear();
+                    filteredData.addAll(courses);
+                    result.values = filteredData;
+                    result.count = filteredData.size();
+                }else {
+                    final ArrayList<Course> nList = new ArrayList<>();
+                    for(Course item: courses ){
                         if(item.filterString().toLowerCase().contains(constraint)){
                             nList.add(item);
                         }
                     }
                     result.values = nList;
                     result.count = nList.size();
-                }else {
-                    result.values = courses;
-                    result.count = courses.size();
                 }
                 return result;
-
             }
 
             @Override
-            protected void publishResults(CharSequence charSequence, FilterResults filterResults)
-            {
+            protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
                 filteredData.clear();
                 filteredData.addAll((ArrayList<Course>)filterResults.values);
-                System.out.println(filteredData);
                 notifyDataSetChanged();
             }
-
         };
     }
 }
