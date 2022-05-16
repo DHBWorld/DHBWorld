@@ -635,6 +635,9 @@ public class DashboardActivity extends AppCompatActivity {
 
                        DateTimeFormatter formatter = DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT);
                        timeView.setText(departures.get(i).getDepartureTime().format(formatter));
+                       if (departures.get(i).isNotServiced()) {
+                           timeView.setText(R.string.canceled);
+                       }
                        timeView.setPadding(20,7,0,7);
                        timeView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                        layoutTram.addView(timeView);

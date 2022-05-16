@@ -8,13 +8,15 @@ public class Departure {
     private String attribute;
     private String destination;
     private LocalDateTime departureTime;
+    private boolean notServiced;
 
-    public Departure(String line, String platform, String attribute, String destination, LocalDateTime departureTime) {
+    public Departure(String line, String platform, String attribute, String destination, LocalDateTime departureTime, boolean notServiced) {
         this.line = line;
         this.platform = platform;
         this.attribute = attribute;
         this.destination = destination;
         this.departureTime = departureTime;
+        this.notServiced = notServiced;
     }
 
     public String getLine() {
@@ -66,5 +68,13 @@ public class Departure {
                 ", destination='" + destination + '\'' +
                 ", departureTime=" + departureTime +
                 '}';
+    }
+
+    public boolean isNotServiced() {
+        return notServiced;
+    }
+
+    public void setNotServiced(boolean notServiced) {
+        this.notServiced = notServiced;
     }
 }

@@ -164,6 +164,12 @@ public class KVVDataLoader {
                     .getString("EstimatedTime");
         }
 
+        boolean notServicedStop = false;
+
+        if (callAtStop.has("NotServicedStop")) {
+            notServicedStop = callAtStop.getBoolean("NotServicedStop");
+        }
+
         String line = service.getJSONObject("PublishedLineName")
                 .getString("Text");
 
@@ -179,7 +185,7 @@ public class KVVDataLoader {
 
         LocalDateTime departureTime = LocalDateTime.ofInstant(Instant.parse(departureTimeString), ZoneOffset.UTC);
 
-        return new Departure(line, platform, attribute, destination, departureTime);
+        return new Departure(line, platform, attribute, destination, departureTime, notServicedStop);
     }
 
     protected static Disruption parseDisruption(JSONObject situations) {

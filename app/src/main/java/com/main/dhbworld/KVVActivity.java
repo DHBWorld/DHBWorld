@@ -142,7 +142,7 @@ public class KVVActivity extends AppCompatActivity implements DataLoaderListener
 
     private void setupAdapter() {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        kvvListAdapter = new KVVListAdapter(departures);
+        kvvListAdapter = new KVVListAdapter(this, departures);
         recyclerView.setAdapter(kvvListAdapter);
     }
 
