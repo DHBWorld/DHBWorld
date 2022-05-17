@@ -29,6 +29,8 @@ public class DualisFragmentAdapter extends FragmentStateAdapter {
                 return new DualisOverallFragment(arguments, cookies);
             case 1:
                 return new DualisSemesterFragment(arguments, cookies);
+            case 2:
+                return new DualisDocumentFragment(arguments, cookies);
             default:
                 return null;
         }
@@ -36,6 +38,6 @@ public class DualisFragmentAdapter extends FragmentStateAdapter {
 
     @Override
     public int getItemCount() {
-        return 2;
+        return 3;
     }
 }

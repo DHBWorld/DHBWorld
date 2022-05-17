@@ -34,7 +34,7 @@ public class LoggedInView {
         ViewPager2 viewPager2 = activity.findViewById(R.id.dualisViewPager);
         DualisFragmentAdapter dualisFragmentAdapter = new DualisFragmentAdapter(activity, arguments, cookies);
         viewPager2.setAdapter(dualisFragmentAdapter);
-        viewPager2.setOffscreenPageLimit(1);
+        viewPager2.setOffscreenPageLimit(2);
 
         TabLayoutMediator tabLayoutMediator = new TabLayoutMediator(tabLayout, viewPager2, new TabLayoutMediator.TabConfigurationStrategy() {
             @Override
@@ -42,9 +42,12 @@ public class LoggedInView {
                 if (position == 0) {
                     tab.setText("Übersicht");
                     tab.setIcon(R.drawable.ic_baseline_dashboard_24);
-                } else {
+                } else if (position == 1) {
                     tab.setText("Kurse");
                     tab.setIcon(R.drawable.ic_baseline_book_24);
+                } else {
+                    tab.setText("Dokumente");
+                    tab.setIcon(R.drawable.ic_baseline_description_24);
                 }
             }
         });
@@ -56,8 +59,10 @@ public class LoggedInView {
             if (item.getItemId() == R.id.dualis_refresh) {
                 if (tabLayout.getSelectedTabPosition() == 0) {
                     DualisOverallFragment.makeOverallRequest(activity, arguments);
-                } else {
+                } else if (tabLayout.getSelectedTabPosition() == 1){
                     DualisSemesterFragment.makeCourseRequest(activity, arguments);
+                } else {
+                    DualisDocumentFragment.makeDocumentsRequest(activity, arguments);
                 }
 
                 return true;
