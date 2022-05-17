@@ -11,8 +11,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.google.android.material.snackbar.BaseTransientBottomBar;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseUser;
 import com.main.dhbworld.Enums.InteractionState;
 
@@ -85,7 +86,7 @@ public class UserInteraction extends AppCompatActivity {
             @Override
             public void onSignInError() {
                 progressDialog.dismiss();
-                Toast.makeText(UserInteraction.this, "Fehler", Toast.LENGTH_SHORT).show();
+                Snackbar.make(UserInteraction.this.findViewById(android.R.id.content), getString(R.string.error), BaseTransientBottomBar.LENGTH_LONG).show();
             }
         });
         firebaseUtilities.setCurrentStatusListener(new CurrentStatusListener() {
@@ -169,13 +170,21 @@ public class UserInteraction extends AppCompatActivity {
                             firebaseUtilities.setDataSendListener(new DataSendListener() {
                                 @Override
                                 public void success() {
-                                    Toast.makeText(UserInteraction.this, R.string.thank_you, Toast.LENGTH_SHORT).show();
+                                    Snackbar.make(UserInteraction.this.findViewById(android.R.id.content),
+                                            R.string.thank_you,
+                                            BaseTransientBottomBar.LENGTH_LONG)
+                                            .show();
                                     updateInteractionState();
                                 }
 
                                 @Override
                                 public void failed(Exception reason) {
-                                    Toast.makeText(UserInteraction.this, reason.getMessage(), Toast.LENGTH_LONG).show();
+                                    if (reason.getMessage() != null) {
+                                        Snackbar.make(UserInteraction.this.findViewById(android.R.id.content),
+                                                        reason.getMessage(),
+                                                        BaseTransientBottomBar.LENGTH_LONG)
+                                                .show();
+                                    }
                                 }
                             });
 
@@ -204,13 +213,21 @@ public class UserInteraction extends AppCompatActivity {
                         firebaseUtilities.setDataSendListener(new DataSendListener() {
                             @Override
                             public void success() {
-                                Toast.makeText(UserInteraction.this, R.string.thank_you, Toast.LENGTH_SHORT).show();
+                                Snackbar.make(UserInteraction.this.findViewById(android.R.id.content),
+                                                R.string.thank_you,
+                                                BaseTransientBottomBar.LENGTH_LONG)
+                                        .show();
                                 updateInteractionState();
                             }
 
                             @Override
                             public void failed(Exception reason) {
-                                Toast.makeText(UserInteraction.this, reason.getMessage(), Toast.LENGTH_LONG).show();
+                                if (reason.getMessage() != null) {
+                                    Snackbar.make(UserInteraction.this.findViewById(android.R.id.content),
+                                                    reason.getMessage(),
+                                                    BaseTransientBottomBar.LENGTH_LONG)
+                                            .show();
+                                }
                             }
                         });
 
@@ -234,13 +251,21 @@ public class UserInteraction extends AppCompatActivity {
                             firebaseUtilities.setDataSendListener(new DataSendListener() {
                                 @Override
                                 public void success() {
-                                    Toast.makeText(UserInteraction.this, R.string.thank_you, Toast.LENGTH_SHORT).show();
+                                    Snackbar.make(UserInteraction.this.findViewById(android.R.id.content),
+                                                    R.string.thank_you,
+                                                    BaseTransientBottomBar.LENGTH_LONG)
+                                            .show();
                                     updateInteractionState();
                                 }
 
                                 @Override
                                 public void failed(Exception reason) {
-                                    Toast.makeText(UserInteraction.this, reason.getMessage(), Toast.LENGTH_LONG).show();
+                                    if (reason.getMessage() != null) {
+                                        Snackbar.make(UserInteraction.this.findViewById(android.R.id.content),
+                                                        reason.getMessage(),
+                                                        BaseTransientBottomBar.LENGTH_LONG)
+                                                .show();
+                                    }
                                 }
                             });
 

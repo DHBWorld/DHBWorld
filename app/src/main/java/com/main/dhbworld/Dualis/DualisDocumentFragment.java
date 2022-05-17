@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,6 +16,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.VolleyError;
 import com.google.android.material.progressindicator.CircularProgressIndicator;
+import com.google.android.material.snackbar.BaseTransientBottomBar;
+import com.google.android.material.snackbar.Snackbar;
 import com.main.dhbworld.R;
 
 import org.json.JSONArray;
@@ -129,6 +130,6 @@ public class DualisDocumentFragment extends Fragment implements DualisAPI.Docume
 
     @Override
     public void onDocumentsError(VolleyError error) {
-        Toast.makeText(getContext(), "Error: " + error.toString(), Toast.LENGTH_LONG).show();
+        Snackbar.make(mainView.findViewById(android.R.id.content), getString(R.string.error_with_message, error.toString()), BaseTransientBottomBar.LENGTH_LONG).show();
     }
 }

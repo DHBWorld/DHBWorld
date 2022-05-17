@@ -25,6 +25,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.VolleyError;
 import com.google.android.material.progressindicator.CircularProgressIndicator;
+import com.google.android.material.snackbar.BaseTransientBottomBar;
+import com.google.android.material.snackbar.Snackbar;
 import com.main.dhbworld.R;
 
 import org.json.JSONArray;
@@ -171,6 +173,6 @@ public class DualisOverallFragment extends Fragment implements DualisAPI.Overall
 
     @Override
     public void onOverallError(VolleyError error) {
-        Toast.makeText(getContext(), "Error: " + error.toString(), Toast.LENGTH_LONG).show();
+        Snackbar.make(mainView.findViewById(android.R.id.content), getString(R.string.error_with_message, error.toString()), BaseTransientBottomBar.LENGTH_LONG).show();
     }
 }

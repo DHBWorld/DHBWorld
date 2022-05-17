@@ -164,4 +164,6 @@ E-Mail-Adresse: <p><a href="mailto:zaeske.christian@gmail.com">zaeske.christian@
     <string name="export_debug_log">Debug-Log exportieren</string>
     <string name="file_saved">Datei gespeichert</string>
     <string name="download">Download</string>
+    <string name="error_with_message">Error: %1$s</string>
+    <string name="error">Fehler</string>
 </resources>

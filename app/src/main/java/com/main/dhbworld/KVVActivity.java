@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.text.Html;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -15,6 +14,8 @@ import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.progressindicator.CircularProgressIndicator;
+import com.google.android.material.snackbar.BaseTransientBottomBar;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.timepicker.MaterialTimePicker;
 import com.google.android.material.timepicker.TimeFormat;
 import com.main.dhbworld.KVV.DataLoaderListener;
@@ -166,10 +167,10 @@ public class KVVActivity extends AppCompatActivity implements DataLoaderListener
         kvvListAdapter.notifyItemRangeInserted(0, departures.size());
         progressIndicator.setVisibility(View.GONE);
         if (departures.size() == 0) {
-            Toast.makeText(KVVActivity.this,
+            Snackbar.make(KVVActivity.this.findViewById(android.R.id.content),
                     R.string.error_getting_kvv_data,
-                    Toast.LENGTH_LONG
-            ).show();
+                    BaseTransientBottomBar.LENGTH_LONG)
+                    .show();
         }
 
         if (disruption != null) {
