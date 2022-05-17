@@ -117,8 +117,8 @@ public class OrganizerCourseAdapter extends ArrayAdapter implements Filterable {
                 constraint = constraint.toString().toLowerCase();
                 FilterResults result = new FilterResults();
                 if (constraint.toString().length() == 0 | constraint.toString().isEmpty()) {
-                    filteredData.clear();
-                    filteredData.addAll(courses);
+                //   filteredData.clear();
+                //   filteredData.addAll(courses);
                     result.values = filteredData;
                     result.count = filteredData.size();
                 }else {
