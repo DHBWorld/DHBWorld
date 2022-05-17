@@ -53,7 +53,8 @@
             app:nowLineStrokeWidth="2dp"
             app:showNowLine="true"
             app:showWeekNumber="true"
-
+            app:showCompleteDay="true"
+            app:verticalFlingEnabled="false"
             />
     </RelativeLayout>
 
