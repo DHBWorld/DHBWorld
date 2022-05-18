@@ -11,6 +11,7 @@ import android.widget.ListView;
 import android.widget.SearchView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.android.material.appbar.MaterialToolbar;
@@ -26,6 +27,7 @@ public class OrganizerActivity extends AppCompatActivity {
     ViewPager2 viewPager;
     OrganizerFragmentAdapter organizerFragmentAdapter;
     MaterialToolbar toolbar;
+    SearchViewModel searchViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,24 +61,24 @@ public class OrganizerActivity extends AppCompatActivity {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.organizer_top_app_bar, menu);
 
-        SearchManager searchManager =
-                (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        SearchView searchView =
-                (SearchView) menu.findItem(R.id.organizerSearchIcon).getActionView();
-        searchView.setSearchableInfo(
-                searchManager.getSearchableInfo(getComponentName()));
+        searchViewModel = new ViewModelProvider(this).get(SearchViewModel.class);
+
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView = (SearchView) menu.findItem(R.id.organizerSearchIcon).getActionView();
+        searchView.setQueryHint("Search in all Tabs");
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 return false;
             }
-
             @Override
             public boolean onQueryTextChange(String newText) {
-                organizerFragmentAdapter.setQuery(newText);
+                searchViewModel.setQuery(newText);
                 return true;
             }
         });
+
        return super.onCreateOptionsMenu(menu);
     }
 
