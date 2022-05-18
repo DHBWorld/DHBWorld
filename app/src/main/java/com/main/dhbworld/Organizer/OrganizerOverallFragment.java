@@ -74,7 +74,6 @@ public class OrganizerOverallFragment extends Fragment{
         }
     }
 
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -95,10 +94,11 @@ public class OrganizerOverallFragment extends Fragment{
 
     public void setQuery(String query){
         currentQuery = query;
-        courses = courseDataHandler.filter(query);
+        courses.clear();
+        courses.addAll(courseDataHandler.filter(query));
         System.out.println("Query: " + query +" \n " + courses);
-        courses.remove(0);
-        courseAdapter.notifyItemRemoved(0);
+        OrganizerCourseAdapter courseAdapter2 = new OrganizerCourseAdapter(courses);
+        recyclerView.setAdapter(courseAdapter2);
     }
 }
 

@@ -15,12 +15,12 @@ import java.util.Objects;
 
 public class OrganizerCourseAdapter extends RecyclerView.Adapter<OrganizerCourseAdapter.ViewHolder>{
     ArrayList<Course> courses;
-    ArrayList<Course> filteredData;
+
 
     public OrganizerCourseAdapter(ArrayList<Course> courses) {
         this.courses = courses;
-        filteredData = new ArrayList<>(courses);
     }
+
 
     @NonNull
     @Override
@@ -43,11 +43,11 @@ public class OrganizerCourseAdapter extends RecyclerView.Adapter<OrganizerCourse
     @Override
     public int getItemCount() {
         // returning the size of array list.
-        return filteredData.size();
+        return courses.size();
     }
 
     public Object getItem(int position) {
-        return filteredData.get(position);
+        return courses.get(position);
     }
 
     public long getItemId(int position) {

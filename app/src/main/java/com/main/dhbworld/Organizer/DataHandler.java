@@ -16,7 +16,7 @@ class CourseDataHandler extends DataHandler{
     ArrayList<Course> list;
 
     public CourseDataHandler(ArrayList<Course> list){
-        this.list = list;
+        this.list = new ArrayList<>(list);
     }
 
     @Override

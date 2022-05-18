@@ -55,7 +55,7 @@ public class OrganizerActivity extends AppCompatActivity {
             public boolean onQueryTextChange(String newText) {
                 System.out.println(newText);
                 organizerFragmentAdapter.setQuery(newText);
-                return false;
+                return true;
             }
         });
        return super.onCreateOptionsMenu(menu);
