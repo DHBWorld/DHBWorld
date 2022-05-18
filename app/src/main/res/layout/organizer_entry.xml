@@ -4,8 +4,6 @@
     android:layout_height="70dp"
     android:orientation="vertical">
 
-
-
     <TextView
         android:id="@+id/info_box1"
         android:layout_width="wrap_content"
@@ -15,7 +13,7 @@
         android:text="TINF20B4"
         android:textStyle="bold"
         android:textSize="18sp" />
-
+        android:textSize="18sp" />
     <TextView
         android:id="@+id/info_box2"
         android:layout_width="wrap_content"
@@ -25,10 +23,4 @@
         android:gravity="end"
         android:textSize="16sp" />
 
-
-    <View
-        android:layout_height="match_parent"
-        android:layout_width="match_parent"
-        android:visibility="gone"
-        />
 </LinearLayout>

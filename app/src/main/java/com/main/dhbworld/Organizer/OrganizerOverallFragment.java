@@ -43,7 +43,6 @@ public class OrganizerOverallFragment extends Fragment{
 
     @Override
     public void onViewCreated(@NonNull View v, @Nullable Bundle savedInstanceState) {
-        LayoutInflater inflater  = getLayoutInflater();
         super.onViewCreated(view,savedInstanceState);
         setHasOptionsMenu(true);
         recyclerView = view.findViewById(R.id.org_recylclerview);
@@ -97,8 +96,10 @@ public class OrganizerOverallFragment extends Fragment{
         courses.clear();
         courses.addAll(courseDataHandler.filter(query));
         System.out.println("Query: " + query +" \n " + courses);
+
         OrganizerCourseAdapter courseAdapter2 = new OrganizerCourseAdapter(courses);
         recyclerView.setAdapter(courseAdapter2);
+        courseAdapter2.notifyItemRangeChanged(0,courses.size());
     }
 }
 
