@@ -29,16 +29,21 @@ public class OrganizerActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.organizer_layout);
-        toolbar = findViewById(R.id.topAppBar);
-        setSupportActionBar(toolbar);
-        NavigationUtilities.setUpNavigation(this, R.id.organizer);
-        if(isNetworkConnected()){
-            createView();
+        try {
+            super.onCreate(savedInstanceState);
+            setContentView(R.layout.organizer_layout);
+            toolbar = findViewById(R.id.topAppBar);
+            setSupportActionBar(toolbar);
+            NavigationUtilities.setUpNavigation(this, R.id.organizer);
+            if(isNetworkConnected()){
+                createView();
+            }
+            else {
+                displayError();
+            }
         }
-        else {
-            displayError();
+        catch (Exception e){
+            e.printStackTrace();
         }
 
     }
