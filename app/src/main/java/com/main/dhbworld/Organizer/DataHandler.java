@@ -10,7 +10,7 @@ abstract class DataHandler {
 class CourseDataHandler extends DataHandler{
     ArrayList<Course> list;
 
-    public CourseDataHandler(ArrayList<Course> list){ this.list = new ArrayList<>(list); }
+    public CourseDataHandler(ArrayList<Course> list){ this.list = list; }
 
     @Override
     ArrayList<Course> filter(String query) {

@@ -20,6 +20,11 @@ public class OrganizerParser {
     static String text;
     static XmlPullParser parser;
 
+    static ArrayList<String> courseStrings = new ArrayList<>();
+    static ArrayList<String> personStrings = new ArrayList<>();
+    static ArrayList<String> roomStrings = new ArrayList<>();
+
+
     public Map<String, ArrayList> getAllElements(){
         try {
             URL url = new URL("https://rapla.dhbw-karlsruhe.de/rapla?key=2llRzrjV9Yj0yY4JKsO9cneRD8XIxxCqFeg5tRpzABg");
@@ -41,12 +46,16 @@ public class OrganizerParser {
         while (eventType != XmlPullParser.END_DOCUMENT) {
             String tag = parser.getName();
             if(eventType == XmlPullParser.START_TAG) {
-                if(tag.equals("kurs")){
-                    parseCourse(tag,eventType);
-                } else if(tag.equals("person")){
-                    parsePerson(tag, eventType);
-                }else if(tag.equals("raum")){
-                    parseRoom(tag, eventType);
+                switch (tag) {
+                    case "kurs":
+                        parseCourse(eventType);
+                        break;
+                    case "person":
+                        parsePerson(eventType);
+                        break;
+                    case "raum":
+                        parseRoom(eventType);
+                        break;
                 }
             }
             eventType = parser.next();
@@ -54,11 +63,11 @@ public class OrganizerParser {
         createMap();
     }
 
-    public void parseCourse(String tag, int eventType) throws Exception {
+    public void parseCourse(int eventType) throws Exception {
         course = new Course();
         boolean stop = false;
         while(!stop) {
-            tag = parser.getName();
+            String tag = parser.getName();
             switch (eventType) {
                 case XmlPullParser.TEXT:
                     text = parser.getText();
@@ -73,7 +82,10 @@ public class OrganizerParser {
                     } else if (tag.equalsIgnoreCase("resourceURL")){
                         course.setUrl(text);
                     } else if (tag.equalsIgnoreCase("kurs")) {
-                        courses.add(course);
+                        if(!courseStrings.contains(course.filterString())){
+                            courseStrings.add(course.filterString());
+                            courses.add(course);
+                        }
                         stop = true;
                     }
                 default:
@@ -83,11 +95,11 @@ public class OrganizerParser {
         }
     }
 
-    public void parsePerson(String tag, int eventType) throws Exception{
+    public void parsePerson(int eventType) throws Exception{
         person = new Person();
         boolean stop = false;
         while(!stop) {
-            tag = parser.getName();
+            String tag = parser.getName();
             switch (eventType) {
                 case XmlPullParser.TEXT:
                     text = parser.getText();
@@ -106,7 +118,10 @@ public class OrganizerParser {
                     } else if (tag.equalsIgnoreCase("raumnr")) {
                         person.setRoomNo(text);
                     } else if (tag.equalsIgnoreCase("person")) {
-                        people.add(person);
+                        if(!personStrings.contains(person.filterString())){
+                            personStrings.add(person.filterString());
+                            people.add(person);
+                        }
                         stop = true;
                     }
                 default:
@@ -116,11 +131,11 @@ public class OrganizerParser {
         }
     }
 
-    public void parseRoom(String tag, int eventType) throws Exception{
+    public void parseRoom(int eventType) throws Exception{
         room = new Room();
         boolean stop = false;
         while(!stop) {
-            tag = parser.getName();
+            String tag = parser.getName();
             switch (eventType) {
                 case XmlPullParser.TEXT:
                     text = parser.getText();
@@ -133,7 +148,10 @@ public class OrganizerParser {
                     } else if (tag.equalsIgnoreCase("raumnr")) {
                         room.setRoomNo(text);
                     } else if (tag.equalsIgnoreCase("raum")) {
-                        rooms.add(room);
+                        if(!roomStrings.contains(room.filterString())){
+                            roomStrings.add(room.filterString());
+                            rooms.add(room);
+                        }
                         stop = true;
                     }
                 default:

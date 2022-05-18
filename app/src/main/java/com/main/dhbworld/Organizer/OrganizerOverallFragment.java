@@ -87,6 +87,7 @@ public class OrganizerOverallFragment extends Fragment{
         public void run() {
             OrganizerParser organizerParser = new OrganizerParser();
             Map<String, ArrayList> entryMap = organizerParser.getAllElements();
+
             courses = entryMap.get("courses");
             courseDataHandler = new CourseDataHandler(courses);
             people = entryMap.get("people");

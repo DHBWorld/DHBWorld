@@ -2,9 +2,11 @@ package com.main.dhbworld.Organizer;
 
 import android.app.SearchManager;
 import android.content.Context;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.View;
 import android.widget.ListView;
 import android.widget.SearchView;
 
@@ -12,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.main.dhbworld.Navigation.NavigationUtilities;
@@ -31,7 +34,19 @@ public class OrganizerActivity extends AppCompatActivity {
         toolbar = findViewById(R.id.topAppBar);
         setSupportActionBar(toolbar);
         NavigationUtilities.setUpNavigation(this, R.id.organizer);
-        createView();
+        if(isNetworkConnected()){
+            createView();
+        }
+        else {
+            displayError();
+        }
+
+    }
+
+    private boolean isNetworkConnected() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        return cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnected();
     }
 
     @Override
@@ -99,6 +114,10 @@ public class OrganizerActivity extends AppCompatActivity {
         }
     }
 
+    public void displayError(){
+        View drawer = findViewById(R.id.drawerLayout);
+        Snackbar.make(drawer, (CharSequence)"Network Error! Couldn't fetch data from Server.", 6).show();
+    }
 }
 
 

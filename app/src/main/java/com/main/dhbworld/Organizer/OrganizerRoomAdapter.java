@@ -71,7 +71,9 @@ public class OrganizerRoomAdapter extends RecyclerView.Adapter<OrganizerRoomAdap
                     if(room.url != null && roomUrl != null) {
                         roomUrl.setText(room.url);
                     }
-
+                    else {
+                        Objects.requireNonNull(roomUrl).setVisibility(View.GONE);
+                    }
                     bottomSheetDialog.show();
                 }
                 catch (Exception e){
