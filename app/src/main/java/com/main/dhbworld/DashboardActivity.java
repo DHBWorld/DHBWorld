@@ -74,6 +74,7 @@ public class DashboardActivity extends AppCompatActivity {
     private LinearLayout layoutCardMealPlan;
     private LinearLayout layoutCardCalendar;
     private LinearLayout layoutCardKvv;
+    private LinearLayout layoutCardPI;
 
     SharedPreferences sp;
 
@@ -86,10 +87,20 @@ public class DashboardActivity extends AppCompatActivity {
     Boolean cardMealPlan_isVisible = true;
     Boolean cardKvv_isVisible = true;
 
-   private MaterialCardView card_dash_calendar;
+    private MaterialCardView card_dash_calendar;
     private MaterialCardView card_dash_pi;
     private MaterialCardView card_dash_kvv;
     private MaterialCardView card_dash_mealPlan;
+
+    private Button buttonCardCalendar;
+    private Button buttonCardPI;
+    private Button buttonCardMealPlan;
+    private Button buttonCardKvv;
+
+    private LinearLayout card_dash_calendar_layout;
+    private LinearLayout card_dash_pi_layout;
+    private LinearLayout card_dash_kvv_layout;
+    private LinearLayout card_dash_mealPlan_layout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,6 +113,7 @@ public class DashboardActivity extends AppCompatActivity {
         layoutCardMealPlan= findViewById(R.id.layoutCardMealPlan);
         layoutCardCalendar = findViewById(R.id.layoutCardCalendar);
         layoutCardKvv = findViewById(R.id.layoutCardKvv);
+        layoutCardPI = findViewById(R.id.layoutCardPI);
 
         card_dash_calendar = findViewById(R.id.card_dash_calendar);
         card_dash_pi = findViewById(R.id.card_dash_pi);
@@ -140,16 +152,17 @@ public class DashboardActivity extends AppCompatActivity {
     }
 
     private void userConfigurationOfDashboard(){
-
         sp = getSharedPreferences(dashboardSettings, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
 
-        ImageButton settings = findViewById(R.id.dashboard_settings);
+
+
+        //ImageButton settings = findViewById(R.id.dashboard_settings);
         configurationModus=false;
-        Button buttonCardCalendar= findViewById(R.id.buttonCardCalendar);
-        Button buttonCardPI= findViewById(R.id.buttonCardPI);
-        Button buttonCardMealPlan= findViewById(R.id.buttonCardMealPlan);
-        Button buttonCardKvv= findViewById(R.id.buttonCardKvv);
+        buttonCardCalendar= findViewById(R.id.buttonCardCalendar);
+        buttonCardPI= findViewById(R.id.buttonCardPI);
+        buttonCardMealPlan= findViewById(R.id.buttonCardMealPlan);
+        buttonCardKvv= findViewById(R.id.buttonCardKvv);
 
         buttonCardCalendar.setBackgroundColor((ColorUtils.setAlphaComponent(getResources().getColor(R.color.black),0)));
         buttonCardPI.setBackgroundColor((ColorUtils.setAlphaComponent(getResources().getColor(R.color.black),0)));
@@ -161,10 +174,10 @@ public class DashboardActivity extends AppCompatActivity {
         buttonCardMealPlan.setVisibility(View.INVISIBLE);
         buttonCardKvv.setVisibility(View.INVISIBLE);
 
-        LinearLayout card_dash_calendar_layout = findViewById(R.id.card_dash_calendar_layout);
-        LinearLayout card_dash_pi_layout = findViewById(R.id.card_dash_pi_layout);
-        LinearLayout card_dash_kvv_layout = findViewById(R.id.card_dash_kvv_layout);
-        LinearLayout card_dash_mealPlan_layout = findViewById(R.id.card_dash_mealPlan_layout);
+        card_dash_calendar_layout = findViewById(R.id.card_dash_calendar_layout);
+        card_dash_pi_layout = findViewById(R.id.card_dash_pi_layout);
+        card_dash_kvv_layout = findViewById(R.id.card_dash_kvv_layout);
+        card_dash_mealPlan_layout = findViewById(R.id.card_dash_mealPlan_layout);
 
 
         cardCalendar_isVisible = sp.getBoolean("cardCalendar", true);
@@ -185,80 +198,7 @@ public class DashboardActivity extends AppCompatActivity {
             card_dash_kvv.setVisibility(View.GONE);
         }
 
-        settings.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (configurationModus==false){ //User can configure his dashboard
 
-                    settings.setBackground(getResources().getDrawable(R.drawable.ic_done));
-                    Toast.makeText(DashboardActivity.this, " Wählen sie Cards, die ausblenden oder wieder einblenden möchten", Toast.LENGTH_LONG).show();
-                    card_dash_calendar.setVisibility(View.VISIBLE);
-                    card_dash_pi.setVisibility(View.VISIBLE);
-                    card_dash_kvv.setVisibility(View.VISIBLE);
-                    card_dash_mealPlan.setVisibility(View.VISIBLE);
-
-                    buttonCardCalendar.setVisibility(View.VISIBLE);
-                    buttonCardPI.setVisibility(View.VISIBLE);
-                    buttonCardMealPlan.setVisibility(View.VISIBLE);
-                    buttonCardKvv.setVisibility(View.VISIBLE);
-
-                    if (!cardCalendar_isVisible){
-                        card_dash_calendar.setStrokeColor(ColorUtils.setAlphaComponent(card_dash_calendar.getStrokeColor(),50));
-                        card_dash_calendar_layout.setBackgroundColor(ColorUtils.setAlphaComponent(card_dash_calendar.getStrokeColor(),50));
-                    }
-                    if (!cardPI_isVisible){
-                        card_dash_pi.setStrokeColor(ColorUtils.setAlphaComponent(card_dash_pi.getStrokeColor(),50));
-                        card_dash_pi_layout.setBackgroundColor(ColorUtils.setAlphaComponent(card_dash_pi.getStrokeColor(),50));
-                    }
-                    if (!cardMealPlan_isVisible){
-                        card_dash_mealPlan.setStrokeColor(ColorUtils.setAlphaComponent(card_dash_mealPlan.getStrokeColor(),50));
-                        card_dash_mealPlan_layout.setBackgroundColor(ColorUtils.setAlphaComponent(card_dash_mealPlan.getStrokeColor(),50));
-                    }
-                    if (!cardKvv_isVisible){
-                        card_dash_kvv.setStrokeColor(ColorUtils.setAlphaComponent(card_dash_kvv.getStrokeColor(),50));
-                        card_dash_kvv_layout.setBackgroundColor(ColorUtils.setAlphaComponent(card_dash_kvv.getStrokeColor(),50));
-                    }
-
-                   configurationModus=true;
-                } else{
-                    settings.setBackground(getResources().getDrawable(R.drawable.ic_construction));
-                    buttonCardCalendar.setVisibility(View.INVISIBLE);
-                    buttonCardPI.setVisibility(View.INVISIBLE);
-                    buttonCardMealPlan.setVisibility(View.INVISIBLE);
-                    buttonCardKvv.setVisibility(View.INVISIBLE);
-
-
-                    card_dash_calendar.setStrokeColor(ColorUtils.setAlphaComponent(card_dash_calendar.getStrokeColor(),255));
-                    card_dash_calendar_layout.setBackgroundColor(ColorUtils.setAlphaComponent(card_dash_calendar.getStrokeColor(),255));
-                    card_dash_pi.setStrokeColor(ColorUtils.setAlphaComponent(card_dash_pi.getStrokeColor(),255));
-                    card_dash_pi_layout.setBackgroundColor(ColorUtils.setAlphaComponent(card_dash_pi.getStrokeColor(),255));
-                    card_dash_kvv.setStrokeColor(ColorUtils.setAlphaComponent(card_dash_kvv.getStrokeColor(),255));
-                    card_dash_kvv_layout.setBackgroundColor(ColorUtils.setAlphaComponent(card_dash_kvv.getStrokeColor(),255));
-                    card_dash_mealPlan.setStrokeColor(ColorUtils.setAlphaComponent(card_dash_mealPlan.getStrokeColor(),255));
-                    card_dash_mealPlan_layout.setBackgroundColor(ColorUtils.setAlphaComponent(card_dash_mealPlan.getStrokeColor(),255));
-
-                    if (!cardCalendar_isVisible){
-                        card_dash_calendar.setVisibility(View.GONE);
-                    }
-                    if (!cardPI_isVisible){
-                        card_dash_pi.setVisibility(View.GONE);
-                    }
-                    if (!cardMealPlan_isVisible){
-                        card_dash_mealPlan.setVisibility(View.GONE);
-                    }
-                    if (!cardKvv_isVisible){
-                        card_dash_kvv.setVisibility(View.GONE);
-                    }
-
-                    editor.putBoolean("cardCalendar", cardCalendar_isVisible);
-                    editor.putBoolean("cardPI", cardPI_isVisible);
-                    editor.putBoolean("cardMealPlan", cardMealPlan_isVisible);
-                    editor.putBoolean("cardKvv", cardKvv_isVisible);
-                    configurationModus=false;
-
-                }
-            }
-        });
 
         buttonCardCalendar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -527,8 +467,6 @@ public class DashboardActivity extends AppCompatActivity {
     }
 
 
-
-
     public static boolean isNetworkAvailable(Context context) {
         ConnectivityManager connectivity = (ConnectivityManager) context
                 .getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -714,7 +652,6 @@ public class DashboardActivity extends AppCompatActivity {
 
     }
 
-
     private void loadPersonalInformation(){
 
 
@@ -730,7 +667,7 @@ public class DashboardActivity extends AppCompatActivity {
         markerTitle.add("E-Mail:\n" );
 
         SharedPreferences sp = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
-        LinearLayout layoutCardPI = findViewById(R.id.layoutCardPI);
+
 
 
         for (String data:personalData){
@@ -786,19 +723,19 @@ public class DashboardActivity extends AppCompatActivity {
 
 
 
-            }else{
-
-                if (layoutCardPI.getChildCount()<1){
-                TextView messageView = new TextView(DashboardActivity.this);
-                messageView.setTextSize(15);
-                messageView.setGravity(Gravity.CENTER_VERTICAL);
-                messageView.setTextColor(getResources().getColor(R.color.black));
-                messageView.setText("Sie haben noch keine persönlichen Daten gespeichert");
-                messageView.setPadding(10,0,5,0);
-                messageView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                layoutCardPI.addView(messageView);}
             }
+
+
         }
+        if (layoutCardPI.getChildCount()<1){
+            TextView messageView = new TextView(DashboardActivity.this);
+            messageView.setTextSize(15);
+            messageView.setGravity(Gravity.CENTER_VERTICAL);
+            messageView.setTextColor(getResources().getColor(R.color.black));
+            messageView.setText("Sie haben noch keine persönlichen Daten gespeichert");
+            messageView.setPadding(10,0,5,0);
+            messageView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            layoutCardPI.addView(messageView);}
 
 
 
@@ -864,9 +801,12 @@ public class DashboardActivity extends AppCompatActivity {
         }
 
 
-
-
     public void refreshClick(@NonNull MenuItem item) throws NullPointerException{
+
+        layoutCardMealPlan.removeAllViews();
+        layoutCardCalendar.removeAllViews();
+        layoutCardKvv.removeAllViews();
+        layoutCardPI.removeAllViews();
 
         userConfigurationOfDashboard();
         loadUserInteraction();
@@ -888,6 +828,83 @@ public class DashboardActivity extends AppCompatActivity {
 
 
 
+    }
+
+    public void configurationClick(@NonNull MenuItem item) throws NullPointerException{
+        sp = getSharedPreferences(dashboardSettings, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+        if (configurationModus==false){ //User can configure his dashboard
+
+            item.setIcon(getResources().getDrawable(R.drawable.ic_done));
+
+
+          // item.setBackground(getResources().getDrawable(R.drawable.ic_done));
+            Toast.makeText(DashboardActivity.this, " Wählen sie Cards, die ausblenden oder wieder einblenden möchten", Toast.LENGTH_LONG).show();
+            card_dash_calendar.setVisibility(View.VISIBLE);
+            card_dash_pi.setVisibility(View.VISIBLE);
+            card_dash_kvv.setVisibility(View.VISIBLE);
+            card_dash_mealPlan.setVisibility(View.VISIBLE);
+
+            buttonCardCalendar.setVisibility(View.VISIBLE);
+            buttonCardPI.setVisibility(View.VISIBLE);
+            buttonCardMealPlan.setVisibility(View.VISIBLE);
+            buttonCardKvv.setVisibility(View.VISIBLE);
+
+            if (!cardCalendar_isVisible){
+                card_dash_calendar.setStrokeColor(ColorUtils.setAlphaComponent(card_dash_calendar.getStrokeColor(),50));
+                card_dash_calendar_layout.setBackgroundColor(ColorUtils.setAlphaComponent(card_dash_calendar.getStrokeColor(),50));
+            }
+            if (!cardPI_isVisible){
+                card_dash_pi.setStrokeColor(ColorUtils.setAlphaComponent(card_dash_pi.getStrokeColor(),50));
+                card_dash_pi_layout.setBackgroundColor(ColorUtils.setAlphaComponent(card_dash_pi.getStrokeColor(),50));
+            }
+            if (!cardMealPlan_isVisible){
+                card_dash_mealPlan.setStrokeColor(ColorUtils.setAlphaComponent(card_dash_mealPlan.getStrokeColor(),50));
+                card_dash_mealPlan_layout.setBackgroundColor(ColorUtils.setAlphaComponent(card_dash_mealPlan.getStrokeColor(),50));
+            }
+            if (!cardKvv_isVisible){
+                card_dash_kvv.setStrokeColor(ColorUtils.setAlphaComponent(card_dash_kvv.getStrokeColor(),50));
+                card_dash_kvv_layout.setBackgroundColor(ColorUtils.setAlphaComponent(card_dash_kvv.getStrokeColor(),50));
+            }
+
+            configurationModus=true;
+        } else{
+           item.setIcon(getResources().getDrawable(R.drawable.ic_construction));
+            buttonCardCalendar.setVisibility(View.INVISIBLE);
+            buttonCardPI.setVisibility(View.INVISIBLE);
+            buttonCardMealPlan.setVisibility(View.INVISIBLE);
+            buttonCardKvv.setVisibility(View.INVISIBLE);
+
+
+            card_dash_calendar.setStrokeColor(ColorUtils.setAlphaComponent(card_dash_calendar.getStrokeColor(),255));
+            card_dash_calendar_layout.setBackgroundColor(ColorUtils.setAlphaComponent(card_dash_calendar.getStrokeColor(),255));
+            card_dash_pi.setStrokeColor(ColorUtils.setAlphaComponent(card_dash_pi.getStrokeColor(),255));
+            card_dash_pi_layout.setBackgroundColor(ColorUtils.setAlphaComponent(card_dash_pi.getStrokeColor(),255));
+            card_dash_kvv.setStrokeColor(ColorUtils.setAlphaComponent(card_dash_kvv.getStrokeColor(),255));
+            card_dash_kvv_layout.setBackgroundColor(ColorUtils.setAlphaComponent(card_dash_kvv.getStrokeColor(),255));
+            card_dash_mealPlan.setStrokeColor(ColorUtils.setAlphaComponent(card_dash_mealPlan.getStrokeColor(),255));
+            card_dash_mealPlan_layout.setBackgroundColor(ColorUtils.setAlphaComponent(card_dash_mealPlan.getStrokeColor(),255));
+
+            if (!cardCalendar_isVisible){
+                card_dash_calendar.setVisibility(View.GONE);
+            }
+            if (!cardPI_isVisible){
+                card_dash_pi.setVisibility(View.GONE);
+            }
+            if (!cardMealPlan_isVisible){
+                card_dash_mealPlan.setVisibility(View.GONE);
+            }
+            if (!cardKvv_isVisible){
+                card_dash_kvv.setVisibility(View.GONE);
+            }
+
+            editor.putBoolean("cardCalendar", cardCalendar_isVisible);
+            editor.putBoolean("cardPI", cardPI_isVisible);
+            editor.putBoolean("cardMealPlan", cardMealPlan_isVisible);
+            editor.putBoolean("cardKvv", cardKvv_isVisible);
+            configurationModus=false;
+
+        }
     }
 
 

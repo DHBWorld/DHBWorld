@@ -8,7 +8,8 @@
 
         android:icon="@drawable/ic_construction"
         app:showAsAction="always"
-        android:onClick="refreshClick"
+
+        android:onClick="configurationClick"
         />
     <item
         android:title="filter_icon"

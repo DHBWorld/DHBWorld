@@ -26,7 +26,7 @@
                 android:background="@android:color/transparent"
                 android:elevation="0dp"
 
-                app:menu="@menu/top_app_bar"
+                app:menu="@menu/dashboard_top_app_bar"
                 app:navigationIcon="@drawable/navitem"
                 app:title="@string/page_title"
                 />
@@ -121,12 +121,7 @@
 
                             android:padding="15dp">
 
-                            <ImageButton
-                                android:id="@+id/dashboard_settings"
 
-                                android:layout_width="30dp"
-                                android:layout_height="30dp"
-                                android:background="@drawable/ic_construction"/>
 
 
 
