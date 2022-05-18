@@ -17,9 +17,10 @@ import com.main.dhbworld.R;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 
-public class OrganizerCourseAdapter extends ArrayAdapter implements Filterable {
+public class OrganizerCourseAdapter extends ArrayAdapter{
     ArrayList<Course> courses;
     ArrayList<Course> filteredData;
 
@@ -29,7 +30,6 @@ public class OrganizerCourseAdapter extends ArrayAdapter implements Filterable {
         this.filteredData = new ArrayList<>(courses);
 
     }
-
 
     @Override
     public int getCount() {
@@ -62,6 +62,25 @@ public class OrganizerCourseAdapter extends ArrayAdapter implements Filterable {
         // Return the completed view to render on screen
         setOnClickListener(newRow,course);
         return newRow;
+    }
+
+
+    public void filter(String query){
+        ArrayList<Course> newCourses = new ArrayList<>();
+        query = query.toLowerCase();
+        if(query.isEmpty() | query.length() == 0){
+            newCourses = courses;
+        }
+        else{
+            for(Course course: courses){
+                if(course.filterString().toLowerCase(Locale.ROOT).contains(query)){
+                    newCourses.add(course);
+                }
+            }
+        }
+        filteredData = new ArrayList<>(newCourses);
+        System.out.println(query + "    " + filteredData);
+        notifyDataSetChanged();
     }
 
     public void setOnClickListener(View newRow, Course course){
@@ -108,38 +127,37 @@ public class OrganizerCourseAdapter extends ArrayAdapter implements Filterable {
         });
     }
 
-
-    @Override
-    public Filter getFilter(){
-        return new Filter(){
-            @Override
-            protected FilterResults performFiltering(CharSequence constraint) {
-                constraint = constraint.toString().toLowerCase();
-                FilterResults result = new FilterResults();
-                if (constraint.toString().length() == 0 | constraint.toString().isEmpty()) {
-                //   filteredData.clear();
-                //   filteredData.addAll(courses);
-                    result.values = filteredData;
-                    result.count = filteredData.size();
-                }else {
-                    final ArrayList<Course> nList = new ArrayList<>();
-                    for(Course item: courses ){
-                        if(item.filterString().toLowerCase().contains(constraint)){
-                            nList.add(item);
-                        }
-                    }
-                    result.values = nList;
-                    result.count = nList.size();
-                }
-                return result;
-            }
-
-            @Override
-            protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
-                filteredData.clear();
-                filteredData.addAll((ArrayList<Course>)filterResults.values);
-                notifyDataSetChanged();
-            }
-        };
-    }
+//    @Override
+//    public Filter getFilter(){
+//        return new Filter(){
+//            @Override
+//            protected FilterResults performFiltering(CharSequence constraint) {
+//                constraint = constraint.toString().toLowerCase();
+//                FilterResults result = new FilterResults();
+//                if (constraint.toString().length() == 0 | constraint.toString().isEmpty()) {
+//                //   filteredData.clear();
+//                //   filteredData.addAll(courses);
+//                    result.values = filteredData;
+//                    result.count = filteredData.size();
+//                }else {
+//                    final ArrayList<Course> nList = new ArrayList<>();
+//                    for(Course item: courses ){
+//                        if(item.filterString().toLowerCase().contains(constraint)){
+//                            nList.add(item);
+//                        }
+//                    }
+//                    result.values = nList;
+//                    result.count = nList.size();
+//                }
+//                return result;
+//            }
+//
+//            @Override
+//            protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+//                filteredData.clear();
+//                filteredData.addAll((ArrayList<Course>)filterResults.values);
+//                notifyDataSetChanged();
+//            }
+//        };
+//    }
 }

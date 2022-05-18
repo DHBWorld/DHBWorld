@@ -94,7 +94,7 @@ public class OrganizerOverallFragment extends Fragment{
     public void setQuery(String query){
         currentQuery = query;
         System.out.println(query);
-        courseAdapter.getFilter().filter(query);
+        courseAdapter.filter(query);
 
     }
 
