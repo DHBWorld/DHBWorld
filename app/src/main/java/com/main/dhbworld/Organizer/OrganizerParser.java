@@ -147,6 +147,8 @@ public class OrganizerParser {
                         room.setRoomType(text);
                     } else if (tag.equalsIgnoreCase("raumnr")) {
                         room.setRoomNo(text);
+                    } else if (tag.equalsIgnoreCase("resourceURL")) {
+                        room.setUrl(text);
                     } else if (tag.equalsIgnoreCase("raum")) {
                         if(!roomStrings.contains(room.filterString())){
                             roomStrings.add(room.filterString());
