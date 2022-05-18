@@ -78,6 +78,10 @@ public class OrganizerActivity extends AppCompatActivity {
                 return true;
             }
         });
+        searchView.setOnCloseListener(() -> {
+            searchViewModel.setQuery("");
+            return false;
+        });
 
        return super.onCreateOptionsMenu(menu);
     }
