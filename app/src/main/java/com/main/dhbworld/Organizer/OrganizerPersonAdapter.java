@@ -1,51 +1,65 @@
 package com.main.dhbworld.Organizer;
-
 import android.annotation.SuppressLint;
-import android.content.Context;
+import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.*;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.main.dhbworld.R;
-
 import java.util.ArrayList;
 import java.util.Objects;
 
-public class OrganizerPersonAdapter extends ArrayAdapter{
+public class OrganizerPersonAdapter extends RecyclerView.Adapter<OrganizerPersonAdapter.ViewHolder>{
+    ArrayList<Person> people;
 
-        public OrganizerPersonAdapter(Context context, ArrayList<Person> people) {
-            super(context, 0, people);
-        }
 
-        @Override
-        public View getView(int position, View newRow, ViewGroup parent) {
-            // Get the data item for this position
-            Person person = (Person) getItem(position);
-            // Check if an existing view is being reused, otherwise inflate the view
-            if (newRow == null) {
-                newRow = LayoutInflater.from(getContext()).inflate(R.layout.organizer_entry, parent, false);
-            }
-            // Lookup view for data population
-            TextView tvName = (TextView) newRow.findViewById(R.id.info_box1);
-            TextView tvHome = (TextView) newRow.findViewById(R.id.info_box2);
-            // Populate the data into the template view using the data object
-            tvName.setText(person.getName());
-            tvHome.setText(person.getEmail());
-            // Return the completed view to render on screen
-            setOnClickListener(newRow,person);
-            return newRow;
-        }
+    public OrganizerPersonAdapter(ArrayList<Person> people) {
+        this.people = people;
+    }
 
-    public void setOnClickListener(View newRow, Person person) {
+
+    @NonNull
+    @Override
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        // below line is to inflate our layout.
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.organizer_entry, parent, false);
+        return new ViewHolder(view);
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull OrganizerPersonAdapter.ViewHolder holder, int position) {
+        // setting data to our views of recycler view.
+        Person person = people.get(position);
+        holder.tvName.setText(person.getName());
+        holder.tvHome.setText(person.getStudy());
+        // Return the completed view to render on screen
+        setOnClickListener(holder.itemView,person);
+    }
+
+    @Override
+    public int getItemCount() {
+        // returning the size of array list.
+        return people.size();
+    }
+
+    public Object getItem(int position) {
+        return people.get(position);
+    }
+
+    public long getItemId(int position) {
+        return position;
+    }
+
+    public void setOnClickListener(View newRow, Person person){
         newRow.setOnClickListener(new View.OnClickListener() {
             @SuppressLint("SetTextI18n")
             @Override
             public void onClick(View v) {
-                BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(getContext());
+                BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(newRow.getContext());
 
                 bottomSheetDialog.setContentView(R.layout.organizerpersonbottomsheet);
                 bottomSheetDialog.show();
@@ -54,12 +68,8 @@ public class OrganizerPersonAdapter extends ArrayAdapter{
                     TextView personNameText = bottomSheetDialog.findViewById(R.id.organizerPersonNameText);
                     Objects.requireNonNull(personNameText).setText(person.name);
                     TextView personStudyText = bottomSheetDialog.findViewById(R.id.organizerPersonStudyText);
-                    LinearLayout personStudyView = bottomSheetDialog.findViewById(R.id.organizerPersonStudyView);
                     if(person.study != null && personStudyText != null) {
                         personStudyText.setText(person.study);
-                    }
-                    else{
-                        Objects.requireNonNull(personStudyView).setVisibility(View.GONE);
                     }
                     Objects.requireNonNull(personStudyText).setText("Study: " + person.study);
                     TextView personEmailText = bottomSheetDialog.findViewById(R.id.organizerPersonEmailText);
@@ -69,12 +79,26 @@ public class OrganizerPersonAdapter extends ArrayAdapter{
                     TextView personRoomText = bottomSheetDialog.findViewById(R.id.organizerPersonRoomText);
                     Objects.requireNonNull(personRoomText).setText("Room: " + person.roomNo);
 
+
                     bottomSheetDialog.show();
-                } catch (Exception e) {
+                }
+                catch (Exception e){
                     e.printStackTrace();
                 }
             }
         });
     }
 
+    public class ViewHolder extends RecyclerView.ViewHolder {
+        // creating variables for our views.
+        private final TextView tvName;
+        private final TextView tvHome;
+        public ViewHolder(@NonNull View itemView) {
+            super(itemView);
+            // initializing our views with their ids.
+            tvName = itemView.findViewById(R.id.info_box1);
+            tvHome = itemView.findViewById(R.id.info_box2);
+
+        }
     }
+}

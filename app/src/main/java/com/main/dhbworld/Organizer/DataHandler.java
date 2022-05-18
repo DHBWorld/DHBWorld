@@ -61,3 +61,28 @@ class PersonDataHandler extends DataHandler{
         return newPeople;
     }
 }
+
+class RoomsDataHandler extends DataHandler{
+    ArrayList<Room> list;
+
+    public RoomsDataHandler(ArrayList<Room> list){
+        this.list = list;
+    }
+
+    @Override
+    ArrayList filter(String query) {
+        ArrayList<Room> newRooms = new ArrayList<>();
+        query = query.toLowerCase();
+        if(query.isEmpty() | query.length() == 0){
+            newRooms = list;
+        }
+        else{
+            for(Room room: list){
+                if(room.toString().toLowerCase(Locale.ROOT).contains(query)){
+                    newRooms.add(room);
+                }
+            }
+        }
+        return newRooms;
+    }
+}

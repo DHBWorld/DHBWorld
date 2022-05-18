@@ -25,8 +25,12 @@ public class OrganizerOverallFragment extends Fragment{
     ArrayList<Room> rooms;
     View view;
     OrganizerCourseAdapter courseAdapter;
+    OrganizerRoomAdapter roomAdapter;
+    OrganizerPersonAdapter personAdapter;
 
     CourseDataHandler courseDataHandler;
+    PersonDataHandler personDataHandler;
+    RoomsDataHandler roomsDataHandler;
 
 
 
@@ -51,20 +55,18 @@ public class OrganizerOverallFragment extends Fragment{
         try {
             parseThread.join();
             courseAdapter = new OrganizerCourseAdapter(courses);
-            OrganizerPersonAdapter personAdapter = new OrganizerPersonAdapter(this.getContext(),people);
-            OrganizerRoomAdapter roomAdapter = new OrganizerRoomAdapter(this.getContext(),rooms);
+            personAdapter = new OrganizerPersonAdapter(people);
+            roomAdapter = new OrganizerRoomAdapter(rooms);
             switch(position) {
                 case 0:
                     recyclerView.setAdapter(courseAdapter);
                     break;
-//                case 1:
-//                    listView.setAdapter(personAdapter);
-//                    personAdapter.addAll(people);
-//                    break;
-//                case 2:
-//                    listView.setAdapter(roomAdapter);
-//                    roomAdapter.addAll(rooms);
-//                    break;
+                case 1:
+                    recyclerView.setAdapter(personAdapter);
+                    break;
+                case 2:
+                    recyclerView.setAdapter(roomAdapter);
+                    break;
                 default:
                     break;
             }
@@ -88,18 +90,26 @@ public class OrganizerOverallFragment extends Fragment{
             courses = entryMap.get("courses");
             courseDataHandler = new CourseDataHandler(courses);
             people = entryMap.get("people");
+            personDataHandler = new PersonDataHandler(people);
             rooms = entryMap.get("rooms");
+            roomsDataHandler = new RoomsDataHandler(rooms);
         }});
 
     public void setQuery(String query){
         currentQuery = query;
         courses.clear();
         courses.addAll(courseDataHandler.filter(query));
-        System.out.println("Query: " + query +" \n " + courses);
 
-        OrganizerCourseAdapter courseAdapter2 = new OrganizerCourseAdapter(courses);
-        recyclerView.setAdapter(courseAdapter2);
-        courseAdapter2.notifyItemRangeChanged(0,courses.size());
+        people.clear();
+        people.addAll(personDataHandler.filter(query));
+
+        rooms.clear();
+        rooms.addAll(roomsDataHandler.filter(query));
+
+        courseAdapter.notifyDataSetChanged();
+        personAdapter.notifyDataSetChanged();
+        roomAdapter.notifyDataSetChanged();
+
     }
 }
 
