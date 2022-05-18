@@ -163,7 +163,6 @@ E-Mail-Adresse: <p><a href="mailto:zaeske.christian@gmail.com">zaeske.christian@
     <string name="organizer_search">organizer_search</string>
     <string name="filter_icon">filter_icon</string>
     <string name="search_organizer">search_organizer</string>
-    <string name="enter_studiengangsleiter_name_here">Enter \'Studiengangsleiter\'</string>
     <string name="canceled">Entfällt</string>
     <string name="canceled_in_parens">(Entfällt)</string>
     <string name="debugging">Debugging</string>

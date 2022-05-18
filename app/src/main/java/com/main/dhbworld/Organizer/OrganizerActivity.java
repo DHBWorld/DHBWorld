@@ -87,12 +87,15 @@ public class OrganizerActivity extends AppCompatActivity {
             switch (position){
                 case 0:
                     tab.setText("Courses");
+                    tab.setIcon(R.drawable.ic_baseline_class_24);
                     break;
                 case 1:
                     tab.setText("People");
+                    tab.setIcon(R.drawable.ic_baseline_person_24);
                     break;
                 case 2:
                     tab.setText("Rooms");
+                    tab.setIcon(R.drawable.ic_baseline_room_24);
                     break;
                 default:
                     break;

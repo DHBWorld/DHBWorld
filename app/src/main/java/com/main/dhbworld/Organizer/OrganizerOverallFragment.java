@@ -8,12 +8,14 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.main.dhbworld.R;
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.Objects;
 
 public class OrganizerOverallFragment extends Fragment{
 
@@ -50,7 +52,10 @@ public class OrganizerOverallFragment extends Fragment{
         super.onViewCreated(view,savedInstanceState);
         setHasOptionsMenu(true);
         recyclerView = view.findViewById(R.id.org_recylclerview);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this.getContext());
+        recyclerView.setLayoutManager(layoutManager);
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),layoutManager.getOrientation());
+        recyclerView.addItemDecoration(dividerItemDecoration);
 
         try {
             parseThread.join();
