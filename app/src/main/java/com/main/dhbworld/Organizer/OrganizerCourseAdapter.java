@@ -1,38 +1,48 @@
 package com.main.dhbworld.Organizer;
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.Filter;
-import android.widget.Filterable;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.*;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.main.dhbworld.R;
-
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
 import java.util.Objects;
 
-public class OrganizerCourseAdapter extends ArrayAdapter{
+public class OrganizerCourseAdapter extends RecyclerView.Adapter<OrganizerCourseAdapter.ViewHolder>{
     ArrayList<Course> courses;
     ArrayList<Course> filteredData;
 
-    public OrganizerCourseAdapter(Context context, ArrayList<Course> courses) {
-        super(context, 0, courses);
+    public OrganizerCourseAdapter(ArrayList<Course> courses) {
         this.courses = courses;
-        this.filteredData = new ArrayList<>(courses);
+        filteredData = new ArrayList<>(courses);
+    }
 
+    @NonNull
+    @Override
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        // below line is to inflate our layout.
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.organizer_entry, parent, false);
+        return new ViewHolder(view);
     }
 
     @Override
-    public int getCount() {
+    public void onBindViewHolder(@NonNull OrganizerCourseAdapter.ViewHolder holder, int position) {
+        // setting data to our views of recycler view.
+        Course course = courses.get(position);
+        holder.tvName.setText(course.getName());
+        holder.tvHome.setText(course.getStudy());
+        // Return the completed view to render on screen
+        setOnClickListener(holder.itemView,course);
+    }
+
+    @Override
+    public int getItemCount() {
+        // returning the size of array list.
         return filteredData.size();
     }
 
@@ -44,51 +54,12 @@ public class OrganizerCourseAdapter extends ArrayAdapter{
         return position;
     }
 
-
-    @Override
-    public View getView(int position, View newRow, ViewGroup parent) {
-        // Get the data item for this position
-        Course course = (Course) getItem(position);
-        // Check if an existing view is being reused, otherwise inflate the view
-        if (newRow == null) {
-            newRow = LayoutInflater.from(getContext()).inflate(R.layout.organizer_entry, parent, false);
-        }
-        // Lookup view for data population
-        TextView tvName = (TextView) newRow.findViewById(R.id.info_box1);
-        TextView tvHome = (TextView) newRow.findViewById(R.id.info_box2);
-        // Populate the data into the template view using the data object
-        tvName.setText(course.getName());
-        tvHome.setText(course.getStudy());
-        // Return the completed view to render on screen
-        setOnClickListener(newRow,course);
-        return newRow;
-    }
-
-
-    public void filter(String query){
-        ArrayList<Course> newCourses = new ArrayList<>();
-        query = query.toLowerCase();
-        if(query.isEmpty() | query.length() == 0){
-            newCourses = courses;
-        }
-        else{
-            for(Course course: courses){
-                if(course.filterString().toLowerCase(Locale.ROOT).contains(query)){
-                    newCourses.add(course);
-                }
-            }
-        }
-        filteredData = new ArrayList<>(newCourses);
-        System.out.println(query + "    " + filteredData);
-        notifyDataSetChanged();
-    }
-
     public void setOnClickListener(View newRow, Course course){
         newRow.setOnClickListener(new View.OnClickListener() {
             @SuppressLint("SetTextI18n")
             @Override
             public void onClick(View v) {
-                BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(getContext());
+                BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(newRow.getContext());
 
                 bottomSheetDialog.setContentView(R.layout.organizercoursebottomsheet);
                 bottomSheetDialog.show();
@@ -127,37 +98,16 @@ public class OrganizerCourseAdapter extends ArrayAdapter{
         });
     }
 
-//    @Override
-//    public Filter getFilter(){
-//        return new Filter(){
-//            @Override
-//            protected FilterResults performFiltering(CharSequence constraint) {
-//                constraint = constraint.toString().toLowerCase();
-//                FilterResults result = new FilterResults();
-//                if (constraint.toString().length() == 0 | constraint.toString().isEmpty()) {
-//                //   filteredData.clear();
-//                //   filteredData.addAll(courses);
-//                    result.values = filteredData;
-//                    result.count = filteredData.size();
-//                }else {
-//                    final ArrayList<Course> nList = new ArrayList<>();
-//                    for(Course item: courses ){
-//                        if(item.filterString().toLowerCase().contains(constraint)){
-//                            nList.add(item);
-//                        }
-//                    }
-//                    result.values = nList;
-//                    result.count = nList.size();
-//                }
-//                return result;
-//            }
-//
-//            @Override
-//            protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
-//                filteredData.clear();
-//                filteredData.addAll((ArrayList<Course>)filterResults.values);
-//                notifyDataSetChanged();
-//            }
-//        };
-//    }
+    public class ViewHolder extends RecyclerView.ViewHolder {
+        // creating variables for our views.
+        private final TextView tvName;
+        private final TextView tvHome;
+        public ViewHolder(@NonNull View itemView) {
+            super(itemView);
+            // initializing our views with their ids.
+            tvName = itemView.findViewById(R.id.info_box1);
+            tvHome = itemView.findViewById(R.id.info_box2);
+
+        }
+    }
 }

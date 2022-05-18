@@ -5,13 +5,10 @@ import android.content.Context;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.View;
 import android.widget.ListView;
 import android.widget.SearchView;
-import android.widget.Toolbar;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.android.material.appbar.MaterialToolbar;
@@ -67,7 +64,7 @@ public class OrganizerActivity extends AppCompatActivity {
     public void createView() {
         TabLayout tabLayout = findViewById(R.id.organizerTabLayout);
         viewPager = findViewById(R.id.organizerViewPager);
-        listView = findViewById(R.id.listviewitem);
+        listView = findViewById(R.id.org_recylclerview);
         organizerFragmentAdapter = new OrganizerFragmentAdapter(this);
         viewPager.setAdapter(organizerFragmentAdapter);
         viewPager.setOffscreenPageLimit(2);

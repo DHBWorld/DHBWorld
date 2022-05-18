@@ -4,28 +4,29 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.viewpager2.widget.ViewPager2;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.main.dhbworld.R;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.Map;
 
 public class OrganizerOverallFragment extends Fragment{
 
     int position;
     String currentQuery;
-    ListView listView;
+    RecyclerView recyclerView;
     ArrayList<Course> courses;
     ArrayList<Person> people;
     ArrayList<Room> rooms;
     View view;
     OrganizerCourseAdapter courseAdapter;
+
+    CourseDataHandler courseDataHandler;
 
 
 
@@ -45,26 +46,26 @@ public class OrganizerOverallFragment extends Fragment{
         LayoutInflater inflater  = getLayoutInflater();
         super.onViewCreated(view,savedInstanceState);
         setHasOptionsMenu(true);
-        listView = view.findViewById(R.id.listviewitem);
+        recyclerView = view.findViewById(R.id.org_recylclerview);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
 
         try {
             parseThread.join();
-            courseAdapter = new OrganizerCourseAdapter(this.getContext(),courses);
+            courseAdapter = new OrganizerCourseAdapter(courses);
             OrganizerPersonAdapter personAdapter = new OrganizerPersonAdapter(this.getContext(),people);
             OrganizerRoomAdapter roomAdapter = new OrganizerRoomAdapter(this.getContext(),rooms);
             switch(position) {
                 case 0:
-                    listView.setAdapter(courseAdapter);
-                    courseAdapter.addAll(courses);
+                    recyclerView.setAdapter(courseAdapter);
                     break;
-                case 1:
-                    listView.setAdapter(personAdapter);
-                    personAdapter.addAll(people);
-                    break;
-                case 2:
-                    listView.setAdapter(roomAdapter);
-                    roomAdapter.addAll(rooms);
-                    break;
+//                case 1:
+//                    listView.setAdapter(personAdapter);
+//                    personAdapter.addAll(people);
+//                    break;
+//                case 2:
+//                    listView.setAdapter(roomAdapter);
+//                    roomAdapter.addAll(rooms);
+//                    break;
                 default:
                     break;
             }
@@ -87,17 +88,17 @@ public class OrganizerOverallFragment extends Fragment{
             OrganizerParser organizerParser = new OrganizerParser();
             Map<String, ArrayList> entryMap = organizerParser.getAllElements();
             courses = entryMap.get("courses");
+            courseDataHandler = new CourseDataHandler(courses);
             people = entryMap.get("people");
             rooms = entryMap.get("rooms");
         }});
 
     public void setQuery(String query){
         currentQuery = query;
-        System.out.println(query);
-        courseAdapter.filter(query);
-
+        courses = courseDataHandler.filter(query);
+        System.out.println("Query: " + query +" \n " + courses);
+        courses.remove(0);
+        courseAdapter.notifyItemRemoved(0);
     }
-
-
 }
 
