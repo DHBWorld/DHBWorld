@@ -8,16 +8,15 @@
     android:orientation="vertical"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/drawerLayout">
-
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:weightSum="3"
         android:fitsSystemWindows="true">
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/topAppBarLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            tools:menu="@menu/organizer_top_app_bar"
             style="@style/Widget.MaterialComponents.AppBarLayout.Primary"
             android:fitsSystemWindows="true">
             <com.google.android.material.appbar.MaterialToolbar
@@ -25,8 +24,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 app:title="@string/page_title"
-                app:menu="@menu/calendar_top_app_bar"
                 app:navigationIcon="@drawable/navitem"
+
                 style="@style/Widget.MaterialComponents.Toolbar.Primary"
                 android:background="@android:color/transparent"
                 android:elevation="0dp"
@@ -34,25 +33,19 @@
         </com.google.android.material.appbar.AppBarLayout>
         <!-- everything above is for the topbar and navigation-->
 
-        <com.alamkanak.weekview.WeekView
-            android:id="@+id/weekView"
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/organizerTabLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/topAppBarLayout" />
+
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/organizerViewPager"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@id/topAppBarLayout"
-            app:columnGap="8dp"
-            app:dayBackgroundColor="@color/white"
-            app:eventTextColor="@color/white"
-            app:hourHeight="70dp"
-            app:maxHour="@string/maxCalendarHour"
-            app:minHour="@string/minCalendarHour"
-            app:showCurrentTimeFirst="true"
-            app:nowLineColor="@color/LightBlue"
-            app:nowLineStrokeWidth="2dp"
-            app:showNowLine="true"
-            app:showWeekNumber="true"
-            app:showCompleteDay="true"
-            app:verticalFlingEnabled="false"
-            />
+            android:layout_below="@id/organizerTabLayout" />
+
+
     </RelativeLayout>
 
     <com.google.android.material.navigation.NavigationView
@@ -63,5 +56,4 @@
         app:menu="@menu/navigation_drawer"
         app:headerLayout="@layout/header_nav"
         />
-
 </androidx.drawerlayout.widget.DrawerLayout>

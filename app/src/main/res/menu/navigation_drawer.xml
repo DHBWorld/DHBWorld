@@ -27,6 +27,9 @@
         <item
             android:id="@+id/dualis"
             android:title="@string/dualis" />
+        <item
+            android:id="@+id/organizer"
+            android:title="@string/organizer"/>
     </group>
 
     <group

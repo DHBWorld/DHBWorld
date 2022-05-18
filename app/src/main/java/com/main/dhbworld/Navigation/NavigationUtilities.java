@@ -6,7 +6,6 @@ import android.view.MenuItem;
 import android.view.View;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
@@ -18,12 +17,13 @@ import com.main.dhbworld.DashboardActivity;
 import com.main.dhbworld.DualisActivity;
 import com.main.dhbworld.KVVActivity;
 import com.main.dhbworld.MainActivity;
+import com.main.dhbworld.Organizer.OrganizerActivity;
 import com.main.dhbworld.R;
 import com.main.dhbworld.SettingsActivity;
 import com.main.dhbworld.UserInteraction;
 
 public class NavigationUtilities {
-    public static void setUpNavigation(AppCompatActivity activity, int checkedItem) {
+    public static void setUpNavigation(Activity activity, int checkedItem) {
         MaterialToolbar toolbar = activity.findViewById(R.id.topAppBar);
 
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -68,6 +68,8 @@ public class NavigationUtilities {
                     case R.id.dualis:
                         startActivity(activity, DualisActivity.class);
                         break;
+                    case R.id.organizer:
+                        startActivity(activity, OrganizerActivity.class);
                 }
                 return true;
             }

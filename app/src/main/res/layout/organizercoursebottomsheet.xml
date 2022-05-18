@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:id="@+id/organizerCourseEntryView"
+        android:gravity="center"
+        android:background="?android:attr/selectableItemBackground"
+        android:padding="8dp">
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/organizerCourseEntryText"
+            android:text="TINF20B4"
+            android:textSize="11pt"
+            android:layout_gravity="center_vertical"
+            android:padding="8dp"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:id="@+id/organizerCourseStudyView"
+        android:background="?android:attr/selectableItemBackground"
+        android:padding="8dp">
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/organizerCourseStudyText"
+            android:text="Informatik"
+            android:layout_gravity="center_vertical"
+            android:textSize="9pt"
+            android:padding="8dp"/>
+    </LinearLayout>
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:id="@+id/organizerCourseYearView"
+        android:background="?android:attr/selectableItemBackground"
+        android:padding="8dp">
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/organizerCourseYearText"
+            android:text="Jahrgang: 2020"
+            android:layout_gravity="center_vertical"
+            android:padding="8dp"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:id="@+id/organizerCourseRoomView"
+        android:background="?android:attr/selectableItemBackground"
+        android:padding="8dp">
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/organizerCourseRoomText"
+            android:text="Raum-Nr: C201 "
+            android:layout_gravity="center_vertical"
+            android:padding="8dp"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:id="@+id/organizerCourseUrlView"
+        android:background="?android:attr/selectableItemBackground"
+        android:padding="8dp">
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/organizerCourseUrlText"
+            android:textIsSelectable="true"
+            android:layout_gravity="center_vertical"
+            android:autoLink="web"
+            android:padding="8dp"/>
+
+    </LinearLayout>
+</LinearLayout>
