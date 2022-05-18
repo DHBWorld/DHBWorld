@@ -2,24 +2,16 @@ package com.main.dhbworld.Organizer;
 
 public class Person {
     String name;
-    String abteilung;
+    String field;
     String study;
     String email;
     String phoneNumber;
     String roomNo;
 
-    public Person(String name, String abteilung, String studiengang, String email, String phoneNumber, String roomNo) {
-        this.name = name;
-        this.abteilung = abteilung;
-        this.study = studiengang;
-        this.email = email;
-        this.phoneNumber = phoneNumber;
-        this.roomNo = roomNo;
-    }
 
-    public Person() {
+    public Person() { }
 
-    }
+    public String filterString(){return name + field + study + email + phoneNumber + roomNo;}
 
     public String getName() {
         return name;
@@ -29,8 +21,8 @@ public class Person {
         this.name = name;
     }
 
-    public void setAbteilung(String abteilung) {
-        this.abteilung = abteilung;
+    public void setField(String field) {
+        this.field = field;
     }
 
     public void setStudy(String study) {
@@ -49,23 +41,9 @@ public class Person {
         this.roomNo = roomNo;
     }
 
-    public String getAbteilung() {
-        return abteilung;
-    }
-
     public String getStudy() {
         return study;
     }
 
-    public String getEmail() {
-        return email;
-    }
 
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public String getRoomNo() {
-        return roomNo;
-    }
 }

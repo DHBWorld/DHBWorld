@@ -6,16 +6,8 @@ public class Room {
     String roomNo;
     String url;
 
-    public Room(String name, String roomType, String roomNo, String url) {
-        this.name = name;
-        this.roomType = roomType;
-        this.roomNo = roomNo;
-        this.url = url;
-    }
-
-    public Room() {
-
-    }
+    public Room() { }
+    public String filterString(){return name + roomType + roomNo + url;}
 
     public void setName(String name) {
         this.name = name;
@@ -39,10 +31,6 @@ public class Room {
 
     public String getRoomType() {
         return roomType;
-    }
-
-    public String getRoomNo() {
-        return roomNo;
     }
 
     public String getUrl() {

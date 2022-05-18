@@ -53,7 +53,6 @@ public class OrganizerActivity extends AppCompatActivity {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                System.out.println(newText);
                 organizerFragmentAdapter.setQuery(newText);
                 return true;
             }

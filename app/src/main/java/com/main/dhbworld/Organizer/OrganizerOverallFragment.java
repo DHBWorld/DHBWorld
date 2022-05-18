@@ -97,19 +97,29 @@ public class OrganizerOverallFragment extends Fragment{
 
     public void setQuery(String query){
         currentQuery = query;
-        courses.clear();
-        courses.addAll(courseDataHandler.filter(query));
 
-        people.clear();
-        people.addAll(personDataHandler.filter(query));
-
-        rooms.clear();
-        rooms.addAll(roomsDataHandler.filter(query));
-
-        courseAdapter.notifyDataSetChanged();
-        personAdapter.notifyDataSetChanged();
-        roomAdapter.notifyDataSetChanged();
-
+        switch(position) {
+            case 0:
+                courses.clear();
+                courses.addAll(courseDataHandler.filter(query));
+                System.out.println(courses);
+                courseAdapter.notifyDataSetChanged();
+                break;
+            case 1:
+                people.clear();
+                people.addAll(personDataHandler.filter(query));
+                System.out.println(people);
+                personAdapter.notifyDataSetChanged();
+                break;
+            case 2:
+                rooms.clear();
+                rooms.addAll(roomsDataHandler.filter(query));
+                System.out.println(rooms);
+                roomAdapter.notifyDataSetChanged();
+                break;
+            default:
+                break;
+        }
     }
 }
 

@@ -7,9 +7,10 @@ import androidx.viewpager2.adapter.FragmentStateAdapter;
 
 public class OrganizerFragmentAdapter extends FragmentStateAdapter {
     String currentQuery = "";
-    OrganizerOverallFragment fragment;
-    OrganizerOverallFragment fragment2;
-    OrganizerOverallFragment fragment3;
+    OrganizerOverallFragment courseFragment;
+    OrganizerOverallFragment personFragment;
+    OrganizerOverallFragment roomFragment;
+    int position;
 
     public OrganizerFragmentAdapter(@NonNull FragmentActivity fragmentActivity) {
         super(fragmentActivity);
@@ -18,16 +19,17 @@ public class OrganizerFragmentAdapter extends FragmentStateAdapter {
     @NonNull
     @Override
     public Fragment createFragment(int position) {
+        this.position = position;
         switch (position){
             case 0:
-                fragment = new OrganizerOverallFragment(position,currentQuery);
-                return fragment;
+                courseFragment = new OrganizerOverallFragment(position,currentQuery);
+                return courseFragment;
             case 1:
-                fragment2 = new OrganizerOverallFragment(position, currentQuery);
-                return fragment2;
+                personFragment = new OrganizerOverallFragment(position, currentQuery);
+                return personFragment;
             case 2:
-                fragment3 = new OrganizerOverallFragment(position, currentQuery);
-                return fragment3;
+                roomFragment = new OrganizerOverallFragment(position, currentQuery);
+                return roomFragment;
             default:
                 return createFragment(0);
         }
@@ -41,7 +43,9 @@ public class OrganizerFragmentAdapter extends FragmentStateAdapter {
 
     public void setQuery(String query){
         currentQuery = query;
-        fragment.setQuery(query);
-    }
 
+        courseFragment.setQuery(query);
+        personFragment.setQuery(query);
+        roomFragment.setQuery(query);
+    }
 }

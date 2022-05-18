@@ -4,23 +4,16 @@ import java.util.ArrayList;
 import java.util.Locale;
 
 abstract class DataHandler {
-    ArrayList list;
-
     abstract ArrayList filter(String query);
-
-
-
 }
 
 class CourseDataHandler extends DataHandler{
     ArrayList<Course> list;
 
-    public CourseDataHandler(ArrayList<Course> list){
-        this.list = new ArrayList<>(list);
-    }
+    public CourseDataHandler(ArrayList<Course> list){ this.list = new ArrayList<>(list); }
 
     @Override
-    ArrayList filter(String query) {
+    ArrayList<Course> filter(String query) {
         ArrayList<Course> newCourses = new ArrayList<>();
         query = query.toLowerCase();
         if(query.isEmpty() | query.length() == 0){
@@ -28,7 +21,7 @@ class CourseDataHandler extends DataHandler{
         }
         else{
             for(Course course: list){
-                if(course.filterString().toLowerCase(Locale.ROOT).contains(query)){
+                if(course.filterString().toLowerCase().contains(query)){
                     newCourses.add(course);
                 }
             }
@@ -41,11 +34,12 @@ class PersonDataHandler extends DataHandler{
     ArrayList<Person> list;
 
     public PersonDataHandler(ArrayList<Person> list){
-        this.list = list;
+        this.list = new ArrayList<>(list);
     }
 
     @Override
-    ArrayList filter(String query) {
+    ArrayList<Person> filter(String query) {
+        System.out.println(list.size());
         ArrayList<Person> newPeople = new ArrayList<>();
         query = query.toLowerCase();
         if(query.isEmpty() | query.length() == 0){
@@ -53,7 +47,7 @@ class PersonDataHandler extends DataHandler{
         }
         else{
             for(Person person: list){
-                if(person.toString().toLowerCase(Locale.ROOT).contains(query)){
+                if(person.filterString().toLowerCase().contains(query)){
                     newPeople.add(person);
                 }
             }
@@ -66,11 +60,11 @@ class RoomsDataHandler extends DataHandler{
     ArrayList<Room> list;
 
     public RoomsDataHandler(ArrayList<Room> list){
-        this.list = list;
+        this.list = new ArrayList<>(list);
     }
 
     @Override
-    ArrayList filter(String query) {
+    ArrayList<Room> filter(String query) {
         ArrayList<Room> newRooms = new ArrayList<>();
         query = query.toLowerCase();
         if(query.isEmpty() | query.length() == 0){
@@ -78,7 +72,7 @@ class RoomsDataHandler extends DataHandler{
         }
         else{
             for(Room room: list){
-                if(room.toString().toLowerCase(Locale.ROOT).contains(query)){
+                if(room.filterString().toLowerCase(Locale.ROOT).contains(query)){
                     newRooms.add(room);
                 }
             }

@@ -8,24 +8,11 @@ public class Course {
     String url;
 
     public String getUrl() {
-
-
         return url;
     }
 
     public void setUrl(String url) {
         this.url = url;
-    }
-
-    @Override
-    public String toString() {
-        return "Course{" +
-                "name='" + name + '\'' +
-                ", year=" + year +
-                ", study='" + study + '\'' +
-                ", roomNo='" + roomNo + '\'' +
-                ", url='" + url + '\'' +
-                '}';
     }
 
     public String filterString(){
@@ -36,16 +23,8 @@ public class Course {
         return name;
     }
 
-    public int getYear() {
-        return year;
-    }
-
     public String getStudy() {
         return study;
-    }
-
-    public String getRoomNo() {
-        return roomNo;
     }
 
     public void setName(String name) {
@@ -60,8 +39,5 @@ public class Course {
         this.study = study;
     }
 
-    public void setRoomNo(String roomNo) {
-        this.roomNo = roomNo;
-    }
 
 }

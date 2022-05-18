@@ -96,7 +96,7 @@ public class OrganizerParser {
                     if (tag.equalsIgnoreCase("name")) {
                         person.setName(text);
                     } else if (tag.equalsIgnoreCase("abteilung")) {
-                        person.setAbteilung(text);
+                        person.setField(text);
                     } else if (tag.equalsIgnoreCase("studiengang")) {
                         person.setStudy(text);
                     } else if (tag.equalsIgnoreCase("email")) {
