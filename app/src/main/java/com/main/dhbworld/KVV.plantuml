@@ -44,13 +44,6 @@ title __KVV class diagram__\n
             + getLine()
             + getPlatform()
             + isNotServiced()
-            + setAttribute()
-            + setDepartureTime()
-            + setDestination()
-            + setLine()
-            + setNotServiced()
-            + setPlatform()
-            + toString()
         }
       }
 

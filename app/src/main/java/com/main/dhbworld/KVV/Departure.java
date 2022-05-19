@@ -3,12 +3,12 @@ package com.main.dhbworld.KVV;
 import java.time.LocalDateTime;
 
 public class Departure {
-    private String line;
-    private String platform;
-    private String attribute;
-    private String destination;
-    private LocalDateTime departureTime;
-    private boolean notServiced;
+    private final String line;
+    private final String platform;
+    private final String attribute;
+    private final String destination;
+    private final LocalDateTime departureTime;
+    private final boolean notServiced;
 
     public Departure(String line, String platform, String attribute, String destination, LocalDateTime departureTime, boolean notServiced) {
         this.line = line;
@@ -23,58 +23,23 @@ public class Departure {
         return line;
     }
 
-    public void setLine(String line) {
-        this.line = line;
-    }
-
     public String getPlatform() {
         return platform;
-    }
-
-    public void setPlatform(String platform) {
-        this.platform = platform;
     }
 
     public String getAttribute() {
         return attribute;
     }
 
-    public void setAttribute(String attribute) {
-        this.attribute = attribute;
-    }
-
     public String getDestination() {
         return destination;
-    }
-
-    public void setDestination(String destination) {
-        this.destination = destination;
     }
 
     public LocalDateTime getDepartureTime() {
         return departureTime;
     }
 
-    public void setDepartureTime(LocalDateTime departureTime) {
-        this.departureTime = departureTime;
-    }
-
-    @Override
-    public String toString() {
-        return "Departure{" +
-                "line='" + line + '\'' +
-                ", platform='" + platform + '\'' +
-                ", attribute='" + attribute + '\'' +
-                ", destination='" + destination + '\'' +
-                ", departureTime=" + departureTime +
-                '}';
-    }
-
     public boolean isNotServiced() {
         return notServiced;
-    }
-
-    public void setNotServiced(boolean notServiced) {
-        this.notServiced = notServiced;
     }
 }
