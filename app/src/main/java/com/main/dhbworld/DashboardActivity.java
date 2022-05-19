@@ -522,39 +522,36 @@ public class DashboardActivity extends AppCompatActivity {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void run() {
-                List<String> meals = CantineActivity.loadDataForDashboard();
+               List<String> meals = CantineActivity.loadDataForDashboard();
                 layoutCardMealPlan.post(new Runnable() {
                     @Override
                     public void run() {
-                        LinearLayout layoutMealOne= findViewById(R.id.layoutMealOne);
-                        LinearLayout layoutMealTwo= findViewById(R.id.layoutMealTwo);
-                        LinearLayout layoutMealThree= findViewById(R.id.layoutMealThree);
-                        TextView textViewMealOne= findViewById(R.id.textViewMealOne);
-                        TextView textViewMealTwo= findViewById(R.id.textViewMealTwo);
-                        TextView textViewMealThree= findViewById(R.id.textViewMealThree);
+                        LinearLayout[] layoutMeal = new LinearLayout[3];
+                        layoutMeal[0] = findViewById(R.id.layoutMealOne);
+                        layoutMeal[1] = findViewById(R.id.layoutMealTwo);
+                        layoutMeal[2] = findViewById(R.id.layoutMealThree);
+                        TextView[] textViewMeal = new TextView[3];
+                        textViewMeal[0] = findViewById(R.id.textViewMealOne);
+                        textViewMeal[1] = findViewById(R.id.textViewMealTwo);
+                        textViewMeal[2] = findViewById(R.id.textViewMealThree);
                         ImageView imageViewMeal= findViewById(R.id.imageViewMeal);
                         imageViewMeal.setImageResource(R.drawable.ic_restaurant);
-                        layoutMealOne.setVisibility(View.VISIBLE);
-                        layoutMealTwo.setVisibility(View.VISIBLE);
-                        layoutMealThree.setVisibility(View.VISIBLE);
-                        if (meals.size()>0){
-                            textViewMealOne.setText(meals.get(0));
+
+                        if((meals==null) || (meals.size()==0)){
+                            imageViewMeal.setImageResource(R.drawable.ic_no_meals);
+                            textViewMeal[0].setText("Es gibt keine Daten für heute");
+                            layoutMeal[1].setVisibility(View.GONE);
+                            layoutMeal[2].setVisibility(View.GONE);
                         }else{
-                            layoutMealOne.setVisibility(View.GONE);
-                        }
-                        if (meals.size()>1){
-                            textViewMealTwo.setText(meals.get(1));
-                        }else{
-                            layoutMealTwo.setVisibility(View.GONE);
-                        }
-                        if (meals.size()>2){
-                            textViewMealThree.setText(meals.get(2));
-                        }else{
-                            layoutMealThree.setVisibility(View.GONE);
-                        }
-                       if (meals.size()==0){
-                           imageViewMeal.setImageResource(R.drawable.ic_no_meals);
-                           textViewMealOne.setText("Es gibt keine Daten für heute");
+                            for (int i=0;i<3;i++){
+                                textViewMeal[i].setVisibility(View.VISIBLE);
+
+                                if (meals.size()>i){
+                                    textViewMeal[i].setText(meals.get(i));
+                                }else{
+                                    layoutMeal[0].setVisibility(View.GONE);
+                                }
+                            }
                         }
                     }
                 });

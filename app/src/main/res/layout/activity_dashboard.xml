@@ -376,7 +376,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:orientation="horizontal"
-                                android:paddingTop="7dp"
+                                android:paddingVertical="7dp"
                                >
                                 <ImageView
                                     android:id="@+id/imageViewMeal"
@@ -397,7 +397,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:orientation="horizontal"
-                                android:paddingVertical="7dp">
+                                android:paddingBottom="7dp">
                                 <ImageView
                                     android:layout_width="20dp"
                                     android:layout_height="20dp"
