@@ -35,6 +35,7 @@ public class OrganizerCourseAdapter extends RecyclerView.Adapter<OrganizerCourse
         // setting data to our views of recycler view.
         Course course = courses.get(position);
         holder.tvName.setText(course.getName());
+        // holder.tvName.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_baseline_book_24,0,0,0);
         holder.tvHome.setText(course.getStudy());
         // Return the completed view to render on screen
         setOnClickListener(holder.itemView,course);
@@ -44,10 +45,6 @@ public class OrganizerCourseAdapter extends RecyclerView.Adapter<OrganizerCourse
     public int getItemCount() {
         // returning the size of array list.
         return courses.size();
-    }
-
-    public Object getItem(int position) {
-        return courses.get(position);
     }
 
     public long getItemId(int position) {
@@ -98,7 +95,7 @@ public class OrganizerCourseAdapter extends RecyclerView.Adapter<OrganizerCourse
         });
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
         // creating variables for our views.
         private final TextView tvName;
         private final TextView tvHome;

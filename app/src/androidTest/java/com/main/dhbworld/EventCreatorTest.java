@@ -47,7 +47,7 @@ public class EventCreatorTest {
         Calendar start = Calendar.getInstance();
         Calendar end = Calendar.getInstance();
         end.add(Calendar.HOUR_OF_DAY,1);
-        tempList.add(new Event(start,end,"testPerson","testResource","testTitleKlausur","testInfo"));
+        tempList.add(new Event(start,end,"testPerson","testResource","testTitleKlausur"));
         EventCreator.eventList = tempList;
         WeekViewEntity.Style outcomeStyle = EventCreator.setEventColor(0);
         assertFalse(outcomeStyle.toString().isEmpty());
