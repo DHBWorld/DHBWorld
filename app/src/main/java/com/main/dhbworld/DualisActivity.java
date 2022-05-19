@@ -31,6 +31,8 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.checkbox.MaterialCheckBox;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.progressindicator.CircularProgressIndicator;
+import com.google.android.material.snackbar.BaseTransientBottomBar;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.OAuthProvider;
@@ -295,9 +297,22 @@ public class DualisActivity extends AppCompatActivity {
                         }
                     });
                 }
+            } else {
+                handler.post(() -> {
+                    Snackbar.make(findViewById(android.R.id.content), getString(R.string.error), BaseTransientBottomBar.LENGTH_LONG).show();
+                    loginButton.setEnabled(true);
+                    progressIndicator.setVisibility(View.GONE);
+                });
             }
         } catch (IOException e) {
             e.printStackTrace();
+            if (e.getMessage() != null) {
+                handler.post(() -> {
+                    Snackbar.make(findViewById(android.R.id.content), e.getMessage(), BaseTransientBottomBar.LENGTH_LONG).show();
+                    loginButton.setEnabled(true);
+                    progressIndicator.setVisibility(View.GONE);
+                });
+            }
         }
     }
 

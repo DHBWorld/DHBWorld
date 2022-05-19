@@ -264,7 +264,7 @@ public class DualisAPI {
         }
     }
 
-    private static void sendNotification(Context context, String title, String message, int id) {
+    static void sendNotification(Context context, String title, String message, int id) {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "1234")
                 .setSmallIcon(R.drawable.ic_baseline_school_24)
                 .setContentTitle(title)
@@ -292,6 +292,10 @@ public class DualisAPI {
 
         int time = Integer.parseInt(settingsPref.getString("sync_time", "15"));
 
+        createAlarmManager(context, time);
+    }
+
+    public static void createAlarmManager(Context context, int time) {
         Constraints constraints = new Constraints.Builder()
                 .setRequiredNetworkType(NetworkType.CONNECTED)
                 .build();
@@ -318,7 +322,7 @@ public class DualisAPI {
         createNotificationChannel(context, id, name, description);
     }
 
-    private static void createNotificationChannel(Context context, String id, String name, String description) {
+    static void createNotificationChannel(Context context, String id, String name, String description) {
         int importance = NotificationManager.IMPORTANCE_DEFAULT;
         NotificationChannel channel = new NotificationChannel(id, name, importance);
         channel.setDescription(description);
