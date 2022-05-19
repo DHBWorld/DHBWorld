@@ -1,4 +1,4 @@
-package com.main.dhbworld;
+package com.main.dhbworld.Calendar;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
@@ -6,23 +6,19 @@ import static org.junit.Assert.assertTrue;
 
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.view.MenuItem;
-import android.view.View;
 
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.view.menu.ActionMenuItemView;
 import androidx.preference.PreferenceManager;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import com.alamkanak.weekview.WeekViewEntity;
-import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.main.dhbworld.Calendar.CalendarActivity;
+import com.main.dhbworld.Calendar.Events;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Calendar;
 

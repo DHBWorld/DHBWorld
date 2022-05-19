@@ -1,17 +1,15 @@
-package com.main.dhbworld;
+package com.main.dhbworld.Calendar;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.view.menu.ActionMenuItemView;
-import androidx.preference.PreferenceManager;
-import androidx.test.core.app.ActivityScenario;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import com.alamkanak.weekview.WeekViewEntity;
+import com.main.dhbworld.Calendar.Event;
+import com.main.dhbworld.Calendar.EventCreator;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -19,16 +17,12 @@ import org.junit.runner.RunWith;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalUnit;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
 import dhbw.timetable.rapla.data.event.Appointment;
-import dhbw.timetable.rapla.parser.DataImporter;
 
 
 @RunWith(AndroidJUnit4.class)
