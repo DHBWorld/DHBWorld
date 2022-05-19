@@ -2,19 +2,11 @@ package com.main.dhbworld.Calendar;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
-
 import androidx.test.ext.junit.runners.AndroidJUnit4;
-
 import com.alamkanak.weekview.WeekViewEntity;
-import com.main.dhbworld.Calendar.Event;
-import com.main.dhbworld.Calendar.EventCreator;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -28,7 +20,6 @@ import dhbw.timetable.rapla.data.event.Appointment;
 @RunWith(AndroidJUnit4.class)
 public class EventCreatorTest {
     private EventCreator eventCreator;
-    Map<LocalDate, ArrayList<Appointment>> data = new HashMap<>();
 
     @Before
     public void setUp(){
