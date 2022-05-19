@@ -360,4 +360,5 @@ E-Mail-Adresse: <p><a href="mailto:zaeske.christian@gmail.com">zaeske.christian@
     <string name="licenses">Lizenzen</string>
     <string name="data_privacy_title">Datenschutz</string>
     <string name="import_from_url">Import from URL</string>
+    <string name="configuration">configuration</string>
 </resources>
