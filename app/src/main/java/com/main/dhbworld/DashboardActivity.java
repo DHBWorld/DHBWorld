@@ -141,9 +141,6 @@ public class DashboardActivity extends AppCompatActivity {
         sp = getSharedPreferences(dashboardSettings, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
 
-
-
-        //ImageButton settings = findViewById(R.id.dashboard_settings);
         configurationModus=false;
         buttonCardCalendar= findViewById(R.id.buttonCardCalendar);
         buttonCardPI= findViewById(R.id.buttonCardPI);
@@ -178,8 +175,6 @@ public class DashboardActivity extends AppCompatActivity {
         if (!cardKvv_isVisible){
             card_dash_kvv.setVisibility(View.GONE);
         }
-
-
 
         buttonCardCalendar.setOnClickListener(new View.OnClickListener() {
             @Override
