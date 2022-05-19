@@ -292,6 +292,10 @@ public class DualisAPI {
 
         int time = Integer.parseInt(settingsPref.getString("sync_time", "15"));
 
+        createAlarmManager(context, time);
+    }
+
+    public static void createAlarmManager(Context context, int time) {
         Constraints constraints = new Constraints.Builder()
                 .setRequiredNetworkType(NetworkType.CONNECTED)
                 .build();
