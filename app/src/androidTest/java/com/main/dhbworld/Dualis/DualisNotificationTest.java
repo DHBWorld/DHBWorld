@@ -63,7 +63,7 @@ public class DualisNotificationTest {
    public void sendNotificationTest() {
       Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
 
-      int id = 1234;
+      int id = 6187;
       String title = "title";
       String message = "message";
 
@@ -74,6 +74,12 @@ public class DualisNotificationTest {
       StatusBarNotification[] notifications = notificationManager.getActiveNotifications();
 
       assertTrue(notifications.length > 0);
-      assertEquals(id, notifications[0].getId());
+
+      for (StatusBarNotification notification : notifications) {
+         if (notification.getId() == id) {
+            return;
+         }
+      }
+      fail();
    }
 }
