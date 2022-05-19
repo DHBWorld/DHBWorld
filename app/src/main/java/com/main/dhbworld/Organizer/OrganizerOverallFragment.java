@@ -102,7 +102,7 @@ public class OrganizerOverallFragment extends Fragment{
         @Override
         public void run() {
             OrganizerParser organizerParser = new OrganizerParser();
-            Map<String, ArrayList> entryMap = organizerParser.getAllElements();
+            Map<String, ArrayList> entryMap = organizerParser.getAllElements(getContext());
 
             courses = entryMap.get("courses");
             courseDataHandler = new CourseDataHandler(courses);

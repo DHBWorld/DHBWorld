@@ -1,5 +1,9 @@
 package com.main.dhbworld.Organizer;
 
+import android.content.Context;
+
+import com.main.dhbworld.R;
+
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserFactory;
 
@@ -24,10 +28,9 @@ public class OrganizerParser {
     static ArrayList<String> personStrings = new ArrayList<>();
     static ArrayList<String> roomStrings = new ArrayList<>();
 
-
-    public Map<String, ArrayList> getAllElements(){
+    public Map<String, ArrayList> getAllElements(Context context){
         try {
-            URL url = new URL("https://rapla.dhbw-karlsruhe.de/rapla?key=2llRzrjV9Yj0yY4JKsO9cneRD8XIxxCqFeg5tRpzABg");
+            URL url = new URL(context.getString(R.string.organizerURL));
             InputStream inputStream = url.openStream();
             parse(inputStream);
         } catch (Exception e) {
