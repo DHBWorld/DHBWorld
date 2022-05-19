@@ -30,6 +30,7 @@ import androidx.preference.PreferenceManager;
 
 import com.google.android.material.card.MaterialCardView;
 import com.google.firebase.auth.FirebaseUser;
+import com.main.dhbworld.Calendar.nextEventsProvider;
 import com.main.dhbworld.Debugging.Debugging;
 import com.main.dhbworld.Enums.InteractionState;
 import com.main.dhbworld.Firebase.CurrentStatusListener;

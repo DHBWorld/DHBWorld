@@ -48,7 +48,7 @@
             android:name=".DataPrivacyActivity"
             android:exported="false" />
         <activity
-            android:name=".CalendarActivity"
+            android:name=".Calendar.CalendarActivity"
             android:exported="false" />
         <activity
             android:name=".Organizer.OrganizerActivity"

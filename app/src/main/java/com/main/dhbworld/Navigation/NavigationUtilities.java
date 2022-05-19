@@ -11,7 +11,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.navigation.NavigationView;
-import com.main.dhbworld.CalendarActivity;
+import com.main.dhbworld.Calendar.CalendarActivity;
 import com.main.dhbworld.CantineActivity;
 import com.main.dhbworld.DashboardActivity;
 import com.main.dhbworld.DualisActivity;
