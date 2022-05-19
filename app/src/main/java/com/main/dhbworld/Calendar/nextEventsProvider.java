@@ -1,4 +1,4 @@
-package com.main.dhbworld;
+package com.main.dhbworld.Calendar;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -48,7 +48,6 @@ public class nextEventsProvider {
         mondayCal.set(Calendar.DAY_OF_WEEK,
                 mondayCal.getActualMinimum(Calendar.DAY_OF_WEEK) + 1);
         LocalDate thisWeek = LocalDateTime.ofInstant(mondayCal.toInstant(), ZoneId.systemDefault()).toLocalDate();
-
         Map<LocalDate, ArrayList<Appointment>> rawData = DataImporter.ImportWeekRange(thisWeek,nextWeek,url);
         return(disectData(mergeData(rawData)));
     }

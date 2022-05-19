@@ -1,10 +1,12 @@
-package com.main.dhbworld;
+package com.main.dhbworld.Calendar;
 
 
 import android.annotation.SuppressLint;
 import android.graphics.Color;
 import androidx.core.graphics.ColorUtils;
 import com.alamkanak.weekview.WeekViewEntity;
+import com.main.dhbworld.R;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -16,7 +18,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Random;
 import dhbw.timetable.rapla.data.event.Appointment;
-import dhbw.timetable.rapla.parser.DataImporter;
 
 public class EventCreator {
     static List<String> blackList;
