@@ -102,7 +102,7 @@ public class CantineActivity extends AppCompatActivity {
         NavigationUtilities.setUpNavigation(this,R.id.cantine);
 
         loadProgressIndikator();
-        if (!isNetworkAvailable(CantineActivity.this)){
+        if (!NetworkAvailability.check(CantineActivity.this)){
             loadDisplay("Die Daten können nicht geladen werden, weil Sie keine Internet-Verbindung haben.");
         }else{
 
@@ -544,29 +544,10 @@ public class CantineActivity extends AppCompatActivity {
 
     }
 
-    public static boolean isNetworkAvailable(Context context) {
-        ConnectivityManager connectivity = (ConnectivityManager) context
-                .getSystemService(Context.CONNECTIVITY_SERVICE);
-        if (connectivity == null) {
-            Log.d("NetworkCheck", "isNetworkAvailable: No");
-            return false;
-        }
-        NetworkInfo[] info = connectivity.getAllNetworkInfo();
-
-        if (info != null) {
-            for (int i = 0; i < info.length; i++) {
-                if (info[i].getState() == NetworkInfo.State.CONNECTED) {
-                    Log.d("NetworkCheck", "isNetworkAvailable: Yes");
-                    return true;
-                }
-            }
-        }
-        return false;}
-
     public void refreshClick(@NonNull MenuItem item) throws NullPointerException{
 
         loadProgressIndikator();
-        if (!isNetworkAvailable(CantineActivity.this)){
+        if (!NetworkAvailability.check(CantineActivity.this)){
             loadDisplay("Die Daten können nicht geladen werden, weil Sie keine Internet-Verbindung haben.");
         }else{
 

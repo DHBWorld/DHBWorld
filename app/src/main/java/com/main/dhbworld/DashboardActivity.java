@@ -16,6 +16,7 @@ import android.annotation.SuppressLint;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
@@ -123,7 +124,7 @@ public class DashboardActivity extends AppCompatActivity {
 
         userConfigurationOfDashboard();
         loadUserInteraction();
-       if (isNetworkAvailable(DashboardActivity.this)){
+       if (NetworkAvailability.check(DashboardActivity.this)){
            loadMealPlan();
            loadCalendar();
            loadKvv();
@@ -369,30 +370,6 @@ public class DashboardActivity extends AppCompatActivity {
         }
     }
 
-    public static boolean isNetworkAvailable(Context context) {
-        ConnectivityManager connectivity = (ConnectivityManager) context
-                .getSystemService(Context.CONNECTIVITY_SERVICE);
-        if (connectivity == null) {
-            Log.d("NetworkCheck", "isNetworkAvailable: No");
-            return false;
-        }
-
-        // get network info for all of the data interfaces (e.g. WiFi, 3G, LTE, etc.)
-        NetworkInfo[] info = connectivity.getAllNetworkInfo();
-
-        // make sure that there is at least one interface to test against
-        if (info != null) {
-            // iterate through the interfaces
-            for (int i = 0; i < info.length; i++) {
-                // check this interface for a connected state
-                if (info[i].getState() == NetworkInfo.State.CONNECTED) {
-                    Log.d("NetworkCheck", "isNetworkAvailable: Yes");
-                    return true;
-                }
-            }
-        }
-        return false;}
-
     private void loadKvv(){
         KVVDataLoader dataLoader = new KVVDataLoader(this);
         dataLoader.setDataLoaderListener(new DataLoaderListener() {
@@ -441,14 +418,9 @@ public class DashboardActivity extends AppCompatActivity {
 
     private void loadUserInteraction(){
         Utilities utilities = new Utilities(this);
-
         ImageView image_canteen = findViewById(R.id.imageBox_dashboard_canteen);
         ImageView image_coffee= findViewById(R.id.imageBox_dashboard_coffee);
         ImageView image_printer = findViewById(R.id.imageBox_dashboard_printer);
-
-       // InteractionState statePrinter= UserInteraction.getStatePrinter();
-
-
         image_canteen.setColorFilter(ContextCompat.getColor(this, R.color.grey_light));
         image_coffee.setColorFilter(ContextCompat.getColor(this, R.color.grey_light));
         image_printer.setColorFilter(ContextCompat.getColor(this, R.color.grey_light));
@@ -486,11 +458,18 @@ public class DashboardActivity extends AppCompatActivity {
             }
         });
         utilities.signIn();
+    }
 
-
-      /*if (statePrinter!=null){
-        image_printer.setColorFilter(statePrinter.getColor());
-      }*/
+    private void copyClick(ImageButton button, String copyText){
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                ClipData clip = ClipData.newPlainText("", copyText);
+                clipboard.setPrimaryClip(clip);
+                Toast.makeText(DashboardActivity.this, "Kopiert", Toast.LENGTH_SHORT).show();
+            }
+        });
 
     }
 
@@ -514,18 +493,13 @@ public class DashboardActivity extends AppCompatActivity {
         layoutInfoThree.setVisibility(View.VISIBLE);
         Boolean emptyCard=true;
         String infoM= sp.getString("matriculationNumberKey", "");
+
+
+
         if (!infoM.equals("")){
             emptyCard=false;
-            infoOne.setText("Bibliotheksnummer:\n"+infoM);
-            imageButtonCopyOne.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-                    ClipData clip = ClipData.newPlainText("", infoM);
-                    clipboard.setPrimaryClip(clip);
-                    Toast.makeText(DashboardActivity.this, "Kopiert", Toast.LENGTH_SHORT).show();
-                }
-            });
+            infoOne.setText("Matrikelnummer:\n"+infoM);
+            copyClick(imageButtonCopyOne, infoM);
         }else{
             layoutInfoOne.setVisibility(View.GONE);
         }
@@ -533,15 +507,7 @@ public class DashboardActivity extends AppCompatActivity {
         if (!infoL.equals("")){
             emptyCard=false;
             infoTwo.setText("Bibliotheksnummer:\n"+infoL);
-            imageButtonCopyTwo.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-                    ClipData clip = ClipData.newPlainText("", infoL);
-                    clipboard.setPrimaryClip(clip);
-                    Toast.makeText(DashboardActivity.this, "Kopiert", Toast.LENGTH_SHORT).show();
-                }
-            });
+            copyClick(imageButtonCopyTwo, infoL);
         }else{
             layoutInfoTwo.setVisibility(View.GONE);
         }
@@ -549,15 +515,7 @@ public class DashboardActivity extends AppCompatActivity {
         if (!infoE.equals("")){
             emptyCard=false;
             infoThree.setText("E-Mail:\n"+infoE);
-            imageButtonCopyThree.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-                    ClipData clip = ClipData.newPlainText("", infoE);
-                    clipboard.setPrimaryClip(clip);
-                    Toast.makeText(DashboardActivity.this, "Kopiert", Toast.LENGTH_SHORT).show();
-                }
-            });
+            copyClick(imageButtonCopyThree, infoE);
         }else{
             layoutInfoThree.setVisibility(View.GONE);
         }
@@ -616,10 +574,13 @@ public class DashboardActivity extends AppCompatActivity {
         if (configurationModus==false){
             userConfigurationOfDashboard();
             loadUserInteraction();
-            if (isNetworkAvailable(DashboardActivity.this)){
+            if (NetworkAvailability.check(DashboardActivity.this)){
+                card_dash_mealPlan.setVisibility(View.VISIBLE);
+                card_dash_calendar.setVisibility(View.VISIBLE);
+                card_dash_kvv.setVisibility(View.VISIBLE);
                loadMealPlan();
                loadCalendar();
-                loadKvv();
+               loadKvv();
             }else{
                 card_dash_mealPlan.setVisibility(View.GONE);
                 card_dash_calendar.setVisibility(View.GONE);
@@ -636,11 +597,7 @@ public class DashboardActivity extends AppCompatActivity {
         sp = getSharedPreferences(dashboardSettings, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
         if (configurationModus==false){ //User can configure his dashboard
-
             item.setIcon(getResources().getDrawable(R.drawable.ic_done));
-
-
-          // item.setBackground(getResources().getDrawable(R.drawable.ic_done));
             Toast.makeText(DashboardActivity.this, " Wählen sie Cards, die ausblenden oder wieder einblenden möchten", Toast.LENGTH_LONG).show();
             card_dash_calendar.setVisibility(View.VISIBLE);
             card_dash_pi.setVisibility(View.VISIBLE);
@@ -668,7 +625,6 @@ public class DashboardActivity extends AppCompatActivity {
                 card_dash_kvv.setStrokeColor(ColorUtils.setAlphaComponent(card_dash_kvv.getStrokeColor(),50));
                 card_dash_kvv_layout.setBackgroundColor(ColorUtils.setAlphaComponent(card_dash_kvv.getStrokeColor(),50));
             }
-
             configurationModus=true;
         } else{
            item.setIcon(getResources().getDrawable(R.drawable.ic_construction));
