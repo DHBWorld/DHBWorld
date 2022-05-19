@@ -285,75 +285,26 @@ public class DashboardActivity extends AppCompatActivity {
                                 Duration durationUntilStartOfClass = Duration.between(now, startClass);
                                 Duration durationUntilEndOfClass = Duration.between(now, endClass);
 
-                                LinearLayout layoutNextClass = new LinearLayout(DashboardActivity.this);
-                                layoutNextClass.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                                layoutNextClass.setOrientation(LinearLayout.HORIZONTAL);
-                                layoutNextClass.setVerticalGravity(View.TEXT_ALIGNMENT_CENTER);
-                                layoutNextClass.setGravity(Gravity.CENTER_VERTICAL);
-                                layoutCardCalendar.addView(layoutNextClass);
+                                LinearLayout layoutNextClass = findViewById(R.id.layoutNextClass);
+                                ImageView UniImage = findViewById(R.id.imageViewCalendar);
+                                TextView nextClassView = findViewById(R.id.nextClassView);
 
-                                ImageView UniImage = new ImageView(DashboardActivity.this);
-                                UniImage.setLayoutParams(new ViewGroup.LayoutParams(65, 65));
-                                UniImage.setPadding(0, 7, 10, 0);
-                                layoutNextClass.addView(UniImage);
 
                                 if ((durationUntilStartOfClass.toHours() <= 8) && (durationUntilEndOfClass.toMinutes() >= 0)) {
-
-                                    TextView nextClassView = new TextView(DashboardActivity.this);
-                                    nextClassView.setTextSize(15);
-                                    nextClassView.setLayoutParams(new ViewGroup.LayoutParams(560, ViewGroup.LayoutParams.MATCH_PARENT));
-                                    nextClassView.setGravity(Gravity.CENTER_VERTICAL);
-                                    nextClassView.setTextColor(getResources().getColor(R.color.black));
-                                    nextClassView.setPadding(0, 7, 5, 0);
-                                    layoutNextClass.addView(nextClassView);
-
                                     UniImage.setImageResource(R.drawable.ic_uni);
                                     nextClassView.setText(nextClass.getTitle());
 
-                                    LinearLayout layoutTime = new LinearLayout(DashboardActivity.this);
-                                    layoutTime.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                                    layoutTime.setOrientation(LinearLayout.VERTICAL);
-                                    layoutTime.setVerticalGravity(View.TEXT_ALIGNMENT_CENTER);
-                                    layoutNextClass.addView(layoutTime);
+                                    LinearLayout layoutTime = findViewById(R.id.layoutTimeCalendarCard);
+                                    LinearLayout layoutTimeDigit = findViewById(R.id.layoutTimeDigit);
 
-                                    LinearLayout layoutTimeDigit = new LinearLayout(DashboardActivity.this);
-                                    layoutTimeDigit.setLayoutParams(new ViewGroup.LayoutParams(235, 120));
-                                    layoutTimeDigit.setOrientation(LinearLayout.HORIZONTAL);
-                                    layoutTime.setPadding(5, 0, 5, 0);
-                                    layoutTime.setVerticalGravity(Gravity.CENTER);
-                                    layoutTime.setHorizontalGravity(Gravity.RIGHT);
 
-                                    layoutTimeDigit.setBackgroundColor(getColor(R.color.grey_defect));
-                                    layoutTime.addView(layoutTimeDigit);
-
-                                    TextView timeView = new TextView(DashboardActivity.this);
-                                    timeView.setTextSize(23);
-                                    timeView.setTextColor(getResources().getColor(R.color.black));
+                                    TextView timeView = findViewById(R.id.timeViewCalendarDashboard);
                                     timeView.setText(nextClass.getStartTime());
-                                    timeView.setGravity(Gravity.CENTER);
-                                    timeView.setPadding(12, 12, 0, 0);
-                                    timeView.setLayoutParams(new ViewGroup.LayoutParams(150, ViewGroup.LayoutParams.WRAP_CONTENT));
-                                    layoutTimeDigit.addView(timeView);
 
 
-                                    TextView timeViewMin = new TextView(DashboardActivity.this);
-                                    timeViewMin.setTextSize(12);
-                                    timeViewMin.setTextColor(getResources().getColor(R.color.black));
-                                    timeViewMin.setText("Min");
-                                    timeViewMin.setGravity(Gravity.CENTER);
-                                    timeViewMin.setPadding(0, 0, 0, 0);
-                                    timeViewMin.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                                    layoutTimeDigit.addView(timeViewMin);
+                                    TextView timeViewMin = findViewById(R.id.timeViewMinCalendarDashboard);
+                                    TextView letterTimeView = findViewById(R.id.letterTimeViewCalendarDashboard);
 
-                                    TextView letterTimeView = new TextView(DashboardActivity.this);
-                                    letterTimeView.setTextSize(12);
-                                    letterTimeView.setTextColor(getResources().getColor(R.color.black));
-                                    letterTimeView.setGravity(Gravity.CENTER);
-
-                                    letterTimeView.setPadding(0, 2, 0, 5);
-                                    letterTimeView.setLayoutParams(new ViewGroup.LayoutParams(235, ViewGroup.LayoutParams.WRAP_CONTENT));
-                                    letterTimeView.setBackgroundColor(getColor(R.color.even_lighter_gray));
-                                    layoutTime.addView(letterTimeView);
 
                                     if (durationUntilStartOfClass.toMinutes() >= 0) {
 
@@ -400,7 +351,7 @@ public class DashboardActivity extends AppCompatActivity {
                                 } else if (durationUntilStartOfClass.toHours() > 9) {
                                     UniImage.setImageResource(R.drawable.ic_celebration);
 
-                                    TextView nextClassView = new TextView(DashboardActivity.this);
+
                                     nextClassView.setTextSize(15);
                                     nextClassView.setLayoutParams(new ViewGroup.LayoutParams(760, ViewGroup.LayoutParams.MATCH_PARENT));
                                     nextClassView.setGravity(Gravity.CENTER_VERTICAL);
