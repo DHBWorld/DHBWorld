@@ -337,7 +337,7 @@
                                 android:id="@+id/buttonCardKvv"
                                 android:stateListAnimator="@null"
                                 android:layout_width="30dp"
-                                android:layout_height="50dp" />
+                                android:layout_height="match_parent" />
                         </LinearLayout>
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
@@ -530,7 +530,7 @@
                                 android:id="@+id/buttonCardPI"
                                 android:stateListAnimator="@null"
                                 android:layout_width="30dp"
-                                android:layout_height="50dp" />
+                                android:layout_height="match_parent" />
                         </LinearLayout>
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
