@@ -476,53 +476,45 @@ public class DashboardActivity extends AppCompatActivity {
     private void loadPersonalInformation(){
         String MyPREFERENCES = "myPreferencesKey" ;
         SharedPreferences sp = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
-        LinearLayout layoutInfoOne = findViewById(R.id.layoutInfoOne);
-        LinearLayout layoutInfoTwo = findViewById(R.id.layoutInfoTwo);
-        LinearLayout layoutInfoThree = findViewById(R.id.layoutInfoThree);
-        ImageButton imageButtonCopyOne = findViewById(R.id.imageButtonCopyOne);
-        ImageButton imageButtonCopyTwo = findViewById(R.id.imageButtonCopyTwo);
-        ImageButton imageButtonCopyThree = findViewById(R.id.imageButtonCopyThree);
-        TextView infoOne = findViewById(R.id.textViewPersonalInfoOne);
-        TextView infoTwo = findViewById(R.id.textViewPersonalInfoTwo);
-        TextView infoThree = findViewById(R.id.textViewPersonalInfoThree);
-        imageButtonCopyOne.setVisibility(View.VISIBLE);
-        imageButtonCopyTwo.setVisibility(View.VISIBLE);
-        imageButtonCopyThree.setVisibility(View.VISIBLE);
-        layoutInfoOne.setVisibility(View.VISIBLE);
-        layoutInfoTwo.setVisibility(View.VISIBLE);
-        layoutInfoThree.setVisibility(View.VISIBLE);
+
+        LinearLayout[] layoutInfo = new LinearLayout[3];
+        layoutInfo[0] = findViewById(R.id.layoutInfoOne);
+        layoutInfo[1] = findViewById(R.id.layoutInfoTwo);
+        layoutInfo[2] = findViewById(R.id.layoutInfoThree);
+        ImageButton[] imageButtonCopy = new ImageButton[3];
+        imageButtonCopy[0] = findViewById(R.id.imageButtonCopyOne);
+        imageButtonCopy[1] = findViewById(R.id.imageButtonCopyTwo);
+        imageButtonCopy[2] = findViewById(R.id.imageButtonCopyThree);
+        TextView[] infoView = new TextView[3];
+        infoView[0] = findViewById(R.id.textViewPersonalInfoOne);
+        infoView[1] = findViewById(R.id.textViewPersonalInfoTwo);
+        infoView[2] = findViewById(R.id.textViewPersonalInfoThree);
+        String[] markerTitle = new String[3];
+        markerTitle[0]="Matrikelnummer:\n";
+        markerTitle[1]="Bibliotheksnummer:\n" ;
+        markerTitle[2]="E-Mail:\n" ;
         Boolean emptyCard=true;
-        String infoM= sp.getString("matriculationNumberKey", "");
+        String[] info = new String[3];
+        info[0]=sp.getString("matriculationNumberKey", "");
+        info[1]=sp.getString("libraryNumberKey", "");
+        info[2]=sp.getString("studentMailKey", "");
 
-
-
-        if (!infoM.equals("")){
-            emptyCard=false;
-            infoOne.setText("Matrikelnummer:\n"+infoM);
-            copyClick(imageButtonCopyOne, infoM);
-        }else{
-            layoutInfoOne.setVisibility(View.GONE);
-        }
-        String infoL= sp.getString("libraryNumberKey", "");
-        if (!infoL.equals("")){
-            emptyCard=false;
-            infoTwo.setText("Bibliotheksnummer:\n"+infoL);
-            copyClick(imageButtonCopyTwo, infoL);
-        }else{
-            layoutInfoTwo.setVisibility(View.GONE);
-        }
-        String infoE= sp.getString("studentMailKey", "");
-        if (!infoE.equals("")){
-            emptyCard=false;
-            infoThree.setText("E-Mail:\n"+infoE);
-            copyClick(imageButtonCopyThree, infoE);
-        }else{
-            layoutInfoThree.setVisibility(View.GONE);
+        for (int i=0;i<3;i++){
+            layoutInfo[i].setVisibility(View.VISIBLE);
+            imageButtonCopy[i].setVisibility(View.VISIBLE);
+            if (!info[i].equals("")){
+                emptyCard=false;
+                infoView[i].setText( markerTitle[i]+info[i]);
+                copyClick(imageButtonCopy[i], info[i]);
+            }else{
+                layoutInfo[i].setVisibility(View.GONE);
+            }
         }
         if (emptyCard){
-            imageButtonCopyOne.setVisibility(View.GONE);
-            infoOne.setText("Sie haben noch keine persönlichen Daten gespeichert");
-          }
+            layoutInfo[0].setVisibility(View.VISIBLE);
+            imageButtonCopy[0].setVisibility(View.GONE);
+            infoView[0].setText("Sie haben noch keine persönlichen Daten gespeichert");
+        }
     }
 
     private void loadMealPlan(){
