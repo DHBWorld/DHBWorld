@@ -260,7 +260,7 @@ public class DashboardActivity extends AppCompatActivity {
         TextView timeView = findViewById(R.id.timeViewCalendarDashboard);
         TextView timeViewMin = findViewById(R.id.timeViewMinCalendarDashboard);
         TextView letterTimeView = findViewById(R.id.letterTimeViewCalendarDashboard);
-        timeViewMin.setVisibility(View.VISIBLE);
+
         if (!(url ==null) && (!url.equals(""))) {
             new Thread(new Runnable() {
                 @Override
@@ -281,12 +281,14 @@ public class DashboardActivity extends AppCompatActivity {
                                     UniImage.setImageResource(R.drawable.ic_uni);
                                     nextClassView.setText(nextClass.getTitle());
                                     timeView.setText(nextClass.getStartTime());
+                                    timeViewMin.setVisibility(View.VISIBLE);
+                                    timeViewMin.setText(" Min");
                                     if (durationUntilStartOfClass.toMinutes() >= 0) {
                                         new CountDownTimer(durationUntilStartOfClass.toMinutes() * 60000, 60000) {
                                             public void onTick(long millisUtilFinished) {
                                                 timeView.setText(Long.toString(millisUtilFinished / 60000 + 1));
                                                 letterTimeView.setText("start in ");
-                                                timeViewMin.setText("Min");
+                                                timeViewMin.setText(" Min");
                                             }
                                             @Override
                                             public void onFinish() {
@@ -300,7 +302,7 @@ public class DashboardActivity extends AppCompatActivity {
                                             public void onTick(long millisUtilFinished) {
                                                 timeView.setText(Long.toString(millisUtilFinished / 60000 + 1));
                                                 letterTimeView.setText("end in ");
-                                                timeViewMin.setText("Min");
+                                                timeViewMin.setText(" Min");
                                             }
                                             @Override
                                             public void onFinish() {
@@ -312,7 +314,7 @@ public class DashboardActivity extends AppCompatActivity {
                                             }
                                         }.start();
                                     }
-                                } else if (durationUntilStartOfClass.toHours() > 9) {
+                                } else {
                                     UniImage.setImageResource(R.drawable.ic_uni);
                                     nextClassView.setText(nextClass.getTitle());
                                     timeView.setText(nextClass.getStartTime());
@@ -594,19 +596,23 @@ public class DashboardActivity extends AppCompatActivity {
         }
 
     public void refreshClick(@NonNull MenuItem item) throws NullPointerException{
-        userConfigurationOfDashboard();
-        loadUserInteraction();
-        if (isNetworkAvailable(DashboardActivity.this)){
-           loadMealPlan();
-           loadCalendar();
-            loadKvv();
-        }else{
-            card_dash_mealPlan.setVisibility(View.GONE);
-            card_dash_calendar.setVisibility(View.GONE);
-            card_dash_kvv.setVisibility(View.GONE);
-            Toast.makeText(DashboardActivity.this, "Sie haben keine Internet-Verbindung, deshalb können die Daten nicht geladen werden.", Toast.LENGTH_LONG).show();
+        if (configurationModus==false){
+            userConfigurationOfDashboard();
+            loadUserInteraction();
+            if (isNetworkAvailable(DashboardActivity.this)){
+               loadMealPlan();
+               loadCalendar();
+                loadKvv();
+            }else{
+                card_dash_mealPlan.setVisibility(View.GONE);
+                card_dash_calendar.setVisibility(View.GONE);
+                card_dash_kvv.setVisibility(View.GONE);
+                Toast.makeText(DashboardActivity.this, "Sie haben keine Internet-Verbindung, deshalb können die Daten nicht geladen werden.", Toast.LENGTH_LONG).show();
+            }
+            loadPersonalInformation();
+        }else {
+            Toast.makeText(DashboardActivity.this, "Sie sind in Konfiguration-Modus, keine Aktualisierung ist möglich", Toast.LENGTH_LONG).show();
         }
-        loadPersonalInformation();
     }
 
     public void configurationClick(@NonNull MenuItem item) throws NullPointerException{

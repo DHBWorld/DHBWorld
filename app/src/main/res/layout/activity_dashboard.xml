@@ -42,8 +42,6 @@
             android:layout_height="match_parent"
             android:layout_below="@id/topAppBarLayout"
             android:background="@color/white">
-
-
             <LinearLayout
                 android:id="@+id/layoutDashboardCards"
                 android:layout_width="match_parent"
@@ -51,8 +49,6 @@
                 android:background="@color/white"
                 android:orientation="vertical"
                 android:padding="15dp">
-
-
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/card_dash_userInteraction"
                     android:layout_width="match_parent"
@@ -60,14 +56,12 @@
                     app:cardElevation="0dp"
                     app:strokeColor="@color/grey_light"
                     app:strokeWidth="3dp">
-
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:background="@color/grey_light"
                         android:orientation="horizontal"
                         android:gravity="center">
-
                         <ImageView
                             android:id="@+id/imageBox_dashboard_canteen"
                             android:layout_width="50dp"
@@ -77,8 +71,6 @@
                             android:scaleType="centerCrop"
                             app:srcCompat="@drawable/ic_baseline_restaurant_24"
                             app:tint="@color/grey_light" />
-
-
                         <ImageView
                             android:id="@+id/imageBox_dashboard_coffee"
                             android:layout_width="50dp"
@@ -86,8 +78,6 @@
                             android:background="@color/white"
                             android:scaleType="centerCrop"
                             app:srcCompat="@drawable/baseline_coffee_maker_24" />
-
-
                         <ImageView
                             android:id="@+id/imageBox_dashboard_printer"
                             android:layout_width="50dp"
@@ -96,9 +86,7 @@
                             android:background="@color/white"
                             android:scaleType="centerCrop"
                             app:srcCompat="@drawable/ic_baseline_print_24" />
-
                     </LinearLayout>
-
                 </com.google.android.material.card.MaterialCardView>
 
 
@@ -112,25 +100,18 @@
                     app:strokeColor="@color/red"
                     android:checkable="true"
                     app:strokeWidth="3dp">
-
                     <LinearLayout
                         android:id="@+id/card_dash_calendar_layout"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:background="@color/red"
-                        android:orientation="horizontal"
-                        >
-
+                        android:orientation="horizontal"     >
                         <Button
-
                             android:id="@+id/buttonCardCalendar"
                             android:layout_width="30dp"
                             android:layout_height="match_parent"
-                            android:stateListAnimator="@null"
-                            />
-
+                            android:stateListAnimator="@null" />
                         <LinearLayout
-
                             android:id="@+id/layoutCardCalendar"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
@@ -139,56 +120,39 @@
                             android:paddingRight="10dp"
                             android:paddingLeft="5dp"
                             android:paddingVertical="10dp">
-
-
                             <LinearLayout
-
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:orientation="horizontal"
-
                                 android:gravity="center">
-
                                 <ImageView
                                     android:id="@+id/imageViewCalendar"
                                     android:layout_width="20dp"
                                     android:layout_height="20dp"
                                     android:layout_marginRight="3dp"
                                     android:background="@drawable/ic_uni"/>
-
                                 <TextView
+                                    android:text="\???"
                                     android:layout_weight="1"
                                     android:paddingRight="7dp"
                                     android:id="@+id/nextClassView"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:textColor="@color/black"
-
-
                                     android:textSize="15sp" />
-
                                 <LinearLayout
-
                                     android:layout_weight="1.5"
-
                                     android:id="@+id/layoutTimeCalendarCard"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:orientation="vertical"
                                     android:gravity="right">
-
                                     <LinearLayout
-
-
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:orientation="vertical"
-
                                         android:gravity="center">
-
                                     <LinearLayout
-
-
                                         android:padding="7dp"
                                         android:id="@+id/layoutTimeDigit"
                                         android:layout_width="90dp"
@@ -196,24 +160,19 @@
                                         android:orientation="horizontal"
                                         android:gravity="center"
                                         android:background="@color/grey_defect">
-
-
                                         <TextView
+                                            android:text="\??:??"
                                             android:id="@+id/timeViewCalendarDashboard"
                                             android:layout_width="wrap_content"
                                             android:textSize="23dp"
                                             android:textColor="@color/black"
                                             android:layout_height="wrap_content"/>
-
                                         <TextView
                                             android:layout_gravity="center"
-
                                             android:id="@+id/timeViewMinCalendarDashboard"
                                             android:layout_width="wrap_content"
                                             android:gravity="center_vertical"
                                             android:textSize="12dp"
-                                            android:paddingLeft="5dp"
-                                            android:text="Min"
                                             android:textColor="@color/black"
                                             android:layout_height="match_parent"/>
                                     </LinearLayout>
@@ -227,28 +186,16 @@
                                         android:background="@color/even_lighter_gray"
                                         android:textColor="@color/black"
                                         android:layout_height="wrap_content"/>
-
-
-
-
                                 </LinearLayout>
-
                                 </LinearLayout>
-
-
-
                             </LinearLayout>
-
-
                         </LinearLayout>
-
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
 
 
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/card_dash_kvv"
-
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
@@ -256,21 +203,16 @@
                     app:cardElevation="0dp"
                     app:strokeColor="@color/grey_light"
                     app:strokeWidth="3dp">
-
                     <LinearLayout
-
                         android:id="@+id/card_dash_kvv_layout"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:background="@color/grey_light"
                         android:orientation="horizontal"
                         android:paddingRight="30dp">
-
-
                         <LinearLayout
                             android:id="@+id/layoutCardKvv"
                             android:layout_width="match_parent"
-
                             android:layout_height="match_parent"
                             android:background="@color/white"
                             android:orientation="vertical"
@@ -278,52 +220,40 @@
                             android:paddingTop="15dp"
                             android:paddingEnd="15dp"
                             android:paddingBottom="15dp">
-
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:orientation="horizontal">
-
-
                                 <ImageView
                                     android:id="@+id/imageViewTramOne"
                                     android:layout_width="20dp"
                                     android:layout_height="20dp"
                                     android:layout_marginRight="3dp"
                                     android:background="@drawable/ic_tram"/>
-
                                 <TextView
+                                    android:text="\???"
                                     android:id="@+id/textViewTramLineOne"
                                     android:layout_weight="0.3"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:textColor="@color/black"
                                     android:textSize="15sp" />
-
                                 <TextView
                                     android:id="@+id/textViewTramPlatformOne"
                                     android:layout_weight="0.3"
                                     android:paddingHorizontal="7dp"
-
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:textColor="@color/black"
                                     android:textSize="15sp" />
                                 <TextView
-
                                     android:id="@+id/textViewTramTimeOne"
                                     android:layout_weight="0.3"
                                     android:paddingLeft="7dp"
-
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:textColor="@color/black"
                                     android:textSize="15sp" />
-
-
-
-
-
                             </LinearLayout>
                             <LinearLayout
                                 android:layout_weight="1"
@@ -332,33 +262,28 @@
                                 android:layout_height="wrap_content"
                                 android:paddingVertical="7dp"
                                 android:orientation="horizontal">
-
-
                                 <ImageView
                                     android:layout_width="20dp"
                                     android:layout_height="20dp"
                                     android:layout_marginRight="3dp"
                                     android:background="@drawable/ic_tram"/>
-
                                 <TextView
+                                    android:text="\???"
                                     android:id="@+id/textViewTramLineTwo"
                                     android:layout_weight="0.3"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:textColor="@color/black"
                                     android:textSize="15sp" />
-
                                 <TextView
                                     android:id="@+id/textViewTramPlatformTwo"
                                     android:layout_weight="0.3"
                                     android:paddingHorizontal="7dp"
-
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:textColor="@color/black"
                                     android:textSize="15sp" />
                                 <TextView
-
                                     android:id="@+id/textViewTramTimeTwo"
                                     android:layout_weight="0.3"
                                     android:paddingLeft="7dp"
@@ -366,33 +291,25 @@
                                     android:layout_height="wrap_content"
                                     android:textColor="@color/black"
                                     android:textSize="15sp" />
-
-
-
-
-
                             </LinearLayout>
-
                             <LinearLayout
                                 android:id="@+id/layoutDepartureThree"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:orientation="horizontal">
-
                                 <ImageView
                                     android:layout_width="20dp"
                                     android:layout_height="20dp"
                                     android:layout_marginRight="3dp"
                                     android:background="@drawable/ic_tram"/>
-
                                 <TextView
+                                    android:text="\???"
                                     android:id="@+id/textViewTramLineThree"
                                     android:layout_weight="0.3"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:textColor="@color/black"
                                     android:textSize="15sp" />
-
                                 <TextView
                                     android:id="@+id/textViewTramPlatformThree"
                                     android:layout_weight="0.3"
@@ -402,7 +319,6 @@
                                     android:textColor="@color/black"
                                     android:textSize="15sp" />
                                 <TextView
-
                                     android:id="@+id/textViewTramTimeThree"
                                     android:layout_weight="0.3"
                                     android:paddingLeft="7dp"
@@ -410,36 +326,19 @@
                                     android:layout_height="wrap_content"
                                     android:textColor="@color/black"
                                     android:textSize="15sp" />
-
-
-
-
-
                             </LinearLayout>
-
-
                         </LinearLayout>
                         <LinearLayout
-
                             android:layout_width="30dp"
-
                             android:layout_height="match_parent"
                             android:background="@color/white"
-                            android:orientation="vertical"
-                           >
+                            android:orientation="vertical">
                             <Button
-
                                 android:id="@+id/buttonCardKvv"
-
                                 android:stateListAnimator="@null"
                                 android:layout_width="30dp"
                                 android:layout_height="50dp" />
-
-
                         </LinearLayout>
-
-
-
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
 
@@ -452,25 +351,18 @@
                     app:cardElevation="0dp"
                     app:strokeColor="@color/red"
                     app:strokeWidth="3dp">
-
                     <LinearLayout
                         android:id="@+id/card_dash_mealPlan_layout"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:background="@color/red"
-                        android:orientation="horizontal"
-                        >
+                        android:orientation="horizontal">
                         <Button
-
                             android:id="@+id/buttonCardMealPlan"
                             android:layout_width="30dp"
                             android:stateListAnimator="@null"
-                            android:layout_height="match_parent"
-                           />
-
-
+                            android:layout_height="match_parent" />
                         <LinearLayout
-
                             android:id="@+id/layoutCardMealPlan"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
@@ -479,26 +371,21 @@
                             android:paddingRight="30dp"
                             android:paddingLeft="10dp"
                             android:paddingVertical="10dp">
-
-
-
                             <LinearLayout
                                 android:id="@+id/layoutMealOne"
-
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:orientation="horizontal"
                                 android:paddingTop="7dp"
                                >
-
                                 <ImageView
                                     android:id="@+id/imageViewMeal"
                                     android:layout_width="20dp"
                                     android:layout_height="20dp"
                                     android:layout_marginRight="3dp"
                                     android:background="@drawable/ic_restaurant"/>
-
                                 <TextView
+                                    android:text="\???"
                                     android:id="@+id/textViewMealOne"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
@@ -510,57 +397,45 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:orientation="horizontal"
-                                android:paddingVertical="7dp"
-                               >
-
+                                android:paddingVertical="7dp">
                                 <ImageView
                                     android:layout_width="20dp"
                                     android:layout_height="20dp"
                                     android:layout_marginRight="3dp"
                                     android:background="@drawable/ic_restaurant"/>
-
                                 <TextView
+                                    android:text="\???"
                                     android:id="@+id/textViewMealTwo"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:textColor="@color/black"
                                     android:textSize="15sp" />
                             </LinearLayout>
-
                             <LinearLayout
                                 android:id="@+id/layoutMealThree"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:orientation="horizontal"
-                                android:paddingBottom="7dp"
-                                >
-
+                                android:paddingBottom="7dp">
                                 <ImageView
                                     android:layout_width="20dp"
                                     android:layout_height="20dp"
                                     android:layout_marginRight="3dp"
                                     android:background="@drawable/ic_restaurant"/>
-
                                 <TextView
+                                    android:text="\???"
                                     android:id="@+id/textViewMealThree"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:textColor="@color/black"
                                     android:textSize="15sp" />
                             </LinearLayout>
-
-
-
                         </LinearLayout>
-
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
 
-
-
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/card_dash_pi"
-
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
@@ -568,21 +443,16 @@
                     app:cardElevation="0dp"
                     app:strokeColor="@color/grey_light"
                     app:strokeWidth="3dp">
-
                     <LinearLayout
-
                         android:id="@+id/card_dash_pi_layout"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:background="@color/grey_light"
                         android:orientation="horizontal"
                         android:paddingRight="30dp">
-
-
                         <LinearLayout
                             android:id="@+id/layoutCardPI"
                             android:layout_width="match_parent"
-
                             android:layout_height="match_parent"
                             android:background="@color/white"
                             android:orientation="vertical"
@@ -590,37 +460,25 @@
                             android:paddingTop="15dp"
                             android:paddingEnd="15dp"
                             android:paddingBottom="15dp">
-
-
-
                                 <LinearLayout
                                     android:paddingTop="7dp"
                                     android:id="@+id/layoutInfoOne"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:orientation="horizontal">
-
-
                                     <ImageButton
                                         android:id="@+id/imageButtonCopyOne"
                                         android:layout_width="20dp"
                                         android:layout_height="20dp"
                                         android:layout_marginRight="3dp"
                                         android:background="@drawable/ic_copy"/>
-
                                     <TextView
+                                        android:text="\???"
                                         android:id="@+id/textViewPersonalInfoOne"
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:textColor="@color/black"
                                         android:textSize="13sp" />
-
-
-
-
-
-
-
                                 </LinearLayout>
                                 <LinearLayout
                                     android:id="@+id/layoutInfoTwo"
@@ -628,94 +486,56 @@
                                     android:layout_height="wrap_content"
                                     android:orientation="horizontal"
                                     android:paddingVertical="7dp">
-
-
                                     <ImageButton
                                         android:id="@+id/imageButtonCopyTwo"
                                         android:layout_width="20dp"
                                         android:layout_height="20dp"
                                         android:layout_marginRight="3dp"
                                         android:background="@drawable/ic_copy"/>
-
                                     <TextView
+                                        android:text="\???"
                                         android:id="@+id/textViewPersonalInfoTwo"
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:textColor="@color/black"
                                         android:textSize="13sp" />
-
-
-
-
-
-
-
                                 </LinearLayout>
-
                                 <LinearLayout
                                     android:id="@+id/layoutInfoThree"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:paddingBottom="7dp"
                                     android:orientation="horizontal">
-
                                     <ImageButton
                                         android:id="@+id/imageButtonCopyThree"
                                         android:layout_width="20dp"
                                         android:layout_height="20dp"
                                         android:layout_marginRight="3dp"
                                         android:background="@drawable/ic_copy"/>
-
                                     <TextView
+                                        android:text="\???"
                                         android:id="@+id/textViewPersonalInfoThree"
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:textColor="@color/black"
                                         android:textSize="13sp" />
-
-
-
-
-
-
-
-
-
-
                             </LinearLayout>
-
-
                         </LinearLayout>
                         <LinearLayout
-
                             android:layout_width="30dp"
-
                             android:layout_height="match_parent"
                             android:background="@color/white"
-                            android:orientation="vertical"
-                            >
+                            android:orientation="vertical">
                             <Button
-
                                 android:id="@+id/buttonCardPI"
-
                                 android:stateListAnimator="@null"
                                 android:layout_width="30dp"
                                 android:layout_height="50dp" />
-
-
                         </LinearLayout>
-
-
-
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
-
-
             </LinearLayout>
-
-
         </ScrollView>
-
     </RelativeLayout>
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/navigationView"
