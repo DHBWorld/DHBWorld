@@ -44,6 +44,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.card.MaterialCardView;
+import com.google.android.material.progressindicator.CircularProgressIndicator;
 import com.google.firebase.auth.FirebaseUser;
 import com.main.dhbworld.CantineClasses.MealDailyPlan;
 import com.main.dhbworld.Enums.InteractionState;
@@ -103,6 +104,7 @@ public class DashboardActivity extends AppCompatActivity {
     private LinearLayout card_dash_pi_layout;
     private LinearLayout card_dash_kvv_layout;
     private LinearLayout card_dash_mealPlan_layout;
+    private CircularProgressIndicator progressIndicator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -261,6 +263,18 @@ public class DashboardActivity extends AppCompatActivity {
 
     }
 
+    private void loadProgressIndikator(LinearLayout layoutCard){
+
+
+            progressIndicator = new CircularProgressIndicator(DashboardActivity.this);
+            progressIndicator.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            progressIndicator.setIndeterminate(true);
+            progressIndicator.setPadding(400,0,400,0);
+            layoutCard.addView(progressIndicator);
+            progressIndicator.setVisibility(View.VISIBLE);
+
+    }
+
     private void loadCalendar(){
         SharedPreferences preferences = PreferenceManager
                 .getDefaultSharedPreferences(DashboardActivity.this);
@@ -275,6 +289,19 @@ public class DashboardActivity extends AppCompatActivity {
         TextView letterTimeView = findViewById(R.id.letterTimeViewCalendarDashboard);
 
         if (!(url ==null) && (!url.equals(""))) {
+            UniImage.setVisibility(View.GONE);
+            nextClassView.setVisibility(View.GONE);
+            timeView.setVisibility(View.GONE);
+            timeViewMin.setVisibility(View.GONE);
+            letterTimeView.setVisibility(View.GONE);
+            layoutTimeDigit.setVisibility(View.GONE);
+            ProgressIndicator indicator= new ProgressIndicator(DashboardActivity.this, layoutCardCalendar);
+            indicator.show();
+
+
+
+
+
             new Thread(new Runnable() {
                 @Override
                 public void run() {
@@ -291,6 +318,16 @@ public class DashboardActivity extends AppCompatActivity {
                                 Duration durationUntilStartOfClass = Duration.between(now, startClass);
                                 Duration durationUntilEndOfClass = Duration.between(now, endClass);
                                 if ((durationUntilStartOfClass.toHours() <= 8) && (durationUntilEndOfClass.toMinutes() >= 0)) {
+
+
+                                    indicator.hide();
+                                    UniImage.setVisibility(View.VISIBLE);
+                                    nextClassView.setVisibility(View.VISIBLE);
+                                    timeView.setVisibility(View.VISIBLE);
+                                    timeViewMin.setVisibility(View.VISIBLE);
+                                    letterTimeView.setVisibility(View.VISIBLE);
+                                    layoutTimeDigit.setVisibility(View.VISIBLE);
+
                                     UniImage.setImageResource(R.drawable.ic_uni);
                                     nextClassView.setText(nextClass.getTitle());
                                     timeView.setText(nextClass.getStartTime());
@@ -366,31 +403,37 @@ public class DashboardActivity extends AppCompatActivity {
     }
 
     private void loadKvv(){
+        ProgressIndicator indicator= new ProgressIndicator(DashboardActivity.this, layoutCardKvv);
+        indicator.show();
+        ImageView tramImageOne= findViewById(R.id.imageViewTramOne);
+        TextView tramViewOne = findViewById(R.id.textViewTramLineOne);
+        TextView platformViewOne = findViewById(R.id.textViewTramPlatformOne);
+        TextView timeViewOne = findViewById(R.id.textViewTramTimeOne);
+        LinearLayout layoutTramTwo = findViewById(R.id.layoutDepartureTwo);
+        TextView tramViewTwo = findViewById(R.id.textViewTramLineTwo);
+        TextView platformViewTwo = findViewById(R.id.textViewTramPlatformTwo);
+        TextView timeViewTwo = findViewById(R.id.textViewTramTimeTwo);
+        LinearLayout layoutTramThree = findViewById(R.id.layoutDepartureThree);
+        LinearLayout layoutTramOne = findViewById(R.id.layoutDepartureOne);
+        TextView tramViewThree = findViewById(R.id.textViewTramLineThree);
+        TextView platformViewThree = findViewById(R.id.textViewTramPlatformThree);
+        TextView timeViewThree = findViewById(R.id.textViewTramTimeThree);
+        layoutTramOne.setVisibility(View.GONE);
+        layoutTramTwo.setVisibility(View.GONE);
+        layoutTramThree.setVisibility(View.GONE);
         KVVDataLoader dataLoader = new KVVDataLoader(this);
         dataLoader.setDataLoaderListener(new DataLoaderListener() {
             @Override
             public void onDataLoaded(ArrayList<Departure> departures, Disruption disruption) {
-                ImageView tramImageOne= findViewById(R.id.imageViewTramOne);
-                TextView tramViewOne = findViewById(R.id.textViewTramLineOne);
-                TextView platformViewOne = findViewById(R.id.textViewTramPlatformOne);
-                TextView timeViewOne = findViewById(R.id.textViewTramTimeOne);
-                LinearLayout layoutTramTwo = findViewById(R.id.layoutDepartureTwo);
-                TextView tramViewTwo = findViewById(R.id.textViewTramLineTwo);
-                TextView platformViewTwo = findViewById(R.id.textViewTramPlatformTwo);
-                TextView timeViewTwo = findViewById(R.id.textViewTramTimeTwo);
-                LinearLayout layoutTramThree = findViewById(R.id.layoutDepartureThree);
-                TextView tramViewThree = findViewById(R.id.textViewTramLineThree);
-                TextView platformViewThree = findViewById(R.id.textViewTramPlatformThree);
-                TextView timeViewThree = findViewById(R.id.textViewTramTimeThree);
-                layoutTramTwo.setVisibility(View.GONE);
-                layoutTramThree.setVisibility(View.GONE);
                 DateTimeFormatter formatter = DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT);
                 if (departures.size()<1){
+                    layoutTramOne.setVisibility(View.VISIBLE);
                     tramImageOne.setBackground(getDrawable(R.drawable.ic_pause));
                     platformViewOne.setVisibility(View.GONE);
                     timeViewOne.setVisibility(View.GONE);
                     tramViewOne.setText("Server Problem");
                 } if (departures.size()>0){
+                    layoutTramOne.setVisibility(View.VISIBLE);
                     tramViewOne.setText(departures.get(0).getLine().substring(departures.get(0).getLine().length()-1)+" ("+departures.get(0).getDestination()+")");
                     platformViewOne.setText(departures.get(0).getPlatform());
                     timeViewOne.setText(departures.get(0).getDepartureTime().format(formatter));
@@ -405,6 +448,7 @@ public class DashboardActivity extends AppCompatActivity {
                     platformViewThree.setText(departures.get(2).getPlatform());
                     timeViewThree.setText(departures.get(2).getDepartureTime().format(formatter));
                 }
+                indicator.hide();
             }
         });
         LocalDateTime now = LocalDateTime.now();
@@ -513,6 +557,21 @@ public class DashboardActivity extends AppCompatActivity {
     }
 
     private void loadMealPlan(){
+        ProgressIndicator indicator= new ProgressIndicator(DashboardActivity.this, layoutCardMealPlan);
+        indicator.show();
+        LinearLayout[] layoutMeal = new LinearLayout[3];
+        layoutMeal[0] = findViewById(R.id.layoutMealOne);
+        layoutMeal[1] = findViewById(R.id.layoutMealTwo);
+        layoutMeal[2] = findViewById(R.id.layoutMealThree);
+        TextView[] textViewMeal = new TextView[3];
+        textViewMeal[0] = findViewById(R.id.textViewMealOne);
+        textViewMeal[1] = findViewById(R.id.textViewMealTwo);
+        textViewMeal[2] = findViewById(R.id.textViewMealThree);
+
+        layoutMeal[0].setVisibility(View.GONE);
+        layoutMeal[1].setVisibility(View.GONE);
+        layoutMeal[2].setVisibility(View.GONE);
+
         new Thread(new Runnable() {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
@@ -521,14 +580,7 @@ public class DashboardActivity extends AppCompatActivity {
                 layoutCardMealPlan.post(new Runnable() {
                     @Override
                     public void run() {
-                        LinearLayout[] layoutMeal = new LinearLayout[3];
-                        layoutMeal[0] = findViewById(R.id.layoutMealOne);
-                        layoutMeal[1] = findViewById(R.id.layoutMealTwo);
-                        layoutMeal[2] = findViewById(R.id.layoutMealThree);
-                        TextView[] textViewMeal = new TextView[3];
-                        textViewMeal[0] = findViewById(R.id.textViewMealOne);
-                        textViewMeal[1] = findViewById(R.id.textViewMealTwo);
-                        textViewMeal[2] = findViewById(R.id.textViewMealThree);
+
                         ImageView imageViewMeal= findViewById(R.id.imageViewMeal);
                         imageViewMeal.setImageResource(R.drawable.ic_restaurant);
 
@@ -548,6 +600,10 @@ public class DashboardActivity extends AppCompatActivity {
                                 }
                             }
                         }
+                        layoutMeal[0].setVisibility(View.VISIBLE);
+                        layoutMeal[1].setVisibility(View.VISIBLE);
+                        layoutMeal[2].setVisibility(View.VISIBLE);
+                        indicator.hide();
                     }
                 });
             }
