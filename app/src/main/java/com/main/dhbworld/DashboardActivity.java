@@ -27,6 +27,8 @@ import android.widget.Toast;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.progressindicator.CircularProgressIndicator;
 import com.google.firebase.auth.FirebaseUser;
+import com.main.dhbworld.Calendar.CalendarActivity;
+import com.main.dhbworld.Calendar.nextEventsProvider;
 import com.main.dhbworld.Enums.InteractionState;
 import com.main.dhbworld.Firebase.CurrentStatusListener;
 import com.main.dhbworld.Firebase.SignedInListener;
@@ -89,7 +91,6 @@ public class DashboardActivity extends AppCompatActivity {
         layoutCardCalendar = findViewById(R.id.layoutCardCalendar);
         layoutCardKvv = findViewById(R.id.layoutCardKvv);
         layoutCardPI = findViewById(R.id.layoutCardPI);
-
         card_dash_calendar = findViewById(R.id.card_dash_calendar);
         card_dash_pi = findViewById(R.id.card_dash_pi);
         card_dash_kvv = findViewById(R.id.card_dash_kvv);
@@ -102,9 +103,6 @@ public class DashboardActivity extends AppCompatActivity {
            loadCalendar();
            loadKvv();
        }else{
-           card_dash_mealPlan.setVisibility(View.GONE);
-           card_dash_calendar.setVisibility(View.GONE);
-           card_dash_kvv.setVisibility(View.GONE);
            Toast.makeText(DashboardActivity.this, "Sie haben keine Internet-Verbindung, deshalb können die Daten nicht geladen werden.", Toast.LENGTH_LONG).show();
        }
        loadPersonalInformation();
@@ -112,7 +110,7 @@ public class DashboardActivity extends AppCompatActivity {
 
     private void userConfigurationOfDashboard(){
         sp = getSharedPreferences(dashboardSettings, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sp.edit();
+
 
         configurationModus=false;
         buttonCardCalendar= findViewById(R.id.buttonCardCalendar);
@@ -542,20 +540,23 @@ public class DashboardActivity extends AppCompatActivity {
         }
 
     public void refreshClick(@NonNull MenuItem item) throws NullPointerException{
+        item.setEnabled(false);
+        new CountDownTimer(10000,1000) {
+            public void onTick(long millisUtilFinished) {
+            }
+            @Override
+            public void onFinish() {
+                item.setEnabled(true);
+            }
+        }.start();
         if (configurationModus==false){
             userConfigurationOfDashboard();
             loadUserInteraction();
             if (NetworkAvailability.check(DashboardActivity.this)){
-                card_dash_mealPlan.setVisibility(View.VISIBLE);
-                card_dash_calendar.setVisibility(View.VISIBLE);
-                card_dash_kvv.setVisibility(View.VISIBLE);
                loadMealPlan();
                loadCalendar();
                loadKvv();
             }else{
-                card_dash_mealPlan.setVisibility(View.GONE);
-                card_dash_calendar.setVisibility(View.GONE);
-                card_dash_kvv.setVisibility(View.GONE);
                 Toast.makeText(DashboardActivity.this, "Sie haben keine Internet-Verbindung, deshalb können die Daten nicht geladen werden.", Toast.LENGTH_LONG).show();
             }
             loadPersonalInformation();
@@ -624,6 +625,7 @@ public class DashboardActivity extends AppCompatActivity {
             editor.putBoolean("cardPI", cardPI_isVisible);
             editor.putBoolean("cardMealPlan", cardMealPlan_isVisible);
             editor.putBoolean("cardKvv", cardKvv_isVisible);
+            editor.apply();
             configurationModus=false;
 
         }
