@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <item
+        android:title="@string/configuration"
+
+        android:icon="@drawable/ic_construction"
+        app:showAsAction="always"
+
+        android:onClick="configurationClick"
+        />
+    <item
+        android:title="@string/refresh"
+
+        android:icon="@drawable/ic_baseline_refresh_24"
+        app:showAsAction="always"
+        android:onClick="refreshClick"
+        />
+
+
+</menu>

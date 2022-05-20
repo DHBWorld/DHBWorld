@@ -1,18 +1,5 @@
 package com.main.dhbworld.CantineClasses;
 
-
-
-
-
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.math.BigDecimal;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,8 +15,6 @@ public class Meal {
         price="-";
         notes=new ArrayList<>();
         category="No category";
-
-
     }
 
     public void addNote(String s){
@@ -45,7 +30,6 @@ public class Meal {
     }
 
     public String getPrice() {
-
         String result=price;
         if ((price!=null) && (!price.equals("null")) && (!price.equals("-"))){
             if (price.substring(price.indexOf('.')+1).length()>1){
@@ -59,11 +43,9 @@ public class Meal {
     }
 
     public void setPrice(String price) {
-
         if ((price!=null) && (!price.equals("null"))){
             this.price = price;
         }
-
     }
 
     public List<String> getNotes() {
