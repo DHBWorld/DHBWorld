@@ -4,49 +4,29 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
-import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.ColorUtils;
 import androidx.preference.PreferenceManager;
-
-import java.text.SimpleDateFormat;
 import java.time.*;
-
-import android.annotation.SuppressLint;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.ColorStateList;
-import android.content.res.Resources;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.progressindicator.CircularProgressIndicator;
 import com.google.firebase.auth.FirebaseUser;
-import com.main.dhbworld.CantineClasses.MealDailyPlan;
 import com.main.dhbworld.Enums.InteractionState;
 import com.main.dhbworld.Firebase.CurrentStatusListener;
 import com.main.dhbworld.Firebase.SignedInListener;
@@ -56,20 +36,11 @@ import com.main.dhbworld.KVV.Departure;
 import com.main.dhbworld.KVV.Disruption;
 import com.main.dhbworld.KVV.KVVDataLoader;
 import com.main.dhbworld.Navigation.NavigationUtilities;
-
-import org.json.JSONException;
-
-import java.net.MalformedURLException;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
-
 import dhbw.timetable.rapla.data.event.Appointment;
-import dhbw.timetable.rapla.exceptions.NoConnectionException;
-import android.os.CountDownTimer;
 
 public class DashboardActivity extends AppCompatActivity {
 
@@ -158,7 +129,6 @@ public class DashboardActivity extends AppCompatActivity {
         card_dash_pi_layout = findViewById(R.id.card_dash_pi_layout);
         card_dash_kvv_layout = findViewById(R.id.card_dash_kvv_layout);
         card_dash_mealPlan_layout = findViewById(R.id.card_dash_mealPlan_layout);
-
 
         cardCalendar_isVisible = sp.getBoolean("cardCalendar", true);
         cardPI_isVisible = sp.getBoolean("cardPI", true);
@@ -263,18 +233,6 @@ public class DashboardActivity extends AppCompatActivity {
 
     }
 
-    private void loadProgressIndikator(LinearLayout layoutCard){
-
-
-            progressIndicator = new CircularProgressIndicator(DashboardActivity.this);
-            progressIndicator.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            progressIndicator.setIndeterminate(true);
-            progressIndicator.setPadding(400,0,400,0);
-            layoutCard.addView(progressIndicator);
-            progressIndicator.setVisibility(View.VISIBLE);
-
-    }
-
     private void loadCalendar(){
         SharedPreferences preferences = PreferenceManager
                 .getDefaultSharedPreferences(DashboardActivity.this);
@@ -296,7 +254,6 @@ public class DashboardActivity extends AppCompatActivity {
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-
                     try {
                         nextEventsProvider nextEventsProvider = new nextEventsProvider(DashboardActivity.this);
                         Appointment nextClass = nextEventsProvider.getNextEvent();
@@ -541,7 +498,6 @@ public class DashboardActivity extends AppCompatActivity {
     }
 
     private void loadMealPlan(){
-
         LinearLayout[] layoutMeal = new LinearLayout[3];
         layoutMeal[0] = findViewById(R.id.layoutMealOne);
         layoutMeal[1] = findViewById(R.id.layoutMealTwo);
@@ -561,19 +517,16 @@ public class DashboardActivity extends AppCompatActivity {
                 layoutCardMealPlan.post(new Runnable() {
                     @Override
                     public void run() {
-
                         ImageView imageViewMeal= findViewById(R.id.imageViewMeal);
-                        imageViewMeal.setImageResource(R.drawable.ic_restaurant);
-
                         if((meals==null) || (meals.size()==0)){
                             imageViewMeal.setImageResource(R.drawable.ic_no_meals);
                             textViewMeal[0].setText("Es gibt keine Daten für heute");
                             layoutMeal[1].setVisibility(View.GONE);
                             layoutMeal[2].setVisibility(View.GONE);
                         }else{
+                            imageViewMeal.setImageResource(R.drawable.ic_restaurant);
                             for (int i=0;i<3;i++){
                                 textViewMeal[i].setVisibility(View.VISIBLE);
-
                                 if (meals.size()>i){
                                     textViewMeal[i].setText(meals.get(i));
                                 }else{
