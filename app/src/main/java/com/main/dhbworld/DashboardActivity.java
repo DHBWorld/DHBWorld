@@ -393,17 +393,18 @@ public class DashboardActivity extends AppCompatActivity {
         ProgressIndicator indicator= new ProgressIndicator(DashboardActivity.this, layoutCardKvv, layoutTram);
         indicator.show();
         ImageView tramImageOne= findViewById(R.id.imageViewTramOne);
-        TextView tramViewOne = findViewById(R.id.textViewTramLineOne);
-        TextView platformViewOne = findViewById(R.id.textViewTramPlatformOne);
-        TextView timeViewOne = findViewById(R.id.textViewTramTimeOne);
-
-        TextView tramViewTwo = findViewById(R.id.textViewTramLineTwo);
-        TextView platformViewTwo = findViewById(R.id.textViewTramPlatformTwo);
-        TextView timeViewTwo = findViewById(R.id.textViewTramTimeTwo);
-
-        TextView tramViewThree = findViewById(R.id.textViewTramLineThree);
-        TextView platformViewThree = findViewById(R.id.textViewTramPlatformThree);
-        TextView timeViewThree = findViewById(R.id.textViewTramTimeThree);
+        TextView[] tramView = new TextView [3];
+        tramView[0] = findViewById(R.id.textViewTramLineOne);
+        tramView[1]= findViewById(R.id.textViewTramLineTwo);
+        tramView[2] = findViewById(R.id.textViewTramLineThree);
+        TextView[] platformView = new TextView [3];
+        platformView[0] = findViewById(R.id.textViewTramPlatformOne);
+        platformView[1] = findViewById(R.id.textViewTramPlatformTwo);
+        platformView[2] = findViewById(R.id.textViewTramPlatformThree);
+        TextView[] timeView = new TextView [3];
+        timeView[0] = findViewById(R.id.textViewTramTimeOne);
+        timeView[1] = findViewById(R.id.textViewTramTimeTwo);
+        timeView[2]= findViewById(R.id.textViewTramTimeThree);
 
         KVVDataLoader dataLoader = new KVVDataLoader(this);
         dataLoader.setDataLoaderListener(new DataLoaderListener() {
@@ -411,27 +412,26 @@ public class DashboardActivity extends AppCompatActivity {
             public void onDataLoaded(ArrayList<Departure> departures, Disruption disruption) {
                 DateTimeFormatter formatter = DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT);
                 indicator.hide();
-                layoutTram[1].setVisibility(View.GONE);
-                layoutTram[2].setVisibility(View.GONE);
                 if ( (departures==null) || (departures.size()<1)){
                     tramImageOne.setBackground(getDrawable(R.drawable.ic_pause));
-                    platformViewOne.setVisibility(View.GONE);
-                    timeViewOne.setVisibility(View.GONE);
-                    tramViewOne.setText("Server Problem");
-                } if (departures.size()>0){
-                    tramViewOne.setText(departures.get(0).getLine().substring(departures.get(0).getLine().length()-1)+" ("+departures.get(0).getDestination()+")");
-                    platformViewOne.setText(departures.get(0).getPlatform());
-                    timeViewOne.setText(departures.get(0).getDepartureTime().format(formatter));
-                 } if (departures.size()>1){
-                    layoutTram[1].setVisibility(View.VISIBLE);
-                    tramViewTwo.setText(departures.get(1).getLine().substring(departures.get(1).getLine().length()-1)+" ("+departures.get(1).getDestination()+")");
-                    platformViewTwo.setText(departures.get(1).getPlatform());
-                    timeViewTwo.setText(departures.get(1).getDepartureTime().format(formatter));
-                }  if (departures.size()>2){
-                    layoutTram[2].setVisibility(View.VISIBLE);
-                    tramViewThree.setText(departures.get(2).getLine().substring(departures.get(2).getLine().length()-1)+" ("+departures.get(2).getDestination()+")");
-                    platformViewThree.setText(departures.get(2).getPlatform());
-                    timeViewThree.setText(departures.get(2).getDepartureTime().format(formatter));
+                    platformView[0].setVisibility(View.GONE);
+                    timeView[0].setVisibility(View.GONE);
+                    tramView[0].setText("Server Problem");
+                    layoutTram[2].setVisibility(View.GONE);
+                    layoutTram[1].setVisibility(View.GONE);
+                }else{
+                    platformView[0].setVisibility(View.VISIBLE);
+                    timeView[0].setVisibility(View.VISIBLE);
+                    for (int i=0;i<3;i++){
+                        if (departures.size()>i){
+                            layoutTram[i].setVisibility(View.VISIBLE);
+                            tramView[i].setText(departures.get(i).getLine().substring(departures.get(i).getLine().length()-1)+" ("+departures.get(i).getDestination()+")");
+                            platformView[i].setText(departures.get(i).getPlatform());
+                            timeView[i].setText(departures.get(i).getDepartureTime().format(formatter));
+                        }else{
+                            layoutTram[i].setVisibility(View.GONE);
+                        }
+                    }
                 }
             }
         });
