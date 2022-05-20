@@ -280,7 +280,7 @@ public class DashboardActivity extends AppCompatActivity {
                 .getDefaultSharedPreferences(DashboardActivity.this);
         String url = preferences.getString("CurrentURL",null);
 
-        ImageView UniImage = findViewById(R.id.imageViewCalendar);
+        ImageView uniImage = findViewById(R.id.imageViewCalendar);
         TextView nextClassView = findViewById(R.id.nextClassView);
         LinearLayout layoutTime = findViewById(R.id.layoutTimeCalendarCard);
         LinearLayout layoutTimeDigit = findViewById(R.id.layoutTimeDigit);
@@ -289,7 +289,7 @@ public class DashboardActivity extends AppCompatActivity {
         TextView letterTimeView = findViewById(R.id.letterTimeViewCalendarDashboard);
 
         if (!(url ==null) && (!url.equals(""))) {
-            UniImage.setVisibility(View.GONE);
+            uniImage.setVisibility(View.GONE);
             nextClassView.setVisibility(View.GONE);
             timeView.setVisibility(View.GONE);
             timeViewMin.setVisibility(View.GONE);
@@ -321,14 +321,14 @@ public class DashboardActivity extends AppCompatActivity {
 
 
                                     indicator.hide();
-                                    UniImage.setVisibility(View.VISIBLE);
+                                    uniImage.setVisibility(View.VISIBLE);
                                     nextClassView.setVisibility(View.VISIBLE);
                                     timeView.setVisibility(View.VISIBLE);
                                     timeViewMin.setVisibility(View.VISIBLE);
                                     letterTimeView.setVisibility(View.VISIBLE);
                                     layoutTimeDigit.setVisibility(View.VISIBLE);
 
-                                    UniImage.setImageResource(R.drawable.ic_uni);
+                                    uniImage.setImageResource(R.drawable.ic_uni);
                                     nextClassView.setText(nextClass.getTitle());
                                     timeView.setText(nextClass.getStartTime());
                                     timeViewMin.setVisibility(View.VISIBLE);
@@ -360,12 +360,12 @@ public class DashboardActivity extends AppCompatActivity {
                                                 nextClassView.setText("Pause!");
                                                 letterTimeView.setText("");
                                                 timeViewMin.setText("");
-                                                UniImage.setImageResource(R.drawable.ic_pause);
+                                                uniImage.setImageResource(R.drawable.ic_pause);
                                             }
                                         }.start();
                                     }
                                 } else {
-                                    UniImage.setImageResource(R.drawable.ic_uni);
+                                    uniImage.setImageResource(R.drawable.ic_uni);
                                     nextClassView.setText(nextClass.getTitle());
                                     timeView.setText(nextClass.getStartTime());
                                     timeViewMin.setVisibility(View.GONE);
@@ -380,7 +380,7 @@ public class DashboardActivity extends AppCompatActivity {
                             public void run() {
                                 layoutTimeDigit.setVisibility(View.GONE);
                                 layoutTime.setVisibility(View.GONE);
-                                UniImage.setVisibility(View.GONE);
+                                uniImage.setVisibility(View.GONE);
                                 timeView.setVisibility(View.GONE);
                                 timeViewMin.setVisibility(View.GONE);
                                 letterTimeView.setVisibility(View.GONE);
@@ -393,7 +393,7 @@ public class DashboardActivity extends AppCompatActivity {
         }else{
             layoutTimeDigit.setVisibility(View.GONE);
             layoutTime.setVisibility(View.GONE);
-            UniImage.setVisibility(View.GONE);
+            uniImage.setVisibility(View.GONE);
             timeView.setVisibility(View.GONE);
             timeViewMin.setVisibility(View.GONE);
             letterTimeView.setVisibility(View.GONE);
