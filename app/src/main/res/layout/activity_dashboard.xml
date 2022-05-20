@@ -121,6 +121,7 @@
                             android:paddingLeft="5dp"
                             android:paddingVertical="10dp">
                             <LinearLayout
+                                android:id="@+id/layoutCardCalendarInformation"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:orientation="horizontal"
