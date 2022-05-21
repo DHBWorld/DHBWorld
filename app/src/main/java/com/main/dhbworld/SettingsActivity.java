@@ -159,7 +159,7 @@ public class SettingsActivity extends AppCompatActivity {
                         Snackbar.make(activity.findViewById(android.R.id.content), context.getResources().getString(R.string.sync_makes_no_difference), Snackbar.LENGTH_LONG).show();
                     }
                     if (!(boolean) newValue) {
-                        WorkManager.getInstance(context).cancelUniqueWork("DualisNotifier");
+                        WorkManager.getInstance(context).cancelUniqueWork("DualisNotifierDHBWorld");
                     } else {
                         DualisAPI.setAlarmManager(getContext());
                     }
