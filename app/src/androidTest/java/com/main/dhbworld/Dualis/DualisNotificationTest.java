@@ -32,7 +32,7 @@ public class DualisNotificationTest {
 
       WorkManager workManager = WorkManager.getInstance(appContext.getApplicationContext());
       try {
-         List<WorkInfo> workInfos = workManager.getWorkInfosForUniqueWork("DualisNotifier").get();
+         List<WorkInfo> workInfos = workManager.getWorkInfosForUniqueWork("DualisNotifierDHBWorld").get();
 
          assertEquals(1, workInfos.size());
 
@@ -57,29 +57,5 @@ public class DualisNotificationTest {
       assertNotNull(notificationChannel);
       assertEquals(name, notificationChannel.getName());
       assertEquals(description, notificationChannel.getDescription());
-   }
-
-   @Test
-   public void sendNotificationTest() {
-      Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
-
-      int id = 6187;
-      String title = "title";
-      String message = "message";
-
-      DualisAPI.createNotificationChannel(appContext, "1234", "test", "test");
-      DualisAPI.sendNotification(appContext, title, message, id);
-
-      NotificationManager notificationManager = appContext.getSystemService(NotificationManager.class);
-      StatusBarNotification[] notifications = notificationManager.getActiveNotifications();
-
-      assertTrue(notifications.length > 0);
-
-      for (StatusBarNotification notification : notifications) {
-         if (notification.getId() == id) {
-            return;
-         }
-      }
-      fail();
    }
 }

@@ -516,6 +516,7 @@ public class DashboardActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         ImageView imageViewMeal= findViewById(R.id.imageViewMeal);
+                        indicator.hide();
                         if((meals==null) || (meals.size()==0)){
                             imageViewMeal.setImageResource(R.drawable.ic_no_meals);
                             textViewMeal[0].setText("Es gibt keine Daten für heute");
@@ -532,7 +533,7 @@ public class DashboardActivity extends AppCompatActivity {
                                 }
                             }
                         }
-                        indicator.hide();
+
                     }
                 });
             }
