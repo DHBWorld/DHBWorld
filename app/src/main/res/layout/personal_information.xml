@@ -179,7 +179,7 @@ android:fitsSystemWindows="true">
             style="@style/Widget.MaterialComponents.Button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"
             android:text="@string/save"
             tools:context=".MainActivity"
             android:visibility="invisible"/>
@@ -193,7 +193,7 @@ android:fitsSystemWindows="true">
             android:text = "@string/cancel"
             style="@style/Widget.MaterialComponents.Button"
             android:backgroundTint="@color/grey_dark"
-            android:layout_alignParentEnd="true"
+            android:layout_alignParentStart="true"
             android:visibility="invisible"/>
 
                     </RelativeLayout>
