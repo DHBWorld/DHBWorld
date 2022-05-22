@@ -77,6 +77,7 @@ public class DashboardActivity extends AppCompatActivity {
     private LinearLayout card_dash_pi_layout;
     private LinearLayout card_dash_kvv_layout;
     private LinearLayout card_dash_mealPlan_layout;
+    private LinearLayout card_dash_user_interaction_layout;
     private CircularProgressIndicator progressIndicator;
 
     @Override
@@ -87,14 +88,7 @@ public class DashboardActivity extends AppCompatActivity {
 
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
 
-        layoutCardMealPlan= findViewById(R.id.layoutCardMealPlan);
-        layoutCardCalendar = findViewById(R.id.layoutCardCalendar);
-        layoutCardKvv = findViewById(R.id.layoutCardKvv);
-        layoutCardPI = findViewById(R.id.layoutCardPI);
-        card_dash_calendar = findViewById(R.id.card_dash_calendar);
-        card_dash_pi = findViewById(R.id.card_dash_pi);
-        card_dash_kvv = findViewById(R.id.card_dash_kvv);
-        card_dash_mealPlan = findViewById(R.id.card_dash_mealPlan);
+        defineViews();
 
         userConfigurationOfDashboard();
         loadUserInteraction();
@@ -108,25 +102,37 @@ public class DashboardActivity extends AppCompatActivity {
        loadPersonalInformation();
     }
 
-    private void userConfigurationOfDashboard(){
-        sp = getSharedPreferences(dashboardSettings, Context.MODE_PRIVATE);
+    private void defineViews(){
+        layoutCardMealPlan= findViewById(R.id.layoutCardMealPlan);
+        layoutCardCalendar = findViewById(R.id.layoutCardCalendar);
+        layoutCardKvv = findViewById(R.id.layoutCardKvv);
+        layoutCardPI = findViewById(R.id.layoutCardPI);
+        card_dash_calendar = findViewById(R.id.card_dash_calendar);
+        card_dash_pi = findViewById(R.id.card_dash_pi);
+        card_dash_kvv = findViewById(R.id.card_dash_kvv);
+        card_dash_mealPlan = findViewById(R.id.card_dash_mealPlan);
 
-
-        configurationModus=false;
         buttonCardCalendar= findViewById(R.id.buttonCardCalendar);
         buttonCardPI= findViewById(R.id.buttonCardPI);
         buttonCardMealPlan= findViewById(R.id.buttonCardMealPlan);
         buttonCardKvv= findViewById(R.id.buttonCardKvv);
 
-        buttonCardCalendar.setBackgroundColor((ColorUtils.setAlphaComponent(getResources().getColor(R.color.black),0)));
-        buttonCardPI.setBackgroundColor((ColorUtils.setAlphaComponent(getResources().getColor(R.color.black),0)));
-        buttonCardMealPlan.setBackgroundColor((ColorUtils.setAlphaComponent(getResources().getColor(R.color.black),0)));
-        buttonCardKvv.setBackgroundColor((ColorUtils.setAlphaComponent(getResources().getColor(R.color.black),0)));
-
         card_dash_calendar_layout = findViewById(R.id.card_dash_calendar_layout);
         card_dash_pi_layout = findViewById(R.id.card_dash_pi_layout);
         card_dash_kvv_layout = findViewById(R.id.card_dash_kvv_layout);
         card_dash_mealPlan_layout = findViewById(R.id.card_dash_mealPlan_layout);
+        card_dash_user_interaction_layout = findViewById(R.id.card_dash_userInteraction_layout);
+    }
+
+    private void userConfigurationOfDashboard(){
+        sp = getSharedPreferences(dashboardSettings, Context.MODE_PRIVATE);
+
+        configurationModus=false;
+
+        buttonCardCalendar.setBackgroundColor((ColorUtils.setAlphaComponent(getResources().getColor(R.color.black),0)));
+        buttonCardPI.setBackgroundColor((ColorUtils.setAlphaComponent(getResources().getColor(R.color.black),0)));
+        buttonCardMealPlan.setBackgroundColor((ColorUtils.setAlphaComponent(getResources().getColor(R.color.black),0)));
+        buttonCardKvv.setBackgroundColor((ColorUtils.setAlphaComponent(getResources().getColor(R.color.black),0)));
 
         cardCalendar_isVisible = sp.getBoolean("cardCalendar", true);
         cardPI_isVisible = sp.getBoolean("cardPI", true);
@@ -145,6 +151,57 @@ public class DashboardActivity extends AppCompatActivity {
         if (!cardKvv_isVisible){
             card_dash_kvv.setVisibility(View.GONE);
         }
+
+        //TODO integrate onClickListeners more easily
+        card_dash_calendar_layout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!configurationModus){
+                    Intent intent = new Intent(DashboardActivity.this, CalendarActivity.class);
+                    startActivity(intent);
+                }
+            }
+        });
+        card_dash_pi_layout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!configurationModus){
+                    Intent intent = new Intent(DashboardActivity.this, MainActivity.class);
+                    startActivity(intent);
+                }
+            }
+        });
+        card_dash_kvv_layout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!configurationModus){
+                    Intent intent = new Intent(DashboardActivity.this, KVVActivity.class);
+                    startActivity(intent);
+                }
+            }
+        });
+        card_dash_mealPlan_layout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!configurationModus){
+                    Intent intent = new Intent(DashboardActivity.this, CantineActivity.class);
+                    startActivity(intent);
+                }
+            }
+        });
+        card_dash_user_interaction_layout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!configurationModus){
+                    Intent intent = new Intent(DashboardActivity.this, UserInteraction.class);
+                    startActivity(intent);
+                }
+            }
+        });
+
+
+
+
 
         buttonCardCalendar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -174,6 +231,7 @@ public class DashboardActivity extends AppCompatActivity {
                     if (cardPI_isVisible) {
                         cardPI_isVisible = false; //True = Card is visible
                         card_dash_pi.setStrokeColor(ColorUtils.setAlphaComponent(card_dash_pi.getStrokeColor(), 50));
+                        card_dash_pi_layout.setBackgroundColor(ColorUtils.setAlphaComponent(card_dash_pi.getStrokeColor(), 50));
                         card_dash_pi_layout.setBackgroundColor(ColorUtils.setAlphaComponent(card_dash_pi.getStrokeColor(), 50));
                     } else {
                         cardPI_isVisible = true;//True = Card is visible
