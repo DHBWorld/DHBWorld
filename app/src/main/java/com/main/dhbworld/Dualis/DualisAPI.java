@@ -305,7 +305,7 @@ public class DualisAPI {
                 .build();
 
         WorkManager workManager = WorkManager.getInstance(context.getApplicationContext());
-        workManager.enqueueUniquePeriodicWork("DualisNotifier", ExistingPeriodicWorkPolicy.REPLACE, periodicWorkRequest);
+        workManager.enqueueUniquePeriodicWork("DualisNotifierDHBWorld", ExistingPeriodicWorkPolicy.REPLACE, periodicWorkRequest);
     }
 
     public static void createNotificationChannelNewGrade(Context context) {
