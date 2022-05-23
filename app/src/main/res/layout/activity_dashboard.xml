@@ -60,6 +60,7 @@
                     app:strokeWidth="3dp">
 
                     <LinearLayout
+                        android:id="@+id/card_dash_userInteraction_layout"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:background="@color/white"
