@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.appcompat.content.res.AppCompatResources;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.ColorUtils;
 import androidx.preference.PreferenceManager;
@@ -426,13 +427,14 @@ public class DashboardActivity extends AppCompatActivity {
                 DateTimeFormatter formatter = DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT);
                 indicator.hide();
                 if ( (departures==null) || (departures.size()<1)){
-                    tramImageOne.setBackground(getDrawable(R.drawable.ic_pause));
+                    tramImageOne.setBackground(AppCompatResources.getDrawable(DashboardActivity.this, R.drawable.ic_pause));
                     platformView[0].setVisibility(View.GONE);
                     timeView[0].setVisibility(View.GONE);
                     tramView[0].setText("Server Problem");
                     layoutTram[2].setVisibility(View.GONE);
                     layoutTram[1].setVisibility(View.GONE);
                 }else{
+                    tramImageOne.setBackground(AppCompatResources.getDrawable(DashboardActivity.this, R.drawable.ic_tram));
                     platformView[0].setVisibility(View.VISIBLE);
                     timeView[0].setVisibility(View.VISIBLE);
                     for (int i=0;i<3;i++){
