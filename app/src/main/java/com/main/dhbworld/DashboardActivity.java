@@ -439,7 +439,11 @@ public class DashboardActivity extends AppCompatActivity {
                         if (departures.size()>i){
                             layoutTram[i].setVisibility(View.VISIBLE);
                             tramView[i].setText(departures.get(i).getLine().substring(departures.get(i).getLine().length()-1)+" ("+departures.get(i).getDestination()+")");
-                            platformView[i].setText(departures.get(i).getPlatform());
+                            if (departures.get(i).isNotServiced()) {
+                                platformView[i].setText(R.string.canceled_in_parens);
+                            } else {
+                                platformView[i].setText(departures.get(i).getPlatform());
+                            }
                             timeView[i].setText(departures.get(i).getDepartureTime().format(formatter));
                         }else{
                             layoutTram[i].setVisibility(View.GONE);
