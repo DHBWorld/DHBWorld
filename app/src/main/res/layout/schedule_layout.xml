@@ -34,25 +34,31 @@
         </com.google.android.material.appbar.AppBarLayout>
         <!-- everything above is for the topbar and navigation-->
 
+        <com.google.android.material.progressindicator.LinearProgressIndicator
+            android:id="@+id/calProgressBar"
+            android:layout_below="@id/topAppBarLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:indeterminate="true" />
+
         <com.alamkanak.weekview.WeekView
             android:id="@+id/weekView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@id/topAppBarLayout"
+            android:layout_below="@id/calProgressBar"
             app:columnGap="8dp"
             app:dayBackgroundColor="@color/white"
             app:eventTextColor="@color/white"
             app:hourHeight="70dp"
             app:maxHour="@string/maxCalendarHour"
             app:minHour="@string/minCalendarHour"
-            app:showCurrentTimeFirst="true"
             app:nowLineColor="@color/LightBlue"
             app:nowLineStrokeWidth="2dp"
+            app:showCompleteDay="true"
+            app:showCurrentTimeFirst="true"
             app:showNowLine="true"
             app:showWeekNumber="true"
-            app:showCompleteDay="true"
-            app:verticalFlingEnabled="false"
-            />
+            app:verticalFlingEnabled="false" />
     </RelativeLayout>
 
     <com.google.android.material.navigation.NavigationView

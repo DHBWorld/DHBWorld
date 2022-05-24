@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.PreferenceManager;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.Notification;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -13,12 +14,14 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 import com.alamkanak.weekview.WeekView;
 import com.alamkanak.weekview.WeekViewEntity;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.main.dhbworld.Navigation.NavigationUtilities;
@@ -54,8 +57,8 @@ public class CalendarActivity extends AppCompatActivity{
     static ArrayList<Events> events = new ArrayList<>();
     static ArrayList<String> blackList = new ArrayList<>();
     String url;
-    boolean allowScrolling = false;
-
+    boolean stillLoading = false;
+    LinearProgressIndicator progressBar;
 
     @SuppressLint("ClickableViewAccessibility")
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +66,7 @@ public class CalendarActivity extends AppCompatActivity{
         //check url here so the schedule layout isn't displayed yet.
         checkURL();
         setContentView(R.layout.schedule_layout);
+        progressBar = findViewById(R.id.calProgressBar);
         NavigationUtilities.setUpNavigation(this, R.id.Calendar);
         firstSetup();
     }
@@ -290,14 +294,14 @@ public class CalendarActivity extends AppCompatActivity{
                 case MotionEvent.ACTION_UP:
                     x2[0] = event.getX();
                     float deltaX = x2[0] - x1[0].get();
-                    if (deltaX < -100 && allowScrolling) {
+                    if (deltaX < -100 && stillLoading) {
                         date.add(Calendar.WEEK_OF_YEAR,1);
                         cal.scrollToDate(date);
                         if(!loadedDateList.contains(date.toInstant())) {
                             executor.submit(importWeek);
                         }
                         return true;
-                    }else if(deltaX > 100 && allowScrolling){
+                    }else if(deltaX > 100 && stillLoading){
                         date.add(Calendar.WEEK_OF_YEAR,-1);
                         cal.scrollToDate(date);
                         if(!loadedDateList.contains(date.toInstant())) {
@@ -312,7 +316,13 @@ public class CalendarActivity extends AppCompatActivity{
     }
 
     Runnable importWeek = () -> {
-        allowScrolling = false;
+        stillLoading = false;
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                progressBar.setVisibility(View.VISIBLE);
+            }
+        });
         Map<LocalDate, ArrayList<Appointment>> data = new HashMap<>();
         LocalDate thisWeek = LocalDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault()).toLocalDate();
         loadedDateList.add(date.toInstant());
@@ -326,8 +336,7 @@ public class CalendarActivity extends AppCompatActivity{
                 e.printStackTrace();
             }
             try {
-                assert data != null;
-                allowScrolling = true;
+                stillLoading = true;
                 saveValues(data);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -339,6 +348,12 @@ public class CalendarActivity extends AppCompatActivity{
         cal.setAdapter(adapter);
         EventCreator.fillData(data, date);
         fillAdapter(adapter);
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                progressBar.setVisibility(View.INVISIBLE);
+            }
+        });
     }
 
     public static void setEvents(ArrayList<Events> events) {
