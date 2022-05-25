@@ -590,7 +590,7 @@ public class DashboardActivity extends AppCompatActivity {
                                 if (meals.size()>i){
                                     textViewMeal[i].setText(meals.get(i));
                                 }else{
-                                    layoutMeal[0].setVisibility(View.GONE);
+                                    layoutMeal[i].setVisibility(View.GONE);
                                 }
                             }
                         }
