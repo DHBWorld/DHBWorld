@@ -187,6 +187,7 @@
                                                 android:textSize="23dp" />
 
                                             <TextView
+                                                android:paddingStart="5dp"
                                                 android:id="@+id/timeViewMinCalendarDashboard"
                                                 android:layout_width="wrap_content"
                                                 android:layout_height="match_parent"

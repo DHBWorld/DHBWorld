@@ -90,7 +90,6 @@ public class DashboardActivity extends AppCompatActivity {
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
 
         defineViews();
-
         userConfigurationOfDashboard();
         loadUserInteraction();
        if (NetworkAvailability.check(DashboardActivity.this)){
@@ -98,7 +97,7 @@ public class DashboardActivity extends AppCompatActivity {
            loadCalendar();
            loadKvv();
        }else{
-           Toast.makeText(DashboardActivity.this, "Sie haben keine Internet-Verbindung, deshalb können die Daten nicht geladen werden.", Toast.LENGTH_LONG).show();
+           Toast.makeText(DashboardActivity.this, getResources().getString(R.string.problemsWithInternetConnection), Toast.LENGTH_LONG).show();
        }
        loadPersonalInformation();
     }
@@ -326,17 +325,17 @@ public class DashboardActivity extends AppCompatActivity {
                                     nextClassView.setText(nextClass.getTitle());
                                     timeView.setText(nextClass.getStartTime());
                                     timeViewMin.setVisibility(View.VISIBLE);
-                                    timeViewMin.setText(" Min");
+                                    timeViewMin.setText(getResources().getString(R.string.min));
                                     if (durationUntilStartOfClass.toMinutes() >= 0) {
                                         new CountDownTimer(durationUntilStartOfClass.toMinutes() * 60000, 60000) {
                                             public void onTick(long millisUtilFinished) {
                                                 timeView.setText(Long.toString(millisUtilFinished / 60000 + 1));
-                                                letterTimeView.setText("start in ");
-                                                timeViewMin.setText(" Min");
+                                                letterTimeView.setText(getResources().getString(R.string.startsIn));
+                                                timeViewMin.setText(getResources().getString(R.string.min));
                                             }
                                             @Override
                                             public void onFinish() {
-                                                timeView.setText("now");
+                                                timeView.setText(getResources().getString(R.string.now));
                                                 letterTimeView.setText("");
                                                 timeViewMin.setText("");
                                             }
@@ -345,13 +344,13 @@ public class DashboardActivity extends AppCompatActivity {
                                         new CountDownTimer(durationUntilEndOfClass.toMinutes() * 60000, 60000) {
                                             public void onTick(long millisUtilFinished) {
                                                 timeView.setText(Long.toString(millisUtilFinished / 60000 + 1));
-                                                letterTimeView.setText("end in ");
-                                                timeViewMin.setText(" Min");
+                                                letterTimeView.setText(getResources().getString(R.string.endsIn));
+                                                timeViewMin.setText(getResources().getString(R.string.min));
                                             }
                                             @Override
                                             public void onFinish() {
                                                 timeView.setText("");
-                                                nextClassView.setText("Pause!");
+                                                nextClassView.setText(getResources().getString(R.string.pause));
                                                 letterTimeView.setText("");
                                                 timeViewMin.setText("");
                                                 uniImage.setImageResource(R.drawable.ic_pause);
@@ -378,7 +377,7 @@ public class DashboardActivity extends AppCompatActivity {
                                 timeView.setVisibility(View.GONE);
                                 timeViewMin.setVisibility(View.GONE);
                                 letterTimeView.setVisibility(View.GONE);
-                                nextClassView.setText("Die Daten aus dem Kalender können hier nicht gezeigt werden.");
+                                nextClassView.setText(getResources().getString(R.string.problemsWithCalenderView));
                             }
                         });
                     }
@@ -391,7 +390,7 @@ public class DashboardActivity extends AppCompatActivity {
             timeView.setVisibility(View.GONE);
             timeViewMin.setVisibility(View.GONE);
             letterTimeView.setVisibility(View.GONE);
-            nextClassView.setText("Damit Sie die Daten aus dem Rapla hier sehen können, fügen Sie bitte den Link in dem Kalender hinzu.");
+            nextClassView.setText(getResources().getString(R.string.pasteLinkInCalender));
 
         }
     }
@@ -427,7 +426,7 @@ public class DashboardActivity extends AppCompatActivity {
                     tramImageOne.setBackground(AppCompatResources.getDrawable(DashboardActivity.this, R.drawable.ic_pause));
                     platformView[0].setVisibility(View.GONE);
                     timeView[0].setVisibility(View.GONE);
-                    tramView[0].setText("Server Problem");
+                    tramView[0].setText(getResources().getString(R.string.serverTrouble));
                     layoutTram[2].setVisibility(View.GONE);
                     layoutTram[1].setVisibility(View.GONE);
                 }else{
@@ -490,10 +489,8 @@ public class DashboardActivity extends AppCompatActivity {
                 utilities.getCurrentStatus(Utilities.CATEGORY_PRINTER);
                 utilities.getCurrentStatus(Utilities.CATEGORY_COFFEE);
             }
-
             @Override
             public void onSignInError() {
-
             }
         });
         utilities.signIn();
@@ -506,14 +503,13 @@ public class DashboardActivity extends AppCompatActivity {
                 ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
                 ClipData clip = ClipData.newPlainText("", copyText);
                 clipboard.setPrimaryClip(clip);
-                Toast.makeText(DashboardActivity.this, "Kopiert", Toast.LENGTH_SHORT).show();
+                Toast.makeText(DashboardActivity.this, getResources().getString(R.string.copy), Toast.LENGTH_SHORT).show();
             }
         });
 
     }
 
     private void loadPersonalInformation(){
-        String MyPREFERENCES = "myPreferencesKey" ;
         SharedPreferences sp = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
 
         LinearLayout[] layoutInfo = new LinearLayout[3];
@@ -529,9 +525,9 @@ public class DashboardActivity extends AppCompatActivity {
         infoView[1] = findViewById(R.id.textViewPersonalInfoTwo);
         infoView[2] = findViewById(R.id.textViewPersonalInfoThree);
         String[] markerTitle = new String[3];
-        markerTitle[0]="Matrikelnummer:\n";
-        markerTitle[1]="Bibliotheksnummer:\n" ;
-        markerTitle[2]="E-Mail:\n" ;
+        markerTitle[0]=getString(R.string.matriculationNumber)+"\n";
+        markerTitle[1]=getString(R.string.libraryNumber)+"\n" ;
+        markerTitle[2]=getString(R.string.emailStudent)+"\n";
         Boolean emptyCard=true;
         String[] info = new String[3];
         info[0]=sp.getString("matriculationNumberKey", "");
@@ -552,7 +548,7 @@ public class DashboardActivity extends AppCompatActivity {
         if (emptyCard){
             layoutInfo[0].setVisibility(View.VISIBLE);
             imageButtonCopy[0].setVisibility(View.GONE);
-            infoView[0].setText("Sie haben noch keine persönlichen Daten gespeichert");
+            infoView[0].setText(getResources().getString(R.string.thereIsntAnyPersonalData));
         }
     }
 
@@ -580,7 +576,7 @@ public class DashboardActivity extends AppCompatActivity {
                         indicator.hide();
                         if((meals==null) || (meals.size()==0)){
                             imageViewMeal.setImageResource(R.drawable.ic_no_meals);
-                            textViewMeal[0].setText("Es gibt keine Daten für heute");
+                            textViewMeal[0].setText(R.string.thereIsntAnyInfo);
                             layoutMeal[1].setVisibility(View.GONE);
                             layoutMeal[2].setVisibility(View.GONE);
                         }else{
@@ -602,41 +598,38 @@ public class DashboardActivity extends AppCompatActivity {
         }
 
     public void refreshClick(@NonNull MenuItem item) throws NullPointerException{
-        if (refreshIsEnable){
-            refreshIsEnable=false;
-            new CountDownTimer(10000,1000) {
-                public void onTick(long millisUtilFinished) {
-                }
-                @Override
-                public void onFinish() {
-                    refreshIsEnable=true;
-                }
-            }.start();
             if (!configurationModus){
-                userConfigurationOfDashboard();
-                loadUserInteraction();
-                if (NetworkAvailability.check(DashboardActivity.this)){
-                   loadMealPlan();
-                   loadCalendar();
-                   loadKvv();
-                }else{
-                    Toast.makeText(DashboardActivity.this, "Sie haben keine Internet-Verbindung, deshalb können die Daten nicht geladen werden.", Toast.LENGTH_LONG).show();
-                }
-                loadPersonalInformation();
-            }else {
-                Toast.makeText(DashboardActivity.this, "Sie sind in Konfiguration-Modus, keine Aktualisierung ist möglich", Toast.LENGTH_SHORT).show();
-            }
-        }else{
-            Toast.makeText(DashboardActivity.this, "Aktualisierung ist nur 1 mal pro 10 Sekunden möglich", Toast.LENGTH_SHORT).show();
-        }
+                if (refreshIsEnable){
+                    refreshIsEnable=false;
+                    new CountDownTimer(10000,1000) {
+                        public void onTick(long millisUtilFinished) {
+                        }
+                        @Override
+                        public void onFinish() {
+                            refreshIsEnable=true;
+                        }
+                    }.start();
+                    userConfigurationOfDashboard();
+                    loadUserInteraction();
+                    if (NetworkAvailability.check(DashboardActivity.this)){
+                       loadMealPlan();
+                       loadCalendar();
+                       loadKvv();
+                    }else{
+                        Toast.makeText(DashboardActivity.this, getResources().getString(R.string.problemsWithInternetConnection), Toast.LENGTH_LONG).show();
+                    }
+                    loadPersonalInformation();
+
+                }else{ Toast.makeText(DashboardActivity.this, R.string.refreshIsOnlyIn10Min, Toast.LENGTH_SHORT).show();}
+            }else { Toast.makeText(DashboardActivity.this, getResources().getString(R.string.youAreInConfigModus), Toast.LENGTH_SHORT).show(); }
     }
 
     public void configurationClick(@NonNull MenuItem item) throws NullPointerException{
         sp = getSharedPreferences(dashboardSettings, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
-        if (configurationModus==false){ //User can configure his dashboard
+        if (!configurationModus){ //User can configure his dashboard
             item.setIcon(getResources().getDrawable(R.drawable.ic_done));
-            Toast.makeText(DashboardActivity.this, " Wählen sie Cards, die ausblenden oder wieder einblenden möchten", Toast.LENGTH_LONG).show();
+            Toast.makeText(DashboardActivity.this, getResources().getString(R.string.chooseTheCardForConfiguration), Toast.LENGTH_SHORT).show();
             card_dash_calendar.setVisibility(View.VISIBLE);
             card_dash_pi.setVisibility(View.VISIBLE);
             card_dash_kvv.setVisibility(View.VISIBLE);
