@@ -58,6 +58,7 @@ public class DashboardActivity extends AppCompatActivity {
     public static final String MyPREFERENCES = "myPreferencesKey" ;
     public static final String dashboardSettings="dashboardSettings";
 
+    Boolean refreshIsEnable=true;
     Boolean configurationModus;
     Boolean cardCalendar_isVisible = true;
     Boolean cardPI_isVisible = true;
@@ -79,7 +80,6 @@ public class DashboardActivity extends AppCompatActivity {
     private LinearLayout card_dash_kvv_layout;
     private LinearLayout card_dash_mealPlan_layout;
     private LinearLayout card_dash_user_interaction_layout;
-    private CircularProgressIndicator progressIndicator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -199,9 +199,6 @@ public class DashboardActivity extends AppCompatActivity {
                 }
             }
         });
-
-
-
 
 
         buttonCardCalendar.setOnClickListener(new View.OnClickListener() {
@@ -605,28 +602,32 @@ public class DashboardActivity extends AppCompatActivity {
         }
 
     public void refreshClick(@NonNull MenuItem item) throws NullPointerException{
-        item.setEnabled(false);
-        new CountDownTimer(10000,1000) {
-            public void onTick(long millisUtilFinished) {
+        if (refreshIsEnable){
+            refreshIsEnable=false;
+            new CountDownTimer(10000,1000) {
+                public void onTick(long millisUtilFinished) {
+                }
+                @Override
+                public void onFinish() {
+                    refreshIsEnable=true;
+                }
+            }.start();
+            if (!configurationModus){
+                userConfigurationOfDashboard();
+                loadUserInteraction();
+                if (NetworkAvailability.check(DashboardActivity.this)){
+                   loadMealPlan();
+                   loadCalendar();
+                   loadKvv();
+                }else{
+                    Toast.makeText(DashboardActivity.this, "Sie haben keine Internet-Verbindung, deshalb können die Daten nicht geladen werden.", Toast.LENGTH_LONG).show();
+                }
+                loadPersonalInformation();
+            }else {
+                Toast.makeText(DashboardActivity.this, "Sie sind in Konfiguration-Modus, keine Aktualisierung ist möglich", Toast.LENGTH_SHORT).show();
             }
-            @Override
-            public void onFinish() {
-                item.setEnabled(true);
-            }
-        }.start();
-        if (configurationModus==false){
-            userConfigurationOfDashboard();
-            loadUserInteraction();
-            if (NetworkAvailability.check(DashboardActivity.this)){
-               loadMealPlan();
-               loadCalendar();
-               loadKvv();
-            }else{
-                Toast.makeText(DashboardActivity.this, "Sie haben keine Internet-Verbindung, deshalb können die Daten nicht geladen werden.", Toast.LENGTH_LONG).show();
-            }
-            loadPersonalInformation();
-        }else {
-            Toast.makeText(DashboardActivity.this, "Sie sind in Konfiguration-Modus, keine Aktualisierung ist möglich", Toast.LENGTH_LONG).show();
+        }else{
+            Toast.makeText(DashboardActivity.this, "Aktualisierung ist nur 1 mal pro 10 Sekunden möglich", Toast.LENGTH_SHORT).show();
         }
     }
 
