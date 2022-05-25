@@ -15,7 +15,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import com.main.dhbworld.CantineClasses.MealDailyPlan;
 import com.main.dhbworld.Navigation.NavigationUtilities;
@@ -36,13 +35,11 @@ import javax.net.ssl.HttpsURLConnection;
 public class CantineActivity extends AppCompatActivity {
     private LinearLayout layoutMealCardsBasic;
     private LinearLayout layoutMealCardsExtra;
-    private ScrollView scroll;
     private String inputFromApi;
     private  ProgressIndicator indicator;
     TabLayout tabLayout;
     Date[] currentWeek;
     static String inputForDashboard;
-    private LinearLayout titleLayout;
     private TextView pageTitleBasic;
     private TextView pageTitleExtra;
     private  TextView todayIs;
@@ -54,18 +51,17 @@ public class CantineActivity extends AppCompatActivity {
         layoutMealCardsBasic= findViewById(R.id.layoutMealCardsBasic);
         layoutMealCardsExtra= findViewById(R.id.layoutMealCardsExtra);
         tabLayout= findViewById(R.id.tabTags);
-        titleLayout = findViewById(R.id.layoutTitleCanteen);
         pageTitleBasic = findViewById(R.id.textView_pageTitleBasic_canteen);
         pageTitleExtra = findViewById(R.id.textView_pageTitleExtra_canteen);
         todayIs = findViewById(R.id.textView_todayIs_canteen);
-        scroll= findViewById(R.id.scrollViewCantine);
+
 
         NavigationUtilities.setUpNavigation(this,R.id.cantine);
 
         indicator= new ProgressIndicator(CantineActivity.this, layoutMealCardsBasic);
         indicator.show();
         if (!NetworkAvailability.check(CantineActivity.this)){
-            loadDisplay("Die Daten können nicht geladen werden, weil Sie keine Internet-Verbindung haben.");
+            loadDisplay(getResources().getString(R.string.problemsWithInternetConnection));
         }else{
         generateCurrentWeek();
         showTabs();
@@ -106,11 +102,11 @@ public class CantineActivity extends AppCompatActivity {
 
     private void showTabs (){
         SimpleDateFormat f =new SimpleDateFormat("dd");
-        tabLayout.getTabAt(0).setText("Mo ("+f.format(currentWeek[0])+")");
-        tabLayout.getTabAt(1).setText("Di ("+f.format(currentWeek[1])+")");
-        tabLayout.getTabAt(2).setText("Mi ("+f.format(currentWeek[2])+")");
-        tabLayout.getTabAt(3).setText("Do ("+f.format(currentWeek[3])+")");
-        tabLayout.getTabAt(4).setText("Fr ("+f.format(currentWeek[4])+")");
+        tabLayout.getTabAt(0).setText(getResources().getString(R.string.mo)+" ("+f.format(currentWeek[0])+")");
+        tabLayout.getTabAt(1).setText(getResources().getString(R.string.di)+" ("+f.format(currentWeek[1])+")");
+        tabLayout.getTabAt(2).setText(getResources().getString(R.string.mi)+" ("+f.format(currentWeek[2])+")");
+        tabLayout.getTabAt(3).setText(getResources().getString(R.string.dn)+" ("+f.format(currentWeek[3])+")");
+        tabLayout.getTabAt(4).setText(getResources().getString(R.string.fr)+" ("+f.format(currentWeek[4])+")");
         Calendar c= Calendar.getInstance();
         c.setFirstDayOfWeek(Calendar.SUNDAY);
         if (((c.get(Calendar.DAY_OF_WEEK)-2)<5) &&((c.get(Calendar.DAY_OF_WEEK)-2)>=0)){
@@ -182,7 +178,7 @@ public class CantineActivity extends AppCompatActivity {
                             break;
                     }
                 } catch ( IOException e) {
-                    loadDisplay("Die Daten können nicht geladen werden.");
+                    loadDisplay(getResources().getString(R.string.dataLoadProblem));
                     e.printStackTrace();
                 }
             }
@@ -210,13 +206,13 @@ public class CantineActivity extends AppCompatActivity {
             mealCard.setStrokeColor(getResources().getColor(R.color.grey_dark));
             mealCard.setElevation(0);
             // "Künstliche Intelligenz" zur Erkennunung von Haupgerichten
-            if((mealDailyPlan.getMeal()[i].getCategory().equals("Wahlessen 1")) && basicMealOne){
+            if((mealDailyPlan.getMeal()[i].getCategory().equals(getString(R.string.typeMealOne))) && basicMealOne){
                 layoutMealCardsBasic.addView(mealCard);
                 basicMealOne=false;
-            }else if((mealDailyPlan.getMeal()[i].getCategory().equals("Wahlessen 2")) && basicMealTwo){
+            }else if((mealDailyPlan.getMeal()[i].getCategory().equals(getString(R.string.typeMealTwo))) && basicMealTwo){
                 layoutMealCardsBasic.addView(mealCard);
                 basicMealTwo=false;
-            }else if((mealDailyPlan.getMeal()[i].getCategory().equals("Wahlessen 3")) && basicMealThree  ){
+            }else if((mealDailyPlan.getMeal()[i].getCategory().equals(getString(R.string.typeMealThree))) && basicMealThree  ){
                 try {
                     Double price= Double.parseDouble(mealDailyPlan.getMeal()[i].getPrice());
 
@@ -309,7 +305,7 @@ public class CantineActivity extends AppCompatActivity {
                                     loadLayout(mealDailyPlan, date);
                                 } catch (JSONException e) {
                                     e.printStackTrace();
-                                    loadDisplay("Es kann keine Verbindung mit \"OpenMensa\" hergestellt werden.");
+                                    loadDisplay(getResources().getString(R.string.problemsWithOpenMensa));
                                 }
                             }
                         });
@@ -319,7 +315,7 @@ public class CantineActivity extends AppCompatActivity {
                             @Override
                             public void run() {
                                 SimpleDateFormat f =new SimpleDateFormat("dd.MM.yyyy");
-                                loadDisplay("Es sind keine Daten für "+f.format(date)+" gefunden.\n\nDie Kantine ist an diesem Tag wahrscheinlich geschlossen.  ");
+                                loadDisplay(getString(R.string.thereIsNoData)+" "+f.format(date)+" "+getString(R.string.cantineIsProbablyClosed));
                             }
                         });
                     }
@@ -327,7 +323,7 @@ public class CantineActivity extends AppCompatActivity {
                     layoutMealCardsBasic.post(new Runnable() {
                         @Override
                         public void run() {
-                            loadDisplay("Die Daten können nicht geladen werden.");
+                            loadDisplay(getResources().getString(R.string.dataLoadProblem));
                         }
                     });
                     e.printStackTrace();
@@ -379,7 +375,6 @@ public class CantineActivity extends AppCompatActivity {
                             }else if((plan.getMeal()[i].getCategory().equals("Wahlessen 3")) && basicMealThree  ){
                                 try {
                                     Double price= Double.parseDouble(plan.getMeal()[i].getPrice());
-
                                     if (price>1.80){
                                         basicMealThree=false;
                                         meals.add(plan.getMeal()[i].getName());
@@ -399,11 +394,10 @@ public class CantineActivity extends AppCompatActivity {
     public void refreshClick(@NonNull MenuItem item) throws NullPointerException{
         indicator.show();
         if (!NetworkAvailability.check(CantineActivity.this)){
-            loadDisplay("Die Daten können nicht geladen werden, weil Sie keine Internet-Verbindung haben.");
+            loadDisplay(getResources().getString(R.string.problemsWithInternetConnection));
         }else{
             generateCurrentWeek();
             showTabs();
-           // pageTitleExtra.setVisibility(View.INVISIBLE);
             fillTabsWithData();
         }
     }
