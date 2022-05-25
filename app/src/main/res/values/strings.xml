@@ -173,4 +173,6 @@ E-Mail-Adresse: <p><a href="mailto:zaeske.christian@gmail.com">zaeske.christian@
     <string name="error">Fehler</string>
     <string name="organizerURL">https://rapla.dhbw-karlsruhe.de/rapla?key=2llRzrjV9Yj0yY4JKsO9cneRD8XIxxCqFeg5tRpzABg</string>
     <string name="configuration">Konfiguration</string>
+    <string name="questions">\???</string>
+    <string name="questionsTime">\??:??</string>
 </resources>

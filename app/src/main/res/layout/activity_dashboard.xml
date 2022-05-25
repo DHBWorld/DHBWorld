@@ -151,7 +151,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
                                     android:paddingRight="7dp"
-                                    android:text="\???"
+                                    android:text="@string/questions"
                                     android:textColor="@color/black"
                                     android:textSize="15sp" />
 
@@ -182,7 +182,7 @@
                                                 android:id="@+id/timeViewCalendarDashboard"
                                                 android:layout_width="wrap_content"
                                                 android:layout_height="wrap_content"
-                                                android:text="\??:??"
+                                                android:text="@string/questionsTime"
                                                 android:textColor="@color/black"
                                                 android:textSize="23dp" />
 
@@ -260,7 +260,7 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="0.3"
-                                    android:text="\???"
+                                    android:text="@string/questions"
                                     android:textColor="@color/black"
                                     android:textSize="15sp" />
 
@@ -302,7 +302,7 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="0.3"
-                                    android:text="\???"
+                                    android:text="@string/questions"
                                     android:textColor="@color/black"
                                     android:textSize="15sp" />
 
@@ -342,7 +342,7 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="0.3"
-                                    android:text="\???"
+                                    android:text="@string/questions"
                                     android:textColor="@color/black"
                                     android:textSize="15sp" />
 
@@ -432,7 +432,7 @@
                                     android:id="@+id/textViewMealOne"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:text="\???"
+                                    android:text="@string/questions"
                                     android:textColor="@color/black"
                                     android:textSize="15sp" />
                             </LinearLayout>
@@ -454,7 +454,7 @@
                                     android:id="@+id/textViewMealTwo"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:text="\???"
+                                    android:text="@string/questions"
                                     android:textColor="@color/black"
                                     android:textSize="15sp" />
                             </LinearLayout>
@@ -476,7 +476,7 @@
                                     android:id="@+id/textViewMealThree"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:text="\???"
+                                    android:text="@string/questions"
                                     android:textColor="@color/black"
                                     android:textSize="15sp" />
                             </LinearLayout>
@@ -531,7 +531,7 @@
                                     android:id="@+id/textViewPersonalInfoOne"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:text="\???"
+                                    android:text="@string/questions"
                                     android:textColor="@color/black"
                                     android:textSize="13sp" />
                             </LinearLayout>
@@ -554,7 +554,7 @@
                                     android:id="@+id/textViewPersonalInfoTwo"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:text="\???"
+                                    android:text="@string/questions"
                                     android:textColor="@color/black"
                                     android:textSize="13sp" />
                             </LinearLayout>
@@ -577,7 +577,7 @@
                                     android:id="@+id/textViewPersonalInfoThree"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:text="\???"
+                                    android:text="@string/questions"
                                     android:textColor="@color/black"
                                     android:textSize="13sp" />
                             </LinearLayout>
