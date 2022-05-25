@@ -175,4 +175,11 @@ E-Mail-Adresse: <p><a href="mailto:zaeske.christian@gmail.com">zaeske.christian@
     <string name="configuration">Konfiguration</string>
     <string name="questions">\???</string>
     <string name="questionsTime">\??:??</string>
+    <string name="mo">Mo</string>
+    <string name="di">Di</string>
+    <string name="mi">Mi</string>
+    <string name="don">Do</string>
+    <string name="fr">Fr</string>
+    <string name="hauptgerichte">Hauptgerichte</string>
+    <string name="sonstiges">Sonstiges</string>
 </resources>

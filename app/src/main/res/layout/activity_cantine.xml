@@ -45,7 +45,7 @@
                 <com.google.android.material.tabs.TabItem
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Mo"
+                    android:text="@string/mo"
 
 
                     />
@@ -53,24 +53,24 @@
                 <com.google.android.material.tabs.TabItem
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Di"
+                    android:text="@string/di"
                     />
 
                 <com.google.android.material.tabs.TabItem
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Mi"
+                    android:text="@string/mi"
                     />
 
                 <com.google.android.material.tabs.TabItem
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Do"
+                    android:text="@string/don"
                     />
                 <com.google.android.material.tabs.TabItem
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Fr"
+                    android:text="@string/fr"
                     />
 
 
@@ -108,7 +108,7 @@
                         android:id="@+id/textView_pageTitleBasic_canteen"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Hauptgerichte"
+                        android:text="@string/hauptgerichte"
                         android:textSize="25dp"
                         android:textColor="@color/black"
                         android:paddingBottom="5dp"/>
@@ -145,7 +145,7 @@
                         android:id="@+id/textView_pageTitleExtra_canteen"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:text="Sonstiges"
+                        android:text="@string/sonstiges"
                         android:textSize="25dp"
                         android:textColor="@color/black"
                         android:paddingBottom="5dp"/>
