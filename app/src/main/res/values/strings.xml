@@ -194,7 +194,7 @@ E-Mail-Adresse: <p><a href="mailto:zaeske.christian@gmail.com">zaeske.christian@
     <string name="endsIn">endet in</string>
     <string name="pause">Pause!</string>
     <string name="serverTrouble">Server Problem</string>
-    <string name="copy">Kopiert</string>
+    <string name="copied">Kopiert</string>
     <string name="thereIsntAnyPersonalData">Sie haben noch keine persönlichen Daten gespeichert</string>
     <string name="matriculationNumber">Matrikelnummer:</string>
     <string name="libraryNumber">Bibliotheksnummer:</string>
@@ -207,4 +207,5 @@ E-Mail-Adresse: <p><a href="mailto:zaeske.christian@gmail.com">zaeske.christian@
     <string name="problemsWithOpenMensa">Es kann keine Verbindung mit \"OpenMensa\" hergestellt werden.</string>
     <string name="thereIsNoData">Es sind keine Daten für</string>
     <string name="cantineIsProbablyClosed">gefunden.\n\nDie Kantine ist an diesem Tag wahrscheinlich geschlossen.</string>
+    <string name="data_saved">Daten gespeichert</string>
 </resources>

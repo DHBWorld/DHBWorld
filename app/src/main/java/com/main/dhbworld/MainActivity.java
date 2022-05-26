@@ -1,8 +1,5 @@
 package com.main.dhbworld;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.app.AppCompatDelegate;
-
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
@@ -10,10 +7,13 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.BaseTransientBottomBar;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
 import com.main.dhbworld.Navigation.NavigationUtilities;
 
@@ -74,8 +74,7 @@ public class MainActivity extends AppCompatActivity{
                 ClipData clip = ClipData.newPlainText("", name.getText().toString());
                 clipboard.setPrimaryClip(clip);
 
-
-                Toast.makeText(MainActivity.this, "Kopiert", Toast.LENGTH_LONG).show();
+                Snackbar.make(MainActivity.this.findViewById(android.R.id.content), getResources().getString(R.string.copied), BaseTransientBottomBar.LENGTH_SHORT).show();
             }
         };
         TextInputLayout textInputLayout_name = findViewById(R.id.textInputLayoutPI_name);
@@ -91,8 +90,7 @@ public class MainActivity extends AppCompatActivity{
                 ClipData clip = ClipData.newPlainText("", name.getText().toString());
                 clipboard.setPrimaryClip(clip);
 
-
-                Toast.makeText(MainActivity.this, "Kopiert", Toast.LENGTH_LONG).show();
+                Snackbar.make(MainActivity.this.findViewById(android.R.id.content), getResources().getString(R.string.copied), BaseTransientBottomBar.LENGTH_SHORT).show();
             }
         });
         textInputLayout_matriculationNumber.setEndIconOnClickListener(new View.OnClickListener() {
@@ -103,7 +101,7 @@ public class MainActivity extends AppCompatActivity{
                 clipboard.setPrimaryClip(clip);
 
 
-                Toast.makeText(MainActivity.this, "Kopiert", Toast.LENGTH_LONG).show();
+                Snackbar.make(MainActivity.this.findViewById(android.R.id.content), getResources().getString(R.string.copied), BaseTransientBottomBar.LENGTH_SHORT).show();
             }
         });
         textInputLayout_libraryNummer.setEndIconOnClickListener(new View.OnClickListener() {
@@ -114,7 +112,7 @@ public class MainActivity extends AppCompatActivity{
                 clipboard.setPrimaryClip(clip);
 
 
-                Toast.makeText(MainActivity.this, "Kopiert", Toast.LENGTH_LONG).show();
+                Snackbar.make(MainActivity.this.findViewById(android.R.id.content), getResources().getString(R.string.copied), BaseTransientBottomBar.LENGTH_SHORT).show();
             }
         });
         textInputLayout_adresse.setEndIconOnClickListener(new View.OnClickListener() {
@@ -125,7 +123,7 @@ public class MainActivity extends AppCompatActivity{
                 clipboard.setPrimaryClip(clip);
 
 
-                Toast.makeText(MainActivity.this, "Kopiert", Toast.LENGTH_LONG).show();
+                Snackbar.make(MainActivity.this.findViewById(android.R.id.content), getResources().getString(R.string.copied), BaseTransientBottomBar.LENGTH_SHORT).show();
             }
         });
 
@@ -241,7 +239,7 @@ public class MainActivity extends AppCompatActivity{
         editor.putString(FreeNotes, freeNotes.getText().toString());
         editor.apply();
         //show a message to the user
-        Toast.makeText(this, "Data saved", Toast.LENGTH_SHORT).show();
+        Snackbar.make(MainActivity.this.findViewById(android.R.id.content), getResources().getString(R.string.data_saved), BaseTransientBottomBar.LENGTH_SHORT).show();
     }
 
     public void loadAndUpdateData(){

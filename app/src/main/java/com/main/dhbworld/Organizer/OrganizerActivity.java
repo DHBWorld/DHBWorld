@@ -6,7 +6,6 @@ import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.View;
 import android.widget.ListView;
 import android.widget.SearchView;
 
@@ -15,6 +14,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
@@ -129,8 +129,7 @@ public class OrganizerActivity extends AppCompatActivity {
     }
 
     public void displayError(){
-        View drawer = findViewById(R.id.drawerLayout);
-        Snackbar.make(drawer, (CharSequence)"Network Error! Couldn't fetch data from Server.", 6).show();
+        Snackbar.make(this.findViewById(android.R.id.content), "Network Error! Couldn't fetch data from Server.", BaseTransientBottomBar.LENGTH_LONG).show();
     }
 }
 

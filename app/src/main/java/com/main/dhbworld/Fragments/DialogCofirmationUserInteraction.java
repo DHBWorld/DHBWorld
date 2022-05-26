@@ -1,9 +1,10 @@
 package com.main.dhbworld.Fragments;
+
 import android.content.Context;
 import android.content.DialogInterface;
-import android.view.Gravity;
-import android.widget.Toast;
+
 import androidx.annotation.NonNull;
+
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.main.dhbworld.Enums.InteractionState;
 import com.main.dhbworld.R;

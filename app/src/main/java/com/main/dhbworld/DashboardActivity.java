@@ -1,14 +1,5 @@
 package com.main.dhbworld;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.app.AppCompatDelegate;
-import androidx.appcompat.content.res.AppCompatResources;
-import androidx.core.content.ContextCompat;
-import androidx.core.graphics.ColorUtils;
-import androidx.preference.PreferenceManager;
-import java.time.*;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
@@ -24,9 +15,19 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
+import androidx.appcompat.content.res.AppCompatResources;
+import androidx.core.content.ContextCompat;
+import androidx.core.graphics.ColorUtils;
+import androidx.preference.PreferenceManager;
+
 import com.google.android.material.card.MaterialCardView;
-import com.google.android.material.progressindicator.CircularProgressIndicator;
+import com.google.android.material.snackbar.BaseTransientBottomBar;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseUser;
 import com.main.dhbworld.Calendar.CalendarActivity;
 import com.main.dhbworld.Calendar.nextEventsProvider;
@@ -39,10 +40,14 @@ import com.main.dhbworld.KVV.Departure;
 import com.main.dhbworld.KVV.Disruption;
 import com.main.dhbworld.KVV.KVVDataLoader;
 import com.main.dhbworld.Navigation.NavigationUtilities;
+
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.ArrayList;
 import java.util.List;
+
 import dhbw.timetable.rapla.data.event.Appointment;
 
 public class DashboardActivity extends AppCompatActivity {
@@ -97,7 +102,7 @@ public class DashboardActivity extends AppCompatActivity {
            loadCalendar();
            loadKvv();
        }else{
-           Toast.makeText(DashboardActivity.this, getResources().getString(R.string.problemsWithInternetConnection), Toast.LENGTH_LONG).show();
+           Snackbar.make(this.findViewById(android.R.id.content), getResources().getString(R.string.problemsWithInternetConnection), BaseTransientBottomBar.LENGTH_LONG).show();
        }
        loadPersonalInformation();
     }
@@ -503,7 +508,7 @@ public class DashboardActivity extends AppCompatActivity {
                 ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
                 ClipData clip = ClipData.newPlainText("", copyText);
                 clipboard.setPrimaryClip(clip);
-                Toast.makeText(DashboardActivity.this, getResources().getString(R.string.copy), Toast.LENGTH_SHORT).show();
+                Snackbar.make(DashboardActivity.this.findViewById(android.R.id.content), getResources().getString(R.string.copied), BaseTransientBottomBar.LENGTH_SHORT).show();
             }
         });
 
@@ -616,12 +621,16 @@ public class DashboardActivity extends AppCompatActivity {
                        loadCalendar();
                        loadKvv();
                     }else{
-                        Toast.makeText(DashboardActivity.this, getResources().getString(R.string.problemsWithInternetConnection), Toast.LENGTH_LONG).show();
+                        Snackbar.make(this.findViewById(android.R.id.content), getResources().getString(R.string.problemsWithInternetConnection), BaseTransientBottomBar.LENGTH_LONG).show();
                     }
                     loadPersonalInformation();
 
-                }else{ Toast.makeText(DashboardActivity.this, R.string.refreshIsOnlyIn10Min, Toast.LENGTH_SHORT).show();}
-            }else { Toast.makeText(DashboardActivity.this, getResources().getString(R.string.youAreInConfigModus), Toast.LENGTH_SHORT).show(); }
+                }else {
+                    Snackbar.make(this.findViewById(android.R.id.content), getResources().getString(R.string.refreshIsOnlyIn10Min), BaseTransientBottomBar.LENGTH_SHORT).show();
+                }
+            } else {
+                Snackbar.make(this.findViewById(android.R.id.content), getResources().getString(R.string.youAreInConfigModus), BaseTransientBottomBar.LENGTH_SHORT).show();
+            }
     }
 
     public void configurationClick(@NonNull MenuItem item) throws NullPointerException{
@@ -629,7 +638,7 @@ public class DashboardActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = sp.edit();
         if (!configurationModus){ //User can configure his dashboard
             item.setIcon(getResources().getDrawable(R.drawable.ic_done));
-            Toast.makeText(DashboardActivity.this, getResources().getString(R.string.chooseTheCardForConfiguration), Toast.LENGTH_SHORT).show();
+            Snackbar.make(this.findViewById(android.R.id.content), getResources().getString(R.string.chooseTheCardForConfiguration), BaseTransientBottomBar.LENGTH_SHORT).show();
             card_dash_calendar.setVisibility(View.VISIBLE);
             card_dash_pi.setVisibility(View.VISIBLE);
             card_dash_kvv.setVisibility(View.VISIBLE);
