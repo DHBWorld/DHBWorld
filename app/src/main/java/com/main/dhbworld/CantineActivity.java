@@ -197,39 +197,18 @@ public class CantineActivity extends AppCompatActivity {
         layoutMealCardsExtra.removeAllViews();
         SimpleDateFormat format =new SimpleDateFormat("dd.MM.yyyy");
         todayIs.setText(format.format(today));
-        boolean basicMealOne=true;
-        boolean basicMealTwo=true;
-        boolean basicMealThree=true;
         for (int i=0;i<mealDailyPlan.getMeal().length; i++){
             MaterialCardView mealCard= new MaterialCardView(CantineActivity.this);
             mealCard.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
             mealCard.setStrokeColor(getResources().getColor(R.color.grey_dark));
             mealCard.setElevation(0);
-            // "Künstliche Intelligenz" zur Erkennunung von Haupgerichten
-            if((mealDailyPlan.getMeal()[i].getCategory().equals(getString(R.string.typeMealOne))) && basicMealOne){
-                layoutMealCardsBasic.addView(mealCard);
-                basicMealOne=false;
-            }else if((mealDailyPlan.getMeal()[i].getCategory().equals(getString(R.string.typeMealTwo))) && basicMealTwo){
-                layoutMealCardsBasic.addView(mealCard);
-                basicMealTwo=false;
-            }else if((mealDailyPlan.getMeal()[i].getCategory().equals(getString(R.string.typeMealThree))) && basicMealThree  ){
-                try {
-                    Double price= Double.parseDouble(mealDailyPlan.getMeal()[i].getPrice());
 
-                    if (price>1.80){
-                        layoutMealCardsBasic.addView(mealCard);
-                        basicMealThree=false;
-                    }else{
-                        layoutMealCardsExtra.addView(mealCard);
-                    }
-                } catch (NumberFormatException e) {
-                    e.printStackTrace();
-                    layoutMealCardsBasic.addView(mealCard);
-                    basicMealThree=false;
-                }
+            if((mealDailyPlan.getMainCourses().contains(mealDailyPlan.getMeal()[i]))) { // Trennung: Hauptgericht oder Sonstiges
+                layoutMealCardsBasic.addView(mealCard);
             }else{
-                layoutMealCardsExtra.addView(mealCard);}
-            //----------------------
+                layoutMealCardsExtra.addView(mealCard);
+            }
+
             LinearLayout cardLayout = new LinearLayout(CantineActivity.this);
             cardLayout.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
             cardLayout.setOrientation(LinearLayout.HORIZONTAL);
