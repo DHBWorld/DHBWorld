@@ -1,4 +1,4 @@
-package com.main.dhbworld.CantineClasses;
+package com.main.dhbworld.Cantine;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -26,7 +26,5 @@ public class MealDailyPlan {
         }
     }
 
-    public Meal[] getMeal() { return meals;  }
-
-    public void setMeal(Meal[] meal) {  this.meals = meal; }
+    public Meal[] getMeal() { return meals; }
 }
