@@ -1,6 +1,7 @@
 package com.main.dhbworld.Cantine;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.filters.SmallTest;
@@ -8,6 +9,8 @@ import androidx.test.filters.SmallTest;
 import org.json.JSONException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import java.util.ArrayList;
 
 @RunWith(AndroidJUnit4.class)
 @SmallTest
@@ -24,6 +27,26 @@ public class MealDailyPlanTest {
         assertThat(plan.getMeal()[0].getNotes().size(), is(4));
         assertThat(plan.getMeal()[0].getNotes().get(0), is("Sellerie"));
         assertThat(plan.getMeal()[0].getNotes().get(1), is("Senf"));
+
+    }
+
+    @Test
+    public void test_mainCourses() throws JSONException {
+        MealDailyPlan plan= new MealDailyPlan(inputFromApi);
+
+        assertThat(plan.getMainCourses(), is(instanceOf(ArrayList.class)));
+        assertThat(plan.getMainCourses().get(0), is(instanceOf(Meal.class)));
+        assertThat(plan.getMainCourses().size(), is(2));
+        assertThat(plan.getMainCourses().get(0).getName(), is("Reine Kalbsbratwurst mit Currysauce und Baguette"));
+        assertThat(plan.getMainCourses().get(1).getName(), is("Vegane Bratwurst mit Currysauce und Baguette"));
+        assertThat(plan.getMainCourses().get(0).getPrice(), is("2.00"));
+        assertThat(plan.getMainCourses().get(1).getPrice(), is("2.00"));
+
+        assertThat(plan.getMainCourseNames(), is(instanceOf(ArrayList.class)));
+        assertThat(plan.getMainCourseNames().get(0), is(instanceOf(String.class)));
+        assertThat(plan.getMainCourseNames().size(), is(2));
+        assertThat(plan.getMainCourseNames().get(0), is("Reine Kalbsbratwurst mit Currysauce und Baguette"));
+        assertThat(plan.getMainCourseNames().get(1), is("Vegane Bratwurst mit Currysauce und Baguette"));
 
     }
 

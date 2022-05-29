@@ -360,30 +360,7 @@ public class CantineActivity extends AppCompatActivity {
                         inputForDashboard = new BufferedReader(responseBodyReader).lines().collect(Collectors.joining("\n"));
 
                         MealDailyPlan plan= new MealDailyPlan(inputForDashboard);
-                        Boolean basicMealOne=true;
-                        Boolean basicMealTwo=true;
-                        Boolean basicMealThree=true;
-
-                        for (int i=0;i<plan.getMeal().length; i++){
-                            // "Künstliche Intelligenz" zur Erkennunung von Haupgerichten
-                            if((plan.getMeal()[i].getCategory().equals("Wahlessen 1")) && basicMealOne){
-                                basicMealOne=false;
-                                meals.add(plan.getMeal()[i].getName());
-                            }else if((plan.getMeal()[i].getCategory().equals("Wahlessen 2")) && basicMealTwo){
-                                basicMealTwo=false;
-                                meals.add(plan.getMeal()[i].getName());
-                            }else if((plan.getMeal()[i].getCategory().equals("Wahlessen 3")) && basicMealThree  ){
-                                try {
-                                    Double price= Double.parseDouble(plan.getMeal()[i].getPrice());
-                                    if (price>1.80){
-                                        basicMealThree=false;
-                                        meals.add(plan.getMeal()[i].getName());
-                                    }
-                                } catch (NumberFormatException e) {
-                                    e.printStackTrace();
-                                    meals.add(plan.getMeal()[i].getName());
-                                    basicMealThree=false;
-                                } }}
+                        meals= plan.getMainCourseNames();
                     }
                 } catch (IOException | JSONException e) {
                 e.printStackTrace();
