@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import com.main.dhbworld.Cantine.CantineUtilities;
 import com.main.dhbworld.Cantine.MealDailyPlan;
 import com.main.dhbworld.Navigation.NavigationUtilities;
 import java.io.BufferedReader;
@@ -63,42 +64,13 @@ public class CantineActivity extends AppCompatActivity {
         if (!NetworkAvailability.check(CantineActivity.this)){
             loadDisplay(getResources().getString(R.string.problemsWithInternetConnection));
         }else{
-        generateCurrentWeek();
-        showTabs();
-        fillTabsWithData();
+            currentWeek= CantineUtilities.generateCurrentWeek();
+            showTabs();
+            fillTabsWithData();
         }
     }
 
-    private void generateCurrentWeek()  {
-        Date date= new Date();
-        currentWeek = new Date[5];
-        Calendar c= Calendar.getInstance();
-        c.setFirstDayOfWeek(Calendar.SUNDAY);
-        c.setTime(date);
-        Integer dayOfWeek = c.get(Calendar.DAY_OF_WEEK); // dayOfWeek= 2 ->Mo
-        dayOfWeek=dayOfWeek-2; // dayOfWeek= 0 ->Mo
-        // Am Samstag
-        if ( (dayOfWeek>4)){
-            dayOfWeek=0;
-            c.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
-            c.add(Calendar.DATE, 7);
-           System.out.println(c.get(Calendar.DAY_OF_MONTH));
-        }
-        //Am Sonntag
-        if ((dayOfWeek<0) ){
-            dayOfWeek=0;
-            c.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
-        }
-        for (int q=dayOfWeek; q<5;q++){
-            currentWeek[q]=c.getTime();
-            c.add(Calendar.DATE, 1);
-        }
-        c.add(Calendar.DATE, 2);
-        for (int q=0; q<dayOfWeek;q++){
-            currentWeek[q]=c.getTime();
-            c.add(Calendar.DATE, 1);
-        }
-    }
+
 
     private void showTabs (){
         SimpleDateFormat f =new SimpleDateFormat("dd");
@@ -127,30 +99,6 @@ public class CantineActivity extends AppCompatActivity {
     }
 
     private void fillTabsWithData(){
-        //Scrollen zwischen den Tabs
-       /* final AtomicReference<Float>[] x1 = new AtomicReference[]{new AtomicReference<>((float) 0)};
-        final float[] x2 = {0};
-        scroll.setOnTouchListener((v, event) -> {
-            // TODO Auto-generated method stub
-            switch (event.getAction()) {
-                case MotionEvent.ACTION_DOWN:
-                    x1[0].set(event.getX());
-                    break;
-                case MotionEvent.ACTION_UP:
-                    x2[0] = event.getX();
-                    System.out.println(x1[0] + "     " + x2[0]);
-                    float deltaX = x2[0] - x1[0].get();
-                    if (deltaX < -100) {
-                        tabLayout.selectTab(tabLayout.getTabAt(tabLayout.getSelectedTabPosition()+1));
-                        return true;
-                    }else if(deltaX > 100){
-                        tabLayout.selectTab(tabLayout.getTabAt(tabLayout.getSelectedTabPosition()-1));
-                        return true;
-                    }
-                    break;
-            }
-            return false;
-        });*/
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
@@ -352,7 +300,7 @@ public class CantineActivity extends AppCompatActivity {
         if (!NetworkAvailability.check(CantineActivity.this)){
             loadDisplay(getResources().getString(R.string.problemsWithInternetConnection));
         }else{
-            generateCurrentWeek();
+            currentWeek= CantineUtilities.generateCurrentWeek();
             showTabs();
             fillTabsWithData();
         }
