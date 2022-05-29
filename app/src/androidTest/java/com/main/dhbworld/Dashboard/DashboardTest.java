@@ -1,12 +1,20 @@
-package com.main.dhbworld;
+package com.main.dhbworld.Dashboard;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import android.content.Context;
 import android.content.SharedPreferences;
+
+import androidx.preference.PreferenceManager;
 import androidx.test.InstrumentationRegistry;
 import com.main.dhbworld.Calendar.nextEventsProvider;
+import com.main.dhbworld.CantineActivity;
+import com.main.dhbworld.DashboardActivity;
+import com.main.dhbworld.NetworkAvailability;
+
+import org.hamcrest.MatcherAssert;
 import org.junit.Test;
 import java.net.MalformedURLException;
 import dhbw.timetable.rapla.data.event.Appointment;
@@ -14,10 +22,8 @@ import dhbw.timetable.rapla.exceptions.NoConnectionException;
 
 public class DashboardTest {
 
-
-
     @Test
-    public void test_saveVisibilityOfCards(){
+    public void saveVisibilityOfCards(){
         Context context = InstrumentationRegistry.getContext();
         SharedPreferences sp = context.getSharedPreferences(DashboardActivity.dashboardSettings,Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
@@ -38,9 +44,13 @@ public class DashboardTest {
 
 
     @Test
-    public void test_CalendarData() {
+    public void loadCalendarData() {
         Context context = InstrumentationRegistry.getContext();
-        String url= "https://rapla.dhbw-karlsruhe.de/rapla?page=calendar&user=eisenbiegler&file=TINF20B4";
+        SharedPreferences preferences = PreferenceManager
+                .getDefaultSharedPreferences(context);
+        String url = preferences.getString("CurrentURL",null);
+
+        if (!(url ==null) && (!url.equals(""))) {
             new Thread(new Runnable() {
                 @Override
                 public void run() {
@@ -53,8 +63,25 @@ public class DashboardTest {
                     } catch (MalformedURLException | NoConnectionException | IllegalAccessException e) {
                         e.printStackTrace();
                     }
-                }});
+                }});}
 
+        }
+
+        @Test
+        public void networkAvalabilityIsNotNull(){
+            Context appContext = androidx.test.platform.app.InstrumentationRegistry.getInstrumentation().getTargetContext();
+            assertNotNull(NetworkAvailability.check(appContext));
+        }
+
+        @Test
+        public void textNetworkAvalability(){
+            Context appContext = androidx.test.platform.app.InstrumentationRegistry.getInstrumentation().getTargetContext();
+            if (!NetworkAvailability.check(appContext)){
+                MatcherAssert.assertThat(CantineActivity.loadDataForDashboard().size(), is(0));
+            }
+            if (CantineActivity.loadDataForDashboard().size()>0){
+                assertThat(NetworkAvailability.check(appContext), is(true));
+            }
         }
 
     }

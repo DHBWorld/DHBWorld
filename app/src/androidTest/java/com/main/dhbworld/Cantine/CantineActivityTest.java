@@ -20,7 +20,7 @@ import java.util.Date;
 public class CantineActivityTest {
 
     @Test
-    public void test_currentWeek() throws JSONException {
+    public void testCurrentWeek() throws JSONException {
         Date[] currentWeek= CantineUtilities.generateCurrentWeek();
         assertThat(currentWeek[0].getDay(), is(1));
         assertThat(currentWeek[1].getDay(), is(2));
@@ -60,7 +60,7 @@ public class CantineActivityTest {
 
     }
 
-    public void test_loadDataForDashboard(){
+    public void loadDataForDashboard(){
         Calendar now = Calendar.getInstance();
         if(now.get(Calendar.DAY_OF_WEEK)==Calendar.SUNDAY){
             assertThat(CantineActivity.loadDataForDashboard().size(), is (0));

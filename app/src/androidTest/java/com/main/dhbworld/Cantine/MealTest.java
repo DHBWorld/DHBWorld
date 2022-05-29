@@ -12,14 +12,14 @@ import org.junit.runner.RunWith;
 public class MealTest {
 
     @Test
-    public void test_createDefaultMeal(){
+    public void createDefaultMeal(){
         Meal meal= new Meal();
         assertThat("No category", is(meal.getCategory()));
         assertThat(meal.getPrice(), is("-"));
     }
 
     @Test
-    public void test_createSpecialMeal(){
+    public void createSpecialMeal(){
         Meal meal= new Meal();
         meal.setName("Something special");
         meal.setCategory("Wahlessen 1");
@@ -34,7 +34,7 @@ public class MealTest {
     }
 
     @Test
-    public void test_variousPrices(){
+    public void variousPrices(){
         Meal meal= new Meal();
         meal.setName("Something special");
         meal.setCategory("Wahlessen 1");
