@@ -151,7 +151,6 @@ public class CalendarActivity extends AppCompatActivity{
         return blackList;
     }
 
-
     public void openFilterClick(@NonNull MenuItem item) throws NullPointerException{
         final String[] listItems = arrayConvertor(Objects.requireNonNull(EventCreator.uniqueTitles()));
         final boolean[] checkedItems = new boolean[listItems.length];

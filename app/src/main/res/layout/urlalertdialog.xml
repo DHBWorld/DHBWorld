@@ -1,19 +1,18 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="?dialogPreferredPadding">
-
-
+ <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="?dialogPreferredPadding">
     <EditText
         android:id="@+id/urlEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="bottom"
         android:hint="@string/enter_url_here"
-        android:inputType="textUri"
-        />
-
+        android:inputType="textUri" />
 
     <TextView
         android:layout_width="match_parent"
@@ -43,3 +42,4 @@
         />
 
 </LinearLayout>
+    </ScrollView>
