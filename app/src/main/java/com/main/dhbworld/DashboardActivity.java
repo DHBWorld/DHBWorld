@@ -70,10 +70,10 @@ public class DashboardActivity extends AppCompatActivity {
     Boolean cardMealPlan_isVisible = true;
     Boolean cardKvv_isVisible = true;
 
-    private MaterialCardView card_dash_calendar;
-    private MaterialCardView card_dash_pi;
-    private MaterialCardView card_dash_kvv;
-    private MaterialCardView card_dash_mealPlan;
+    MaterialCardView card_dash_calendar;
+    MaterialCardView card_dash_pi;
+    MaterialCardView card_dash_kvv;
+    MaterialCardView card_dash_mealPlan;
 
     private Button buttonCardCalendar;
     private Button buttonCardPI;
