@@ -2,18 +2,15 @@ package com.main.dhbworld.Dashboard;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import android.content.Context;
 import android.content.SharedPreferences;
-
 import androidx.preference.PreferenceManager;
 import androidx.test.InstrumentationRegistry;
 import com.main.dhbworld.Calendar.nextEventsProvider;
 import com.main.dhbworld.CantineActivity;
 import com.main.dhbworld.DashboardActivity;
 import com.main.dhbworld.NetworkAvailability;
-
 import org.hamcrest.MatcherAssert;
 import org.junit.Test;
 import java.net.MalformedURLException;
