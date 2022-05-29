@@ -16,7 +16,7 @@ import android.view.ViewGroup;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import com.main.dhbworld.CantineClasses.MealDailyPlan;
+import com.main.dhbworld.Cantine.MealDailyPlan;
 import com.main.dhbworld.Navigation.NavigationUtilities;
 import java.io.BufferedReader;
 import java.io.IOException;

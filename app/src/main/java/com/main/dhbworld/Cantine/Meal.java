@@ -1,4 +1,4 @@
-package com.main.dhbworld.CantineClasses;
+package com.main.dhbworld.Cantine;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,15 +31,17 @@ public class Meal {
 
     public String getPrice() {
         String result=price;
+        //Standardisierung von dem Price-Format zur X.XX
         if ((price!=null) && (!price.equals("null")) && (!price.equals("-"))){
-            if (price.substring(price.indexOf('.')+1).length()>1){
+            if (price.indexOf('.')==-1){ // falls Preice ist  z.B. 2 Euro --> 2.00
+                result=price+".00";
+            }else if (price.substring(price.indexOf('.')+1).length()==1) { // falls Preice ist z.B. 2.1 Euro --> 2.10
+                result = price + "0";
+            }else{ // falls Preice ist bereits im richtigen Format z.B. 2.15
                 result=price;
-            }else{
-                result=price+"0";
             }
         }
         return  result;
-
     }
 
     public void setPrice(String price) {
@@ -50,15 +52,6 @@ public class Meal {
 
     public List<String> getNotes() {
         return notes;
-    }
-
-    public void setNotes(List<String> notes) {
-        this.notes = notes;
-    }
-
-    public String toString(){
-        String m=name+" "+price+" "+notes;
-        return m;
     }
 
     public String getCategory() {
