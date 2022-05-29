@@ -46,7 +46,14 @@ public class Meal {
 
     public void setPrice(String price) {
         if ((price!=null) && (!price.equals("null"))){
-            this.price = price;
+            try{
+                Double.parseDouble(price);
+                this.price = price;
+            } catch (NumberFormatException e) {
+                this.price = "-";
+            }
+        }else{
+            this.price = "-";
         }
     }
 
