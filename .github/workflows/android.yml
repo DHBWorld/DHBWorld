@@ -41,7 +41,7 @@ jobs:
     
     - uses: blitzdose/action-android/emulator-run-cmd@release/0.1.4
       with:
-        cmd: ./gradlew connectedAndroidTest
+        cmd: ./gradlew jacocoCombinedTestReports
         api: 27
         tag: default
         abi: x86_64
