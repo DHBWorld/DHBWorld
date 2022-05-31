@@ -112,7 +112,7 @@ public class BackgroundWorker extends Worker {
                                 notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
                                         | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                                 PendingIntent intent = PendingIntent.getActivity(context, 0,
-                                        notificationIntent, 0);
+                                        notificationIntent, PendingIntent.FLAG_IMMUTABLE);
                                 builder.setContentIntent(intent);
 
                                 NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);

@@ -32,7 +32,9 @@ task jacocoCombinedTestReports(type: JacocoReport, dependsOn: ['testDebugUnitTes
             '**/BuildConfig.*',
             '**/Manifest*.*',
             '**/*Test*.*',
-            'android/**/*.*'
+            'android/**/*.*',
+            'androidx/**/*.*',
+            'com/google/**/*.*'
     ]
 
     // generated classes
