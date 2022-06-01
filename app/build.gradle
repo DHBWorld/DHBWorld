@@ -7,7 +7,7 @@ apply plugin: 'com.google.gms.google-services'
 apply plugin: 'jacoco'
 
 jacoco {
-    toolVersion = "0.8.8"
+    toolVersion = "0.8.7"
     reportsDirectory = file("$buildDir/reports/coverage")
 }
 
@@ -34,17 +34,11 @@ task jacocoCombinedTestReports(type: JacocoReport, dependsOn: ['testDebugUnitTes
             '**/*Test*.*',
             'android/**/*.*',
             'androidx/**/*.*',
-            'com/google/**/*.*'
+            'com/google/**/*.*',
+            '**/databinding/*.*'
     ]
 
-    // generated classes
-    classDirectories.from = fileTree(
-            dir: "$buildDir/intermediates/classes/debug",
-            excludes: excludes
-    ) + fileTree(
-            dir: "$buildDir/tmp/kotlin-classes/debug",
-            excludes: excludes
-    )
+    classDirectories.from(fileTree(dir: "$project.buildDir/intermediates/javac/debug/classes", excludes: excludes))
     // sources
     sourceDirectories.from = [
             android.sourceSets.main.java.srcDirs,
