@@ -62,7 +62,7 @@ jobs:
         mv test-reporter-latest-linux-amd64 app/src/main/java
         cd app/src/main/java
         ./test-reporter-latest-linux-amd64 format-coverage ../../../build/reports/coverage/jacocoCombinedTestReports/jacocoCombinedTestReports.xml -t jacoco -d -o output.json
-        ./test-reporter-latest-linux-amd64 upload-coverage -i output.json -r SCHLÜSSEL
+        ./test-reporter-latest-linux-amd64 upload-coverage -i output.json -r ${{ secrets.codeclimate_key }}
         cd ../../../../
 
   ##5
