@@ -53,6 +53,14 @@ jobs:
       with:
         name: reports
         path: app/build/reports/androidTests/connected/ # path to where the xml test results are stored
+        
+    - name: report Test coverage
+      run: |
+        rm output.json
+        wget https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64
+        chmod +x test-reporter-latest-linux-amd64
+        ./test-reporter-latest-linux-amd64 format-coverage app/build/reports/coverage/jacocoCombinedTestReports/jacocoCombinedTestReports.xml -t jacoco -d -o output.json
+        ./test-reporter-latest-linux-amd64 upload-coverage -i output.json -r SCHLÜSSEL
 
   ##5
   report:
