@@ -55,6 +55,8 @@ jobs:
         path: app/build/reports/androidTests/connected/ # path to where the xml test results are stored
         
     - name: report Test coverage
+      env:
+        CODECLIMATE_KEY: ${{ secrets.codeclimate_key }}
       run: |
         rm -f output.json || true
         wget https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64
@@ -62,7 +64,7 @@ jobs:
         mv test-reporter-latest-linux-amd64 app/src/main/java
         cd app/src/main/java
         ./test-reporter-latest-linux-amd64 format-coverage ../../../build/reports/coverage/jacocoCombinedTestReports/jacocoCombinedTestReports.xml -t jacoco -d -o output.json
-        ./test-reporter-latest-linux-amd64 upload-coverage -i output.json -r ${{ secrets.codeclimate_key }}
+        ./test-reporter-latest-linux-amd64 upload-coverage -i output.json -r "$CODECLIMATE_KEY"
         cd ../../../../
 
   ##5
