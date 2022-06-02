@@ -78,6 +78,7 @@ public class NavigationUtilities {
 
     private static void startActivity(Activity activity, Class<?> cls) {
         Intent intent = new Intent(activity, cls);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         activity.startActivity(intent);
         activity.finish();
     }
