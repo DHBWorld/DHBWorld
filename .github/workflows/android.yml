@@ -56,7 +56,7 @@ jobs:
         
     - name: report Test coverage
       run: |
-        rm output.json
+        rm -f output.json || true
         wget https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64
         chmod +x test-reporter-latest-linux-amd64
         ./test-reporter-latest-linux-amd64 format-coverage app/build/reports/coverage/jacocoCombinedTestReports/jacocoCombinedTestReports.xml -t jacoco -d -o output.json
