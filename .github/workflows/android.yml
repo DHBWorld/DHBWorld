@@ -59,11 +59,11 @@ jobs:
         rm -f output.json || true
         wget https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64
         chmod +x test-reporter-latest-linux-amd64
-        mv test-reporter-latest-linux-amd64 src/main/java
-        cd src/main/java
+        mv test-reporter-latest-linux-amd64 app/src/main/java
+        cd app/src/main/java
         ./test-reporter-latest-linux-amd64 format-coverage app/build/reports/coverage/jacocoCombinedTestReports/jacocoCombinedTestReports.xml -t jacoco -d -o output.json
         ./test-reporter-latest-linux-amd64 upload-coverage -i output.json -r SCHLÜSSEL
-        cd ../../../
+        cd ../../../../
 
   ##5
   report:
