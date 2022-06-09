@@ -51,33 +51,25 @@ android:fitsSystemWindows="true">
     tools:openDrawer="start"
     android:layout_below="@id/topAppBarLayout"
     >
-
-
     <ScrollView
-
          android:layout_height="match_parent"
         android:layout_width="match_parent">
 
         <LinearLayout
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical"
-
             >
 
-
     <com.google.android.material.textfield.TextInputLayout
-
-
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Name"
+        android:hint="@string/name"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
 
         android:id="@+id/textInputLayoutPI_name"
         app:endIconDrawable="@drawable/ic_copy"
         app:endIconMode="custom"
-
         >
 
         <com.google.android.material.textfield.TextInputEditText
@@ -96,7 +88,7 @@ android:fitsSystemWindows="true">
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Matrikelnummer"
+        android:hint="@string/matriculation_number"
         android:id="@+id/textInputLayoutPI_matriculationNumber"
         app:endIconDrawable="@drawable/ic_copy"
         app:endIconMode="custom"
@@ -115,7 +107,7 @@ android:fitsSystemWindows="true">
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Bibliotheksnummer"
+        android:hint="@string/librrary_number"
         android:id="@+id/textInputLayoutPI_libraryNummer"
         app:endIconDrawable="@drawable/ic_copy"
         app:endIconMode="custom"
@@ -136,7 +128,7 @@ android:fitsSystemWindows="true">
 
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Studenten-E-Mail-Adresse"
+        android:hint="@string/student_e_mail_adress"
         android:id="@+id/textInputLayoutPI_adresse"
         app:endIconDrawable="@drawable/ic_copy"
         app:endIconMode="custom"
@@ -155,7 +147,7 @@ android:fitsSystemWindows="true">
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Freie Notizen"
+        android:hint="@string/free_notes"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
         <com.google.android.material.textfield.TextInputEditText

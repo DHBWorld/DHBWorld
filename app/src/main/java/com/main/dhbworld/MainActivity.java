@@ -64,67 +64,42 @@ public class MainActivity extends AppCompatActivity{
         NavigationUtilities.setUpNavigation(this, R.id.personalInformation);
 
 
-
-
-        View.OnClickListener copy= new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-                ClipData clip = ClipData.newPlainText("", name.getText().toString());
-                clipboard.setPrimaryClip(clip);
-
-                Snackbar.make(MainActivity.this.findViewById(android.R.id.content), getResources().getString(R.string.copied), BaseTransientBottomBar.LENGTH_SHORT).show();
-            }
-        };
         TextInputLayout textInputLayout_name = findViewById(R.id.textInputLayoutPI_name);
         textInputLayout_matriculationNumber = findViewById(R.id.textInputLayoutPI_matriculationNumber);
         TextInputLayout textInputLayout_adresse = findViewById(R.id.textInputLayoutPI_adresse);
         textInputLayout_libraryNummer = findViewById(R.id.textInputLayoutPI_libraryNummer);
 
 
-        textInputLayout_name.setEndIconOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-                ClipData clip = ClipData.newPlainText("", name.getText().toString());
-                clipboard.setPrimaryClip(clip);
+        textInputLayout_name.setEndIconOnClickListener(v -> {
+            ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+            ClipData clip = ClipData.newPlainText("", name.getText().toString());
+            clipboard.setPrimaryClip(clip);
 
-                Snackbar.make(MainActivity.this.findViewById(android.R.id.content), getResources().getString(R.string.copied), BaseTransientBottomBar.LENGTH_SHORT).show();
-            }
+            Snackbar.make(MainActivity.this.findViewById(android.R.id.content), getResources().getString(R.string.copied), BaseTransientBottomBar.LENGTH_SHORT).show();
         });
-        textInputLayout_matriculationNumber.setEndIconOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-                ClipData clip = ClipData.newPlainText("", mNumber.getText().toString());
-                clipboard.setPrimaryClip(clip);
+        textInputLayout_matriculationNumber.setEndIconOnClickListener(v -> {
+            ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+            ClipData clip = ClipData.newPlainText("", mNumber.getText().toString());
+            clipboard.setPrimaryClip(clip);
 
 
-                Snackbar.make(MainActivity.this.findViewById(android.R.id.content), getResources().getString(R.string.copied), BaseTransientBottomBar.LENGTH_SHORT).show();
-            }
+            Snackbar.make(MainActivity.this.findViewById(android.R.id.content), getResources().getString(R.string.copied), BaseTransientBottomBar.LENGTH_SHORT).show();
         });
-        textInputLayout_libraryNummer.setEndIconOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-                ClipData clip = ClipData.newPlainText("", lNumber.getText().toString());
-                clipboard.setPrimaryClip(clip);
+        textInputLayout_libraryNummer.setEndIconOnClickListener(v -> {
+            ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+            ClipData clip = ClipData.newPlainText("", lNumber.getText().toString());
+            clipboard.setPrimaryClip(clip);
 
 
-                Snackbar.make(MainActivity.this.findViewById(android.R.id.content), getResources().getString(R.string.copied), BaseTransientBottomBar.LENGTH_SHORT).show();
-            }
+            Snackbar.make(MainActivity.this.findViewById(android.R.id.content), getResources().getString(R.string.copied), BaseTransientBottomBar.LENGTH_SHORT).show();
         });
-        textInputLayout_adresse.setEndIconOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-                ClipData clip = ClipData.newPlainText("", studentMail.getText().toString());
-                clipboard.setPrimaryClip(clip);
+        textInputLayout_adresse.setEndIconOnClickListener(v -> {
+            ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+            ClipData clip = ClipData.newPlainText("", studentMail.getText().toString());
+            clipboard.setPrimaryClip(clip);
 
 
-                Snackbar.make(MainActivity.this.findViewById(android.R.id.content), getResources().getString(R.string.copied), BaseTransientBottomBar.LENGTH_SHORT).show();
-            }
+            Snackbar.make(MainActivity.this.findViewById(android.R.id.content), getResources().getString(R.string.copied), BaseTransientBottomBar.LENGTH_SHORT).show();
         });
 
         editButton.setOnClickListener(v -> {
@@ -193,14 +168,14 @@ public class MainActivity extends AppCompatActivity{
         }else{
             try{
                 long libraryNumberLength = Long.parseLong(l);
-                if(libraryNumberLength>999999999999l){
-                    textInputLayout_libraryNummer.setError("Can only contain 12 digits");
+                if(libraryNumberLength>999999999999L){
+                    textInputLayout_libraryNummer.setError(getString(R.string.error_12_digits));
                     return false;
                 }else{
                     return true;
                 }
             }catch(NumberFormatException g){
-                textInputLayout_libraryNummer.setError("No letters, only digits");
+                textInputLayout_libraryNummer.setError(getString(R.string.only_digits));
                 return false;
             }
         }
@@ -213,13 +188,13 @@ public class MainActivity extends AppCompatActivity{
             try{
                 long matriculationNumberLength = Long.parseLong(m);
                 if(matriculationNumberLength>9999999){
-                    textInputLayout_matriculationNumber.setError("Can only contain 7 digits");
+                    textInputLayout_matriculationNumber.setError(getString(R.string.max_7_digits));
                     return false;
                 }else{
                     return true;
                 }
             }catch (NumberFormatException g){
-                textInputLayout_matriculationNumber.setError("No letters, only digits");
+                textInputLayout_matriculationNumber.setError(getString(R.string.no_letters_only_digits));
                 return false;
             }
         }

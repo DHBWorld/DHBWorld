@@ -1,112 +1,111 @@
 <resources>
     <string name="app_name">DHBWorld</string>
     <string name="page_title">DHBWorld</string>
-    <string name="more">more</string>
-    <string name="content_description_more">show more information (contextual)</string>
+    <string name="more">Mehr</string>
+    <string name="content_description_more">Zeige mehr infos (Kontextuell)</string>
     <string name="header_title">DHBWorld</string>
-    <string name="header_text">The All-in-One DHBW app.</string>
-    <string name="personal_information">Personal Information</string>
-    <string name="meal_plan">Meal Plan</string>
-    <string name="edit">Edit</string>
+    <string name="header_text">Die All-in-One DHBW App.</string>
+    <string name="personal_information">Persönliche Infos</string>
+    <string name="meal_plan">Essensplan</string>
+    <string name="edit">Bearbeiten</string>
     <string name="editbutton">editButton</string>
-    <string name="save">Save</string>
-    <string name="cancel">Cancel</string>
+    <string name="save">Speichern</string>
+    <string name="cancel">Abbrechen</string>
     <string name="default_notification_channel_id">userInteraction</string>
-    <string name="still_accurate">Is this still accurate?</string>
-    <string name="kantine">Cantine</string>
-    <string name="Coffee">Coffee</string>
-    <string name="Printer">Printer</string>
-    <string name="yes">Yes</string>
-    <string name="no">No</string>
-    <string name="coffee_machine">Coffee machine</string>
+    <string name="still_accurate"></string>
+    <string name="kantine">Mensa</string>
+    <string name="Coffee">Kaffee</string>
+    <string name="coffee_machine">Kaffeemaschine</string>
+    <string name="Printer">Drucker</string>
+    <string name="yes">Ja</string>
+    <string name="no">Nein</string>
     <string name="status">Status:</string>
-    <string name="recent_reports">Recent reports: </string>
-    <string name="moechten_sie_event_melden">Do you want to report the event?</string>
-    <string name="sind_sie_sicher">Are you sure?</string>
-    <string name="abbrechen">Cancel</string>
-    <string name="problem_melden">Send report</string>
-    <string name="danke_fuer_event">Thank you for contributing!</string>
-    <string name="problem_still_there">Are you sure that the problem is solved?</string>
-    <string name="problem_ist_geloest">Already solved</string>
-    <string name="moechten_sie_melden_dass_der_drucker_kaputt_ist">Are you sure that the printer is broken?</string>
-    <string name="event_notifications">Notifications about events. Coffee machine, printer etc.</string>
-    <string name="problem_report">Report</string>
-    <string name="thank_you">Thank you for contributing!</string>
-    <string name="problem_is_solved">Already solved</string>
+    <string name="recent_reports">Kürzliche Meldungen: </string>
+    <string name="moechten_sie_event_melden">Wollen Sie das Event melden?</string>
+    <string name="sind_sie_sicher">Sind Sie sicher?</string>
+    <string name="abbrechen">Abbrechen</string>
+    <string name="problem_melden">Sende Meldung</string>
+    <string name="danke_fuer_event">Vielen Dank für Ihre Hilfe!</string>
+    <string name="problem_still_there">Sind Sie sicher, dass das Problem gelöst wurde?</string>
+    <string name="problem_ist_geloest">Bereits gelöst</string>
+    <string name="moechten_sie_melden_dass_der_drucker_kaputt_ist">Sind Sie sicher, dass der Drucker nicht funktioniert?</string>
+    <string name="event_notifications">Benachrichtigungen über Events. Kaffeemaschine, Mensa etc.</string>
+    <string name="problem_report">Melden</string>
+    <string name="thank_you">Vielen Dank für Ihren Hilfe!</string>
+    <string name="problem_is_solved">Bereits gelöst</string>
 
     <string name="title_activity_settings">SettingsActivity</string>
 
     <!-- Preference Titles -->
-    <string name="messages_header">Messages</string>
+    <string name="messages_header">Nachrichten</string>
     <string name="sync_header">Sync</string>
 
     <!-- Messages Preferences -->
-    <string name="signature_title">Your signature</string>
+    <string name="signature_title">Ihre Unterschrift.</string>
     <string name="reply_title">Default reply action</string>
-    <string name="informations_message">This application was developed by Christian Zäske, Daria Kodolova, Adrian Kohl and Linus Pust.
-        \nThis is not an official application by the DHBW!
-        \nThere is no guarantee for correctness.
-        \nVersion number: %1$s
+    <string name="informations_message">Diese App wurde von Christian Zäske, Daria Kodolova, Adrian Kohl und Linus Pust entwickelt.
+        \nDiese App ist keine Offizielle App der Dualen Hochschule Baden-Württemberg.
+        \nEs gibt keinelei Garantie auf Korrektheit der Angaben.
+        \nVersionsnummer: %1$s
     </string>
 
     <!-- Sync Preferences -->
-    <string name="sync_title">Sync email periodically</string>
-    <string name="attachment_title">Download incoming attachments</string>
-    <string name="attachment_summary_on">Automatically download attachments for incoming emails
-    </string>
-    <string name="attachment_summary_off">Only download attachments when manually requested</string>
+    <string name="sync_title">Synchronisiere E-Mails periodisch</string>
+    <string name="attachment_title">Lade eingehende Anhänge runter.</string>
+    <string name="attachment_summary_on">Lade Anhänge eingehender E-Mails automatisch runter.</string>
+    <string name="attachment_summary_off">Lade Anhänge nur runter, wenn manuell bestätigt wurde.</string>
     <string name="maxCalendarHour">20</string>
     <string name="minCalendarHour">7</string>
     <string name="canteen">Kantine</string>
-    <string name="previous_notifications">Previous notifications:</string>
-    <string name="state">State:</string>
-    <string name="are_you_sure">Are you sure?</string>
+    <string name="previous_notifications">Vorherige Benachrichtigungen:</string>
+    <string name="state">Zustand:</string>
+    <string name="are_you_sure">Sind Sie sicher?</string>
     <string name="time">%1$02d:%2$02d</string>
-    <string name="error_getting_kvv_data">Error while fetching data</string>
-    <string name="departure_time">Departure time</string>
-    <string name="departure_date">Departure date</string>
-    <string name="search">Search</string>
-    <string name="marker_destination">Marker Destination</string>
+    <string name="error_getting_kvv_data">Fehler beim Aufruf der Daten.</string>
+    <string name="departure_time">Abfahrtszeit</string>
+    <string name="departure_date">Abfahrtsdatum</string>
+    <string name="search">Suchen</string>
+    <string name="marker_destination">Marker Ankunftsort</string>
     <string name="title_activity_cantine">CantineActivity</string>
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>
     <string name="second_fragment_label">Second Fragment</string>
-    <string name="next">Next</string>
-    <string name="previous">Previous</string>
+    <string name="next">Vor</string>
+    <string name="previous">Zurück</string>
 
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
-    <string name="cantine">Cantine</string>
+    <string name="cantine">Mensa</string>
 
-    <string name="new_grade_exam">New exam grade</string>
+    <string name="new_grade_exam">Neue Note</string>
     <string name="new_grade_exam_text">
         A new grade is available!
         \n%1$s: %2$s
     </string>
-    <string name="new_grade_final">New final grade</string>
+    <string name="new_grade_final">Neue Endnote</string>
     <string name="new_grade_final_text">
         A new grade is available!
         \n%1$s: %2$s
     </string>
     <string name="dualis">Dualis</string>
-    <string name="wrong_credentials">E-Mail or password incorrect</string>
+    <string name="wrong_credentials">E-Mail oder Password falsch</string>
     <string name="semester">Semester</string>
-    <string name="refresh">Refresh</string>
-    <string name="authentication_expired">Credentials expired</string>
-    <string name="authentication_expired_expl">Maybe you have changed the password? Please log in to the app again.</string>
+    <string name="refresh">Aktualisieren</string>
+    <string name="authentication_expired">Zugang abgelaufen</string>
+    <string name="authentication_expired_expl">Vielleicht haben Sie Ihr Passwort verändert? Bitte melden Sie sich erneut an.</string>
     <string name="channel_name_general_dualis">Dualis Info</string>
-    <string name="channel_description_general_dualis">General information about Dualis</string>
-    <string name="channel_name_dualis">New grade (Dualis)</string>
-    <string name="channel_description_dualis">Notification for new grades (Dualis)</string>
+    <string name="channel_description_general_dualis">Allgemeine Infos über Dualis</string>
+    <string name="channel_name_dualis">Neue Note (Dualis)</string>
+    <string name="channel_description_dualis">Benachrichtigung über neue Note (Dualis)</string>
 
-    <string name="total_gpa">Overall GPA:</string>
-    <string name="major_gpa">Major GPA:</string>
+    <string name="total_gpa">Gesamt GPA:</string>
+    <string name="major_gpa">Hauptfach GPA:</string>
     <string name="total_credits">Credits:</string>
     <string name="values_credits">%1$s / %2$s</string>
-    <string name="tram_departure">Tram departure</string>
+    <string name="tram_departure">Bahn Abfahrt</string>
     <string name="user_interaction">User Interaction</string>
-    <string name="calendar">Calendar</string>
-    <string name="home">Home</string>
+    <string name="calendar">Kalender</string>
+    <string name="home">Hauptseite</string>
     <string name="data_privacy">
         <![CDATA[
 
@@ -132,85 +131,85 @@ E-Mail-Adresse: <p><a href="mailto:zaeske.christian@gmail.com">zaeske.christian@
  <ul class="glossary"><li><strong>Personenbezogene Daten:</strong> "Personenbezogene Daten“ sind alle Informationen, die sich auf eine identifizierte oder identifizierbare natürliche Person (im Folgenden "betroffene Person“) beziehen; als identifizierbar wird eine natürliche Person angesehen, die direkt oder indirekt, insbesondere mittels Zuordnung zu einer Kennung wie einem Namen, zu einer Kennnummer, zu Standortdaten, zu einer Online-Kennung (z.B. Cookie) oder zu einem oder mehreren besonderen Merkmalen identifiziert werden kann, die Ausdruck der physischen, physiologischen, genetischen, psychischen, wirtschaftlichen, kulturellen oder sozialen Identität dieser natürlichen Person sind. </li><li><strong>Profile mit nutzerbezogenen Informationen:</strong> Die Verarbeitung von "Profilen mit nutzerbezogenen Informationen", bzw. kurz "Profilen" umfasst jede Art der automatisierten Verarbeitung personenbezogener Daten, die darin besteht, dass diese personenbezogenen Daten verwendet werden, um bestimmte persönliche Aspekte, die sich auf eine natürliche Person beziehen (je nach Art der Profilbildung können dazu unterschiedliche Informationen betreffend die Demographie, Verhalten und Interessen, wie z.B. die Interaktion mit Webseiten und deren Inhalten, etc.) zu analysieren, zu bewerten oder, um sie vorherzusagen (z.B. die Interessen an bestimmten Inhalten oder Produkten, das Klickverhalten auf einer Webseite oder den Aufenthaltsort). Zu Zwecken des Profilings werden häufig Cookies und Web-Beacons eingesetzt. </li><li><strong>Reichweitenmessung:</strong> Die Reichweitenmessung (auch als Web Analytics bezeichnet) dient der Auswertung der Besucherströme eines Onlineangebotes und kann das Verhalten oder Interessen der Besucher an bestimmten Informationen, wie z.B. Inhalten von Webseiten, umfassen. Mit Hilfe der Reichweitenanalyse können Webseiteninhaber z.B. erkennen, zu welcher Zeit Besucher ihre Webseite besuchen und für welche Inhalte sie sich interessieren. Dadurch können sie z.B. die Inhalte der Webseite besser an die Bedürfnisse ihrer Besucher anpassen. Zu Zwecken der Reichweitenanalyse werden häufig pseudonyme Cookies und Web-Beacons eingesetzt, um wiederkehrende Besucher zu erkennen und so genauere Analysen zur Nutzung eines Onlineangebotes zu erhalten. </li><li><strong>Verantwortlicher:</strong> Als "Verantwortlicher“ wird die natürliche oder juristische Person, Behörde, Einrichtung oder andere Stelle, die allein oder gemeinsam mit anderen über die Zwecke und Mittel der Verarbeitung von personenbezogenen Daten entscheidet, bezeichnet. </li><li><strong>Verarbeitung:</strong> "Verarbeitung" ist jeder mit oder ohne Hilfe automatisierter Verfahren ausgeführte Vorgang oder jede solche Vorgangsreihe im Zusammenhang mit personenbezogenen Daten. Der Begriff reicht weit und umfasst praktisch jeden Umgang mit Daten, sei es das Erheben, das Auswerten, das Speichern, das Übermitteln oder das Löschen. </li></ul><p class="seal"><a href="https://datenschutz-generator.de/" title="Rechtstext von Dr. Schwenke - für weitere Informationen bitte anklicken." target="_blank" rel="noopener noreferrer nofollow"><img src="https://datenschutz-generator.de/wp-content/plugins/ts-dsg/images/dsg-seal/dsg-seal-pp-de.png" alt="Rechtstext von Dr. Schwenke - für weitere Informationen bitte anklicken." width="250" height="250"></a></p>
         ]]>
     </string>
-    <string name="organizer">Organizer</string>
-    <string name="amount">Amount</string>
-    <string name="close">Close</string>
+    <string name="organizer">Organisator</string>
+    <string name="amount">Menge</string>
+    <string name="close">Schließen</string>
     <string name="preference_file_key">Dualis</string>
-    <string name="biometrics">Biometrics</string>
-    <string name="biometrics_summary">Use biometric sensors to log into Dualis.</string>
-    <string name="check_new_grades">Checking for new grades</string>
-    <string name="sync_makes_no_difference">Sync has no impact, as you have not saved your credentials.</string>
-    <string name="information_about_app">About the app</string>
-    <string name="enter_rapla_url">Please enter your Rapla-URL</string>
-    <string name="type_url_here">Type URL here</string>
-    <string name="submit">Submit</string>
-    <string name="notifications_mensa">Notifications Cantine</string>
-    <string name="notifications_coffee">Notifications Coffee machine</string>
-    <string name="notifications_printer">Notifications Printer</string>
-    <string name="notifications">Notifications</string>
-    <string name="customize_notifications">Customize Notifications</string>
-    <string name="about">About</string>
-    <string name="information_about">About DHBWorld</string>
-    <string name="licenses">Licenses</string>
-    <string name="data_privacy_title">Data privacy</string>
-    <string name="import_from_url">Import from URL</string>
-    <string name="enter_url_here">Enter URL here</string>
-    <string name="enter_studiengangsleiter_name_here">Enter \'Studiengangsleiter\' last name</string>
+    <string name="biometrics">Biometrische Daten</string>
+    <string name="biometrics_summary">Nutze Biometrische Daten, um in Dualis einzuloggen.</string>
+    <string name="check_new_grades">Suche nach neuen Noten</string>
+    <string name="sync_makes_no_difference">Synchronisation hat keine Auswirkungen, da Sie Ihre Zugangsdaten nicht speichern.</string>
+    <string name="information_about_app">Über die App</string>
+    <string name="enter_rapla_url">Bitte geben Sie Ihre Rapla-URL ein</string>
+    <string name="type_url_here">Url hier eingeben</string>
+    <string name="submit">Fertig</string>
+    <string name="notifications_mensa">Benachrichtigungen Mensa</string>
+    <string name="notifications_coffee">Benachrichtigungen Kaffeemaschine</string>
+    <string name="notifications_printer">Benachrichtigungen Drucker</string>
+    <string name="notifications">Benachrichtigungen</string>
+    <string name="customize_notifications">Benachrichtigungen bearbeiten</string>
+    <string name="about">Über</string>
+    <string name="information_about">Über DHBWorld</string>
+    <string name="licenses">Lizensen</string>
+    <string name="data_privacy_title">Datensicheheit</string>
+    <string name="import_from_url">Aus URL importieren</string>
+    <string name="enter_url_here">URL hier eingeben</string>
+    <string name="enter_studiengangsleiter_name_here">Nachname Studiengangsleiter</string>
     <string name="organizer_search">organizer_search</string>
     <string name="filter_icon">filter_icon</string>
     <string name="search_organizer">search_organizer</string>
-    <string name="canceled">Cancelled</string>
-    <string name="canceled_in_parens">(Cancelled)</string>
+    <string name="canceled">Abgebrochen</string>
+    <string name="canceled_in_parens">(Abgebrochen)</string>
     <string name="debugging">Debugging</string>
-    <string name="export_debug_log">Export Debugging-Log</string>
-    <string name="file_saved">File saved</string>
+    <string name="export_debug_log">Debugging-Log exportieren</string>
+    <string name="file_saved">Datei gesichert</string>
     <string name="download">Download</string>
-    <string name="error_with_message">Error: %1$s</string>
-    <string name="error">Error</string>
+    <string name="error_with_message">Fehler: %1$s</string>
+    <string name="error">Fehler</string>
     <string name="organizerURL">https://rapla.dhbw-karlsruhe.de/rapla?key=2llRzrjV9Yj0yY4JKsO9cneRD8XIxxCqFeg5tRpzABg</string>
-    <string name="configuration">Configuration</string>
+    <string name="configuration">Konfiguration</string>
     <string name="questions">\???</string>
     <string name="questionsTime">\??:??</string>
     <string name="mo">Mo</string>
-    <string name="di">Tu</string>
-    <string name="mi">We</string>
-    <string name="dn">Th</string>
+    <string name="di">Di</string>
+    <string name="mi">Mi</string>
+    <string name="dn">Do</string>
     <string name="fr">Fr</string>
-    <string name="hauptgerichte">Main dishes</string>
-    <string name="sonstiges">Other</string>
-    <string name="problemsWithInternetConnection">No internet connection available, loading failed.</string>
-    <string name="youAreInConfigModus">Please leave the configuration mode to refresh</string>
-    <string name="refreshIsOnlyIn10Min">Refresh only possible every 10 seconds.</string>
-    <string name="thereIsntAnyInfo">No data available for today.</string>
-    <string name="problemsWithCalenderView">Calendar data cannot be displayed here.</string>
-    <string name="pasteLinkInCalender">Please add your schedule in the settings to view your next class here.</string>
+    <string name="hauptgerichte">Hauptgerichte</string>
+    <string name="sonstiges">Sonstiges</string>
+    <string name="problemsWithInternetConnection">Keine Internetverbindung verfügbar, laden fehlgeschlagen.</string>
+    <string name="youAreInConfigModus">Bitte Konfigurationsmodus ausschalten, um zu aktualisieren. </string>
+    <string name="refreshIsOnlyIn10Min">Aktualisierung nur alle 10 Sekunden möglich.</string>
+    <string name="thereIsntAnyInfo">Für heute keine Daten verfügbar.</string>
+    <string name="problemsWithCalenderView">Kalenderdaten können hier nicht angezeigt werden.</string>
+    <string name="pasteLinkInCalender">Bitte Zeitplan in Einstellungen einfügen, um hier nächste Vorlesung zu sehen.</string>
     <string name="min">Min</string>
-    <string name="now">Now</string>
-    <string name="startsIn">Begins in</string>
-    <string name="endsIn">Ends in</string>
-    <string name="pause">Break!</string>
-    <string name="serverTrouble">Server Problems</string>
-    <string name="copied">Copied</string>
-    <string name="thereIsntAnyPersonalData">No personal informations saved.</string>
-    <string name="matriculationNumber">Matriculation number:</string>
-    <string name="libraryNumber">Library number:</string>
+    <string name="now">Jetzt</string>
+    <string name="startsIn">Beginnt in</string>
+    <string name="endsIn">Endet in</string>
+    <string name="pause">Pause!</string>
+    <string name="serverTrouble">Serverprobleme</string>
+    <string name="copied">Kopiert</string>
+    <string name="thereIsntAnyPersonalData">Keine persönlichen Daten gespeichert.</string>
+    <string name="matriculationNumber">Matrikelnummer:</string>
+    <string name="libraryNumber">Bibliotheksnummer:</string>
     <string name="emailStudent">E-Mail:</string>
-    <string name="chooseTheCardForConfiguration">Please select the cards you want to display.</string>
-    <string name="dataLoadProblem">Data could not be loaded.</string>
-    <string name="typeMealOne">Elective Meal 1</string>
-    <string name="typeMealTwo">Elective Meal 2</string>
-    <string name="typeMealThree">Elective Meal 3</string>
-    <string name="problemsWithOpenMensa">Connection to \"OpenMensa\" could not be established.</string>
-    <string name="thereIsNoData">No data available for </string>
-    <string name="cantineIsProbablyClosed">\n\nDie The cantine is probably closed.</string>
-    <string name="data_saved">Data saved</string>
-    <string name="error_12_digits">Can only contain 12 digits</string>
-    <string name="only_digits">No letters, only digits</string>
-    <string name="max_7_digits">Can only contain 7 digits</string>
-    <string name="no_letters_only_digits">No letters, only digits</string>
-    <string name="free_notes">Free notes</string>
+    <string name="chooseTheCardForConfiguration">Wählen Sie die Karten, welche Sie ein/ausblenden wollen.</string>
+    <string name="dataLoadProblem">Die Daten können nicht geladen werden.</string>
+    <string name="typeMealOne">Wahlessen 1</string>
+    <string name="typeMealTwo">Wahlessen 2</string>
+    <string name="typeMealThree">Wahlessen 3</string>
+    <string name="problemsWithOpenMensa">Es konnte keine Verbindung mit \"OpenMensa\" hergestellt werden.</string>
+    <string name="thereIsNoData">Es sind keine Daten für</string>
+    <string name="cantineIsProbablyClosed">vorhanden.\n\nDie Kantine ist an diesem Tag vermutlich geschlossen.</string>
+    <string name="data_saved">Daten gespeichert</string>
+    <string name="error_12_digits">Maximal 12 Zahlen erlaubt</string>
+    <string name="only_digits">Nur Zahlen zugelassen</string>
+    <string name="max_7_digits">Maximal 7 Zahlen erlabut</string>
+    <string name="no_letters_only_digits">Nur Zahlen zugelassen</string>
+    <string name="free_notes">Freies Notizfeld:</string>
     <string name="name">Name:</string>
-    <string name="matriculation_number">Matriculation number:</string>
-    <string name="librrary_number">Library number:</string>
-    <string name="student_e_mail_adress">Student E-Mail:</string>
+    <string name="matriculation_number">Matrikelnummer:</string>
+    <string name="librrary_number">Bibliotheknummer:</string>
+    <string name="student_e_mail_adress">Studenten E-Mail:</string>
 </resources>

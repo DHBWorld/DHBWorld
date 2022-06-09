@@ -169,7 +169,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginTop="16dp"
-                                    android:text="@string/besteht_das_problem_noch"
+                                    android:text="@string/still_accurate"
                                     android:textAppearance="?attr/textAppearanceBody2"
                                     android:textColor="?android:attr/textColorSecondary" />
 
@@ -187,14 +187,14 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:layout_marginEnd="8dp"
-                                        android:text="@string/ja" />
+                                        android:text="@string/yes" />
 
                                     <com.google.android.material.button.MaterialButton
                                         android:id="@+id/no0"
                                         style="?attr/borderlessButtonStyle"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:text="@string/nein" />
+                                        android:text="@string/no" />
                                 </LinearLayout>
                             </LinearLayout>
 
@@ -268,7 +268,7 @@
                                     android:backgroundTint="@color/grey_dark"
                                     android:clipToOutline="false"
                                     android:gravity="center_horizontal"
-                                    android:text="@string/kaffee"
+                                    android:text="@string/Coffee"
                                     android:textColor="@color/white"
                                     android:textSize="23dp" />
                             </LinearLayout>
@@ -291,7 +291,7 @@
                                     <TextView
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:text="@string/kaffeemaschine"
+                                        android:text="@string/coffee_machine"
                                         android:textAppearance="?attr/textAppearanceHeadline6" />
 
                                     <TextView
@@ -328,7 +328,7 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:layout_marginTop="16dp"
-                                        android:text="@string/besteht_das_problem_noch"
+                                        android:text="@string/still_accurate"
                                         android:textAppearance="?attr/textAppearanceBody2"
                                         android:textColor="?android:attr/textColorSecondary" />
 
@@ -346,14 +346,14 @@
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
                                             android:layout_marginEnd="8dp"
-                                            android:text="@string/ja" />
+                                            android:text="@string/yes" />
 
                                         <com.google.android.material.button.MaterialButton
                                             android:id="@+id/no1"
                                             style="?attr/borderlessButtonStyle"
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
-                                            android:text="@string/nein" />
+                                            android:text="@string/no" />
                                     </LinearLayout>
                                 </LinearLayout>
 
@@ -423,7 +423,7 @@
                                 android:backgroundTint="@color/grey_dark"
                                 android:clipToOutline="false"
                                 android:gravity="center_horizontal"
-                                android:text="@string/drucker"
+                                android:text="@string/Printer"
                                 android:textColor="@color/white"
                                 android:textSize="23dp" />
                         </LinearLayout>
@@ -447,7 +447,7 @@
 
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="@string/drucker"
+                                    android:text="@string/Printer"
                                     android:textAppearance="?attr/textAppearanceHeadline6" />
 
                                 <TextView
@@ -485,7 +485,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginTop="16dp"
-                                    android:text="@string/besteht_das_problem_noch"
+                                    android:text="@string/still_accurate"
                                     android:textAppearance="?attr/textAppearanceBody2"
                                     android:textColor="?android:attr/textColorSecondary" />
 
@@ -503,14 +503,14 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:layout_marginEnd="8dp"
-                                        android:text="@string/ja" />
+                                        android:text="@string/yes" />
 
                                     <com.google.android.material.button.MaterialButton
                                         android:id="@+id/no2"
                                         style="?attr/borderlessButtonStyle"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:text="@string/nein" />
+                                        android:text="@string/no" />
                                 </LinearLayout>
                             </LinearLayout>
 

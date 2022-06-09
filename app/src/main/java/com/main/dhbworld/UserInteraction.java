@@ -244,8 +244,8 @@ public class UserInteraction extends AppCompatActivity {
             n.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    DialogCofirmationUserInteraction confirmation= new DialogCofirmationUserInteraction(UserInteraction.this, R.string.moechten_sie_das_problem_besteht_nicht_mehr, R.string.problem_ist_solved);
-                    confirmation.setPositiveButton(R.string.problem_ist_solved, new DialogInterface.OnClickListener() {
+                    DialogCofirmationUserInteraction confirmation= new DialogCofirmationUserInteraction(UserInteraction.this, R.string.problem_still_there, R.string.problem_is_solved);
+                    confirmation.setPositiveButton(R.string.problem_is_solved, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                             firebaseUtilities.setDataSendListener(new DataSendListener() {
