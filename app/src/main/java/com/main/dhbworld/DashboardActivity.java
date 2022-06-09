@@ -542,7 +542,7 @@ public class DashboardActivity extends AppCompatActivity {
         for (int i=0;i<3;i++){
             layoutInfo[i].setVisibility(View.VISIBLE);
             imageButtonCopy[i].setVisibility(View.VISIBLE);
-            if (!info[i].equals("")){
+            if ((!info[i].equals("")) && (!info[i].equals(" "))){
                 emptyCard=false;
                 infoView[i].setText( markerTitle[i]+info[i]);
                 copyClick(imageButtonCopy[i], info[i]);
