@@ -12,7 +12,7 @@
     <string name="save">Speichern</string>
     <string name="cancel">Abbrechen</string>
     <string name="default_notification_channel_id">userInteraction</string>
-    <string name="still_accurate"></string>
+    <string name="still_accurate">Stimmt das noch?</string>
     <string name="kantine">Mensa</string>
     <string name="Coffee">Kaffee</string>
     <string name="coffee_machine">Kaffeemaschine</string>
