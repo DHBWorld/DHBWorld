@@ -35,6 +35,7 @@ import com.main.dhbworld.Navigation.NavigationUtilities;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.file.Files;
+import java.util.Locale;
 import java.util.Objects;
 
 public class SettingsActivity extends AppCompatActivity {
@@ -206,20 +207,21 @@ public class SettingsActivity extends AppCompatActivity {
                     EditText urlEditText = tempView.findViewById(R.id.urlEditText);
                     EditText courseEditText = tempView.findViewById(R.id.urlCourseName);
                     EditText courseDirEditText = tempView.findViewById(R.id.urlCourseDirector);
-                    String courseDirector = courseDirEditText.getText().toString();
-                    String courseName = courseEditText.getText().toString();
-                    String urlString = urlEditText.getText().toString();
+
                     builder.setPositiveButton("Submit", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
+                            String courseDirector = courseDirEditText.getText().toString();
+                            String courseName = courseEditText.getText().toString();
+                            String urlString = urlEditText.getText().toString();
+
                             if(!courseName.isEmpty() && !urlString.isEmpty()){
-                                String urlString = urlEditText.getText().toString();
                                 SharedPreferences.Editor editor = preferences.edit();
                                 editor.putString("CurrentURL", urlString);
                                 editor.apply();
                             }
                             else if(urlString.isEmpty() && !courseName.isEmpty()){
-                                String formedURL = ("https://rapla.dhbw-karlsruhe.de/rapla?page=calendar&user=" + courseDirector.toLowerCase() + "&file=" + courseName.toLowerCase());
+                                String formedURL = ("https://rapla.dhbw-karlsruhe.de/rapla?page=calendar&user=" + courseDirector.toLowerCase() + "&file=" + courseName.toUpperCase(Locale.ROOT));
                                 System.out.println(formedURL);
                                 SharedPreferences.Editor editor = preferences.edit();
                                 editor.putString("CurrentURL", formedURL);
