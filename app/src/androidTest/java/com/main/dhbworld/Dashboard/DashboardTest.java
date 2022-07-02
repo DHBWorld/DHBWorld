@@ -57,7 +57,7 @@ public class DashboardTest {
 
                         assertNotNull(nextClass.getTitle());
                         assertNotNull(nextClass.getStartDate());
-                    } catch (MalformedURLException | NoConnectionException | IllegalAccessException e) {
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }});}

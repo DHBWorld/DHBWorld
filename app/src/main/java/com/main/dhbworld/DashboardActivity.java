@@ -315,59 +315,69 @@ public class DashboardActivity extends AppCompatActivity {
                     try {
                         nextEventsProvider nextEventsProvider = new nextEventsProvider(DashboardActivity.this);
                         Appointment nextClass = nextEventsProvider.getNextEvent();
+
                         layoutCardCalendar.post(new Runnable() {
                             @Override
                             public void run() {
-                                LocalDateTime now = LocalDateTime.now();
-                                LocalDateTime startClass = nextClass.getStartDate();
-                                LocalDateTime endClass = nextClass.getEndDate();
-                                Duration durationUntilStartOfClass = Duration.between(now, startClass);
-                                Duration durationUntilEndOfClass = Duration.between(now, endClass);
-                                indicator.hide();
-                                layoutCardCalendarInformation.setVisibility(View.VISIBLE);
-                                if ((durationUntilStartOfClass.toHours() <= 8) && (durationUntilEndOfClass.toMinutes() >= 0)) {
-                                    uniImage.setImageResource(R.drawable.ic_uni);
+                                if(nextClass.getStartDate() == null){
                                     nextClassView.setText(nextClass.getTitle());
-                                    timeView.setText(nextClass.getStartTime());
-                                    timeViewMin.setVisibility(View.VISIBLE);
-                                    timeViewMin.setText(getResources().getString(R.string.min));
-                                    if (durationUntilStartOfClass.toMinutes() >= 0) {
-                                        new CountDownTimer(durationUntilStartOfClass.toMinutes() * 60000, 60000) {
-                                            public void onTick(long millisUtilFinished) {
-                                                timeView.setText(Long.toString(millisUtilFinished / 60000 + 1));
-                                                letterTimeView.setText(getResources().getString(R.string.startsIn));
-                                                timeViewMin.setText(getResources().getString(R.string.min));
-                                            }
-                                            @Override
-                                            public void onFinish() {
-                                                timeView.setText(getResources().getString(R.string.now));
-                                                letterTimeView.setText("");
-                                                timeViewMin.setText("");
-                                            }
-                                        }.start();
+                                    layoutCardCalendarInformation.setVisibility(View.VISIBLE);
+                                    uniImage.setImageResource(R.drawable.ic_uni);
+                                }
+                                else {
+                                    LocalDateTime now = LocalDateTime.now();
+                                    LocalDateTime startClass = nextClass.getStartDate();
+                                    LocalDateTime endClass = nextClass.getEndDate();
+                                    Duration durationUntilStartOfClass = Duration.between(now, startClass);
+                                    Duration durationUntilEndOfClass = Duration.between(now, endClass);
+                                    indicator.hide();
+                                    layoutCardCalendarInformation.setVisibility(View.VISIBLE);
+                                    if ((durationUntilStartOfClass.toHours() <= 8) && (durationUntilEndOfClass.toMinutes() >= 0)) {
+                                        uniImage.setImageResource(R.drawable.ic_uni);
+                                        nextClassView.setText(nextClass.getTitle());
+                                        timeView.setText(nextClass.getStartTime());
+                                        timeViewMin.setVisibility(View.VISIBLE);
+                                        timeViewMin.setText(getResources().getString(R.string.min));
+                                        if (durationUntilStartOfClass.toMinutes() >= 0) {
+                                            new CountDownTimer(durationUntilStartOfClass.toMinutes() * 60000, 60000) {
+                                                public void onTick(long millisUtilFinished) {
+                                                    timeView.setText(Long.toString(millisUtilFinished / 60000 + 1));
+                                                    letterTimeView.setText(getResources().getString(R.string.startsIn));
+                                                    timeViewMin.setText(getResources().getString(R.string.min));
+                                                }
+
+                                                @Override
+                                                public void onFinish() {
+                                                    timeView.setText(getResources().getString(R.string.now));
+                                                    letterTimeView.setText("");
+                                                    timeViewMin.setText("");
+                                                }
+                                            }.start();
+                                        } else {
+                                            new CountDownTimer(durationUntilEndOfClass.toMinutes() * 60000, 60000) {
+                                                public void onTick(long millisUtilFinished) {
+                                                    timeView.setText(Long.toString(millisUtilFinished / 60000 + 1));
+                                                    letterTimeView.setText(getResources().getString(R.string.endsIn));
+                                                    timeViewMin.setText(getResources().getString(R.string.min));
+                                                }
+
+                                                @Override
+                                                public void onFinish() {
+                                                    timeView.setText("");
+                                                    nextClassView.setText(getResources().getString(R.string.pause));
+                                                    letterTimeView.setText("");
+                                                    timeViewMin.setText("");
+                                                    uniImage.setImageResource(R.drawable.ic_pause);
+                                                }
+                                            }.start();
+                                        }
                                     } else {
-                                        new CountDownTimer(durationUntilEndOfClass.toMinutes() * 60000, 60000) {
-                                            public void onTick(long millisUtilFinished) {
-                                                timeView.setText(Long.toString(millisUtilFinished / 60000 + 1));
-                                                letterTimeView.setText(getResources().getString(R.string.endsIn));
-                                                timeViewMin.setText(getResources().getString(R.string.min));
-                                            }
-                                            @Override
-                                            public void onFinish() {
-                                                timeView.setText("");
-                                                nextClassView.setText(getResources().getString(R.string.pause));
-                                                letterTimeView.setText("");
-                                                timeViewMin.setText("");
-                                                uniImage.setImageResource(R.drawable.ic_pause);
-                                            }
-                                        }.start();
+                                        uniImage.setImageResource(R.drawable.ic_uni);
+                                        nextClassView.setText(nextClass.getTitle());
+                                        timeView.setText(nextClass.getStartTime());
+                                        timeViewMin.setVisibility(View.GONE);
+                                        letterTimeView.setText(startClass.getDayOfWeek().toString());
                                     }
-                                } else {
-                                    uniImage.setImageResource(R.drawable.ic_uni);
-                                    nextClassView.setText(nextClass.getTitle());
-                                    timeView.setText(nextClass.getStartTime());
-                                    timeViewMin.setVisibility(View.GONE);
-                                    letterTimeView.setText(startClass.getDayOfWeek().toString());
                                 }
                             }
                         });
