@@ -92,7 +92,9 @@ public class DashboardActivity extends AppCompatActivity {
         setContentView(R.layout.activity_dashboard);
         NavigationUtilities.setUpNavigation(this,R.id.dashboard);
 
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        SharedPreferences defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        int darkmode = Integer.parseInt(defaultSharedPreferences.getString("darkmode", "-1"));
+        AppCompatDelegate.setDefaultNightMode(darkmode);
 
         defineViews();
         userConfigurationOfDashboard();

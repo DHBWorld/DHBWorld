@@ -38,7 +38,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@id/topAppBarLayout"
-            android:background="@color/grey_light"
+            android:background="?attr/cantineBackground"
             tools:context="com.main.dhbworld.Services.UserInteractionMessagingService">
 
 
@@ -46,7 +46,6 @@
                 android:id="@+id/user_interaction_linear"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/grey_light"
                 android:orientation="vertical"
                 android:padding="20dp">
 
@@ -54,7 +53,7 @@
 
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:backgroundTint="@color/white"
+                    android:backgroundTint="?attr/cantineCardBackgroundElevated"
                     android:baselineAligned="false"
                     app:cardElevation="0dp"
                     app:strokeColor="@color/stroke_color"
@@ -88,7 +87,7 @@
 
                                     android:layout_width="100dp"
                                     android:layout_height="100dp"
-                                    android:background="@color/white"
+                                    android:background="?attr/cantineCardBackgroundElevated"
 
 
                                     android:contentDescription="content_description_media"
@@ -214,7 +213,7 @@
                         android:id="@+id/card_coffe"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:backgroundTint="@color/white"
+                        android:backgroundTint="?attr/cantineCardBackgroundElevated"
                         android:baselineAligned="false"
                         app:cardElevation="0dp"
                         app:strokeColor="@color/stroke_color"
@@ -249,7 +248,7 @@
                                         android:id="@+id/bild_kaffee"
                                         android:layout_width="100dp"
                                         android:layout_height="100dp"
-                                        android:background="@color/white"
+                                        android:background="?attr/cantineCardBackgroundElevated"
                                         android:contentDescription="content_description_media"
                                         android:scaleType="centerCrop"
                                         app:srcCompat="@drawable/baseline_coffee_maker_24" />
@@ -368,7 +367,7 @@
                     android:id="@+id/card_printer"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:backgroundTint="@color/white"
+                    android:backgroundTint="?attr/cantineCardBackgroundElevated"
                     android:baselineAligned="false"
                     app:cardElevation="0dp"
                     app:strokeColor="@color/stroke_color"
@@ -403,7 +402,7 @@
                                     android:id="@+id/bild_druker"
                                     android:layout_width="100dp"
                                     android:layout_height="100dp"
-                                    android:background="@color/white"
+                                    android:background="?attr/cantineCardBackgroundElevated"
 
                                     android:contentDescription="content_description_media"
                                     android:scaleType="centerCrop"

@@ -84,7 +84,7 @@
             android:layout_height="match_parent"
             android:layout_below="@id/topAppBarLayout"
             android:id="@+id/scrollViewCantine"
-            android:background="@color/white">
+            android:background="?attr/dashboardCardBackground">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -94,7 +94,6 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/white"
                     android:orientation="vertical"
                     android:padding="20dp">
 
@@ -110,7 +109,6 @@
                         android:layout_height="wrap_content"
                         android:text="@string/hauptgerichte"
                         android:textSize="25dp"
-                        android:textColor="@color/black"
                         android:paddingBottom="5dp"/>
 
                     <TextView
@@ -136,7 +134,6 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/white"
                     android:orientation="vertical"
                     android:paddingLeft="20dp"
                     android:paddingRight="20dp">
@@ -147,7 +144,6 @@
                         android:layout_height="match_parent"
                         android:text="@string/sonstiges"
                         android:textSize="25dp"
-                        android:textColor="@color/black"
                         android:paddingBottom="5dp"/>
 
                     <LinearLayout

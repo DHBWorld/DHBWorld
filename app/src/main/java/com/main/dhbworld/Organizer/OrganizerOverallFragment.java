@@ -70,8 +70,8 @@ public class OrganizerOverallFragment extends Fragment{
 
         try {
             parseThread.join();
-            courseAdapter = new OrganizerCourseAdapter(courses);
-            personAdapter = new OrganizerPersonAdapter(people);
+            courseAdapter = new OrganizerCourseAdapter(getContext(), courses);
+            personAdapter = new OrganizerPersonAdapter(getContext(), people);
             roomAdapter = new OrganizerRoomAdapter(rooms);
             switch(position) {
                 case 0:

@@ -1,5 +1,6 @@
 package com.main.dhbworld.Organizer;
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
@@ -15,9 +16,10 @@ import java.util.Objects;
 
 public class OrganizerCourseAdapter extends RecyclerView.Adapter<OrganizerCourseAdapter.ViewHolder>{
     ArrayList<Course> courses;
+    Context context;
 
-
-    public OrganizerCourseAdapter(ArrayList<Course> courses) {
+    public OrganizerCourseAdapter(Context context, ArrayList<Course> courses) {
+        this.context = context;
         this.courses = courses;
     }
 
@@ -65,12 +67,12 @@ public class OrganizerCourseAdapter extends RecyclerView.Adapter<OrganizerCourse
                     TextView entryView = bottomSheetDialog.findViewById(R.id.organizerCourseEntryText);
                     Objects.requireNonNull(entryView).setText(course.name);
                     TextView studyView = bottomSheetDialog.findViewById(R.id.organizerCourseStudyText);
-                    Objects.requireNonNull(studyView).setText("Study: " + course.study);
+                    Objects.requireNonNull(studyView).setText(context.getString(R.string.study, course.study));
                     TextView yearView = bottomSheetDialog.findViewById(R.id.organizerCourseYearText);
-                    Objects.requireNonNull(yearView).setText("Year: " + course.year);
+                    Objects.requireNonNull(yearView).setText(context.getString(R.string.year, String.valueOf(course.year)));
                     TextView roomView = bottomSheetDialog.findViewById(R.id.organizerCourseRoomText);
                     if(course.roomNo != null && roomView != null) {
-                        (roomView).setText("Room: " + course.roomNo);
+                        (roomView).setText(context.getString(R.string.room_placeholder, course.roomNo));
                     }
                     else{
                         assert roomView != null;

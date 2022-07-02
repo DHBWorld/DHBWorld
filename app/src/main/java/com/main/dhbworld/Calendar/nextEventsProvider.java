@@ -5,6 +5,8 @@ import android.content.SharedPreferences;
 import androidx.preference.PreferenceManager;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.main.dhbworld.R;
+
 import java.lang.reflect.Type;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -56,7 +58,7 @@ public class nextEventsProvider {
     public Appointment disectData(ArrayList<Appointment> data){
         ArrayList<Appointment> futureEvents = getFutureEvents(data);
         if(futureEvents == null | futureEvents.isEmpty()){
-            return new Appointment(null,null,"No classes in the next two weeks","","");
+            return new Appointment(null,null,context.getString(R.string.no_classes),"","");
         }
         Appointment nextEvent = futureEvents.get(0);
             for(int i = 0; i < futureEvents.size(); i++){

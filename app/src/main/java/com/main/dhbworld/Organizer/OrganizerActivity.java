@@ -97,15 +97,15 @@ public class OrganizerActivity extends AppCompatActivity {
         TabLayoutMediator tabLayoutMediator = new TabLayoutMediator(tabLayout, viewPager, (tab, position) -> {
             switch (position){
                 case 0:
-                    tab.setText("Courses");
+                    tab.setText(R.string.Courses);
                     tab.setIcon(R.drawable.ic_baseline_class_24);
                     break;
                 case 1:
-                    tab.setText("People");
+                    tab.setText(R.string.people);
                     tab.setIcon(R.drawable.ic_baseline_person_24);
                     break;
                 case 2:
-                    tab.setText("Rooms");
+                    tab.setText(R.string.rooms);
                     tab.setIcon(R.drawable.ic_baseline_room_24);
                     break;
                 default:

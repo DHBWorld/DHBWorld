@@ -16,6 +16,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.biometric.BiometricManager;
 import androidx.preference.ListPreference;
 import androidx.preference.Preference;
@@ -92,6 +93,10 @@ public class SettingsActivity extends AppCompatActivity {
             }
 
             setPreferencesFromResource(R.xml.root_preferences, rootKey);
+
+            ListPreference darkmode = findPreference("darkmode");
+            Objects.requireNonNull(darkmode).setOnPreferenceChangeListener(this);
+
             Preference information = findPreference("informations");
             Preference licenses = findPreference("licenses");
             Preference privacy = findPreference("dataprivacy");
@@ -134,6 +139,10 @@ public class SettingsActivity extends AppCompatActivity {
         public boolean onPreferenceChange(Preference preference, Object newValue) {
             SharedPreferences sharedPref = context.getSharedPreferences("Dualis", MODE_PRIVATE);
             switch (preference.getKey()) {
+                case "darkmode":
+                    int darkmode = Integer.parseInt((String) newValue);
+                    AppCompatDelegate.setDefaultNightMode(darkmode);
+                    break;
                 case "notifications_mensa":
                     if ((boolean) newValue) {
                         Utilities.subscribeToTopic(Utilities.CATEGORY_CAFETERIA);

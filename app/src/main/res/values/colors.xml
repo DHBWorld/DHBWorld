@@ -10,9 +10,14 @@
     <color name="red">#E2001A</color>
     <color name="red_dark">#A2001A</color>
     <color name="grey_dark">#4A5360</color>
+    <color name="grey_dark_but_a_bit_lighter">#6F7D90</color>
     <color name="grey_light">#9CA0A4</color>
     <color name="even_lighter_gray">#0D000000</color>
     <color name="sea_green">#008148</color>
+    <color name="dark_bg">#222222</color>
+    <color name="dark_bg_elevated">#2d2d2d</color>
+    <color name="dark_bg_more_elevated">#383838</color>
+    <color name="ltgrey">#d3d3d3</color>
 
 
     <!-- copied colors to have a wider variety-->

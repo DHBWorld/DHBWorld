@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="dashboardCard">
+        <attr name="dashboardCardBackground" format="color"/>
+        <attr name="dashboardCardBackgroundElevated" format="color"/>
+        <attr name="dashboardCardBackgroundMoreElevated" format="color"/>
+    </declare-styleable>
+
+    <declare-styleable name="CantineCard">
+        <attr name="cantineCardBackground" format="color"/>
+        <attr name="cantineCardBackgroundElevated" format="color"/>
+        <attr name="cantineBackground" format="color"/>
+    </declare-styleable>
+
+    <declare-styleable name="calender">
+        <attr name="pastWeekendBackgroundColorCustom" format="color"/>
+    </declare-styleable>
+</resources>

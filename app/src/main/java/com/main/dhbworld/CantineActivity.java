@@ -7,8 +7,11 @@ import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.tabs.TabLayout;
 import org.json.JSONException;
+
+import android.graphics.PorterDuff;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
@@ -149,7 +152,10 @@ public class CantineActivity extends AppCompatActivity {
             MaterialCardView mealCard= new MaterialCardView(CantineActivity.this);
             mealCard.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
             mealCard.setStrokeColor(getResources().getColor(R.color.grey_dark));
-            mealCard.setElevation(0);
+            TypedValue value = new TypedValue();
+            this.getTheme().resolveAttribute(R.attr.dashboardCardBackground, value, true);
+            mealCard.setBackgroundColor(value.data);
+            //mealCard.setElevation(0);
 
             if((mealDailyPlan.getMainCourses().contains(mealDailyPlan.getMeal()[i]))) { // Trennung: Hauptgericht oder Sonstiges
                 layoutMealCardsBasic.addView(mealCard);
@@ -169,7 +175,7 @@ public class CantineActivity extends AppCompatActivity {
             cardLayout.addView(mealLayout);
             TextView mealView = new TextView(CantineActivity.this);
             mealView.setTextSize(15);
-            mealView.setTextColor(getResources().getColor(R.color.black));
+            //mealView.setTextColor(getResources().getColor(R.color.black));
             mealView.setText(mealDailyPlan.getMeal()[i].getName());
             mealView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
             mealLayout.addView(mealView);
@@ -196,6 +202,7 @@ public class CantineActivity extends AppCompatActivity {
                 chip.setText(mealDailyPlan.getMeal()[i].getNotes().get(j));
                 chip.setTextSize(12);
                 chip.setGravity(Gravity.CENTER);
+                chip.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
                 chip.setCheckable(false);
                 chip.setClickable(false);
                 chipLayout.addView(chip);
@@ -203,12 +210,15 @@ public class CantineActivity extends AppCompatActivity {
             LinearLayout preisLayout = new LinearLayout(CantineActivity.this);
             preisLayout.setLayoutParams(new ViewGroup.LayoutParams(120, ViewGroup.LayoutParams.MATCH_PARENT));
             preisLayout.setOrientation(LinearLayout.VERTICAL);
-            preisLayout.setBackgroundColor(getResources().getColor(R.color.grey_light));
+
+            TypedValue valuePreisBg = new TypedValue();
+            CantineActivity.this.getTheme().resolveAttribute(R.attr.dashboardCardBackgroundElevated, valuePreisBg, true);
+            preisLayout.setBackgroundColor(valuePreisBg.data);
             preisLayout.setGravity(Gravity.CENTER);
             cardLayout.addView(preisLayout);
             TextView preisView = new TextView(CantineActivity.this);
             preisView.setTextSize(18);
-            preisView.setTextColor(getResources().getColor(R.color.grey_dark));
+            //preisView.setTextColor(getResources().getColor(R.color.grey_dark));
             preisView.setText(mealDailyPlan.getMeal()[i].getPrice());
             preisView.setGravity(Gravity.CENTER);
             preisView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));

@@ -101,8 +101,8 @@ public class CalendarActivity extends AppCompatActivity{
         cal.setHourHeight(7);
         //configure now Line
         cal.setShowNowLineDot(true);
-        cal.setNowLineColor(Color.parseColor("#343491"));
-        cal.setPastBackgroundColor(Color.LTGRAY);
+        //cal.setNowLineColor(Color.parseColor("#343491"));
+        //cal.setPastBackgroundColor(Color.LTGRAY);
         cal.setDateFormatter(calendar -> {
             SimpleDateFormat date = new SimpleDateFormat( "E dd.MM", Locale.getDefault());
             return date.format(calendar.getTime());

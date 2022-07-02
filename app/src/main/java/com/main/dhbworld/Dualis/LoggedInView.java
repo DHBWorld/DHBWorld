@@ -40,13 +40,13 @@ public class LoggedInView {
             @Override
             public void onConfigureTab(@NonNull TabLayout.Tab tab, int position) {
                 if (position == 0) {
-                    tab.setText("Übersicht");
+                    tab.setText(R.string.overview);
                     tab.setIcon(R.drawable.ic_baseline_dashboard_24);
                 } else if (position == 1) {
-                    tab.setText("Kurse");
+                    tab.setText(R.string.Courses);
                     tab.setIcon(R.drawable.ic_baseline_book_24);
                 } else {
-                    tab.setText("Dokumente");
+                    tab.setText(R.string.documents);
                     tab.setIcon(R.drawable.ic_baseline_description_24);
                 }
             }

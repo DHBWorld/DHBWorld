@@ -2,9 +2,11 @@ package com.main.dhbworld;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.preference.PreferenceManager;
 
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.View;
@@ -58,7 +60,9 @@ public class UserInteraction extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.user_interaction_layout);
 
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        SharedPreferences defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        int darkmode = Integer.parseInt(defaultSharedPreferences.getString("darkmode", "-1"));
+        AppCompatDelegate.setDefaultNightMode(darkmode);
 
         NavigationUtilities.setUpNavigation(this, R.id.UserInteraction);
 

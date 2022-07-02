@@ -1,5 +1,6 @@
 package com.main.dhbworld.Organizer;
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
@@ -15,9 +16,11 @@ import java.util.Objects;
 
 public class OrganizerPersonAdapter extends RecyclerView.Adapter<OrganizerPersonAdapter.ViewHolder>{
     ArrayList<Person> people;
+    Context context;
 
 
-    public OrganizerPersonAdapter(ArrayList<Person> people) {
+    public OrganizerPersonAdapter(Context context, ArrayList<Person> people) {
+        this.context = context;
         this.people = people;
     }
 
@@ -71,13 +74,13 @@ public class OrganizerPersonAdapter extends RecyclerView.Adapter<OrganizerPerson
                     if(person.study != null && personStudyText != null) {
                         personStudyText.setText(person.study);
                     }
-                    Objects.requireNonNull(personStudyText).setText("Study: " + person.study);
+                    Objects.requireNonNull(personStudyText).setText(context.getResources().getString(R.string.study, person.study));
                     TextView personEmailText = bottomSheetDialog.findViewById(R.id.organizerPersonEmailText);
-                    Objects.requireNonNull(personEmailText).setText("Mail: " + person.email);
+                    Objects.requireNonNull(personEmailText).setText(context.getString(R.string.mail, person.email));
                     TextView personPhoneText = bottomSheetDialog.findViewById(R.id.organizerPersonPhoneText);
-                    Objects.requireNonNull(personPhoneText).setText("Phone: " + person.phoneNumber);
+                    Objects.requireNonNull(personPhoneText).setText(context.getString(R.string.phone, person.phoneNumber));
                     TextView personRoomText = bottomSheetDialog.findViewById(R.id.organizerPersonRoomText);
-                    Objects.requireNonNull(personRoomText).setText("Room: " + person.roomNo);
+                    Objects.requireNonNull(personRoomText).setText(context.getResources().getString(R.string.room_placeholder, person.roomNo));
 
 
                     bottomSheetDialog.show();

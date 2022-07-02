@@ -16,6 +16,24 @@
         <item name="materialAlertDialogTheme">@style/ThemeOverlay.App.MaterialAlertDialog</item>
 
         <item name="android:forceDarkAllowed" tools:targetApi="q">false</item>
+
+
+
+
+
+
+        <item name="android:textColor">@color/dark_bg_more_elevated</item>
+        <item name="colorControlNormal">@color/dark_bg_more_elevated</item>
+
+        <item name="dashboardCardBackground">@color/white</item>
+        <item name="dashboardCardBackgroundElevated">@color/grey_light</item>
+        <item name="dashboardCardBackgroundMoreElevated">@color/even_lighter_gray</item>
+
+        <item name="pastWeekendBackgroundColorCustom">@color/ltgrey</item>
+
+        <item name="cantineCardBackground">@color/white</item>
+        <item name="cantineCardBackgroundElevated">@color/white</item>
+        <item name="cantineBackground">@color/grey_light</item>
     </style>
 
     <style name="ThemeOverlay.App.MaterialAlertDialog" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">

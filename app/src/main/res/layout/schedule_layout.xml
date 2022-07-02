@@ -47,17 +47,20 @@
             android:layout_height="match_parent"
             android:layout_below="@id/calProgressBar"
             app:columnGap="8dp"
-            app:dayBackgroundColor="@color/white"
+            app:dayBackgroundColor="?attr/dashboardCardBackground"
             app:eventTextColor="@color/white"
             app:hourHeight="70dp"
             app:maxHour="@string/maxCalendarHour"
             app:minHour="@string/minCalendarHour"
-            app:nowLineColor="@color/LightBlue"
+            app:nowLineColor="@color/red"
+            app:nowLineDotColor="@color/red"
             app:nowLineStrokeWidth="2dp"
+            app:pastBackgroundColor="?attr/pastWeekendBackgroundColorCustom"
             app:showCompleteDay="true"
             app:showCurrentTimeFirst="true"
             app:showNowLine="true"
             app:showWeekNumber="true"
+            app:weekNumberBackgroundColor="?attr/dashboardCardBackgroundElevated"
             app:verticalFlingEnabled="false" />
     </RelativeLayout>
 
