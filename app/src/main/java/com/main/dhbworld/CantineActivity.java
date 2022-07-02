@@ -182,6 +182,14 @@ public class CantineActivity extends AppCompatActivity {
             chipLayout.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
             chipLayout.setOrientation(LinearLayout.HORIZONTAL);
             chipScroll.addView(chipLayout);
+            if (mealDailyPlan.getMeal()[i].getNotes().size()==0){
+                Chip chip = new Chip(CantineActivity.this);
+                chip.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                chip.setTextSize(12);
+                chip.setText(" ");
+                chip.setVisibility(View.INVISIBLE);
+                chipLayout.addView(chip);
+            }
             for (int j=0; j<mealDailyPlan.getMeal()[i].getNotes().size(); j++){
                 Chip chip = new Chip(CantineActivity.this);
                 chip.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
