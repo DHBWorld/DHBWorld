@@ -320,9 +320,15 @@ public class DashboardActivity extends AppCompatActivity {
                             @Override
                             public void run() {
                                 if(nextClass.getStartDate() == null){
-                                    nextClassView.setText(nextClass.getTitle());
+                                    indicator.hide();
                                     layoutCardCalendarInformation.setVisibility(View.VISIBLE);
-                                    uniImage.setImageResource(R.drawable.ic_uni);
+                                    nextClassView.setText(nextClass.getTitle());
+                                    layoutTimeDigit.setVisibility(View.GONE);
+                                    layoutTime.setVisibility(View.GONE);
+                                    timeView.setVisibility(View.GONE);
+                                    timeViewMin.setVisibility(View.GONE);
+                                    letterTimeView.setVisibility(View.GONE);
+                                    uniImage.setBackground(getResources().getDrawable(R.drawable.ic_pause));
                                 }
                                 else {
                                     LocalDateTime now = LocalDateTime.now();
@@ -333,7 +339,7 @@ public class DashboardActivity extends AppCompatActivity {
                                     indicator.hide();
                                     layoutCardCalendarInformation.setVisibility(View.VISIBLE);
                                     if ((durationUntilStartOfClass.toHours() <= 8) && (durationUntilEndOfClass.toMinutes() >= 0)) {
-                                        uniImage.setImageResource(R.drawable.ic_uni);
+                                        uniImage.setBackground(getResources().getDrawable(R.drawable.ic_uni));
                                         nextClassView.setText(nextClass.getTitle());
                                         timeView.setText(nextClass.getStartTime());
                                         timeViewMin.setVisibility(View.VISIBLE);
@@ -367,12 +373,12 @@ public class DashboardActivity extends AppCompatActivity {
                                                     nextClassView.setText(getResources().getString(R.string.pause));
                                                     letterTimeView.setText("");
                                                     timeViewMin.setText("");
-                                                    uniImage.setImageResource(R.drawable.ic_pause);
+                                                    uniImage.setBackground(getResources().getDrawable(R.drawable.ic_pause));
                                                 }
                                             }.start();
                                         }
                                     } else {
-                                        uniImage.setImageResource(R.drawable.ic_uni);
+                                        uniImage.setBackground(getResources().getDrawable(R.drawable.ic_uni));
                                         nextClassView.setText(nextClass.getTitle());
                                         timeView.setText(nextClass.getStartTime());
                                         timeViewMin.setVisibility(View.GONE);
@@ -386,6 +392,8 @@ public class DashboardActivity extends AppCompatActivity {
                         layoutCardCalendar.post(new Runnable() {
                             @Override
                             public void run() {
+                                indicator.hide();
+                                layoutCardCalendarInformation.setVisibility(View.VISIBLE);
                                 layoutTimeDigit.setVisibility(View.GONE);
                                 layoutTime.setVisibility(View.GONE);
                                 uniImage.setVisibility(View.GONE);
