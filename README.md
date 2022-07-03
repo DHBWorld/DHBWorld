@@ -28,5 +28,5 @@ This App is developed for the DHBW Karlsruhe and is maybe not compatible with ot
 
 ## 👀 Screenshots
 <p align="center">
-<img src="https://github.com/inFumumVerti/DHBWorld/raw/main/Screenshots/screenshot_main.png" width="300">&nbsp;&nbsp;<img src="https://github.com/inFumumVerti/DHBWorld/raw/main/Screenshots/screenshot_rapla.png" width="300">
+<img src="https://github.com/inFumumVerti/DHBWorld/raw/main/Screenshots/Dashboard.png" width="200">&nbsp;&nbsp;<img src="https://github.com/inFumumVerti/DHBWorld/raw/main/Screenshots/Kalender.png" width="200">&nbsp;&nbsp;<img src="https://github.com/inFumumVerti/DHBWorld/raw/main/Screenshots/Dualis.png" width="200">
 </p>
