@@ -33,13 +33,13 @@ public class DialogCofirmationUserInteraction extends MaterialAlertDialogBuilder
         super(context);
         this.setTitle(R.string.are_you_sure);
 
-        nameOfSelectedState = states[0].getText();
+        nameOfSelectedState = states[0].getText(context);
 
         selectedState = states[0];
 
         String[] stateNames = new String[states.length];
         for (int i=0; i<states.length; i++) {
-            stateNames[i] = states[i].getText();
+            stateNames[i] = states[i].getText(context);
         }
 
         this.setSingleChoiceItems(
@@ -49,7 +49,7 @@ public class DialogCofirmationUserInteraction extends MaterialAlertDialogBuilder
                     @Override
                     public void onClick(DialogInterface dialog, int item) {
 
-                        nameOfSelectedState=states[item].getText();
+                        nameOfSelectedState=states[item].getText(context);
                         selectedState = states[item];
 
                     }

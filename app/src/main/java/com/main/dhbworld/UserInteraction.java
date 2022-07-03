@@ -7,6 +7,7 @@ import androidx.preference.PreferenceManager;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.View;
@@ -29,6 +30,7 @@ import com.main.dhbworld.Navigation.NavigationUtilities;
 import com.main.dhbworld.Services.UserInteractionMessagingService;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class UserInteraction extends AppCompatActivity {
     private ArrayList <Button> yes;
@@ -57,12 +59,29 @@ public class UserInteraction extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.user_interaction_layout);
-
         SharedPreferences defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         int darkmode = Integer.parseInt(defaultSharedPreferences.getString("darkmode", "-1"));
         AppCompatDelegate.setDefaultNightMode(darkmode);
+
+        String language = defaultSharedPreferences.getString("language", "default");
+        if (language.equals("default")) {
+            Locale locale = Resources.getSystem().getConfiguration().getLocales().get(0);
+            Locale.setDefault(locale);
+            Resources resources = this.getResources();
+            Configuration config = resources.getConfiguration();
+            config.setLocale(locale);
+            resources.updateConfiguration(config, resources.getDisplayMetrics());
+        } else {
+            Locale locale = new Locale(language);
+            Locale.setDefault(locale);
+            Resources resources = this.getResources();
+            Configuration config = resources.getConfiguration();
+            config.setLocale(locale);
+            resources.updateConfiguration(config, resources.getDisplayMetrics());
+        }
+
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.user_interaction_layout);
 
         NavigationUtilities.setUpNavigation(this, R.id.UserInteraction);
 
@@ -101,17 +120,17 @@ public class UserInteraction extends AppCompatActivity {
                     case Utilities.CATEGORY_CAFETERIA:
                         System.out.println("STATUS: " + status);
                         stateCanteen = InteractionState.parseId(status);
-                        stateCanteenTV.setText(getResources().getString(R.string.state) + " " + stateCanteen.getText());
+                        stateCanteenTV.setText(getResources().getString(R.string.state, stateCanteen.getText(UserInteraction.this)));
                         imageBox_canteen.setBackgroundColor(res.getColor(stateCanteen.getColor()));
                         break;
                     case Utilities.CATEGORY_COFFEE:
                         stateCoffee = InteractionState.parseId(status);
-                        stateCoffeeTV.setText(getResources().getString(R.string.state) + " " + stateCoffee.getText());
+                        stateCoffeeTV.setText(getResources().getString(R.string.state, stateCoffee.getText(UserInteraction.this)));
                         imageBox_coffee.setBackgroundColor(res.getColor(stateCoffee.getColor()));
                         break;
                     case Utilities.CATEGORY_PRINTER:
                         statePrinter = InteractionState.parseId(status);
-                        statePrinterTV.setText(getResources().getString(R.string.state) + " " + statePrinter.getText());
+                        statePrinterTV.setText(getResources().getString(R.string.state, statePrinter.getText(UserInteraction.this)));
                         imageBox_printer.setBackgroundColor(res.getColor(statePrinter.getColor()));
                         break;
                 }
@@ -124,15 +143,15 @@ public class UserInteraction extends AppCompatActivity {
                 switch (category) {
                     case Utilities.CATEGORY_CAFETERIA:
                         notificationCanteen = reportCount;
-                        notificationCanteenTV.setText(getResources().getString(R.string.previous_notifications) + " " + notificationCanteen);
+                        notificationCanteenTV.setText(getResources().getString(R.string.previous_notifications, String.valueOf(notificationCanteen)));
                         break;
                     case Utilities.CATEGORY_COFFEE:
                         notificationCoffee = reportCount;
-                        notificationCoffeeTV.setText(getResources().getString(R.string.previous_notifications) + " " + notificationCoffee);
+                        notificationCoffeeTV.setText(getResources().getString(R.string.previous_notifications, String.valueOf(notificationCoffee)));
                         break;
                     case Utilities.CATEGORY_PRINTER:
                         notificationPrinter = reportCount;
-                        notificationPrinterTV.setText(getResources().getString(R.string.previous_notifications) + " " + notificationPrinter);
+                        notificationPrinterTV.setText(getResources().getString(R.string.previous_notifications, String.valueOf(notificationPrinter)));
                         break;
                 }
             }
@@ -303,9 +322,9 @@ public class UserInteraction extends AppCompatActivity {
         stateCoffee =InteractionState.NORMAL;
         statePrinter =InteractionState.NORMAL;
 
-        stateCanteenTV.setText(getResources().getString(R.string.state)+" "+ stateCanteen.getText());
-        stateCoffeeTV.setText(getResources().getString(R.string.state)+" "+ stateCoffee.getText());
-        statePrinterTV.setText(getResources().getString(R.string.state)+" "+ statePrinter.getText());
+        stateCanteenTV.setText(getResources().getString(R.string.state, stateCanteen.getText(UserInteraction.this)));
+        stateCoffeeTV.setText(getResources().getString(R.string.state, stateCoffee.getText(UserInteraction.this)));
+        statePrinterTV.setText(getResources().getString(R.string.state, statePrinter.getText(UserInteraction.this)));
 
         Resources res = getResources();
 
@@ -327,9 +346,9 @@ public class UserInteraction extends AppCompatActivity {
         notificationCoffee =0;
         notificationPrinter =0;
 
-        notificationCanteenTV.setText(getResources().getString(R.string.previous_notifications)+" "+ notificationCanteen);
-        notificationCoffeeTV.setText(getResources().getString(R.string.previous_notifications)+" "+ notificationCoffee);
-        notificationPrinterTV.setText(getResources().getString(R.string.previous_notifications)+" "+ notificationPrinter);
+        notificationCanteenTV.setText(getResources().getString(R.string.previous_notifications, String.valueOf(notificationCanteen)));
+        notificationCoffeeTV.setText(getResources().getString(R.string.previous_notifications, String.valueOf(notificationCoffee)));
+        notificationPrinterTV.setText(getResources().getString(R.string.previous_notifications, String.valueOf(notificationPrinter)));
 
     }
 

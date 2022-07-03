@@ -5,6 +5,8 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -22,6 +24,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.content.res.AppCompatResources;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.core.graphics.ColorUtils;
 import androidx.preference.PreferenceManager;
 
@@ -47,6 +50,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import dhbw.timetable.rapla.data.event.Appointment;
 
@@ -88,13 +92,31 @@ public class DashboardActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_dashboard);
-        NavigationUtilities.setUpNavigation(this,R.id.dashboard);
-
         SharedPreferences defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         int darkmode = Integer.parseInt(defaultSharedPreferences.getString("darkmode", "-1"));
         AppCompatDelegate.setDefaultNightMode(darkmode);
+
+        String language = defaultSharedPreferences.getString("language", "default");
+        if (language.equals("default")) {
+            Locale locale = Resources.getSystem().getConfiguration().getLocales().get(0);
+            Locale.setDefault(locale);
+            Resources resources = this.getResources();
+            Configuration config = resources.getConfiguration();
+            config.setLocale(locale);
+            resources.updateConfiguration(config, resources.getDisplayMetrics());
+        } else {
+            Locale locale = new Locale(language);
+            Locale.setDefault(locale);
+            Resources resources = this.getResources();
+            Configuration config = resources.getConfiguration();
+            config.setLocale(locale);
+            resources.updateConfiguration(config, resources.getDisplayMetrics());
+        }
+
+
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_dashboard);
+        NavigationUtilities.setUpNavigation(this,R.id.dashboard);
 
         defineViews();
         userConfigurationOfDashboard();
@@ -330,7 +352,7 @@ public class DashboardActivity extends AppCompatActivity {
                                     timeView.setVisibility(View.GONE);
                                     timeViewMin.setVisibility(View.GONE);
                                     letterTimeView.setVisibility(View.GONE);
-                                    uniImage.setBackground(getResources().getDrawable(R.drawable.ic_pause));
+                                    uniImage.setBackground(AppCompatResources.getDrawable(DashboardActivity.this, R.drawable.ic_pause));
                                 }
                                 else {
                                     LocalDateTime now = LocalDateTime.now();
@@ -341,7 +363,7 @@ public class DashboardActivity extends AppCompatActivity {
                                     indicator.hide();
                                     layoutCardCalendarInformation.setVisibility(View.VISIBLE);
                                     if ((durationUntilStartOfClass.toHours() <= 8) && (durationUntilEndOfClass.toMinutes() >= 0)) {
-                                        uniImage.setBackground(getResources().getDrawable(R.drawable.ic_uni));
+                                        uniImage.setBackground(AppCompatResources.getDrawable(DashboardActivity.this, R.drawable.ic_uni));
                                         nextClassView.setText(nextClass.getTitle());
                                         timeView.setText(nextClass.getStartTime());
                                         timeViewMin.setVisibility(View.VISIBLE);
@@ -375,12 +397,12 @@ public class DashboardActivity extends AppCompatActivity {
                                                     nextClassView.setText(getResources().getString(R.string.pause));
                                                     letterTimeView.setText("");
                                                     timeViewMin.setText("");
-                                                    uniImage.setBackground(getResources().getDrawable(R.drawable.ic_pause));
+                                                    uniImage.setBackground(AppCompatResources.getDrawable(DashboardActivity.this, R.drawable.ic_pause));
                                                 }
                                             }.start();
                                         }
                                     } else {
-                                        uniImage.setBackground(getResources().getDrawable(R.drawable.ic_uni));
+                                        uniImage.setBackground(AppCompatResources.getDrawable(DashboardActivity.this, R.drawable.ic_uni));
                                         nextClassView.setText(nextClass.getTitle());
                                         timeView.setText(nextClass.getStartTime());
                                         timeViewMin.setVisibility(View.GONE);
@@ -657,7 +679,7 @@ public class DashboardActivity extends AppCompatActivity {
         sp = getSharedPreferences(dashboardSettings, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
         if (!configurationModus){ //User can configure his dashboard
-            item.setIcon(getResources().getDrawable(R.drawable.ic_done));
+            item.setIcon(AppCompatResources.getDrawable(DashboardActivity.this, R.drawable.ic_done));
             Snackbar.make(this.findViewById(android.R.id.content), getResources().getString(R.string.chooseTheCardForConfiguration), BaseTransientBottomBar.LENGTH_SHORT).show();
             card_dash_calendar.setVisibility(View.VISIBLE);
             card_dash_pi.setVisibility(View.VISIBLE);
@@ -687,7 +709,7 @@ public class DashboardActivity extends AppCompatActivity {
             }
             configurationModus=true;
         } else{
-           item.setIcon(getResources().getDrawable(R.drawable.ic_construction));
+           item.setIcon(AppCompatResources.getDrawable(DashboardActivity.this, R.drawable.ic_construction));
             card_dash_calendar.setStrokeColor(ColorUtils.setAlphaComponent(card_dash_calendar.getStrokeColor(),255));
             card_dash_calendar_layout.setBackgroundColor(ColorUtils.setAlphaComponent(card_dash_calendar.getStrokeColor(),255));
             card_dash_pi.setStrokeColor(ColorUtils.setAlphaComponent(card_dash_pi.getStrokeColor(),255));

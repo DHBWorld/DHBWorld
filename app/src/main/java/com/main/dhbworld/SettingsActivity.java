@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.Settings;
@@ -97,6 +99,9 @@ public class SettingsActivity extends AppCompatActivity {
             ListPreference darkmode = findPreference("darkmode");
             Objects.requireNonNull(darkmode).setOnPreferenceChangeListener(this);
 
+            ListPreference language = findPreference("language");
+            Objects.requireNonNull(language).setOnPreferenceChangeListener(this);
+
             Preference information = findPreference("informations");
             Preference licenses = findPreference("licenses");
             Preference privacy = findPreference("dataprivacy");
@@ -142,6 +147,24 @@ public class SettingsActivity extends AppCompatActivity {
                 case "darkmode":
                     int darkmode = Integer.parseInt((String) newValue);
                     AppCompatDelegate.setDefaultNightMode(darkmode);
+                    break;
+                case "language":
+                    if (((String) newValue).equals("default")) {
+                        Locale locale = Resources.getSystem().getConfiguration().getLocales().get(0);
+                        Locale.setDefault(locale);
+                        Resources resources = activity.getResources();
+                        Configuration config = resources.getConfiguration();
+                        config.setLocale(locale);
+                        resources.updateConfiguration(config, resources.getDisplayMetrics());
+                    } else {
+                        Locale locale = new Locale((String) newValue);
+                        Locale.setDefault(locale);
+                        Resources resources = activity.getResources();
+                        Configuration config = resources.getConfiguration();
+                        config.setLocale(locale);
+                        resources.updateConfiguration(config, resources.getDisplayMetrics());
+                    }
+                    activity.recreate();
                     break;
                 case "notifications_mensa":
                     if ((boolean) newValue) {

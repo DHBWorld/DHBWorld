@@ -34,6 +34,7 @@ public class UserInteractionMessagingService extends FirebaseMessagingService {
     @Override
     public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
+        Context context = this;
         if (remoteMessage.getNotification() != null) {
             new Handler(Looper.getMainLooper()).post(new Runnable() {
                 @Override
@@ -46,17 +47,17 @@ public class UserInteractionMessagingService extends FirebaseMessagingService {
                     String title = "";
                     switch (category) {
                         case Utilities.CATEGORY_CAFETERIA:
-                            title = "Kantine";
+                            title = getResources().getString(R.string.canteen);
                             break;
                         case Utilities.CATEGORY_COFFEE:
-                            title = "Kaffeemaschine";
+                            title = getResources().getString(R.string.coffee_machine);
                             break;
                         case Utilities.CATEGORY_PRINTER:
-                            title = "Drucker";
+                            title = getResources().getString(R.string.Printer);
                             break;
                     }
 
-                    String message = "Der Status der Kategorie hat sich geändert in: " + InteractionState.parseId(problem).getText();
+                    String message = getString(R.string.status_changed_message, InteractionState.parseId(problem).getText(context));
 
                     NotificationManagerCompat notificationManager = NotificationManagerCompat.from(getApplicationContext());
                     notificationManager.cancel(0);

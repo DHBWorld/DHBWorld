@@ -50,7 +50,7 @@
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="E-Mail-Adresse">
+                    android:hint="@string/e_mail_adresse">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/dualisEmail"
@@ -66,7 +66,7 @@
                     android:layout_height="wrap_content"
                     app:endIconDrawable="@drawable/fingerprint_dialog_fp_icon"
                     app:endIconMode="none"
-                    android:hint="Passwort">
+                    android:hint="@string/password">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/dualisPassword"
@@ -87,13 +87,13 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Login speichern" />
+                        android:text="@string/login_speichern" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/dualisLoginButton"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Login" />
+                        android:text="@string/login" />
 
                 </LinearLayout>
 

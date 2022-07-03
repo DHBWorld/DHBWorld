@@ -2,6 +2,8 @@ package com.main.dhbworld;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -35,6 +37,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -57,12 +60,30 @@ public class DualisActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.dualis_login);
 
         SharedPreferences defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         int darkmode = Integer.parseInt(defaultSharedPreferences.getString("darkmode", "-1"));
         AppCompatDelegate.setDefaultNightMode(darkmode);
+
+        String language = defaultSharedPreferences.getString("language", "default");
+        if (language.equals("default")) {
+            Locale locale = Resources.getSystem().getConfiguration().getLocales().get(0);
+            Locale.setDefault(locale);
+            Resources resources = this.getResources();
+            Configuration config = resources.getConfiguration();
+            config.setLocale(locale);
+            resources.updateConfiguration(config, resources.getDisplayMetrics());
+        } else {
+            Locale locale = new Locale(language);
+            Locale.setDefault(locale);
+            Resources resources = this.getResources();
+            Configuration config = resources.getConfiguration();
+            config.setLocale(locale);
+            resources.updateConfiguration(config, resources.getDisplayMetrics());
+        }
+
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.dualis_login);
 
         NavigationUtilities.setUpNavigation(this, R.id.dualis);
 

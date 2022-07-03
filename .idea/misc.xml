@@ -5,6 +5,7 @@
       <map>
         <entry key="..\:/Christian/AndroidStudioProjects/DHBWorld/app/src/main/res/drawable/baseline_coffee_maker_24.xml" value="0.233" />
         <entry key="..\:/Christian/AndroidStudioProjects/DHBWorld/app/src/main/res/drawable/baseline_design_services_24.xml" value="0.233" />
+        <entry key="..\:/Christian/AndroidStudioProjects/DHBWorld/app/src/main/res/drawable/baseline_language_24.xml" value="0.228" />
         <entry key="..\:/Christian/AndroidStudioProjects/DHBWorld/app/src/main/res/drawable/dualis_documents_view.xml" value="0.232" />
         <entry key="..\:/Christian/AndroidStudioProjects/DHBWorld/app/src/main/res/drawable/ic_baseline_dashboard_24.xml" value="0.2095" />
         <entry key="..\:/Christian/AndroidStudioProjects/DHBWorld/app/src/main/res/drawable/ic_baseline_description_24.xml" value="0.2095" />
@@ -32,8 +33,10 @@
         <entry key="..\:/Christian/AndroidStudioProjects/DHBWorld/app/src/main/res/layout/activity_dashboard.xml" value="0.5" />
         <entry key="..\:/Christian/AndroidStudioProjects/DHBWorld/app/src/main/res/layout/activity_dataprivacy.xml" value="0.1734375" />
         <entry key="..\:/Christian/AndroidStudioProjects/DHBWorld/app/src/main/res/layout/activity_dualis.xml" value="0.17604166666666668" />
+        <entry key="..\:/Christian/AndroidStudioProjects/DHBWorld/app/src/main/res/layout/baseline_language_24.xml" value="0.22135416666666666" />
         <entry key="..\:/Christian/AndroidStudioProjects/DHBWorld/app/src/main/res/layout/dualis_document_item.xml" value="0.33" />
         <entry key="..\:/Christian/AndroidStudioProjects/DHBWorld/app/src/main/res/layout/dualis_documents_view.xml" value="0.18" />
+        <entry key="..\:/Christian/AndroidStudioProjects/DHBWorld/app/src/main/res/layout/dualis_login.xml" value="0.18177083333333333" />
         <entry key="..\:/Christian/AndroidStudioProjects/DHBWorld/app/src/main/res/layout/dualis_overall_course_item.xml" value="0.35052083333333334" />
         <entry key="..\:/Christian/AndroidStudioProjects/DHBWorld/app/src/main/res/layout/dualis_overall_view.xml" value="0.35052083333333334" />
         <entry key="..\:/Christian/AndroidStudioProjects/DHBWorld/app/src/main/res/layout/personal_information.xml" value="0.22604166666666667" />
@@ -46,7 +49,7 @@
         <entry key="..\:/Christian/AndroidStudioProjects/DHBWorld/app/src/main/res/menu/dashboard_top_app_bar.xml" value="0.33" />
         <entry key="..\:/Christian/AndroidStudioProjects/DHBWorld/app/src/main/res/menu/dualis_menu.xml" value="0.17604166666666668" />
         <entry key="..\:/Christian/AndroidStudioProjects/DHBWorld/app/src/main/res/menu/navigation_drawer.xml" value="0.35052083333333334" />
-        <entry key="..\:/Christian/AndroidStudioProjects/DHBWorld/app/src/main/res/xml/root_preferences.xml" value="0.35052083333333334" />
+        <entry key="..\:/Christian/AndroidStudioProjects/DHBWorld/app/src/main/res/xml/root_preferences.xml" value="0.25" />
         <entry key="..\:/Code/DHBWorld/app/src/main/res/drawable/ic_launcher_background.xml" value="0.22179487179487178" />
         <entry key="..\:/Code/DHBWorld/app/src/main/res/drawable/triple_point.xml" value="0.22179487179487178" />
         <entry key="..\:/Code/DHBWorld/app/src/main/res/layout/activity_dashboard.xml" value="0.20854700854700856" />

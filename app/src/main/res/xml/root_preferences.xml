@@ -1,16 +1,25 @@
 <PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <PreferenceCategory app:title="@string/design" >
+    <PreferenceCategory app:title="@string/appearance" >
         <ListPreference
-            app:title="Darkmode"
+            app:title="@string/darkmode"
             app:entries="@array/darkmode_entries"
             app:entryValues="@array/darkmode_values"
             app:defaultValue="-1"
             app:key="darkmode"
-            android:icon="@drawable/baseline_design_services_24"
+            app:icon="@drawable/baseline_design_services_24"
             app:useSimpleSummaryProvider="true"
             />
+
+        <ListPreference
+            app:title="@string/language"
+            app:entries="@array/language_entries"
+            app:entryValues="@array/language_values"
+            app:defaultValue="default"
+            app:key="language"
+            app:icon="@drawable/baseline_language_24"
+            app:useSimpleSummaryProvider="true" />
     </PreferenceCategory>
 
     <PreferenceCategory app:title="@string/user_interaction">
