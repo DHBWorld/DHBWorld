@@ -78,8 +78,7 @@ public class UserInteractionMessagingService extends FirebaseMessagingService {
                     Intent intent = new Intent(getApplicationContext(), UserInteraction.class);
                     TaskStackBuilder stackBuilder = TaskStackBuilder.create(getApplicationContext());
                     stackBuilder.addNextIntentWithParentStack(intent);
-                    PendingIntent resultPendingIntent =
-                            stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+                    PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
                     NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), "warnings")
                             .setSmallIcon(icon)
