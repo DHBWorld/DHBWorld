@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.Icon;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -709,7 +711,7 @@ public class DashboardActivity extends AppCompatActivity {
             }
             configurationModus=true;
         } else{
-           item.setIcon(AppCompatResources.getDrawable(DashboardActivity.this, R.drawable.ic_construction));
+            item.setIcon(AppCompatResources.getDrawable(DashboardActivity.this, R.drawable.ic_construction));
             card_dash_calendar.setStrokeColor(ColorUtils.setAlphaComponent(card_dash_calendar.getStrokeColor(),255));
             card_dash_calendar_layout.setBackgroundColor(ColorUtils.setAlphaComponent(card_dash_calendar.getStrokeColor(),255));
             card_dash_pi.setStrokeColor(ColorUtils.setAlphaComponent(card_dash_pi.getStrokeColor(),255));
