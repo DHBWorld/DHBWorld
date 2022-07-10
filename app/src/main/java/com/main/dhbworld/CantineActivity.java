@@ -19,6 +19,8 @@ import android.view.ViewGroup;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.main.dhbworld.Cantine.CantineParser;
 import com.main.dhbworld.Cantine.CantineUtilities;
 import com.main.dhbworld.Cantine.MealDailyPlan;
 import com.main.dhbworld.Navigation.NavigationUtilities;
@@ -32,6 +34,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
 import javax.net.ssl.HttpsURLConnection;
 
@@ -229,52 +232,53 @@ public class CantineActivity extends AppCompatActivity {
 
     private void mealPlanFromOpenMensa(Date date) throws IOException {
         indicator.show();
-        new Thread(new Runnable() {
-            @RequiresApi(api = Build.VERSION_CODES.N)
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+
+        new CantineParser().requestDay(calendar).setResultListener(new CantineParser.ResultListener() {
             @Override
-            public void run() {
-                SimpleDateFormat format =new SimpleDateFormat("yyyy-MM-dd");
-                URL urlOpenMensa= null;
-                try {
-                    urlOpenMensa = new URL("https://openmensa.org/api/v2/canteens/33/days/"+format.format(date)+"/meals");
-                    HttpsURLConnection connection=(HttpsURLConnection) urlOpenMensa.openConnection();
-                    if (connection.getResponseCode() ==200){ // something wrong
-                        InputStream responseBody = connection.getInputStream();
-                        InputStreamReader responseBodyReader = new InputStreamReader(responseBody, "UTF-8");
-                        inputFromApi= new BufferedReader( responseBodyReader).lines().collect(Collectors.joining("\n"));
-                        layoutMealCardsBasic.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                try {
-                                    MealDailyPlan mealDailyPlan = new MealDailyPlan( inputFromApi);
-                                    loadLayout(mealDailyPlan, date);
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                    loadDisplay(getResources().getString(R.string.problemsWithOpenMensa));
-                                }
-                            }
-                        });
-                    }else{
-                        inputFromApi=null;
-                        layoutMealCardsBasic.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                SimpleDateFormat f =new SimpleDateFormat("dd.MM.yyyy");
-                                loadDisplay(getString(R.string.thereIsNoData)+" "+f.format(date)+" "+getString(R.string.cantineIsProbablyClosed));
-                            }
-                        });
+            public void onSuccess(String response) {
+                layoutMealCardsBasic.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            MealDailyPlan mealDailyPlan = new MealDailyPlan(response);
+                            loadLayout(mealDailyPlan, date);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            loadDisplay(getResources().getString(R.string.problemsWithOpenMensa));
+                        }
                     }
-                } catch (IOException  e) {
+                });
+            }
+
+            @Override
+            public void onFailure(int resultCode, Exception e) {
+                System.out.println(resultCode);
+                if (e != null) {
+                    e.printStackTrace();
+                }
+
+                if (resultCode != CantineParser.SUCCESS && resultCode != CantineParser.NO_DATA_AVAILABLE) {
                     layoutMealCardsBasic.post(new Runnable() {
                         @Override
                         public void run() {
                             loadDisplay(getResources().getString(R.string.dataLoadProblem));
                         }
                     });
-                    e.printStackTrace();
+                    return;
                 }
+
+                layoutMealCardsBasic.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        SimpleDateFormat f =new SimpleDateFormat("dd.MM.yyyy", Locale.GERMAN);
+                        loadDisplay(getString(R.string.thereIsNoData)+" "+f.format(date)+" "+getString(R.string.cantineIsProbablyClosed));
+                    }
+                });
             }
-        }).start();
+        }).startAsync();
     }
 
     private void loadDisplay(String message)  {
@@ -294,23 +298,27 @@ public class CantineActivity extends AppCompatActivity {
 
     public static List<String> loadDataForDashboard() {
         List <String> meals= new ArrayList<>();
-                Date now= new Date();
-                SimpleDateFormat format =new SimpleDateFormat("yyyy-MM-dd");
-                URL urlOpenMensa= null;
-                try { urlOpenMensa = new URL("https://openmensa.org/api/v2/canteens/33/days/" + format.format(now) + "/meals");
-                        HttpsURLConnection connection = (HttpsURLConnection) urlOpenMensa.openConnection();
-                    if (connection.getResponseCode() == 200) { // something wrong
-                        InputStream responseBody = connection.getInputStream();
-                        InputStreamReader responseBodyReader = new InputStreamReader(responseBody, "UTF-8");
-                        inputForDashboard = new BufferedReader(responseBodyReader).lines().collect(Collectors.joining("\n"));
 
-                        MealDailyPlan plan= new MealDailyPlan(inputForDashboard);
-                        meals= plan.getMainCourseNames();
-                    }
-                } catch (IOException | JSONException e) {
-                e.printStackTrace();
+        String result = new CantineParser().requestDay(Calendar.getInstance()).setResultListener(new CantineParser.ResultListener() {
+            @Override
+            public void onSuccess(String response) { }
+
+            @Override
+            public void onFailure(int resultCode, Exception e) {
+                System.out.println(resultCode);
+                if (e != null) {
+                    e.printStackTrace();
+                }
             }
-                return meals;
+        }).start();
+
+        try {
+            MealDailyPlan plan= new MealDailyPlan(result);
+            meals= plan.getMainCourseNames();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return meals;
     }
 
     public void refreshClick(@NonNull MenuItem item) throws NullPointerException{
