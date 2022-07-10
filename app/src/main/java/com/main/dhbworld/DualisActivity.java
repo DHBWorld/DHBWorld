@@ -23,6 +23,7 @@ import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.main.dhbworld.Debugging.Debugging;
 import com.main.dhbworld.Dualis.DualisAPI;
 import com.main.dhbworld.Dualis.LoggedInView;
 import com.main.dhbworld.Dualis.SecureStore;
@@ -60,6 +61,8 @@ public class DualisActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        Debugging.startDebugging(this);
 
         SharedPreferences defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         int darkmode = Integer.parseInt(defaultSharedPreferences.getString("darkmode", "-1"));

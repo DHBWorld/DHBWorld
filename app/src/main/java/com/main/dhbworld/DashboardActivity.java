@@ -36,6 +36,7 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseUser;
 import com.main.dhbworld.Calendar.CalendarActivity;
 import com.main.dhbworld.Calendar.nextEventsProvider;
+import com.main.dhbworld.Debugging.Debugging;
 import com.main.dhbworld.Enums.InteractionState;
 import com.main.dhbworld.Firebase.CurrentStatusListener;
 import com.main.dhbworld.Firebase.SignedInListener;
@@ -94,6 +95,9 @@ public class DashboardActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        Debugging.startDebugging(this);
+
         SharedPreferences defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         int darkmode = Integer.parseInt(defaultSharedPreferences.getString("darkmode", "-1"));
         AppCompatDelegate.setDefaultNightMode(darkmode);
