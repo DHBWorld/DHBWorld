@@ -289,7 +289,6 @@ public class CantineActivity extends AppCompatActivity {
         layoutMealCardsExtra.removeAllViews();
         TextView errorView = new TextView(CantineActivity.this);
         errorView.setTextSize(18);
-        errorView.setTextColor(getResources().getColor(R.color.black));
         errorView.setText(message);
         errorView.setPadding(0,0,0,15);
         errorView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
