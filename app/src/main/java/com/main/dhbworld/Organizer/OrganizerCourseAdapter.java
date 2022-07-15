@@ -6,6 +6,7 @@ import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.*;
@@ -17,6 +18,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.main.dhbworld.ProgressIndicator;
 import com.main.dhbworld.R;
 import java.util.ArrayList;
 import java.util.Objects;
@@ -71,6 +73,9 @@ public class OrganizerCourseAdapter extends RecyclerView.Adapter<OrganizerCourse
 
                 bottomSheetDialog.setContentView(R.layout.organizercoursebottomsheet);
                 bottomSheetDialog.show();
+                LinearLayout l = bottomSheetDialog.findViewById(R.id.organizerCourseBottomSheet);
+                l.setVisibility(View.INVISIBLE);
+
 
 
 
@@ -120,6 +125,7 @@ public class OrganizerCourseAdapter extends RecyclerView.Adapter<OrganizerCourse
                             }
 
 
+                            l.setVisibility(View.VISIBLE);
                             bottomSheetDialog.show();
                         }
                         catch (Exception e){
