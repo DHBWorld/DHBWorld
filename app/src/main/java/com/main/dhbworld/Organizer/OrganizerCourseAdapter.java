@@ -9,7 +9,14 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.*;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.main.dhbworld.R;
 import java.util.ArrayList;
 import java.util.Objects;
@@ -17,10 +24,12 @@ import java.util.Objects;
 public class OrganizerCourseAdapter extends RecyclerView.Adapter<OrganizerCourseAdapter.ViewHolder>{
     ArrayList<Course> courses;
     Context context;
+    FirebaseFirestore firestore;
 
     public OrganizerCourseAdapter(Context context, ArrayList<Course> courses) {
         this.context = context;
         this.courses = courses;
+        firestore= FirebaseFirestore.getInstance();
     }
 
 
@@ -63,36 +72,67 @@ public class OrganizerCourseAdapter extends RecyclerView.Adapter<OrganizerCourse
                 bottomSheetDialog.setContentView(R.layout.organizercoursebottomsheet);
                 bottomSheetDialog.show();
 
-                try {
-                    TextView entryView = bottomSheetDialog.findViewById(R.id.organizerCourseEntryText);
-                    Objects.requireNonNull(entryView).setText(course.name);
-                    TextView studyView = bottomSheetDialog.findViewById(R.id.organizerCourseStudyText);
-                    Objects.requireNonNull(studyView).setText(context.getString(R.string.study, course.study));
-                    TextView yearView = bottomSheetDialog.findViewById(R.id.organizerCourseYearText);
-                    Objects.requireNonNull(yearView).setText(context.getString(R.string.year, String.valueOf(course.year)));
-                    TextView roomView = bottomSheetDialog.findViewById(R.id.organizerCourseRoomText);
-                    if(course.roomNo != null && roomView != null) {
-                        (roomView).setText(context.getString(R.string.room_placeholder, course.roomNo));
-                    }
-                    else{
-                        assert roomView != null;
-                        (roomView).setVisibility(View.GONE);
-                    }
-                    TextView urlText = bottomSheetDialog.findViewById(R.id.organizerCourseUrlText);
-                    if(course.url != null && urlText != null) {
-                        (urlText).setText("URL: " + Html.fromHtml(course.url,0));
-                        urlText.setMovementMethod(LinkMovementMethod.getInstance());
-                    }
-                    else{
-                        (roomView).setVisibility(View.GONE);
-                    }
 
 
-                    bottomSheetDialog.show();
-                }
-                catch (Exception e){
-                    e.printStackTrace();
-                }
+                DocumentReference contact= firestore.collection("Courses").document(course.name);
+                contact.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()){
+                            DocumentSnapshot doc= task.getResult();
+                            course.setCourseDirector(doc.getString("courseDirector"));
+                            if (course.url==null){
+                                course.setUrl(doc.getString("URL"));
+                            }
+
+                        }
+                        try {
+                            TextView entryView = bottomSheetDialog.findViewById(R.id.organizerCourseEntryText);
+                            Objects.requireNonNull(entryView).setText(course.name);
+                            TextView studyView = bottomSheetDialog.findViewById(R.id.organizerCourseStudyText);
+                            Objects.requireNonNull(studyView).setText(context.getString(R.string.study, course.study));
+                            TextView yearView = bottomSheetDialog.findViewById(R.id.organizerCourseYearText);
+                            Objects.requireNonNull(yearView).setText(context.getString(R.string.year, String.valueOf(course.year)));
+                            TextView roomView = bottomSheetDialog.findViewById(R.id.organizerCourseRoomText);
+
+
+                            if(course.roomNo != null && roomView != null) {
+                                (roomView).setText(context.getString(R.string.room_placeholder, course.roomNo));
+                            }
+                            else{
+                                assert roomView != null;
+                                (roomView).setVisibility(View.GONE);
+                            }
+                            TextView urlText = bottomSheetDialog.findViewById(R.id.organizerCourseUrlText);
+                            if(course.url != null && urlText != null) {
+                                (urlText).setText("URL: " + Html.fromHtml(course.url,0));
+                                urlText.setMovementMethod(LinkMovementMethod.getInstance());
+                            }
+                            else{
+                                (roomView).setVisibility(View.GONE);
+                            }
+                            TextView directorText = bottomSheetDialog.findViewById(R.id.organizerCourseDirectorText);
+                            if(course.courseDirector != null && directorText != null) {
+                                (directorText).setText(context.getString(R.string.study, course.study));
+                            }
+                            else{
+                                (directorText).setVisibility(View.GONE);
+                            }
+
+
+                            bottomSheetDialog.show();
+                        }
+                        catch (Exception e){
+                            e.printStackTrace();
+                        }
+
+
+                    }
+                });
+
+
+
+
             }
         });
     }

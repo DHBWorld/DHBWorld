@@ -248,4 +248,5 @@ E-Mail-Adresse: <p><a href="mailto:zaeske.christian@gmail.com">zaeske.christian@
     <string name="medium_queue">mittlere Schlange</string>
     <string name="short_queue">kurze Schlange</string>
     <string name="no_queue">keine Schlange</string>
+    <string name="course_director">Studiengangsleiter : </string>
 </resources>

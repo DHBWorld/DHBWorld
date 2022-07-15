@@ -6,6 +6,16 @@ public class Course {
     String study;
     String roomNo;
     String url;
+    String courseDirector;
+
+
+    public String getCourseDirector() {
+        return courseDirector;
+    }
+
+    public void setCourseDirector(String courseDirector) {
+        this.courseDirector = courseDirector;
+    }
 
     public String getUrl() {
         return url;

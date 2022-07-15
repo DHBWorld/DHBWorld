@@ -249,4 +249,5 @@ E-Mail-Adresse: <p><a href="mailto:zaeske.christian@gmail.com">zaeske.christian@
     <string name="medium_queue">medium queue</string>
     <string name="short_queue">short queue</string>
     <string name="no_queue">no queue</string>
+    <string name="course_director">Course Director: </string>
 </resources>
