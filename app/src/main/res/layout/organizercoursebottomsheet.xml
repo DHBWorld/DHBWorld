@@ -78,7 +78,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/organizerCourseDirectorText"
-            android:text="Studiengangsleiter:"
+            android:text=""
             android:layout_gravity="center_vertical"
             android:padding="8dp"/>
 
@@ -97,7 +97,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/organizerCourseRoomText"
-            android:text="Raum-Nr: C201 "
+            android:text=""
             android:layout_gravity="center_vertical"
             android:padding="8dp"/>
 

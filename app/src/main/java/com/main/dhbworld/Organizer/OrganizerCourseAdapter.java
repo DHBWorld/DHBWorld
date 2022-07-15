@@ -113,7 +113,7 @@ public class OrganizerCourseAdapter extends RecyclerView.Adapter<OrganizerCourse
                             }
                             TextView directorText = bottomSheetDialog.findViewById(R.id.organizerCourseDirectorText);
                             if(course.courseDirector != null && directorText != null) {
-                                (directorText).setText(context.getString(R.string.study, course.study));
+                                (directorText).setText(context.getString(R.string.course_director, course.courseDirector));
                             }
                             else{
                                 (directorText).setVisibility(View.GONE);
