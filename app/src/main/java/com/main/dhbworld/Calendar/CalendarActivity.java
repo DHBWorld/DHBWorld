@@ -17,11 +17,16 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.alamkanak.weekview.WeekView;
 import com.alamkanak.weekview.WeekViewEntity;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.SetOptions;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.main.dhbworld.Navigation.NavigationUtilities;
@@ -59,6 +64,7 @@ public class CalendarActivity extends AppCompatActivity{
     String url;
     boolean stillLoading = false;
     LinearProgressIndicator progressBar;
+    FirebaseFirestore firestore;
 
     @SuppressLint("ClickableViewAccessibility")
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +75,7 @@ public class CalendarActivity extends AppCompatActivity{
         progressBar = findViewById(R.id.calProgressBar);
         NavigationUtilities.setUpNavigation(this, R.id.Calendar);
         firstSetup();
+        firestore= FirebaseFirestore.getInstance();
     }
 
     @Override
@@ -209,11 +216,13 @@ public class CalendarActivity extends AppCompatActivity{
                 String courseDirector = courseDirEditText.getText().toString();
                 String courseName = courseEditText.getText().toString();
                 String urlString = urlEditText.getText().toString();
+                Map <String, Object> courseInFirestore = new HashMap<>();
 
                 if(!courseName.isEmpty() && !urlString.isEmpty()){
                     SharedPreferences.Editor editor = preferences.edit();
                     editor.putString("CurrentURL", urlString);
                     editor.apply();
+                    courseInFirestore.put("URL", urlString);
                 }
                 else if(urlString.isEmpty() && !courseName.isEmpty()){
                     System.out.println("here");
@@ -222,13 +231,18 @@ public class CalendarActivity extends AppCompatActivity{
                     SharedPreferences.Editor editor = preferences.edit();
                     editor.putString("CurrentURL", formedURL);
                     editor.apply();
+                    courseInFirestore.put("CourseDirector", courseDirector.toLowerCase());
+                    courseInFirestore.put("URL", formedURL);
                 }
                 else if(!urlString.isEmpty()) {
                     SharedPreferences.Editor editor = preferences.edit();
                     editor.putString("CurrentURL", urlString);
                     editor.apply();
+                    String partURL=urlString.substring(urlString.indexOf("file=")+5);
+                    courseName=partURL.substring(0, partURL.indexOf("&"));
+                    courseInFirestore.put("URL", urlString);
                 }
-
+                firestore.collection("Courses").document(courseName).set(courseInFirestore, SetOptions.merge());
                 restart(CalendarActivity.this);
             }
 
