@@ -30,6 +30,8 @@ import androidx.work.WorkManager;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.SetOptions;
 import com.main.dhbworld.Debugging.Debugging;
 import com.main.dhbworld.Dualis.DualisAPI;
 import com.main.dhbworld.Firebase.Utilities;
@@ -38,10 +40,13 @@ import com.main.dhbworld.Navigation.NavigationUtilities;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.file.Files;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Objects;
 
 public class SettingsActivity extends AppCompatActivity {
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +65,8 @@ public class SettingsActivity extends AppCompatActivity {
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
+
+
     }
 
     @Override
@@ -80,6 +87,7 @@ public class SettingsActivity extends AppCompatActivity {
 
     public static class SettingsFragment extends PreferenceFragmentCompat implements Preference.OnPreferenceChangeListener, Preference.OnPreferenceClickListener {
 
+        FirebaseFirestore firestore;
         Context context;
         Activity activity;
 
@@ -94,6 +102,7 @@ public class SettingsActivity extends AppCompatActivity {
                 return;
             }
 
+            firestore= FirebaseFirestore.getInstance();
             setPreferencesFromResource(R.xml.root_preferences, rootKey);
 
             ListPreference darkmode = findPreference("darkmode");
@@ -246,11 +255,13 @@ public class SettingsActivity extends AppCompatActivity {
                             String courseDirector = courseDirEditText.getText().toString();
                             String courseName = courseEditText.getText().toString();
                             String urlString = urlEditText.getText().toString();
+                            Map<String, Object> courseInFirestore = new HashMap<>();
 
                             if(!courseName.isEmpty() && !urlString.isEmpty()){
                                 SharedPreferences.Editor editor = preferences.edit();
                                 editor.putString("CurrentURL", urlString);
                                 editor.apply();
+                                courseInFirestore.put("URL", urlString);
                             }
                             else if(urlString.isEmpty() && !courseName.isEmpty()){
                                 String formedURL = ("https://rapla.dhbw-karlsruhe.de/rapla?page=calendar&user=" + courseDirector.toLowerCase() + "&file=" + courseName.toUpperCase(Locale.ROOT));
@@ -258,12 +269,17 @@ public class SettingsActivity extends AppCompatActivity {
                                 SharedPreferences.Editor editor = preferences.edit();
                                 editor.putString("CurrentURL", formedURL);
                                 editor.apply();
+                                courseInFirestore.put("CourseDirector", courseDirector.toUpperCase().charAt(0)+courseDirector.substring(1).toLowerCase());
                             }
                             else if(!urlString.isEmpty()) {
                                 SharedPreferences.Editor editor = preferences.edit();
                                 editor.putString("CurrentURL", urlString);
                                 editor.apply();
+                                String partURL=urlString.substring(urlString.indexOf("file=")+5);
+                                courseName=partURL.substring(0, partURL.indexOf("&"));
+                                courseInFirestore.put("URL", urlString);
                             }
+                            firestore.collection("Courses").document(courseName).set(courseInFirestore, SetOptions.merge());
                         }
                     });
                     builder.setNegativeButton("Close", new DialogInterface.OnClickListener() {
