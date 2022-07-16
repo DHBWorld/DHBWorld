@@ -75,19 +75,17 @@ public class OrganizerCourseAdapter extends RecyclerView.Adapter<OrganizerCourse
 
                 bottomSheetDialog.setContentView(R.layout.organizercoursebottomsheet);
               //  bottomSheetDialog.show();
-                LinearLayout l = bottomSheetDialog.findViewById(R.id.organizerCourseBottomSheet);
-              //  l.setVisibility(View.INVISIBLE);
 
 
 
 
-                DocumentReference contact= firestore.collection("Courses").document(course.name);
+                DocumentReference contact= firestore.collection("Courses").document(course.name.toLowerCase());
                 contact.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                         if (task.isSuccessful()){
                             DocumentSnapshot doc= task.getResult();
-                            course.setCourseDirector(doc.getString("courseDirector"));
+                            course.setCourseDirector(doc.getString("CourseDirector"));
                             if (course.url==null){
                                 course.setUrl(doc.getString("URL"));
                             }
@@ -125,9 +123,6 @@ public class OrganizerCourseAdapter extends RecyclerView.Adapter<OrganizerCourse
                             else{
                                 (directorText).setVisibility(View.GONE);
                             }
-
-
-                            l.setVisibility(View.VISIBLE);
                             bottomSheetDialog.show();
                         }
                         catch (Exception e){

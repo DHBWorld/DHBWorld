@@ -39,11 +39,14 @@ import com.main.dhbworld.Navigation.NavigationUtilities;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.net.URL;
 import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
+
+import javax.net.ssl.HttpsURLConnection;
 
 public class SettingsActivity extends AppCompatActivity {
 
@@ -252,34 +255,50 @@ public class SettingsActivity extends AppCompatActivity {
                     builder.setPositiveButton("Submit", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            String courseDirector = courseDirEditText.getText().toString();
-                            String courseName = courseEditText.getText().toString();
-                            String urlString = urlEditText.getText().toString();
-                            Map<String, Object> courseInFirestore = new HashMap<>();
+                                new Thread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        String courseDirector = courseDirEditText.getText().toString();
+                                        String courseName = courseEditText.getText().toString();
+                                        String urlString = urlEditText.getText().toString();
+                                        Map<String, Object> courseInFirestore = new HashMap<>();
 
-                            if(!courseName.isEmpty() && !urlString.isEmpty()){
-                                SharedPreferences.Editor editor = preferences.edit();
-                                editor.putString("CurrentURL", urlString);
-                                editor.apply();
-                                courseInFirestore.put("URL", urlString);
-                            }
-                            else if(urlString.isEmpty() && !courseName.isEmpty()){
-                                String formedURL = ("https://rapla.dhbw-karlsruhe.de/rapla?page=calendar&user=" + courseDirector.toLowerCase() + "&file=" + courseName.toUpperCase(Locale.ROOT));
-                                System.out.println(formedURL);
-                                SharedPreferences.Editor editor = preferences.edit();
-                                editor.putString("CurrentURL", formedURL);
-                                editor.apply();
-                                courseInFirestore.put("CourseDirector", courseDirector.toUpperCase().charAt(0)+courseDirector.substring(1).toLowerCase());
-                            }
-                            else if(!urlString.isEmpty()) {
-                                SharedPreferences.Editor editor = preferences.edit();
-                                editor.putString("CurrentURL", urlString);
-                                editor.apply();
-                                String partURL=urlString.substring(urlString.indexOf("file=")+5);
-                                courseName=partURL.substring(0, partURL.indexOf("&"));
-                                courseInFirestore.put("URL", urlString);
-                            }
-                            firestore.collection("Courses").document(courseName).set(courseInFirestore, SetOptions.merge());
+                                        if(!courseName.isEmpty() && !urlString.isEmpty()){
+                                            SharedPreferences.Editor editor = preferences.edit();
+                                            editor.putString("CurrentURL", urlString);
+                                            editor.apply();
+                                            courseInFirestore.put("URL", urlString);
+                                        }
+                                        else if(urlString.isEmpty() && !courseName.isEmpty()){
+                                            urlString = ("https://rapla.dhbw-karlsruhe.de/rapla?page=calendar&user=" + courseDirector.toLowerCase() + "&file=" + courseName.toUpperCase(Locale.ROOT));
+                                            SharedPreferences.Editor editor = preferences.edit();
+                                            editor.putString("CurrentURL", urlString);
+                                            editor.apply();
+                                            courseInFirestore.put("CourseDirector", courseDirector.toUpperCase().charAt(0)+courseDirector.substring(1).toLowerCase());
+                                            courseInFirestore.put("URL", urlString);
+                                        }
+                                        else if(!urlString.isEmpty()) {
+                                            SharedPreferences.Editor editor = preferences.edit();
+                                            editor.putString("CurrentURL", urlString);
+                                            editor.apply();
+                                            String partURLfile=urlString.substring(urlString.indexOf("file=")+5);
+                                            if (partURLfile.contains("&")){
+                                                courseName=partURLfile.substring(0, partURLfile.indexOf("&"));
+                                            }else {
+                                                courseName=partURLfile;
+                                            }
+                                            courseInFirestore.put("URL", urlString);
+                                        }
+                                        try {
+                                            URL urlCheck = new URL(urlString);
+                                            HttpsURLConnection connection = (HttpsURLConnection) urlCheck.openConnection();
+                                            if (connection.getResponseCode() == 200) {
+                                                firestore.collection("Courses").document(courseName.toLowerCase()).set(courseInFirestore, SetOptions.merge());
+                                            }
+                                        } catch (IOException e) {}
+
+                                    }
+                                }).start();
                         }
                     });
                     builder.setNegativeButton("Close", new DialogInterface.OnClickListener() {
