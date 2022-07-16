@@ -1,6 +1,7 @@
 package com.main.dhbworld;
 
 import android.app.Activity;
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -32,10 +33,12 @@ import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.SetOptions;
+import com.main.dhbworld.Calendar.CalendarActivity;
 import com.main.dhbworld.Debugging.Debugging;
 import com.main.dhbworld.Dualis.DualisAPI;
 import com.main.dhbworld.Firebase.Utilities;
 import com.main.dhbworld.Navigation.NavigationUtilities;
+import com.main.dhbworld.Organizer.OrganizerActivity;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -305,6 +308,13 @@ public class SettingsActivity extends AppCompatActivity {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
 
+                        }
+                    });
+                    builder.setNeutralButton("No idea",  new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Intent intent = new Intent(context, OrganizerActivity.class);
+                            startActivity(intent);
                         }
                     });
                     builder.create();

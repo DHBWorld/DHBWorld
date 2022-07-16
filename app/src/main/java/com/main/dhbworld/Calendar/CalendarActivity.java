@@ -8,6 +8,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Notification;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -30,6 +31,7 @@ import com.google.firebase.firestore.SetOptions;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.main.dhbworld.Navigation.NavigationUtilities;
+import com.main.dhbworld.Organizer.OrganizerActivity;
 import com.main.dhbworld.R;
 
 import java.io.IOException;
@@ -268,6 +270,14 @@ public class CalendarActivity extends AppCompatActivity{
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
+            }
+        });
+        builder.setNeutralButton("No idea",  new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Intent intent = new Intent(CalendarActivity.this, OrganizerActivity.class);
+                CalendarActivity.this.finish();
+                startActivity(intent);
             }
         });
 
