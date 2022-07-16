@@ -32,6 +32,8 @@ public class OrganizerCourseAdapter extends RecyclerView.Adapter<OrganizerCourse
         this.context = context;
         this.courses = courses;
         firestore= FirebaseFirestore.getInstance();
+        firestore.collection("Courses").get();
+
     }
 
 
@@ -72,9 +74,9 @@ public class OrganizerCourseAdapter extends RecyclerView.Adapter<OrganizerCourse
                 BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(newRow.getContext());
 
                 bottomSheetDialog.setContentView(R.layout.organizercoursebottomsheet);
-                bottomSheetDialog.show();
+              //  bottomSheetDialog.show();
                 LinearLayout l = bottomSheetDialog.findViewById(R.id.organizerCourseBottomSheet);
-                l.setVisibility(View.INVISIBLE);
+              //  l.setVisibility(View.INVISIBLE);
 
 
 
