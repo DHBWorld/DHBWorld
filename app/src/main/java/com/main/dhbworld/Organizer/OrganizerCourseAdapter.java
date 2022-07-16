@@ -72,12 +72,8 @@ public class OrganizerCourseAdapter extends RecyclerView.Adapter<OrganizerCourse
             @Override
             public void onClick(View v) {
                 BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(newRow.getContext());
-
                 bottomSheetDialog.setContentView(R.layout.organizercoursebottomsheet);
               //  bottomSheetDialog.show();
-
-
-
 
                 DocumentReference contact= firestore.collection("Courses").document(course.name.toLowerCase());
                 contact.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -89,7 +85,6 @@ public class OrganizerCourseAdapter extends RecyclerView.Adapter<OrganizerCourse
                             if (course.url==null){
                                 course.setUrl(doc.getString("URL"));
                             }
-
                         }
                         try {
                             TextView entryView = bottomSheetDialog.findViewById(R.id.organizerCourseEntryText);
@@ -116,12 +111,13 @@ public class OrganizerCourseAdapter extends RecyclerView.Adapter<OrganizerCourse
                             else{
                                 (roomView).setVisibility(View.GONE);
                             }
-                            TextView directorText = bottomSheetDialog.findViewById(R.id.organizerCourseDirectorText);
-                            if(course.courseDirector != null && directorText != null) {
-                                (directorText).setText(context.getString(R.string.course_director, course.courseDirector));
+                            TextView directorView = bottomSheetDialog.findViewById(R.id.organizerCourseDirectorText);
+                            if(course.courseDirector != null && directorView != null) {
+                                (directorView).setText(context.getString(R.string.course_director, course.courseDirector));
                             }
                             else{
-                                (directorText).setVisibility(View.GONE);
+                                assert directorView != null;
+                                (directorView).setVisibility(View.GONE);
                             }
                             bottomSheetDialog.show();
                         }

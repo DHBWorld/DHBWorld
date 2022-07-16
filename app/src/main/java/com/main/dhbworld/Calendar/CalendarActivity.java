@@ -244,7 +244,6 @@ public class CalendarActivity extends AppCompatActivity{
                             editor.putString("CurrentURL", urlString);
                             editor.apply();
                             String partURLfile=urlString.substring(urlString.indexOf("file=")+5);
-                            System.out.println(partURLfile);
                             if (partURLfile.contains("&")){
                                 courseName=partURLfile.substring(0, partURLfile.indexOf("&"));
                             }else {
