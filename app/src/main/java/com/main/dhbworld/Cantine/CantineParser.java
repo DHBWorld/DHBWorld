@@ -99,13 +99,10 @@ public class CantineParser {
    }
 
    public void startAsync() {
-      new Thread(new Runnable() {
-         @Override
-         public void run() {
-            String result = compute();
-            if (!result.isEmpty()) {
-               resultListener.onSuccess(result);
-            }
+      new Thread(() -> {
+         String result = compute();
+         if (!result.isEmpty()) {
+            resultListener.onSuccess(result);
          }
       }).start();
    }
@@ -143,6 +140,10 @@ public class CantineParser {
       Elements canteenDayNavElements = document.getElementsByClass("canteen-day-nav");
       if (canteenDayNavElements.size() < 1) {
          resultListener.onFailure(NO_DATA_AVAILABLE, null);
+      }
+      if (canteenDayNavElements.size() < 1) {
+         resultListener.onFailure(NO_DATA_AVAILABLE, null);
+         return "";
       }
       Element canteenDayNav = canteenDayNavElements.get(0);
       if (canteenDayNav.childrenSize() < 1) {
@@ -193,8 +194,8 @@ public class CantineParser {
                }
 
                String titleWithExtras = titles.get(0).text();
-               String extrasStr = "";
-               String title = "";
+               String extrasStr;
+               String title;
 
                if (!titleWithExtras.contains("[")) {
                   title = titleWithExtras;
