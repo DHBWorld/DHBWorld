@@ -27,7 +27,7 @@ public class DualisParser {
         return Jsoup.parse(response);
     }
 
-    static JSONArray parseDocuments(Document doc) {
+    static JSONArray parseDocuments(Document doc) throws Exception {
         Element table = doc.select("#form1").get(0);
         Elements tableRows = table.select("tr");
 

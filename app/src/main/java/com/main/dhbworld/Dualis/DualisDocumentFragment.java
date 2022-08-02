@@ -130,6 +130,6 @@ public class DualisDocumentFragment extends Fragment implements DualisAPI.Docume
 
     @Override
     public void onDocumentsError(VolleyError error) {
-        Snackbar.make(mainView.findViewById(android.R.id.content), getString(R.string.error_with_message, error.toString()), BaseTransientBottomBar.LENGTH_LONG).show();
+        Snackbar.make(DualisDocumentFragment.this.getActivity().findViewById(android.R.id.content), getString(R.string.error_with_message, error.toString()), BaseTransientBottomBar.LENGTH_LONG).show();
     }
 }

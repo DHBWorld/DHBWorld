@@ -165,6 +165,6 @@ public class DualisOverallFragment extends Fragment implements DualisAPI.Overall
 
     @Override
     public void onOverallError(VolleyError error) {
-        Snackbar.make(mainView.findViewById(android.R.id.content), getString(R.string.error_with_message, error.toString()), BaseTransientBottomBar.LENGTH_LONG).show();
+        Snackbar.make(DualisOverallFragment.this.getActivity().findViewById(android.R.id.content), getString(R.string.error_with_message, error.toString()), BaseTransientBottomBar.LENGTH_LONG).show();
     }
 }

@@ -73,7 +73,13 @@ public class DualisAPI {
         String url = "https://dualis.dhbw.de/scripts/mgrqispi.dll?APPNAME=CampusNet&PRGNAME=CREATEDOCUMENT&" + mainArguments;
         createRequest(context, cookieHandler, url, response -> {
             Document doc = DualisParser.parseResponse(response);
-            JSONArray documentsArray = DualisParser.parseDocuments(doc);
+            JSONArray documentsArray;
+            try {
+                documentsArray = DualisParser.parseDocuments(doc);
+            } catch (Exception e) {
+                documentsErrorListener.onDocumentsError(new VolleyError(context.getResources().getString(R.string.error)));
+                return;
+            }
 
             try {
                 mainJson.put("documents", documentsArray);

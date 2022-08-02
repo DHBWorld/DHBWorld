@@ -159,7 +159,7 @@ public class DualisSemesterFragment extends Fragment implements DualisAPI.Course
 
     @Override
     public void onCourseError(VolleyError error) {
-        Snackbar.make(mainView.findViewById(android.R.id.content), getString(R.string.error_with_message, error.toString()), BaseTransientBottomBar.LENGTH_LONG).show();
+        Snackbar.make(DualisSemesterFragment.this.getActivity().findViewById(android.R.id.content), getString(R.string.error_with_message, error.toString()), BaseTransientBottomBar.LENGTH_LONG).show();
     }
 
     void updateList(JSONObject data, int position) throws JSONException {

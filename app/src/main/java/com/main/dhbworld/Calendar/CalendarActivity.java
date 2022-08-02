@@ -1,16 +1,10 @@
 package com.main.dhbworld.Calendar;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.preference.PreferenceManager;
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.Notification;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -18,11 +12,14 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.preference.PreferenceManager;
 
 import com.alamkanak.weekview.WeekView;
 import com.alamkanak.weekview.WeekViewEntity;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
@@ -39,17 +36,15 @@ import java.lang.reflect.Type;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
-import java.util.Calendar;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.time.LocalDate;
-import dhbw.timetable.rapla.data.event.Appointment;
-import dhbw.timetable.rapla.parser.DataImporter;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ExecutorService;
@@ -58,6 +53,9 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 import javax.net.ssl.HttpsURLConnection;
+
+import dhbw.timetable.rapla.data.event.Appointment;
+import dhbw.timetable.rapla.parser.DataImporter;
 
 public class CalendarActivity extends AppCompatActivity{
     WeekView cal;
