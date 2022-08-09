@@ -39,7 +39,10 @@ public class DualisParser {
             }
 
             String name = data.get(0).text();
-            String date = data.get(1).text();
+            String date = "";
+            if (data.size() >= 2) {
+                date = data.get(1).text();
+            }
 
             String download = null;
             if (data.get(4).select("a").size() > 0) {
