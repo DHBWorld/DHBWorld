@@ -1,5 +1,7 @@
 package com.main.dhbworld.Cantine;
 
+import android.widget.Toast;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -14,8 +16,12 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -157,13 +163,40 @@ public class CantineParser {
       canteenDays.add(document.getElementById("canteen_day_4"));
       canteenDays.add(document.getElementById("canteen_day_5"));
 
-      int requestedDay = calendar.get(Calendar.DAY_OF_WEEK);
-      requestedDay = requestedDay - 2;
+      Elements canteenDayDates = new Elements();
+      canteenDayDates.add(document.getElementById("canteen_day_nav_1"));
+      canteenDayDates.add(document.getElementById("canteen_day_nav_2"));
+      canteenDayDates.add(document.getElementById("canteen_day_nav_3"));
+      canteenDayDates.add(document.getElementById("canteen_day_nav_4"));
+      canteenDayDates.add(document.getElementById("canteen_day_nav_5"));
+
+      int requestedDay = -1;
+
+      for (int i = 0; i < canteenDayDates.size(); i++) {
+         Element canteenDayDate = canteenDayDates.get(i);
+         if (canteenDayDate == null) {
+            continue;
+         }
+         String dateStr = canteenDayDate.attr("rel");
+
+         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd", Locale.GERMAN);
+         String dateStrRequest = formatter.format(calendar.getTime());
+
+         if (dateStr.equals(dateStrRequest)) {
+            requestedDay = i;
+         }
+      }
+
+      if (requestedDay == -1) {
+         resultListener.onFailure(NO_DATA_AVAILABLE, null);
+         return "";
+      }
 
       JSONArray resultArray = new JSONArray();
 
       for (int i=0; i<canteenDays.size(); i++) {
          Element canteenDay = canteenDays.get(i);
+         System.out.println(canteenDayDates.get(0));
          if (canteenDay == null || i != requestedDay) {
             continue;
          }
