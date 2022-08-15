@@ -101,19 +101,30 @@ public class CantineParser {
    }
 
    public String start() {
-      return compute();
+      String result = "";
+      try {
+         result = compute();
+      } catch (Exception e) {
+         resultListener.onFailure(NO_DATA_AVAILABLE, e);
+      }
+      return result;
    }
 
    public void startAsync() {
       new Thread(() -> {
-         String result = compute();
+         String result = "";
+         try {
+            result = compute();
+         } catch (Exception e) {
+            resultListener.onFailure(NO_DATA_AVAILABLE, e);
+         }
          if (!result.isEmpty()) {
             resultListener.onSuccess(result);
          }
       }).start();
    }
 
-   private String compute() {
+   private String compute() throws Exception {
       int weekOfYear = calendar.get(Calendar.WEEK_OF_YEAR);
 
       String response = "";
@@ -196,7 +207,6 @@ public class CantineParser {
 
       for (int i=0; i<canteenDays.size(); i++) {
          Element canteenDay = canteenDays.get(i);
-         System.out.println(canteenDayDates.get(0));
          if (canteenDay == null || i != requestedDay) {
             continue;
          }
