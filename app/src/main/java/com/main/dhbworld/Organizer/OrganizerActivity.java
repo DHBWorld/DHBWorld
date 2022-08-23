@@ -60,10 +60,9 @@ public class OrganizerActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.organizer_top_app_bar, menu);
-
         searchViewModel = new ViewModelProvider(this).get(SearchViewModel.class);
-
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+
         SearchView searchView = (SearchView) menu.findItem(R.id.organizerSearchIcon).getActionView();
         searchView.setQueryHint("Search in all Tabs");
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
@@ -81,6 +80,14 @@ public class OrganizerActivity extends AppCompatActivity {
         searchView.setOnCloseListener(() -> {
             searchViewModel.setQuery("");
             return false;
+        });
+        // When viewPager changes tab, searchViewModel clears current Query.
+        viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+            @Override
+            public void onPageSelected(int position) {
+                super.onPageSelected(position);
+                searchViewModel.setQuery("");
+            }
         });
 
        return super.onCreateOptionsMenu(menu);
@@ -113,7 +120,6 @@ public class OrganizerActivity extends AppCompatActivity {
             }
         });
         tabLayoutMediator.attach();
-
     }
 
     @Override
