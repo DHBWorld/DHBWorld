@@ -27,6 +27,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by Hendrik Ulbrich (C) 2017
@@ -251,6 +253,19 @@ public final class DataImporter {
 		pageContent = ("<?xml version=\"1.0\"?>\n" + pageContent.substring(pageContent.indexOf("<tbody>"), pageContent.lastIndexOf("</tbody>") + 8))
 				.replaceAll("&nbsp;", "&#160;")
 				.replaceAll("<br>", "<br/>");
+
+        Pattern pattern = Pattern.compile("(<a.*</a>)");
+        Matcher matcher = pattern.matcher(pageContent);
+        while(matcher.find()) {
+            String anchor = matcher.group(1);
+            if (anchor == null) {
+                continue;
+            }
+            String[] anchorSplit = anchor.split("\"");
+            if (anchorSplit[1].contains("<") || anchorSplit[1].contains(">")) {
+                pageContent = pageContent.replaceAll(anchor, "");
+            }
+        }
 
 		// Parse the document
 		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
