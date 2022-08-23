@@ -71,18 +71,26 @@ public class OrganizerPersonAdapter extends RecyclerView.Adapter<OrganizerPerson
                     TextView personNameText = bottomSheetDialog.findViewById(R.id.organizerPersonNameText);
                     Objects.requireNonNull(personNameText).setText(person.name);
                     TextView personStudyText = bottomSheetDialog.findViewById(R.id.organizerPersonStudyText);
-                    if(person.study != null && personStudyText != null) {
-                        personStudyText.setText(person.study);
-                    }
-                    Objects.requireNonNull(personStudyText).setText(context.getResources().getString(R.string.study, person.study));
+                    if(context.getString(R.string.study, person.study) != null && !context.getString(R.string.study, person.study).contains("null")){
+                        System.out.println(context.getString(R.string.study, person.study));
+                        Objects.requireNonNull(personStudyText).setText(context.getString(R.string.study, person.study));}
+                    else{
+                        Objects.requireNonNull(personStudyText).setVisibility(View.GONE);}
                     TextView personEmailText = bottomSheetDialog.findViewById(R.id.organizerPersonEmailText);
-                    Objects.requireNonNull(personEmailText).setText(context.getString(R.string.mail, person.email));
+                    if(context.getString(R.string.mail, person.email) != null && context.getString(R.string.mail, person.email).contains("@")){
+                    Objects.requireNonNull(personEmailText).setText(context.getString(R.string.mail, person.email));}
+                    else{
+                        Objects.requireNonNull(personEmailText).setVisibility(View.GONE); }
                     TextView personPhoneText = bottomSheetDialog.findViewById(R.id.organizerPersonPhoneText);
-                    Objects.requireNonNull(personPhoneText).setText(context.getString(R.string.phone, person.phoneNumber));
+                    if(context.getString(R.string.phone, person.phoneNumber) != null && context.getString(R.string.phone, person.phoneNumber).contains("+")){
+                        Objects.requireNonNull(personPhoneText).setText(context.getString(R.string.phone, person.phoneNumber));}
+                    else{
+                        Objects.requireNonNull(personPhoneText).setVisibility(View.GONE); }
                     TextView personRoomText = bottomSheetDialog.findViewById(R.id.organizerPersonRoomText);
-                    Objects.requireNonNull(personRoomText).setText(context.getResources().getString(R.string.room_placeholder, person.roomNo));
-
-
+                    if(context.getResources().getString(R.string.room_placeholder, person.roomNo) != null && !context.getResources().getString(R.string.room_placeholder, person.roomNo).equalsIgnoreCase("")){
+                        Objects.requireNonNull(personRoomText).setText(context.getResources().getString(R.string.room_placeholder, person.roomNo));}
+                    else{
+                        Objects.requireNonNull(personEmailText).setVisibility(View.GONE); }
                     bottomSheetDialog.show();
                 }
                 catch (Exception e){

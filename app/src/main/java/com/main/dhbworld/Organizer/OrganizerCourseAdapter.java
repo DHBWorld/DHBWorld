@@ -90,12 +90,17 @@ public class OrganizerCourseAdapter extends RecyclerView.Adapter<OrganizerCourse
                             TextView entryView = bottomSheetDialog.findViewById(R.id.organizerCourseEntryText);
                             Objects.requireNonNull(entryView).setText(course.name);
                             TextView studyView = bottomSheetDialog.findViewById(R.id.organizerCourseStudyText);
-                            Objects.requireNonNull(studyView).setText(context.getString(R.string.study, course.study));
+                            if(context.getString(R.string.study, course.study) != null && !context.getString(R.string.study, course.study).contains("null")){
+                                System.out.println(context.getString(R.string.study, course.study));
+                                Objects.requireNonNull(studyView).setText(context.getString(R.string.study, course.study));}
+                            else{
+                                Objects.requireNonNull(studyView).setVisibility(View.GONE);}
                             TextView yearView = bottomSheetDialog.findViewById(R.id.organizerCourseYearText);
-                            Objects.requireNonNull(yearView).setText(context.getString(R.string.year, String.valueOf(course.year)));
+                            if(context.getString(R.string.year, String.valueOf(course.year)) != null && course.year > 0){
+                                Objects.requireNonNull(yearView).setText(context.getString(R.string.year, String.valueOf(course.year)));
+                            }
+                            else{ Objects.requireNonNull(yearView).setVisibility(View.GONE);}
                             TextView roomView = bottomSheetDialog.findViewById(R.id.organizerCourseRoomText);
-
-
                             if(course.roomNo != null && roomView != null) {
                                 (roomView).setText(context.getString(R.string.room_placeholder, course.roomNo));
                             }
