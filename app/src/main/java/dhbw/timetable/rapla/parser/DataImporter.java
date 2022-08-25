@@ -369,58 +369,37 @@ public final class DataImporter {
         }
     }
 
+
+
+
     private static String[] getDiscriptionNoTooltip(ArrayList<Node> nList) {
-            NodeList dataItems;
-            Element labelElement, dataElement;
-            String className;
-            StringBuilder titleBuilder = new StringBuilder(),
-                    personsBuilder = new StringBuilder(),
-                    resourcesBuilder = new StringBuilder(),
-                    tempBuilder = null;
-            // Handle each row of the table
-            for (int i = 0; i < nList.size(); i++) {
-                Node row = nList.get(i);
-                if(row.getNodeType() == Node.TEXT_NODE) {
-                    dataItems = row.getChildNodes();
-                    labelElement = (Element) dataItems.item(1);
+       boolean areCombined = false;
+       String title = "";
+       String prof = "";
 
-                    // Get category: info or title
-                    switch (i) {
-                        case 1:
-                            tempBuilder = titleBuilder;
-                            break;
-                        case 2:
-                            tempBuilder = personsBuilder;
-                            break;
-
-                        case 3:
-                            tempBuilder = resourcesBuilder;
-                            break;
-                        default:
-                            tempBuilder = null;
-                            // System.out.println("WARN: Unknown labelElement text content: " + labelElement.getTextContent());
-                            break;
-                    }
-
-                    if (tempBuilder != null) {
-                        // Skip label and text
-                        for (int j = 3; j < dataItems.getLength(); j++) {
-                            Node dataNode = dataItems.item(j);
-                            if (dataNode.getNodeType() == Node.ELEMENT_NODE) {
-                                dataElement = (Element) dataItems.item(j);
-                                className = dataElement.getAttribute("class");
-                                if (className.equals("value")) {
-                                    tempBuilder.append(dataElement.getTextContent()).append(" ");
-                                } else {
-                                    System.out.println("WARN: Unknown className in data table: " + className);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            return new String[] { titleBuilder.toString().trim(), personsBuilder.toString().trim(), resourcesBuilder.toString().trim() };
+       StringBuilder resourcesBuilder = new StringBuilder();
+        if(nList.get(1).getNodeValue().contains("Herr") || nList.get(1).getNodeValue().contains("Frau")){
+            areCombined = true;
+            String[] combined = nList.get(1).getNodeValue().split(",");
+            title = combined[0];
+            prof = combined[1];
+        }
+        else{
+           title = nList.get(1).getNodeValue();
+           prof = nList.get(2).getNodeValue();
+        }
+           for(int i = areCombined? 2 : 3; i < nList.size();i++){
+               resourcesBuilder.append(nList.get(i).getNodeValue());
+           }
+        return new String[] { title, prof, resourcesBuilder.toString().trim() };
     }
+
+
+
+
+
+
+
 
 
     private static String getTime(NodeList aChildren) {
