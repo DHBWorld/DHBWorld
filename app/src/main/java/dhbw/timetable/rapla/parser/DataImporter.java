@@ -156,7 +156,7 @@ public final class DataImporter {
             // Rows from table body
             NodeList rows = aChildren.item(aChildren.getLength() - 1).getLastChild().getChildNodes();
 
-            String[] description = getDescription(rows);
+            String[] description = getDescriptionTooltip(rows);
 
             return new BackportAppointment(time, date, description[0], description[1], description[2]);
         }
@@ -344,15 +344,84 @@ public final class DataImporter {
         String time = getTime(aChildren);
 
         //TODO HIER MUSS GEFIXT WERDEN
+        if(aChildren.item(aChildren.getLength() - 1).getLastChild() != null && aChildren.item(aChildren.getLength() - 1).getLastChild().getNodeName().equals("span")){
+            // Rows from table body
+            NodeList rows = aChildren.item(aChildren.getLength() - 1).getLastChild().getChildNodes();
 
-        // Rows from table body
-        NodeList rows = aChildren.item(aChildren.getLength() - 1).getLastChild().getChildNodes();
+            String[] description = getDescriptionTooltip(rows);
 
-        String[] description = getDescription(rows);
-
-        LocalDateTime[] times = DateUtilities.ConvertToTime(date, time);
-        return new Appointment(times[0], times[1], description[0], description[1], description[2]);
+            LocalDateTime[] times = DateUtilities.ConvertToTime(date, time);
+            return new Appointment(times[0], times[1], description[0], description[1], description[2]);
+        }
+        else{
+            LocalDateTime[] times = DateUtilities.ConvertToTime(date, time);
+            ArrayList<Node> nList = new ArrayList<Node>();
+            for(int i = 0; i < block.getChildNodes().getLength(); i++){
+                if(block.getChildNodes().item(i).getNodeName().equals("a") || block.getChildNodes().item(i).getNodeName().equals("span")){
+                    nList.add(block.getChildNodes().item(i).getFirstChild());
+                    if(block.getChildNodes().item(i).getLastChild().getNodeType() == Node.TEXT_NODE && block.getChildNodes().item(i).getChildNodes().getLength() != 1){
+                        nList.add(block.getChildNodes().item(i).getLastChild());
+                    }
+                }
+            }
+            String[] description = getDiscriptionNoTooltip(nList);
+            return new Appointment(times[0], times[1], description[0], description[1], description[2]);
+        }
     }
+
+    private static String[] getDiscriptionNoTooltip(ArrayList<Node> nList) {
+            NodeList dataItems;
+            Element labelElement, dataElement;
+            String className;
+            StringBuilder titleBuilder = new StringBuilder(),
+                    personsBuilder = new StringBuilder(),
+                    resourcesBuilder = new StringBuilder(),
+                    tempBuilder = null;
+            // Handle each row of the table
+            for (int i = 0; i < nList.size(); i++) {
+                Node row = nList.get(i);
+                if(row.getNodeType() == Node.TEXT_NODE) {
+                    dataItems = row.getChildNodes();
+                    labelElement = (Element) dataItems.item(1);
+
+                    // Get category: info or title
+                    switch (i) {
+                        case 1:
+                            tempBuilder = titleBuilder;
+                            break;
+                        case 2:
+                            tempBuilder = personsBuilder;
+                            break;
+
+                        case 3:
+                            tempBuilder = resourcesBuilder;
+                            break;
+                        default:
+                            tempBuilder = null;
+                            // System.out.println("WARN: Unknown labelElement text content: " + labelElement.getTextContent());
+                            break;
+                    }
+
+                    if (tempBuilder != null) {
+                        // Skip label and text
+                        for (int j = 3; j < dataItems.getLength(); j++) {
+                            Node dataNode = dataItems.item(j);
+                            if (dataNode.getNodeType() == Node.ELEMENT_NODE) {
+                                dataElement = (Element) dataItems.item(j);
+                                className = dataElement.getAttribute("class");
+                                if (className.equals("value")) {
+                                    tempBuilder.append(dataElement.getTextContent()).append(" ");
+                                } else {
+                                    System.out.println("WARN: Unknown className in data table: " + className);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return new String[] { titleBuilder.toString().trim(), personsBuilder.toString().trim(), resourcesBuilder.toString().trim() };
+    }
+
 
     private static String getTime(NodeList aChildren) {
         // If no event is provided, appointment is whole working day
@@ -375,7 +444,7 @@ public final class DataImporter {
         return time;
     }
 
-    private static String[] getDescription(NodeList rows) {
+    private static String[] getDescriptionTooltip(NodeList rows) {
         NodeList dataItems;
         Element labelElement, dataElement;
         String className;
