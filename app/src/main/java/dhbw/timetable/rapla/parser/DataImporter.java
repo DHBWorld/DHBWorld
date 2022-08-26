@@ -343,7 +343,7 @@ public final class DataImporter {
 
         String time = getTime(aChildren);
 
-        //TODO HIER MUSS GEFIXT WERDEN
+
         if(aChildren.item(aChildren.getLength() - 1).getLastChild() != null && aChildren.item(aChildren.getLength() - 1).getLastChild().getNodeName().equals("span")){
             // Rows from table body
             NodeList rows = aChildren.item(aChildren.getLength() - 1).getLastChild().getChildNodes();
@@ -369,15 +369,15 @@ public final class DataImporter {
         }
     }
 
-
-
-
     private static String[] getDiscriptionNoTooltip(ArrayList<Node> nList) {
        boolean areCombined = false;
        String title = "";
        String prof = "";
 
+
+
        StringBuilder resourcesBuilder = new StringBuilder();
+        // Hier muss viel allgemeiner gestaltet werden
         if(nList.get(1).getNodeValue().contains("Herr") || nList.get(1).getNodeValue().contains("Frau")){
             areCombined = true;
             String[] combined = nList.get(1).getNodeValue().split(",");
@@ -386,21 +386,13 @@ public final class DataImporter {
         }
         else{
            title = nList.get(1).getNodeValue();
-           prof = nList.get(2).getNodeValue();
+           prof = nList.get(2).getNodeValue() + " ";
         }
            for(int i = areCombined? 2 : 3; i < nList.size();i++){
-               resourcesBuilder.append(nList.get(i).getNodeValue());
+               resourcesBuilder.append(nList.get(i).getNodeValue()).append("\n");
            }
         return new String[] { title, prof, resourcesBuilder.toString().trim() };
     }
-
-
-
-
-
-
-
-
 
     private static String getTime(NodeList aChildren) {
         // If no event is provided, appointment is whole working day
