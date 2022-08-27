@@ -58,6 +58,23 @@ public class BackgroundWorker extends Worker {
             return Result.success();
         }
 
+        NotificationCompat.Builder builder1 = new NotificationCompat.Builder(context, "4321")
+                .setSmallIcon(R.drawable.ic_baseline_school_24)
+                .setContentTitle("TEST")
+                .setContentText("Test Notification")
+                .setStyle(new NotificationCompat.BigTextStyle().bigText("Test Notification"))
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+
+        Intent notificationIntent1 = new Intent(context, DualisActivity.class);
+        notificationIntent1.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
+                | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        PendingIntent intent1 = PendingIntent.getActivity(context, 0,
+                notificationIntent1, PendingIntent.FLAG_IMMUTABLE);
+        builder1.setContentIntent(intent1);
+
+        NotificationManagerCompat notificationManager1 = NotificationManagerCompat.from(context);
+        notificationManager1.notify(55, builder1.build());
+
         Log.d(TAG, "CALLED!");
         SecureStore secureStore = new SecureStore(context, sharedPref);
         Map<String, String> credentials = null;

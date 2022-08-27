@@ -120,7 +120,7 @@ public class SecureStore {
         }
     }
 
-    public void askIfUseBiometricsIfAvailable(BiometricPrompt.AuthenticationCallback callback) {
+    public boolean askIfUseBiometricsIfAvailable(BiometricPrompt.AuthenticationCallback callback) {
         BiometricManager biometricManager = BiometricManager.from(activity);
         if (biometricManager.canAuthenticate(BiometricManager.Authenticators.BIOMETRIC_STRONG | BiometricManager.Authenticators.BIOMETRIC_WEAK) == BiometricManager.BIOMETRIC_SUCCESS) {
             new MaterialAlertDialogBuilder(activity)
@@ -147,6 +147,9 @@ public class SecureStore {
                         }
                     })
                     .show();
+            return true;
+        } else {
+            return false;
         }
     }
 }

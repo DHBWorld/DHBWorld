@@ -13,6 +13,7 @@ import android.view.inputmethod.InputMethodManager;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.biometric.BiometricManager;
 import androidx.biometric.BiometricPrompt;
 import androidx.preference.PreferenceManager;
 
@@ -117,6 +118,7 @@ public class DualisActivity extends AppCompatActivity {
                 dualisPasswordLayout.setEndIconMode(TextInputLayout.END_ICON_CUSTOM);
                 fillSavedCredentialsWithBiometrics(secureStore);
             } else {
+                dualisPasswordLayout.setEndIconMode(TextInputLayout.END_ICON_NONE);
                 try {
                     Map<String, String> credentials = secureStore.loadCredentials();
                     dualisEmail.setText(credentials.get("email"));
@@ -214,7 +216,7 @@ public class DualisActivity extends AppCompatActivity {
                             String arguments = conn.getHeaderField("REFRESH").split("&")[2];
                             if (saveCredentials) {
                                 if (!sharedPreferences.getBoolean("alreadyAskedBiometrics", false)) {
-                                    secureStore.askIfUseBiometricsIfAvailable(new BiometricPrompt.AuthenticationCallback() {
+                                    boolean biometricsAvailable = secureStore.askIfUseBiometricsIfAvailable(new BiometricPrompt.AuthenticationCallback() {
                                         @Override
                                         public void onAuthenticationError(int errorCode, @NonNull CharSequence errString) {
                                             super.onAuthenticationError(errorCode, errString);
@@ -263,7 +265,22 @@ public class DualisActivity extends AppCompatActivity {
                                             new LoggedInView(DualisActivity.this, arguments, cookies).createView();
                                         }
                                     });
+                                    if (!biometricsAvailable) {
+                                        settingsEditor.putBoolean("useBiometrics", false);
+                                        settingsEditor.apply();
+                                        try {
+                                            secureStore.saveCredentials(email, password);
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
+                                        }
+                                        new LoggedInView(DualisActivity.this, arguments, cookies).createView();
+                                    }
                                 } else {
+                                    BiometricManager biometricManager = BiometricManager.from(DualisActivity.this);
+                                    if (biometricManager.canAuthenticate(BiometricManager.Authenticators.BIOMETRIC_STRONG | BiometricManager.Authenticators.BIOMETRIC_WEAK) != BiometricManager.BIOMETRIC_SUCCESS) {
+                                        settingsEditor.putBoolean("useBiometrics", false);
+                                        settingsEditor.apply();
+                                    }
                                     try {
                                         secureStore.saveCredentials(email, password);
                                     } catch (Exception e) {
