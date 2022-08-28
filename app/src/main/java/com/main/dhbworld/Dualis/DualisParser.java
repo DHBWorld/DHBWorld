@@ -192,7 +192,7 @@ public class DualisParser {
         return vorlesungen;
     }
 
-    public static JSONArray parsePruefungen(Document doc) {
+    public static JSONArray parsePruefungen(Document doc, Context context) {
         JSONArray pruefungen = new JSONArray();
 
         Element table = doc.select("table").get(0);
@@ -209,7 +209,9 @@ public class DualisParser {
             } catch (IndexOutOfBoundsException | JSONException ignored) { }
 
         }
+
         return pruefungen;
+
     }
 
 

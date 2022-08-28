@@ -30,9 +30,18 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.jsoup.nodes.Document;
+import org.myjson.Cookie;
 
+import java.io.IOException;
 import java.net.CookieHandler;
 import java.net.CookieManager;
+import java.net.HttpCookie;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 public class DualisAPI {
@@ -187,12 +196,13 @@ public class DualisAPI {
 
                 RequestQueue queue = Volley.newRequestQueue(context);
                 String url = "https://dualis.dhbw.de" + link;
+                System.out.println(url);
                 int finalJ = j;
                 StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                         response -> {
                             try {
                                 Document doc = DualisParser.parseResponse(response);
-                                JSONArray pruefungen = DualisParser.parsePruefungen(doc);
+                                JSONArray pruefungen = DualisParser.parsePruefungen(doc, context);
 
                                 try {
                                     vorlesungen.getJSONObject(finalJ).put("pruefungen", pruefungen);
@@ -259,6 +269,10 @@ public class DualisAPI {
 
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    sendNotification(context,
+                            "Beep Beep ERROR",
+                            e.getMessage(),
+                            23);
                 }
             }
         }

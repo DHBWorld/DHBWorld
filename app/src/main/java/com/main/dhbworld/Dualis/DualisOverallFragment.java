@@ -114,8 +114,6 @@ public class DualisOverallFragment extends Fragment implements DualisAPI.Overall
 
     @Override
     public void onOverallDataLoaded(JSONObject data) {
-        DualisAPI.setAlarmManager(getContext());
-
         ArrayList<OverallCourseModel> overallCourseModels = new ArrayList<>();
         String totalGPA = "";
         String majorCourseGPA = "";
