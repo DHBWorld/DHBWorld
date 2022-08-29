@@ -310,13 +310,6 @@ public class SettingsActivity extends AppCompatActivity {
 
                         }
                     });
-                    builder.setNeutralButton("No idea",  new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            Intent intent = new Intent(context, OrganizerActivity.class);
-                            startActivity(intent);
-                        }
-                    });
                     builder.create();
                     AlertDialog urlDialog = builder.create();
                     urlDialog.show();
