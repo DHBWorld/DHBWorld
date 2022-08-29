@@ -343,8 +343,7 @@ public final class DataImporter {
 
         String time = getTime(aChildren);
 
-
-        if(aChildren.item(aChildren.getLength() - 1).getLastChild() != null && aChildren.item(aChildren.getLength() - 1).getLastChild().getNodeName().equals("span")){
+        if(aChildren.item(aChildren.getLength() - 1).getLastChild() != null && aChildren.item(aChildren.getLength() - 1).getNodeName().equals("span")){
             // Rows from table body
             NodeList rows = aChildren.item(aChildren.getLength() - 1).getLastChild().getChildNodes();
 
