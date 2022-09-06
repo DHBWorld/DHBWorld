@@ -261,8 +261,8 @@ public class SettingsActivity extends AppCompatActivity {
                                 new Thread(new Runnable() {
                                     @Override
                                     public void run() {
-                                        String courseDirector = courseDirEditText.getText().toString();
-                                        String courseName = courseEditText.getText().toString();
+                                        String courseDirector = courseDirEditText.getText().toString().toLowerCase().replace(" ", "");
+                                        String courseName = courseEditText.getText().toString().toUpperCase().replace(" ","");
                                         String urlString = urlEditText.getText().toString();
                                         Map<String, Object> courseInFirestore = new HashMap<>();
 
@@ -273,7 +273,7 @@ public class SettingsActivity extends AppCompatActivity {
                                             courseInFirestore.put("URL", urlString);
                                         }
                                         else if(urlString.isEmpty() && !courseName.isEmpty()){
-                                            urlString = ("https://rapla.dhbw-karlsruhe.de/rapla?page=calendar&user=" + courseDirector.toLowerCase() + "&file=" + courseName.toUpperCase(Locale.ROOT));
+                                            urlString = ("https://rapla.dhbw-karlsruhe.de/rapla?page=calendar&user=" + courseDirector + "&file=" + courseName);
                                             SharedPreferences.Editor editor = preferences.edit();
                                             editor.putString("CurrentURL", urlString);
                                             editor.apply();
@@ -308,13 +308,6 @@ public class SettingsActivity extends AppCompatActivity {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
 
-                        }
-                    });
-                    builder.setNeutralButton("No idea",  new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            Intent intent = new Intent(context, OrganizerActivity.class);
-                            startActivity(intent);
                         }
                     });
                     builder.create();
