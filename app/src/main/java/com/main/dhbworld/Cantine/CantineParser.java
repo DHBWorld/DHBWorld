@@ -198,6 +198,8 @@ public class CantineParser {
          }
       }
 
+      System.out.println("requestDay:" + requestedDay);
+
       if (requestedDay == -1) {
          resultListener.onFailure(NO_DATA_AVAILABLE, null);
          return "";
@@ -256,6 +258,9 @@ public class CantineParser {
                String priceStr = meal.getElementsByClass("price_1").get(0).text();
                priceStr = priceStr.replaceAll("[^0-9,]", "");
                priceStr = priceStr.replace(",", ".");
+               if (priceStr.isEmpty()) {
+                  continue;
+               }
                double price = Double.parseDouble(priceStr);
 
                JSONObject jsonObject = new JSONObject();
