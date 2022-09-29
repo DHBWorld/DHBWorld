@@ -220,8 +220,8 @@ public class CalendarActivity extends AppCompatActivity{
                         EditText urlEditText = tempView.findViewById(R.id.urlEditText);
                         EditText courseEditText = tempView.findViewById(R.id.urlCourseName);
                         EditText courseDirEditText = tempView.findViewById(R.id.urlCourseDirector);
-                        String courseDirector = courseDirEditText.getText().toString();
-                        String courseName = courseEditText.getText().toString();
+                        String courseDirector = courseDirEditText.getText().toString().toLowerCase().replace(" ", "");
+                        String courseName = courseEditText.getText().toString().toUpperCase().replace(" ","");
                         String urlString = urlEditText.getText().toString();
                         Map<String, Object> courseInFirestore = new HashMap<>();
 
@@ -232,7 +232,7 @@ public class CalendarActivity extends AppCompatActivity{
                             courseInFirestore.put("URL", urlString);
                         }
                         else if(urlString.isEmpty() && !courseName.isEmpty()){
-                            urlString = ("https://rapla.dhbw-karlsruhe.de/rapla?page=calendar&user=" + courseDirector.toLowerCase() + "&file=" + courseName.toUpperCase(Locale.ROOT));
+                            urlString = ("https://rapla.dhbw-karlsruhe.de/rapla?page=calendar&user=" + courseDirector + "&file=" + courseName);
                             SharedPreferences.Editor editor = preferences.edit();
                             editor.putString("CurrentURL", urlString);
                             editor.apply();
