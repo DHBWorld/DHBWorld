@@ -83,6 +83,7 @@ android {
     buildFeatures {
         viewBinding true
     }
+    namespace 'com.main.dhbworld'
 
 }
 
