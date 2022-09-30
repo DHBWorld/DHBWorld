@@ -102,8 +102,18 @@ public class CalendarActivity extends AppCompatActivity{
 
     public void setCalSettings(){
         cal = findViewById(R.id.weekView);
-        //Only show Mon-Fri
-        cal.setNumberOfVisibleDays(5);
+
+        SharedPreferences defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        boolean showSat = defaultSharedPreferences.getBoolean("calendarShowSat", false);
+
+        if (showSat) {
+            //Show Mon-Sat
+            cal.setNumberOfVisibleDays(6);
+        } else {
+            //Only show Mon-Fri
+            cal.setNumberOfVisibleDays(5);
+        }
+
         cal.setShowFirstDayOfWeekFirst(true);
         //Scrolling only with onTouchListener allowed!
         cal.setHorizontalScrollingEnabled(false);

@@ -96,6 +96,10 @@
     </PreferenceCategory>
 
     <PreferenceCategory app:title="@string/calendar">
+        <SwitchPreference
+            app:key="calendarShowSat"
+            app:icon="@drawable/ic_baseline_date_range_24"
+            app:title="@string/show_saturday" />
         <Preference
             app:key="calendarURL"
             app:icon="@drawable/ic_baseline_calendar_month_24"

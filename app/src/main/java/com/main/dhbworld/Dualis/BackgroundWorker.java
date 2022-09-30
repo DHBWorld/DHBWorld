@@ -69,9 +69,6 @@ public class BackgroundWorker extends Worker {
             e.printStackTrace();
         }
 
-        System.out.println(password);
-        System.out.println(username);
-
         if (password == null || username == null) {
             return Result.success();
         }
