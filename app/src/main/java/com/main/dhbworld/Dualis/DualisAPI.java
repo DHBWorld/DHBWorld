@@ -38,6 +38,12 @@ import java.net.CookieManager;
 import java.net.HttpCookie;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.time.Instant;
+import java.time.temporal.ChronoField;
+import java.time.temporal.TemporalField;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -255,24 +261,20 @@ public class DualisAPI {
                                     sendNotification(context,
                                             context.getResources().getString(R.string.new_grade_exam),
                                             context.getResources().getString(R.string.new_grade_exam_text, vorlesung.getString("name"), noteCurrent),
-                                            Integer.parseInt("" + j + k));
+                                            calcID(vorlesung.getString("name") + noteCurrent));
                                 }
                             }
                             if (!endnoteCurrent.equals(endnoteSaved)) {
                                 sendNotification(context,
                                         context.getResources().getString(R.string.new_grade_final),
                                         context.getResources().getString(R.string.new_grade_final_text, vorlesung.getString("name"), endnoteCurrent),
-                                        j);
+                                        calcID(vorlesung.getString("name") + endnoteCurrent));
                             }
                         }
                     }
 
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    sendNotification(context,
-                            "Beep Beep ERROR",
-                            e.getMessage(),
-                            23);
                 }
             }
         }
@@ -282,6 +284,23 @@ public class DualisAPI {
         catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    static int calcID(String text) {
+        try {
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            byte[] hash = digest.digest(text.getBytes(StandardCharsets.UTF_8));
+
+            long value = 0L;
+            for (byte b : hash) {
+                value = (value << 8) + (b & 255);
+            }
+
+            return (int) value;
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        return Instant.now().get(ChronoField.SECOND_OF_DAY);
     }
 
     static void sendNotification(Context context, String title, String message, int id) {

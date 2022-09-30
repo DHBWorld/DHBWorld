@@ -176,10 +176,10 @@ public final class DataImporter {
      * @throws IllegalAccessException If the passed arguments don't match
      */
     public static Map<LocalDate, ArrayList<Appointment>> ImportWeekRange(LocalDate startDate, LocalDate endDate, String url) throws MalformedURLException, NoConnectionException, IllegalAccessException {
-		final String deSuffix = ".de/rapla?", cityPrefix = "dhbw-";
+        final String deSuffix = ".de/rapla?", cityPrefix = "dhbw-";
         int urlSplit = url.indexOf(deSuffix);
         final String regularPrefix = url.substring(0, url.indexOf(cityPrefix));
-		return ImportWeekRange(startDate, endDate, BaseURL.valueOf(url.substring(regularPrefix.length() + cityPrefix.length(), urlSplit).toUpperCase()), url.substring(urlSplit + deSuffix.length()));
+        return ImportWeekRange(startDate, endDate, BaseURL.valueOf(url.substring(regularPrefix.length() + cityPrefix.length(), urlSplit).toUpperCase()), url.substring(urlSplit + deSuffix.length()));
     }
 
     /**
@@ -197,33 +197,33 @@ public final class DataImporter {
         // Ensure connection. Throw errors if invalid connection
         checkConnection(baseURL.complete() + args);
 
-	    Map<LocalDate, ArrayList<Appointment>> appointments = new LinkedHashMap<>();
+        Map<LocalDate, ArrayList<Appointment>> appointments = new LinkedHashMap<>();
 
-	    // To monday
-	    startDate = DateUtilities.Normalize(startDate);
-		endDate = DateUtilities.Normalize(endDate);
+        // To monday
+        startDate = DateUtilities.Normalize(startDate);
+        endDate = DateUtilities.Normalize(endDate);
 
         HashMap<String, String> params = NetworkUtilities.getParams(args);
 
         String connectionURL = NetworkUtilities.generateConnection(params, baseURL);
 
         // Request every week and put them into the map
-		do {
+        do {
             try {
                 appointments.put(startDate, ImportWeek(startDate, connectionURL
                         + "&day=" + startDate.getDayOfMonth()
                         + "&month=" + startDate.getMonthValue()
                         + "&year=" + startDate.getYear()));
             } catch (IOException | ParserConfigurationException e) {
-            	System.out.println("FAIL!" + System.lineSeparator() + "Error date: " + startDate.format(DateTimeFormatter.ofPattern("dd.MM.yyyy")));
+                System.out.println("FAIL!" + System.lineSeparator() + "Error date: " + startDate.format(DateTimeFormatter.ofPattern("dd.MM.yyyy")));
                 e.printStackTrace();
             }
             // Next week
             startDate = startDate.plusDays(7);
-		} while (!startDate.isAfter(endDate));
+        } while (!startDate.isAfter(endDate));
 
-		return appointments;
-	}
+        return appointments;
+    }
 
     /**
      * Imports all events of the week
@@ -234,25 +234,25 @@ public final class DataImporter {
      * @throws ParserConfigurationException If the parsing failed
      * @throws IllegalAccessException If the passed arguments don't match
      */
-	public static ArrayList<Appointment> ImportWeek(LocalDate localDate, String connectionURL) throws IOException, ParserConfigurationException, IllegalAccessException {
+    public static ArrayList<Appointment> ImportWeek(LocalDate localDate, String connectionURL) throws IOException, ParserConfigurationException, IllegalAccessException {
         String line, pageContent;
-	    ArrayList<Appointment> weekAppointments = new ArrayList<>();
-		StringBuilder pageContentBuilder = new StringBuilder();
+        ArrayList<Appointment> weekAppointments = new ArrayList<>();
+        StringBuilder pageContentBuilder = new StringBuilder();
         URLConnection webConnection = new URL(connectionURL).openConnection();
-		BufferedReader br = new BufferedReader(new InputStreamReader(webConnection.getInputStream(), StandardCharsets.UTF_8));
+        BufferedReader br = new BufferedReader(new InputStreamReader(webConnection.getInputStream(), StandardCharsets.UTF_8));
         localDate = DateUtilities.Normalize(localDate);
 
-		// Read the whole page
-		while ((line = br.readLine()) != null) {
-			pageContentBuilder.append(line).append("\n");
-		}
-		br.close();
-		pageContent = pageContentBuilder.toString();
+        // Read the whole page
+        while ((line = br.readLine()) != null) {
+            pageContentBuilder.append(line).append("\n");
+        }
+        br.close();
+        pageContent = pageContentBuilder.toString();
 
-		// Trim and filter to correct tbody inner HTML
-		pageContent = ("<?xml version=\"1.0\"?>\n" + pageContent.substring(pageContent.indexOf("<tbody>"), pageContent.lastIndexOf("</tbody>") + 8))
-				.replaceAll("&nbsp;", "&#160;")
-				.replaceAll("<br>", "<br/>");
+        // Trim and filter to correct tbody inner HTML
+        pageContent = ("<?xml version=\"1.0\"?>\n" + pageContent.substring(pageContent.indexOf("<tbody>"), pageContent.lastIndexOf("</tbody>") + 8))
+                .replaceAll("&nbsp;", "&#160;")
+                .replaceAll("<br>", "<br/>");
 
         Pattern pattern = Pattern.compile("(<a.*</a>)");
         Matcher matcher = pattern.matcher(pageContent);
@@ -267,10 +267,10 @@ public final class DataImporter {
             }
         }
 
-		// Parse the document
-		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-		DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-		try {
+        // Parse the document
+        DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+        try {
             Document doc = dBuilder.parse(new InputSource(new ByteArrayInputStream(pageContent.getBytes("utf-8"))));
             doc.getDocumentElement().normalize();
 
@@ -285,13 +285,13 @@ public final class DataImporter {
             }
 
         } catch (SAXException e) {
-		    System.out.println("FAIL!");
-		    System.out.println("Error while parsing:" + System.lineSeparator() + pageContent);
+            System.out.println("FAIL!");
+            System.out.println("Error while parsing:" + System.lineSeparator() + pageContent);
             e.printStackTrace();
         }
 
-		return weekAppointments;
-	}
+        return weekAppointments;
+    }
 
     /**
      * Checks if the URL pattern matches a regular expression and pings the server
@@ -314,22 +314,22 @@ public final class DataImporter {
      * @param currDate Date for the start of the row
      */
     private static void importTableRow(ArrayList<Appointment> appointments, Node tableRow, LocalDate currDate) {
-		// For each <td> in row
-		NodeList cells = tableRow.getChildNodes();
-		for (int i = 0; i < cells.getLength(); i++) {
-			Node cell = cells.item(i);
-			// Filter <th> and other crap, extract class=week_block
-			if (cell.getNodeType() == Node.ELEMENT_NODE && cell.getNodeName().equals("td")) {
-				Element element = (Element) cell;
-				String type = element.getAttribute("class");
-				if (type.startsWith("week_block")) {
-					appointments.add(importAppointment(cell, currDate));
-				} else if (type.startsWith("week_separatorcell")) {
-					currDate = currDate.plusDays(1);
-				}
-			}
-		}
-	}
+        // For each <td> in row
+        NodeList cells = tableRow.getChildNodes();
+        for (int i = 0; i < cells.getLength(); i++) {
+            Node cell = cells.item(i);
+            // Filter <th> and other crap, extract class=week_block
+            if (cell.getNodeType() == Node.ELEMENT_NODE && cell.getNodeName().equals("td")) {
+                Element element = (Element) cell;
+                String type = element.getAttribute("class");
+                if (type.startsWith("week_block")) {
+                    appointments.add(importAppointment(cell, currDate));
+                } else if (type.startsWith("week_separatorcell")) {
+                    currDate = currDate.plusDays(1);
+                }
+            }
+        }
+    }
 
     /**
      * Parses a node into an appointment for the given date. The information is based on anchor and tooltip data.
@@ -337,7 +337,7 @@ public final class DataImporter {
      * @param date The given date
      * @return Imported appointment
      */
-	private static Appointment importAppointment(Node block, LocalDate date) {
+    private static Appointment importAppointment(Node block, LocalDate date) {
         // All children from the event
         NodeList aChildren = block.getFirstChild().getChildNodes();
 

@@ -35,7 +35,7 @@ body:
     validations:
       required: true
      
-    - type: textarea
+  - type: textarea
     id: android-version
     attributes:
       label: Which Android version did you use when the bug happened?

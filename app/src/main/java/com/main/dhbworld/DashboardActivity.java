@@ -37,6 +37,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.main.dhbworld.Calendar.CalendarActivity;
 import com.main.dhbworld.Calendar.nextEventsProvider;
 import com.main.dhbworld.Debugging.Debugging;
+import com.main.dhbworld.Dualis.DualisAPI;
 import com.main.dhbworld.Enums.InteractionState;
 import com.main.dhbworld.Firebase.CurrentStatusListener;
 import com.main.dhbworld.Firebase.SignedInListener;
@@ -47,11 +48,15 @@ import com.main.dhbworld.KVV.Disruption;
 import com.main.dhbworld.KVV.KVVDataLoader;
 import com.main.dhbworld.Navigation.NavigationUtilities;
 
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -127,14 +132,14 @@ public class DashboardActivity extends AppCompatActivity {
         defineViews();
         userConfigurationOfDashboard();
         loadUserInteraction();
-       if (NetworkAvailability.check(DashboardActivity.this)){
-           loadMealPlan();
-           loadCalendar();
-           loadKvv();
-       }else{
-           Snackbar.make(this.findViewById(android.R.id.content), getResources().getString(R.string.problemsWithInternetConnection), BaseTransientBottomBar.LENGTH_LONG).show();
-       }
-       loadPersonalInformation();
+        if (NetworkAvailability.check(DashboardActivity.this)){
+            loadMealPlan();
+            loadCalendar();
+            loadKvv();
+        }else{
+            Snackbar.make(this.findViewById(android.R.id.content), getResources().getString(R.string.problemsWithInternetConnection), BaseTransientBottomBar.LENGTH_LONG).show();
+        }
+        loadPersonalInformation();
     }
 
     private void defineViews(){
