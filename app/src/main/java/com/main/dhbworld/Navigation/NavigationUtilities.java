@@ -71,8 +71,10 @@ public class NavigationUtilities {
                         break;
                     case R.id.organizer:
                         startActivity(activity, OrganizerActivity.class);
+                        break;
                     case R.id.map:
                         startActivity(activity, MapActivity.class);
+                        break;
                 }
                 return true;
             }
