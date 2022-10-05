@@ -30,6 +30,10 @@
         <item
             android:id="@+id/organizer"
             android:title="@string/organizer"/>
+
+        <item
+            android:id="@+id/map"
+            android:title="@string/map"/>
     </group>
 
     <group

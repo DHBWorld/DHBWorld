@@ -250,4 +250,5 @@ E-Mail-Adresse: <p><a href="mailto:zaeske.christian@gmail.com">zaeske.christian@
     <string name="no_queue">keine Schlange</string>
     <string name="course_director">Studiengangsleiter: %1$s</string>
     <string name="show_saturday">Samstag anzeigen</string>
+    <string name="map">Karte</string>
 </resources>

@@ -251,4 +251,5 @@ E-Mail-Adresse: <p><a href="mailto:zaeske.christian@gmail.com">zaeske.christian@
     <string name="no_queue">no queue</string>
     <string name="course_director">"Course Director: %1$s "</string>
     <string name="show_saturday">Show Saturday</string>
+    <string name="map">Map</string>
 </resources>

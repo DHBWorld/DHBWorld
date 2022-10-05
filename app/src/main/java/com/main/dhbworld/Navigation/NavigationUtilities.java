@@ -17,6 +17,7 @@ import com.main.dhbworld.DashboardActivity;
 import com.main.dhbworld.DualisActivity;
 import com.main.dhbworld.KVVActivity;
 import com.main.dhbworld.MainActivity;
+import com.main.dhbworld.MapActivity;
 import com.main.dhbworld.Organizer.OrganizerActivity;
 import com.main.dhbworld.R;
 import com.main.dhbworld.SettingsActivity;
@@ -70,6 +71,8 @@ public class NavigationUtilities {
                         break;
                     case R.id.organizer:
                         startActivity(activity, OrganizerActivity.class);
+                    case R.id.map:
+                        startActivity(activity, MapActivity.class);
                 }
                 return true;
             }
