@@ -251,4 +251,10 @@ E-Mail-Adresse: <p><a href="mailto:zaeske.christian@gmail.com">zaeske.christian@
     <string name="course_director">Studiengangsleiter: %1$s</string>
     <string name="show_saturday">Samstag anzeigen</string>
     <string name="map">Karte</string>
+    <string name="room">Raum</string>
+    <string name="entry">Eingang</string>
+    <string name="show_route">Weg anzeigen</string>
+    <string name="main_entry">Haupteingang</string>
+    <string name="left">Links</string>
+    <string name="right">Rechts</string>
 </resources>
