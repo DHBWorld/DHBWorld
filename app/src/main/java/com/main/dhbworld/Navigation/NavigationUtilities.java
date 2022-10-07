@@ -88,8 +88,7 @@ public class NavigationUtilities {
         if (!(activity instanceof DashboardActivity)) {
             activity.finish();
         } else {
-            DrawerLayout drawerLayout = activity.findViewById(R.id.drawerLayout);
-            drawerLayout.closeDrawer(GravityCompat.START);
+
         }
     }
 }
