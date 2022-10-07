@@ -3,6 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:title="go_to_today"
+        android:id="@+id/calendar_GoToToday"
+        android:icon="@drawable/calendar_jumpback_icon"
+        app:showAsAction="always"
+        android:onClick="jumpToToday"/>
+
+    <item
         android:title="@string/filter_icon"
         android:id="@+id/calendarFilterIcon"
         android:icon="@drawable/ic_baseline_filter_alt_24"
