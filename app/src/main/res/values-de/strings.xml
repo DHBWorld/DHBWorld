@@ -79,12 +79,12 @@
 
     <string name="new_grade_exam">Neue Note</string>
     <string name="new_grade_exam_text">
-        A new grade is available!
+        Eine neue Note ist verfügbar!
         \n%1$s: %2$s
     </string>
     <string name="new_grade_final">Neue Endnote</string>
     <string name="new_grade_final_text">
-        A new grade is available!
+        Eine neue Note ist verfügbar!
         \n%1$s: %2$s
     </string>
     <string name="dualis">Dualis</string>

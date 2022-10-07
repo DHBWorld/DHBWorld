@@ -258,17 +258,26 @@ public class DualisAPI {
                                 String noteCurrent = pruefungen.getJSONObject(k).getString("note");
                                 String noteSaved = savedJson.getJSONArray("semester").getJSONObject(i).getJSONArray("Vorlesungen").getJSONObject(j).getJSONArray("pruefungen").getJSONObject(k).getString("note");
                                 if (!noteCurrent.equals(noteSaved)) {
-                                    sendNotification(context,
-                                            context.getResources().getString(R.string.new_grade_exam),
-                                            context.getResources().getString(R.string.new_grade_exam_text, vorlesung.getString("name"), noteCurrent),
-                                            calcID(vorlesung.getString("name") + noteCurrent));
+                                    String noteCurrentDot = noteCurrent.replace(",", ".").trim();
+                                    try {
+                                        Integer.parseInt(noteCurrentDot);
+                                        sendNotification(context,
+                                                context.getResources().getString(R.string.new_grade_exam),
+                                                context.getResources().getString(R.string.new_grade_exam_text, vorlesung.getString("name"), noteCurrent),
+                                                calcID(vorlesung.getString("name") + noteCurrent));
+                                    } catch (NumberFormatException ignored) {}
+
                                 }
                             }
                             if (!endnoteCurrent.equals(endnoteSaved)) {
-                                sendNotification(context,
-                                        context.getResources().getString(R.string.new_grade_final),
-                                        context.getResources().getString(R.string.new_grade_final_text, vorlesung.getString("name"), endnoteCurrent),
-                                        calcID(vorlesung.getString("name") + endnoteCurrent));
+                                String endnoteCurrentDot = endnoteCurrent.replace(",", ".").trim();
+                                try {
+                                    Integer.parseInt(endnoteCurrentDot);
+                                    sendNotification(context,
+                                            context.getResources().getString(R.string.new_grade_final),
+                                            context.getResources().getString(R.string.new_grade_final_text, vorlesung.getString("name"), endnoteCurrent),
+                                            calcID(vorlesung.getString("name") + endnoteCurrent));
+                                } catch (NumberFormatException ignored) {}
                             }
                         }
                     }
