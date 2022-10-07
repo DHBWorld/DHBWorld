@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.main.dhbworld">
 
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
@@ -12,6 +12,10 @@
         android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
         android:theme="@style/Theme.DHBWorld">
+        <activity
+            android:name=".MapActivity"
+            android:exported="false" />
+
         <receiver
             android:name=".Dualis.AReceiver"
             android:enabled="true"
@@ -21,10 +25,11 @@
                 <action android:name="android.intent.action.QUICKBOOT_POWERON" />
             </intent-filter>
         </receiver>
+
         <activity
             android:name=".DualisActivity"
             android:exported="false"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".KVVActivity"
             android:exported="false" />
@@ -35,7 +40,7 @@
             android:name=".CantineActivity"
             android:exported="false"
             android:label="@string/title_activity_cantine"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".DashboardActivity"
             android:exported="true"
@@ -48,7 +53,7 @@
         </activity>
         <activity
             android:name=".MainActivity"
-            android:exported="false"/>
+            android:exported="false" />
         <activity
             android:name=".SettingsActivity"
             android:exported="false"
@@ -64,18 +69,18 @@
             android:exported="false" />
         <activity
             android:name=".Organizer.OrganizerActivity"
-            android:exported="false" >
-            <meta-data android:name="android.app.searchable"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.searchable"
                 android:resource="@xml/searchable" />
         </activity>
         <activity
             android:name=".Organizer.SearchResultsActivity"
-            android:exported="false"
-            >
-        <intent-filter>
-            <action android:name="android.intent.action.SEARCH" />
-        </intent-filter>
-    </activity>
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+        </activity>
 
         <service
             android:name=".Services.UserInteractionMessagingService"

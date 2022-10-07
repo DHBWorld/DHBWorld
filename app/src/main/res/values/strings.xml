@@ -252,4 +252,11 @@ E-Mail-Adresse: <p><a href="mailto:zaeske.christian@gmail.com">zaeske.christian@
     <string name="course_director">"Course Director: %1$s "</string>
     <string name="show_saturday">Show Saturday</string>
     <string name="go_to_today">Jump To Current Week</string>
+    <string name="map">Map</string>
+    <string name="room">Room</string>
+    <string name="entry">Entrance</string>
+    <string name="show_route">Show route</string>
+    <string name="main_entry">Main entrance</string>
+    <string name="left">Left</string>
+    <string name="right">Right</string>
 </resources>
