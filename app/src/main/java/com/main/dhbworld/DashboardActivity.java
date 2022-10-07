@@ -12,8 +12,11 @@ import android.graphics.drawable.Icon;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -30,10 +33,15 @@ import androidx.core.content.res.ResourcesCompat;
 import androidx.core.graphics.ColorUtils;
 import androidx.preference.PreferenceManager;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.main.dhbworld.Calendar.CalendarActivity;
 import com.main.dhbworld.Calendar.nextEventsProvider;
 import com.main.dhbworld.Debugging.Debugging;
@@ -59,6 +67,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 import dhbw.timetable.rapla.data.event.Appointment;
 
@@ -69,11 +78,13 @@ public class DashboardActivity extends AppCompatActivity {
     private LinearLayout layoutCardCalendar;
     private LinearLayout layoutCardKvv;
     private LinearLayout layoutCardPI;
+    private LinearLayout layoutCardInfo;
 
     SharedPreferences sp;
 
     public static final String MyPREFERENCES = "myPreferencesKey" ;
     public static final String dashboardSettings="dashboardSettings";
+    FirebaseFirestore firestore;
 
     Boolean refreshIsEnable=true;
     Boolean configurationModus;
@@ -81,22 +92,26 @@ public class DashboardActivity extends AppCompatActivity {
     Boolean cardPI_isVisible = true;
     Boolean cardMealPlan_isVisible = true;
     Boolean cardKvv_isVisible = true;
+    Boolean cardInfo_isVisible = true;
 
     MaterialCardView card_dash_calendar;
     MaterialCardView card_dash_pi;
     MaterialCardView card_dash_kvv;
     MaterialCardView card_dash_mealPlan;
+    MaterialCardView card_dash_info;
 
     private Button buttonCardCalendar;
     private Button buttonCardPI;
     private Button buttonCardMealPlan;
     private Button buttonCardKvv;
+    private Button buttonCardInfo;
 
     private LinearLayout card_dash_calendar_layout;
     private LinearLayout card_dash_pi_layout;
     private LinearLayout card_dash_kvv_layout;
     private LinearLayout card_dash_mealPlan_layout;
     private LinearLayout card_dash_user_interaction_layout;
+    private LinearLayout card_dash_info_layout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -136,6 +151,9 @@ public class DashboardActivity extends AppCompatActivity {
             loadMealPlan();
             loadCalendar();
             loadKvv();
+            if (cardInfo_isVisible){
+                loadInfo();
+            }
         }else{
             Snackbar.make(this.findViewById(android.R.id.content), getResources().getString(R.string.problemsWithInternetConnection), BaseTransientBottomBar.LENGTH_LONG).show();
         }
@@ -147,21 +165,26 @@ public class DashboardActivity extends AppCompatActivity {
         layoutCardCalendar = findViewById(R.id.layoutCardCalendar);
         layoutCardKvv = findViewById(R.id.layoutCardKvv);
         layoutCardPI = findViewById(R.id.layoutCardPI);
+        layoutCardInfo = findViewById(R.id.layoutCardInfo);
+
         card_dash_calendar = findViewById(R.id.card_dash_calendar);
         card_dash_pi = findViewById(R.id.card_dash_pi);
         card_dash_kvv = findViewById(R.id.card_dash_kvv);
         card_dash_mealPlan = findViewById(R.id.card_dash_mealPlan);
+        card_dash_info= findViewById(R.id.card_dash_info);
 
         buttonCardCalendar= findViewById(R.id.buttonCardCalendar);
         buttonCardPI= findViewById(R.id.buttonCardPI);
         buttonCardMealPlan= findViewById(R.id.buttonCardMealPlan);
         buttonCardKvv= findViewById(R.id.buttonCardKvv);
+        buttonCardInfo= findViewById(R.id.buttonCardInfo);
 
         card_dash_calendar_layout = findViewById(R.id.card_dash_calendar_layout);
         card_dash_pi_layout = findViewById(R.id.card_dash_pi_layout);
         card_dash_kvv_layout = findViewById(R.id.card_dash_kvv_layout);
         card_dash_mealPlan_layout = findViewById(R.id.card_dash_mealPlan_layout);
         card_dash_user_interaction_layout = findViewById(R.id.card_dash_userInteraction_layout);
+        card_dash_info_layout = findViewById(R.id.card_dash_info_layout);
     }
 
     private void userConfigurationOfDashboard(){
@@ -173,11 +196,13 @@ public class DashboardActivity extends AppCompatActivity {
         buttonCardPI.setBackgroundColor((ColorUtils.setAlphaComponent(getResources().getColor(R.color.black),0)));
         buttonCardMealPlan.setBackgroundColor((ColorUtils.setAlphaComponent(getResources().getColor(R.color.black),0)));
         buttonCardKvv.setBackgroundColor((ColorUtils.setAlphaComponent(getResources().getColor(R.color.black),0)));
+        buttonCardInfo.setBackgroundColor((ColorUtils.setAlphaComponent(getResources().getColor(R.color.black),0)));
 
         cardCalendar_isVisible = sp.getBoolean("cardCalendar", true);
         cardPI_isVisible = sp.getBoolean("cardPI", true);
         cardMealPlan_isVisible = sp.getBoolean("cardMealPlan", true);
         cardKvv_isVisible = sp.getBoolean("cardKvv", true);
+        cardInfo_isVisible = sp.getBoolean("cardInfo", true);
 
        if (!cardCalendar_isVisible){
            card_dash_calendar.setVisibility(View.GONE);
@@ -190,6 +215,9 @@ public class DashboardActivity extends AppCompatActivity {
         }
         if (!cardKvv_isVisible){
             card_dash_kvv.setVisibility(View.GONE);
+        }
+        if (!cardInfo_isVisible){
+            card_dash_info.setVisibility(View.GONE);
         }
 
         //TODO integrate onClickListeners more easily
@@ -234,6 +262,15 @@ public class DashboardActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if(!configurationModus){
                     Intent intent = new Intent(DashboardActivity.this, UserInteraction.class);
+                    startActivity(intent);
+                }
+            }
+        });
+        card_dash_info_layout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!configurationModus){
+                    Intent intent = new Intent(DashboardActivity.this, SettingsActivity.class);
                     startActivity(intent);
                 }
             }
@@ -318,6 +355,26 @@ public class DashboardActivity extends AppCompatActivity {
                     }
                 }else{
                     Intent intent = new Intent(DashboardActivity.this, KVVActivity.class);
+                    startActivity(intent);
+
+                }
+            }
+        });
+        buttonCardInfo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (configurationModus) {
+                    if (cardInfo_isVisible) {
+                        cardInfo_isVisible = false; //True = Card is visible
+                        card_dash_info.setStrokeColor(ColorUtils.setAlphaComponent(card_dash_info.getStrokeColor(), 50));
+                        card_dash_info_layout.setBackgroundColor(ColorUtils.setAlphaComponent(card_dash_info.getStrokeColor(), 50));
+                    } else {
+                        cardInfo_isVisible = true;//True = Card is visible
+                        card_dash_info.setStrokeColor(ColorUtils.setAlphaComponent(card_dash_info.getStrokeColor(), 255));
+                        card_dash_info_layout.setBackgroundColor(ColorUtils.setAlphaComponent(card_dash_info.getStrokeColor(), 255));
+                    }
+                }else{
+                    Intent intent = new Intent(DashboardActivity.this, SettingsActivity.class);
                     startActivity(intent);
 
                 }
@@ -670,9 +727,12 @@ public class DashboardActivity extends AppCompatActivity {
                     userConfigurationOfDashboard();
                     loadUserInteraction();
                     if (NetworkAvailability.check(DashboardActivity.this)){
-                       loadMealPlan();
-                       loadCalendar();
-                       loadKvv();
+                        loadMealPlan();
+                        loadCalendar();
+                        loadKvv();
+                        if (cardInfo_isVisible){
+                            loadInfo();
+                        }
                     }else{
                         Snackbar.make(this.findViewById(android.R.id.content), getResources().getString(R.string.problemsWithInternetConnection), BaseTransientBottomBar.LENGTH_LONG).show();
                     }
@@ -696,11 +756,13 @@ public class DashboardActivity extends AppCompatActivity {
             card_dash_pi.setVisibility(View.VISIBLE);
             card_dash_kvv.setVisibility(View.VISIBLE);
             card_dash_mealPlan.setVisibility(View.VISIBLE);
+            card_dash_info.setVisibility(View.VISIBLE);
 
             buttonCardCalendar.setVisibility(View.VISIBLE);
             buttonCardPI.setVisibility(View.VISIBLE);
             buttonCardMealPlan.setVisibility(View.VISIBLE);
             buttonCardKvv.setVisibility(View.VISIBLE);
+            buttonCardInfo.setVisibility(View.VISIBLE);
 
             if (!cardCalendar_isVisible){
                 card_dash_calendar.setStrokeColor(ColorUtils.setAlphaComponent(card_dash_calendar.getStrokeColor(),50));
@@ -718,6 +780,10 @@ public class DashboardActivity extends AppCompatActivity {
                 card_dash_kvv.setStrokeColor(ColorUtils.setAlphaComponent(card_dash_kvv.getStrokeColor(),50));
                 card_dash_kvv_layout.setBackgroundColor(ColorUtils.setAlphaComponent(card_dash_kvv.getStrokeColor(),50));
             }
+            if (!cardInfo_isVisible){
+                card_dash_info.setStrokeColor(ColorUtils.setAlphaComponent(card_dash_info.getStrokeColor(),50));
+                card_dash_info_layout.setBackgroundColor(ColorUtils.setAlphaComponent(card_dash_info.getStrokeColor(),50));
+            }
             configurationModus=true;
         } else{
             item.setIcon(AppCompatResources.getDrawable(DashboardActivity.this, R.drawable.ic_construction));
@@ -729,6 +795,9 @@ public class DashboardActivity extends AppCompatActivity {
             card_dash_kvv_layout.setBackgroundColor(ColorUtils.setAlphaComponent(card_dash_kvv.getStrokeColor(),255));
             card_dash_mealPlan.setStrokeColor(ColorUtils.setAlphaComponent(card_dash_mealPlan.getStrokeColor(),255));
             card_dash_mealPlan_layout.setBackgroundColor(ColorUtils.setAlphaComponent(card_dash_mealPlan.getStrokeColor(),255));
+            card_dash_info.setStrokeColor(ColorUtils.setAlphaComponent(card_dash_info.getStrokeColor(),255));
+            card_dash_info_layout.setBackgroundColor(ColorUtils.setAlphaComponent(card_dash_info.getStrokeColor(),255));
+
 
             if (!cardCalendar_isVisible){
                 card_dash_calendar.setVisibility(View.GONE);
@@ -742,13 +811,78 @@ public class DashboardActivity extends AppCompatActivity {
             if (!cardKvv_isVisible){
                 card_dash_kvv.setVisibility(View.GONE);
             }
+            if (!cardInfo_isVisible){
+                card_dash_info.setVisibility(View.GONE);
+            }
             editor.putBoolean("cardCalendar", cardCalendar_isVisible);
             editor.putBoolean("cardPI", cardPI_isVisible);
             editor.putBoolean("cardMealPlan", cardMealPlan_isVisible);
             editor.putBoolean("cardKvv", cardKvv_isVisible);
+            editor.putBoolean("cardInfo", cardInfo_isVisible);
             editor.apply();
             configurationModus=false;
 
         }
+    }
+
+    private void loadInfo() {
+
+        TextView title = findViewById(R.id.textViewInfoTitle);
+        TextView[] message = new TextView[3];
+        message[0]=findViewById(R.id.textViewInfoMessageOne);
+        message[1]=findViewById(R.id.textViewInfoMessageTwo);
+        message[2]=findViewById(R.id.textViewInfoMessageThree);
+
+        LinearLayout[] layoutInfoFull = new LinearLayout[1];
+        layoutInfoFull[0] = findViewById(R.id.layoutInfo);
+
+        LinearLayout[] layoutInfo = new LinearLayout[3];
+        layoutInfo[0] = findViewById(R.id.layoutInfoMessageOne);
+        layoutInfo[1] = findViewById(R.id.layoutInfoMessageTwo);
+        layoutInfo[2] = findViewById(R.id.layoutInfoMessageThree);
+
+        ProgressIndicator indicator= new ProgressIndicator(DashboardActivity.this,layoutCardInfo, layoutInfoFull);
+        indicator.show();
+
+        new Thread(new Runnable() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
+            @Override
+            public void run() {
+                layoutCardInfo.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        firestore= FirebaseFirestore.getInstance();
+                        DocumentReference contact= firestore.collection("General").document("InfoCard");
+                        contact.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                if (task.isSuccessful()){
+                                    DocumentSnapshot doc= task.getResult();
+                                    indicator.hide();
+                                    title.setText(doc.getString("Title"));
+                                    String m=doc.getString("Message");
+                                    String[] parts = m.split("#");
+                                    for (int i=0;i<3; i++){
+                                        if (parts.length>i){
+                                            message[i].setText(parts[i]);
+                                        }else{
+                                            layoutInfo[i].setVisibility(View.GONE);
+                                        }
+                                    }
+                                    if (m.length()==0){
+                                        layoutInfo[0].setVisibility(View.GONE);
+                                    }
+
+
+
+                                }
+                            }
+                        });
+                    }
+                });
+            }
+        }).start();
+
+
     }
 }

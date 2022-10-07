@@ -574,6 +574,123 @@
                         </LinearLayout>
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/card_dash_info"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:baselineAligned="false"
+                    app:cardElevation="0dp"
+                    app:strokeColor="@color/red"
+                    app:strokeWidth="3dp">
+
+                    <LinearLayout
+                        android:id="@+id/card_dash_info_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@color/red"
+                        android:orientation="horizontal">
+
+                        <Button
+                            android:id="@+id/buttonCardInfo"
+                            android:layout_width="30dp"
+                            android:layout_height="match_parent"
+                            android:stateListAnimator="@null" />
+
+                        <LinearLayout
+                            android:id="@+id/layoutCardInfo"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="?attr/dashboardCardBackground"
+                            android:orientation="vertical"
+                            android:paddingVertical="10dp"
+                            android:paddingLeft="10dp"
+                            android:paddingRight="30dp">
+
+                            <LinearLayout
+                                android:id="@+id/layoutInfo"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:paddingVertical="7dp">
+
+                                <TextView
+                                    android:id="@+id/textViewInfoTitle"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/questions"
+                                    android:textStyle="bold"
+                                    android:textSize="15sp" />
+
+                                <LinearLayout
+                                    android:id="@+id/layoutInfoMessageOne"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal"
+                                    android:paddingVertical="7dp">
+
+                                    <ImageView
+                                        android:layout_width="20dp"
+                                        android:layout_height="20dp"
+                                        android:layout_marginRight="3dp"
+                                        android:background="@drawable/ic_baseline_expand_more_24" />
+
+                                    <TextView
+                                        android:id="@+id/textViewInfoMessageOne"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:text="@string/questions"
+                                        android:textSize="15sp" />
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:id="@+id/layoutInfoMessageTwo"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal"
+                                    android:paddingBottom="7dp">
+
+                                    <ImageView
+                                        android:layout_width="20dp"
+                                        android:layout_height="20dp"
+                                        android:layout_marginRight="3dp"
+                                        android:background="@drawable/ic_baseline_expand_more_24" />
+
+                                    <TextView
+                                        android:id="@+id/textViewInfoMessageTwo"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:text="@string/questions"
+                                        android:textSize="15sp" />
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:id="@+id/layoutInfoMessageThree"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal"
+                                    android:paddingBottom="7dp">
+
+                                    <ImageView
+                                        android:layout_width="20dp"
+                                        android:layout_height="20dp"
+                                        android:layout_marginRight="3dp"
+                                        android:background="@drawable/ic_baseline_expand_more_24" />
+
+                                    <TextView
+                                        android:id="@+id/textViewInfoMessageThree"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:text="@string/questions"
+                                        android:textSize="15sp" />
+                                </LinearLayout>
+
+
+                            </LinearLayout>
+                        </LinearLayout>
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
             </LinearLayout>
         </ScrollView>
     </RelativeLayout>
