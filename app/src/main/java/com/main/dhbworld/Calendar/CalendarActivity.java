@@ -449,6 +449,7 @@ public class CalendarActivity extends AppCompatActivity{
             tempCal.add(Calendar.DAY_OF_WEEK,1);
             currentDate = tempCal;
         }
+        date = currentDate;
         cal.scrollToDate(currentDate);
     }
 
