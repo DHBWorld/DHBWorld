@@ -85,6 +85,11 @@ public class NavigationUtilities {
         Intent intent = new Intent(activity, cls);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         activity.startActivity(intent);
-        activity.finish();
+        if (!(activity instanceof DashboardActivity)) {
+            activity.finish();
+        } else {
+            DrawerLayout drawerLayout = activity.findViewById(R.id.drawerLayout);
+            drawerLayout.closeDrawer(GravityCompat.START);
+        }
     }
 }
