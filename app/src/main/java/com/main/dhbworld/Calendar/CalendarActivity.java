@@ -172,32 +172,7 @@ public class CalendarActivity extends AppCompatActivity{
         return blackList;
     }
 
-    public void openFilterClick(@NonNull MenuItem item) throws NullPointerException{
-        final String[] listItems = arrayConvertor(Objects.requireNonNull(EventCreator.uniqueTitles()));
-        final boolean[] checkedItems = new boolean[listItems.length];
-        for(int i = 0; i < listItems.length; i++){
-            checkedItems[i] = !blackList.contains(listItems[i]);
-        }
-        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(CalendarActivity.this);
-                builder.setTitle("Filter your classes");
-                builder.setMultiChoiceItems(listItems, checkedItems, (dialog, which, isChecked)
-                        -> checkedItems[which] = isChecked);
-                // alert dialog shouldn't be cancellable
-                builder.setCancelable(false);
-                builder.setPositiveButton("Done", (dialog, which) -> {
-                    for (int i = 0; i < checkedItems.length; i++) {
-                        if(!checkedItems[i]){ blackList.add(listItems[i]); }
-                        else blackList.remove(listItems[i]);
-                    }
-                    positiveButtonAction();
-                });
-                builder.setNegativeButton("CANCEL", (dialog, which) -> {
-                    //just close and do nothing, will not save the changed state.
-                });
-                builder.create();
-                alertDialog = builder.create();
-                alertDialog.show();
-    }
+
 
     //Set and apply new blackList with selected elements. Then restart Activity to display only whitelisted events.
     public void positiveButtonAction(){
@@ -431,6 +406,50 @@ public class CalendarActivity extends AppCompatActivity{
         Objects.requireNonNull(descriptionView).setText(event.description);
 
         bottomSheetDialog.show();
+    }
+
+    public void openFilterClick(@NonNull MenuItem item) throws NullPointerException{
+        final String[] listItems = arrayConvertor(Objects.requireNonNull(EventCreator.uniqueTitles()));
+        final boolean[] checkedItems = new boolean[listItems.length];
+        for(int i = 0; i < listItems.length; i++){
+            checkedItems[i] = !blackList.contains(listItems[i]);
+        }
+        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(CalendarActivity.this);
+        builder.setTitle("Filter your classes");
+        builder.setMultiChoiceItems(listItems, checkedItems, (dialog, which, isChecked)
+                -> checkedItems[which] = isChecked);
+        // alert dialog shouldn't be cancellable
+        builder.setCancelable(false);
+        builder.setPositiveButton("Done", (dialog, which) -> {
+            for (int i = 0; i < checkedItems.length; i++) {
+                if(!checkedItems[i]){ blackList.add(listItems[i]); }
+                else blackList.remove(listItems[i]);
+            }
+            positiveButtonAction();
+        });
+        builder.setNegativeButton("CANCEL", (dialog, which) -> {
+            //just close and do nothing, will not save the changed state.
+        });
+        builder.create();
+        alertDialog = builder.create();
+        alertDialog.show();
+    }
+
+    public void jumpToToday (@NonNull MenuItem item) throws NullPointerException{
+        Calendar currentDate = Calendar.getInstance();
+        currentDate.set(Calendar.DAY_OF_WEEK,
+                currentDate.getActualMinimum(Calendar.DAY_OF_WEEK) + 1);
+
+        Calendar tempCal = Calendar.getInstance();
+        if(tempCal.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY){
+            tempCal.add(Calendar.DAY_OF_WEEK,2);
+            currentDate = tempCal;
+        }
+        else if(tempCal.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY){
+            tempCal.add(Calendar.DAY_OF_WEEK,1);
+            currentDate = tempCal;
+        }
+        cal.scrollToDate(currentDate);
     }
 
 
