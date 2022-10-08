@@ -87,8 +87,6 @@ public class NavigationUtilities {
         activity.startActivity(intent);
         if (!(activity instanceof DashboardActivity)) {
             activity.finish();
-        } else {
-
         }
     }
 }
