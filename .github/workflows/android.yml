@@ -25,7 +25,7 @@ jobs:
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
     - name: Set ANDROID_HOME
-      run: export ANDROID_HOME="/home/blitzdose/android-sdk"
+      run: export ANDROID_HOME=/home/blitzdose/android-sdk & export ANDROID_SDK_ROOT=/home/blitzdose/android-sdk
     - name: Build with Gradle
       run: ./gradlew build --stacktrace
     - name: Android  Report Action
