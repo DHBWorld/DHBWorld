@@ -8,6 +8,10 @@ on:
       - main
   workflow_dispatch:
 
+env:
+  ANDROID_HOME: /home/blitzdose/android-sdk
+  ANDROID_SDK_ROOT: /home/blitzdose/android-sdk
+
 jobs:
   build:
 
@@ -30,6 +34,8 @@ jobs:
       uses: doanpt/AndroidTestReportAction@v1.1
     
     - uses: blitzdose/action-android/install-sdk@release/0.1.4
+      with:
+        url: https://dl.google.com/android/repository/commandlinetools-linux-8512546_latest.zip
       # Set up platform tools like adb.
     - run: sdkmanager platform-tools
 
@@ -42,7 +48,7 @@ jobs:
     - uses: blitzdose/action-android/emulator-run-cmd@release/0.1.4
       with:
         cmd: ./gradlew jacocoCombinedTestReports
-        api: 27
+        api: 30
         tag: default
         abi: x86_64
         cmdOptions: -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim
