@@ -44,7 +44,7 @@ jobs:
     - uses: blitzdose/action-android/emulator-run-cmd@release/0.1.4
       with:
         cmd: ./gradlew jacocoCombinedTestReports
-        api: 32
+        api: 30
         tag: default
         abi: x86_64
         cmdOptions: -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim
