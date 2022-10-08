@@ -259,4 +259,8 @@ E-Mail-Adresse: <p><a href="mailto:zaeske.christian@gmail.com">zaeske.christian@
     <string name="main_entry">Main entrance</string>
     <string name="left">Left</string>
     <string name="right">Right</string>
+    <string name="export_backup">Export backup</string>
+    <string name="restore_backup">Restore backup</string>
+    <string name="backup_restored">Backup restored</string>
+    <string name="backup_saved">Backup saved</string>
 </resources>
