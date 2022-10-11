@@ -2,6 +2,7 @@ package com.main.dhbworld;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -80,6 +81,7 @@ public class SettingsActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK && data != null) {
+            Activity activity = this;
             if (requestCode == 1) {
                 try {
                     OutputStream outputStream = getContentResolver().openOutputStream(data.getData());
@@ -90,9 +92,33 @@ public class SettingsActivity extends AppCompatActivity {
                     Snackbar.make(this.findViewById(android.R.id.content), this.getString(R.string.default_error_msg), BaseTransientBottomBar.LENGTH_SHORT).show();
                 }
             } else if (requestCode == 2) {
-                BackupHandler.saveBackup(data, this);
+                ProgressDialog dialog = new ProgressDialog(activity);
+                dialog.setCancelable(false);
+                dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                dialog.setMessage(getResources().getString(R.string.please_wait));
+                dialog.setTitle(getResources().getString(R.string.export_backup));
+                dialog.show();
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        BackupHandler.saveBackup(data, activity);
+                        dialog.dismiss();
+                    }
+                }).start();
             } else if (requestCode == 3) {
-                BackupHandler.restoreFile(data, this);
+                ProgressDialog dialog = new ProgressDialog(activity);
+                dialog.setCancelable(false);
+                dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                dialog.setMessage(getResources().getString(R.string.please_wait));
+                dialog.setTitle(getResources().getString(R.string.restore_backup));
+                dialog.show();
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        BackupHandler.restoreFile(data, activity);
+                        dialog.dismiss();
+                    }
+                }).start();
             }
         }
     }

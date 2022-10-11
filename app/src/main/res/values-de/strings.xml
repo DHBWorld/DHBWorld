@@ -262,4 +262,5 @@ E-Mail-Adresse: <p><a href="mailto:zaeske.christian@gmail.com">zaeske.christian@
     <string name="restore_backup">Backup wiederherstellen</string>
     <string name="backup_restored">Backup wiederhergesstellt</string>
     <string name="backup_saved">Backup gespeichert</string>
+    <string name="please_wait">Bitte warten</string>
 </resources>
