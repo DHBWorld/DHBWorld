@@ -103,11 +103,11 @@ public class DashboardActivity extends AppCompatActivity {
     MaterialCardView card_dash_mealPlan;
     MaterialCardView card_dash_info;
 
-    private Button buttonCardCalendar;
-    private Button buttonCardPI;
-    private Button buttonCardMealPlan;
-    private Button buttonCardKvv;
-    private Button buttonCardInfo;
+    private LinearLayout buttonCardCalendar;
+    private LinearLayout buttonCardPI;
+    private LinearLayout buttonCardMealPlan;
+    private LinearLayout buttonCardKvv;
+    private LinearLayout buttonCardInfo;
 
     private LinearLayout card_dash_calendar_layout;
     private LinearLayout card_dash_pi_layout;
@@ -227,36 +227,81 @@ public class DashboardActivity extends AppCompatActivity {
         card_dash_calendar_layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!configurationModus){
+                if (configurationModus){
+                    if (cardCalendar_isVisible){
+                        cardCalendar_isVisible=false;
+                        card_dash_calendar.setStrokeColor(ColorUtils.setAlphaComponent(card_dash_calendar.getStrokeColor(),50));
+                        card_dash_calendar_layout.setBackgroundColor(ColorUtils.setAlphaComponent(card_dash_calendar.getStrokeColor(),50));
+                    }else{
+                        cardCalendar_isVisible=true;
+                        card_dash_calendar.setStrokeColor(ColorUtils.setAlphaComponent(card_dash_calendar.getStrokeColor(),255));
+                        card_dash_calendar_layout.setBackgroundColor(ColorUtils.setAlphaComponent(card_dash_calendar.getStrokeColor(),255));
+                    }
+                }else{
                     Intent intent = new Intent(DashboardActivity.this, CalendarActivity.class);
                     startActivity(intent);
+
                 }
             }
         });
         card_dash_pi_layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!configurationModus){
+                if (configurationModus) {
+                    if (cardPI_isVisible) {
+                        cardPI_isVisible = false; //True = Card is visible
+                        card_dash_pi.setStrokeColor(ColorUtils.setAlphaComponent(card_dash_pi.getStrokeColor(), 50));
+                        card_dash_pi_layout.setBackgroundColor(ColorUtils.setAlphaComponent(card_dash_pi.getStrokeColor(), 50));
+                        card_dash_pi_layout.setBackgroundColor(ColorUtils.setAlphaComponent(card_dash_pi.getStrokeColor(), 50));
+                    } else {
+                        cardPI_isVisible = true;//True = Card is visible
+                        card_dash_pi.setStrokeColor(ColorUtils.setAlphaComponent(card_dash_pi.getStrokeColor(), 255));
+                        card_dash_pi_layout.setBackgroundColor(ColorUtils.setAlphaComponent(card_dash_pi.getStrokeColor(), 255));
+                    }
+                }else{
                     Intent intent = new Intent(DashboardActivity.this, MainActivity.class);
                     startActivity(intent);
+
                 }
             }
         });
         card_dash_kvv_layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!configurationModus){
+                if (configurationModus) {
+                    if (cardKvv_isVisible) {
+                        cardKvv_isVisible = false; //True = Card is visible
+                        card_dash_kvv.setStrokeColor(ColorUtils.setAlphaComponent(card_dash_kvv.getStrokeColor(), 50));
+                        card_dash_kvv_layout.setBackgroundColor(ColorUtils.setAlphaComponent(card_dash_kvv.getStrokeColor(), 50));
+                    } else {
+                        cardKvv_isVisible = true;//True = Card is visible
+                        card_dash_kvv.setStrokeColor(ColorUtils.setAlphaComponent(card_dash_kvv.getStrokeColor(), 255));
+                        card_dash_kvv_layout.setBackgroundColor(ColorUtils.setAlphaComponent(card_dash_kvv.getStrokeColor(), 255));
+                    }
+                }else{
                     Intent intent = new Intent(DashboardActivity.this, KVVActivity.class);
                     startActivity(intent);
+
                 }
             }
         });
         card_dash_mealPlan_layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!configurationModus){
+                if (configurationModus) {
+                    if (cardMealPlan_isVisible) {
+                        cardMealPlan_isVisible = false; //True = Card is visible
+                        card_dash_mealPlan.setStrokeColor(ColorUtils.setAlphaComponent(card_dash_mealPlan.getStrokeColor(), 50));
+                        card_dash_mealPlan_layout.setBackgroundColor(ColorUtils.setAlphaComponent(card_dash_mealPlan.getStrokeColor(), 50));
+                    } else {
+                        cardMealPlan_isVisible = true;//True = Card is visible
+                        card_dash_mealPlan.setStrokeColor(ColorUtils.setAlphaComponent(card_dash_mealPlan.getStrokeColor(), 255));
+                        card_dash_mealPlan_layout.setBackgroundColor(ColorUtils.setAlphaComponent(card_dash_mealPlan.getStrokeColor(), 255));
+                    }
+                }else{
                     Intent intent = new Intent(DashboardActivity.this, CantineActivity.class);
                     startActivity(intent);
+
                 }
             }
         });
@@ -272,15 +317,26 @@ public class DashboardActivity extends AppCompatActivity {
         card_dash_info_layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!configurationModus){
+                if (configurationModus) {
+                    if (cardInfo_isVisible) {
+                        cardInfo_isVisible = false; //True = Card is visible
+                        card_dash_info.setStrokeColor(ColorUtils.setAlphaComponent(card_dash_info.getStrokeColor(), 50));
+                        card_dash_info_layout.setBackgroundColor(ColorUtils.setAlphaComponent(card_dash_info.getStrokeColor(), 50));
+                    } else {
+                        cardInfo_isVisible = true;//True = Card is visible
+                        card_dash_info.setStrokeColor(ColorUtils.setAlphaComponent(card_dash_info.getStrokeColor(), 255));
+                        card_dash_info_layout.setBackgroundColor(ColorUtils.setAlphaComponent(card_dash_info.getStrokeColor(), 255));
+                    }
+                }else{
                     Intent intent = new Intent(DashboardActivity.this, SettingsActivity.class);
                     startActivity(intent);
+
                 }
             }
         });
 
 
-        buttonCardCalendar.setOnClickListener(new View.OnClickListener() {
+     /*   buttonCardCalendar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (configurationModus){
@@ -382,7 +438,7 @@ public class DashboardActivity extends AppCompatActivity {
 
                 }
             }
-        });
+        }); */
 
     }
 
@@ -829,24 +885,19 @@ public class DashboardActivity extends AppCompatActivity {
     }
 
     private void loadInfo() {
-
         TextView title = findViewById(R.id.textViewInfoTitle);
         TextView[] message = new TextView[3];
         message[0]=findViewById(R.id.textViewInfoMessageOne);
         message[1]=findViewById(R.id.textViewInfoMessageTwo);
         message[2]=findViewById(R.id.textViewInfoMessageThree);
-
         LinearLayout[] layoutInfoFull = new LinearLayout[1];
         layoutInfoFull[0] = findViewById(R.id.layoutInfo);
-
         LinearLayout[] layoutInfo = new LinearLayout[3];
         layoutInfo[0] = findViewById(R.id.layoutInfoMessageOne);
         layoutInfo[1] = findViewById(R.id.layoutInfoMessageTwo);
         layoutInfo[2] = findViewById(R.id.layoutInfoMessageThree);
-
         ProgressIndicator indicator= new ProgressIndicator(DashboardActivity.this,layoutCardInfo, layoutInfoFull);
         indicator.show();
-
         new Thread(new Runnable() {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
@@ -876,8 +927,6 @@ public class DashboardActivity extends AppCompatActivity {
                                         layoutInfo[0].setVisibility(View.GONE);
                                     }
 
-
-
                                 }
                             }
                         });
@@ -885,8 +934,6 @@ public class DashboardActivity extends AppCompatActivity {
                 });
             }
         }).start();
-
-
     }
 
     @Override

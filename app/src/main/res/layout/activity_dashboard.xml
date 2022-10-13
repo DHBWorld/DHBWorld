@@ -109,7 +109,8 @@
                         android:background="@color/red"
                         android:orientation="horizontal">
 
-                        <Button
+                        <LinearLayout
+                            android:orientation="horizontal"
                             android:id="@+id/buttonCardCalendar"
                             android:layout_width="30dp"
                             android:layout_height="match_parent"
@@ -355,7 +356,8 @@
                             android:background="@color/white"
                             android:orientation="vertical">
 
-                            <Button
+                            <LinearLayout
+                                android:orientation="horizontal"
                                 android:id="@+id/buttonCardKvv"
                                 android:layout_width="30dp"
                                 android:layout_height="match_parent"
@@ -381,7 +383,8 @@
                         android:background="@color/red"
                         android:orientation="horizontal">
 
-                        <Button
+                        <LinearLayout
+                            android:orientation="horizontal"
                             android:id="@+id/buttonCardMealPlan"
                             android:layout_width="30dp"
                             android:layout_height="match_parent"
@@ -566,7 +569,8 @@
                             android:background="@color/white"
                             android:orientation="vertical">
 
-                            <Button
+                            <LinearLayout
+                                android:orientation="horizontal"
                                 android:id="@+id/buttonCardPI"
                                 android:layout_width="30dp"
                                 android:layout_height="match_parent"
@@ -592,7 +596,8 @@
                         android:background="@color/red"
                         android:orientation="horizontal">
 
-                        <Button
+                        <LinearLayout
+                            android:orientation="horizontal"
                             android:id="@+id/buttonCardInfo"
                             android:layout_width="30dp"
                             android:layout_height="match_parent"
