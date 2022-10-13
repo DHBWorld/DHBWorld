@@ -634,7 +634,7 @@
                                         android:layout_width="20dp"
                                         android:layout_height="20dp"
                                         android:layout_marginRight="3dp"
-                                        android:background="@drawable/ic_baseline_expand_more_24" />
+                                        android:background="@drawable/baseline_chevron_right_24" />
 
                                     <TextView
                                         android:id="@+id/textViewInfoMessageOne"
@@ -655,7 +655,7 @@
                                         android:layout_width="20dp"
                                         android:layout_height="20dp"
                                         android:layout_marginRight="3dp"
-                                        android:background="@drawable/ic_baseline_expand_more_24" />
+                                        android:background="@drawable/baseline_chevron_right_24" />
 
                                     <TextView
                                         android:id="@+id/textViewInfoMessageTwo"
@@ -676,7 +676,7 @@
                                         android:layout_width="20dp"
                                         android:layout_height="20dp"
                                         android:layout_marginRight="3dp"
-                                        android:background="@drawable/ic_baseline_expand_more_24" />
+                                        android:background="@drawable/baseline_chevron_right_24" />
 
                                     <TextView
                                         android:id="@+id/textViewInfoMessageThree"
