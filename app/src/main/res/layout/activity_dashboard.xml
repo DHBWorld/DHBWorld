@@ -53,6 +53,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:cardElevation="0dp"
+                    app:rippleColor="@color/white"
                     app:strokeColor="@color/grey_light"
                     app:strokeWidth="3dp">
 
@@ -93,6 +94,7 @@
 
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/card_dash_calendar"
+                    app:rippleColor="@color/white"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
@@ -213,6 +215,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
                     android:baselineAligned="false"
+                    app:rippleColor="@color/white"
                     app:cardElevation="0dp"
                     app:strokeColor="@color/grey_light"
                     app:strokeWidth="3dp">
@@ -370,6 +373,7 @@
                     android:id="@+id/card_dash_mealPlan"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    app:rippleColor="@color/white"
                     android:layout_marginTop="15dp"
                     android:baselineAligned="false"
                     app:cardElevation="0dp"
@@ -469,6 +473,7 @@
 
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/card_dash_pi"
+                    app:rippleColor="@color/white"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
@@ -587,6 +592,7 @@
                     android:baselineAligned="false"
                     app:cardElevation="0dp"
                     app:strokeColor="@color/red"
+                    app:rippleColor="@color/white"
                     app:strokeWidth="3dp">
 
                     <LinearLayout

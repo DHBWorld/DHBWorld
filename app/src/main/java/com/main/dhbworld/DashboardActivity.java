@@ -102,6 +102,7 @@ public class DashboardActivity extends AppCompatActivity {
     MaterialCardView card_dash_kvv;
     MaterialCardView card_dash_mealPlan;
     MaterialCardView card_dash_info;
+    MaterialCardView card_dash_user_interaction;
 
     private LinearLayout boxCardCalendar;
     private LinearLayout boxCardPI;
@@ -175,6 +176,7 @@ public class DashboardActivity extends AppCompatActivity {
         card_dash_kvv = findViewById(R.id.card_dash_kvv);
         card_dash_mealPlan = findViewById(R.id.card_dash_mealPlan);
         card_dash_info= findViewById(R.id.card_dash_info);
+        card_dash_user_interaction= findViewById(R.id.card_dash_userInteraction);
 
         boxCardCalendar= findViewById(R.id.buttonCardCalendar);
         boxCardPI= findViewById(R.id.buttonCardPI);
@@ -224,7 +226,7 @@ public class DashboardActivity extends AppCompatActivity {
         }
 
         //TODO integrate onClickListeners more easily
-        card_dash_calendar_layout.setOnClickListener(new View.OnClickListener() {
+        card_dash_calendar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (configurationModus){
@@ -244,7 +246,7 @@ public class DashboardActivity extends AppCompatActivity {
                 }
             }
         });
-        card_dash_pi_layout.setOnClickListener(new View.OnClickListener() {
+        card_dash_pi.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (configurationModus) {
@@ -265,7 +267,7 @@ public class DashboardActivity extends AppCompatActivity {
                 }
             }
         });
-        card_dash_kvv_layout.setOnClickListener(new View.OnClickListener() {
+        card_dash_kvv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (configurationModus) {
@@ -285,7 +287,7 @@ public class DashboardActivity extends AppCompatActivity {
                 }
             }
         });
-        card_dash_mealPlan_layout.setOnClickListener(new View.OnClickListener() {
+        card_dash_mealPlan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (configurationModus) {
@@ -305,7 +307,7 @@ public class DashboardActivity extends AppCompatActivity {
                 }
             }
         });
-        card_dash_user_interaction_layout.setOnClickListener(new View.OnClickListener() {
+        card_dash_user_interaction.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(!configurationModus){
@@ -314,7 +316,7 @@ public class DashboardActivity extends AppCompatActivity {
                 }
             }
         });
-        card_dash_info_layout.setOnClickListener(new View.OnClickListener() {
+        card_dash_info.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (configurationModus) {
@@ -704,6 +706,7 @@ public class DashboardActivity extends AppCompatActivity {
         if (!configurationModus){ //User can configure his dashboard
             item.setIcon(AppCompatResources.getDrawable(DashboardActivity.this, R.drawable.ic_done));
             Snackbar.make(this.findViewById(android.R.id.content), getResources().getString(R.string.chooseTheCardForConfiguration), BaseTransientBottomBar.LENGTH_SHORT).show();
+            card_dash_user_interaction.setClickable(false);
             card_dash_calendar.setVisibility(View.VISIBLE);
             card_dash_pi.setVisibility(View.VISIBLE);
             card_dash_kvv.setVisibility(View.VISIBLE);
@@ -733,6 +736,7 @@ public class DashboardActivity extends AppCompatActivity {
             configurationModus=true;
         } else{
             item.setIcon(AppCompatResources.getDrawable(DashboardActivity.this, R.drawable.ic_construction));
+            card_dash_user_interaction.setClickable(true);
             card_dash_calendar.setStrokeColor(ColorUtils.setAlphaComponent(card_dash_calendar.getStrokeColor(),255));
             card_dash_calendar_layout.setBackgroundColor(ColorUtils.setAlphaComponent(card_dash_calendar.getStrokeColor(),255));
             card_dash_pi.setStrokeColor(ColorUtils.setAlphaComponent(card_dash_pi.getStrokeColor(),255));
