@@ -92,33 +92,9 @@ public class SettingsActivity extends AppCompatActivity {
                     Snackbar.make(this.findViewById(android.R.id.content), this.getString(R.string.default_error_msg), BaseTransientBottomBar.LENGTH_SHORT).show();
                 }
             } else if (requestCode == 2) {
-                ProgressDialog dialog = new ProgressDialog(activity);
-                dialog.setCancelable(false);
-                dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-                dialog.setMessage(getResources().getString(R.string.please_wait));
-                dialog.setTitle(getResources().getString(R.string.export_backup));
-                dialog.show();
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        BackupHandler.saveBackup(data, activity);
-                        dialog.dismiss();
-                    }
-                }).start();
+                BackupHandler.saveBackupAskPassword(data, activity);
             } else if (requestCode == 3) {
-                ProgressDialog dialog = new ProgressDialog(activity);
-                dialog.setCancelable(false);
-                dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-                dialog.setMessage(getResources().getString(R.string.please_wait));
-                dialog.setTitle(getResources().getString(R.string.restore_backup));
-                dialog.show();
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        BackupHandler.restoreFile(data, activity);
-                        dialog.dismiss();
-                    }
-                }).start();
+                BackupHandler.restoreCheckPassword(data, activity);
             }
         }
     }

@@ -264,4 +264,5 @@ E-Mail-Adresse: <p><a href="mailto:zaeske.christian@gmail.com">zaeske.christian@
     <string name="backup_restored">Backup restored</string>
     <string name="backup_saved">Backup saved</string>
     <string name="please_wait">Please wait</string>
+    <string name="no_backup_file">Dies ist keine DHBWorld-Backup-Datei</string>
 </resources>

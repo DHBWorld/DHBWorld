@@ -1,13 +1,30 @@
 package com.main.dhbworld.Backup;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.provider.DocumentsContract;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.KeyEvent;
+import android.view.View;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
+
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.main.dhbworld.Dualis.SecureStore;
 import com.main.dhbworld.R;
 
@@ -56,6 +73,10 @@ import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
 
 public class BackupHandler {
+
+    private static final byte[] ENC_MAGIC_NUMBER = new byte[]{40, 80, 20, 50};
+    private static final byte[] NOENC_MAGIC_NUMBER = new byte[]{50, 80, 20, 50};
+
     public static void exportBackup(Activity activity, URI pickerInitialUri) {
 
         //TODO: Information über Backup mit Dialog
@@ -73,7 +94,6 @@ public class BackupHandler {
 
     public static void restoreBackup(Activity activity, URI pickerInitialUri) {
 
-
         Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         intent.setType("application/octet-stream");
@@ -82,23 +102,155 @@ public class BackupHandler {
         activity.startActivityForResult(intent, 3);
     }
 
-    public static void saveBackup(Intent data, Activity activity) {
-        //try {
-        //    DocumentsContract.deleteDocument(activity.getContentResolver(), data.getData());
-        //} catch (FileNotFoundException e) {
-        //    e.printStackTrace();
-        //}
+    public static void saveBackupAskPassword(Intent data, Activity activity) {
+        AlertDialog alertDialog = new MaterialAlertDialogBuilder(activity)
+                .setTitle(R.string.export_backup)
+                .setView(R.layout.dialog_backup)
+                .setPositiveButton("Exportieren", null)
+                .setNegativeButton(R.string.cancel, null)
+                .setCancelable(false)
+                .create();
+
+        alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialogInterface) {
+                CheckBox dualisExport = alertDialog.findViewById(R.id.dualis_export_checkbox);
+                TextInputLayout backupPasswordLayout = alertDialog.findViewById(R.id.backupPasswordLayout);
+                TextInputLayout backupPasswordRepeatLayout = alertDialog.findViewById(R.id.backupPasswordRepeatLayout);
+                TextInputEditText backupPassword = alertDialog.findViewById(R.id.backupPassword);
+                TextInputEditText backupPasswordRepeat = alertDialog.findViewById(R.id.backupPasswordRepeat);
+                Button exportButton = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
+                Button cancelButton = alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE);
+
+                dualisExport.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                        if (checked) {
+                            backupPasswordLayout.setHint("Passwort");
+                            backupPasswordRepeatLayout.setHint("Passwort wiederholen");
+                        } else {
+                            backupPasswordLayout.setHint("(Optional) Passwort");
+                            backupPasswordRepeatLayout.setHint("(Optional) Passwort wiederholen");
+                        }
+                    }
+                });
+
+                backupPassword.addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                    }
+
+                    @Override
+                    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                        backupPasswordLayout.setError(null);
+                        backupPasswordRepeatLayout.setError(null);
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable editable) {
+
+                    }
+                });
+
+                backupPasswordRepeat.addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                    }
+
+                    @Override
+                    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                        backupPasswordLayout.setError(null);
+                        backupPasswordRepeatLayout.setError(null);
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable editable) {
+
+                    }
+                });
+
+                exportButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        String password = backupPassword.getText().toString();
+                        String passwordRepeat = backupPasswordRepeat.getText().toString();
+
+                        if (password.isEmpty()) {
+                            if (!dualisExport.isChecked()) {
+                                ProgressDialog progressDialog = new ProgressDialog(activity);
+                                progressDialog.setTitle("Export");
+                                progressDialog.setMessage("Bitte warten");
+                                progressDialog.setCancelable(false);
+                                progressDialog.show();
+                                new Thread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        saveBackup(data, activity, false, null);
+                                        progressDialog.dismiss();
+                                    }
+                                }).start();
+                            } else {
+                                backupPasswordRepeatLayout.setError("Passwort muss gesetzt sein");
+                            }
+                        } else {
+                            if (password.equals(passwordRepeat)) {
+                                ProgressDialog progressDialog = new ProgressDialog(activity);
+                                progressDialog.setTitle("Export");
+                                progressDialog.setMessage("Bitte warten");
+                                progressDialog.setCancelable(false);
+                                progressDialog.show();
+                                new Thread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        saveBackup(data, activity, dualisExport.isChecked(), password);
+                                        progressDialog.dismiss();
+                                    }
+                                }).start();
+                            } else {
+                                backupPasswordRepeatLayout.setError("Passwörter stimmen nicht überein");
+                            }
+                        }
+                        alertDialog.dismiss();
+                    }
+                });
+
+                cancelButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        try {
+                            DocumentsContract.deleteDocument(activity.getContentResolver(), data.getData());
+                        } catch (FileNotFoundException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+
+            }
+        });
+
+        alertDialog.show();
+    }
+
+    private static void saveBackup(Intent data, Activity activity, boolean exportDualis, String password) {
+
         try {
             File fileDualis = new File(activity.getFilesDir().getPath() + "/../shared_prefs/Dualis.xml");
             File fileAll = new File(activity.getFilesDir().getPath() + "/../shared_prefs/com.main.dhbworld_preferences.xml");
             File filePersonal = new File(activity.getFilesDir().getPath() + "/../shared_prefs/myPreferencesKey.xml");
 
             OutputStream outputStream = activity.getContentResolver().openOutputStream(data.getData());
+            if (password != null) {
+                outputStream.write(ENC_MAGIC_NUMBER); //magic number encrypted
+            } else {
+                outputStream.write(NOENC_MAGIC_NUMBER); //magic number unencrypted
+            }
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 
             ZipOutputStream zipOutputStream = new ZipOutputStream(byteArrayOutputStream);
 
-            if (fileDualis.exists()) {
+            if (fileDualis.exists() && exportDualis) {
                 SharedPreferences sharedPreferences = activity.getSharedPreferences("Dualis", Context.MODE_PRIVATE);
                 Map<String, String> credentials = null;
                 try {
@@ -150,7 +302,13 @@ public class BackupHandler {
 
             ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArrayOutputStream.toByteArray());
 
-            encrypt("password", inputStream, outputStream);
+            if (password != null) {
+                encrypt(password, inputStream, outputStream);
+            } else {
+                IOUtils.copy(inputStream, outputStream);
+                inputStream.close();
+                outputStream.close();
+            }
 
             Snackbar.make(activity.findViewById(android.R.id.content), activity.getString(R.string.backup_saved), BaseTransientBottomBar.LENGTH_SHORT).show();
         } catch (Exception e) {
@@ -160,11 +318,121 @@ public class BackupHandler {
 
     }
 
-    public static void restoreFile(Intent data, Activity activity) {
+    public static void restoreCheckPassword(Intent data, Activity activity) {
+        ProgressDialog progressDialog = new ProgressDialog(activity);
+        progressDialog.setTitle("Import");
+        progressDialog.setMessage("Bitte warten");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    InputStream inputStreamZip = activity.getContentResolver().openInputStream(data.getData());
+                    byte[] magicNumber = new byte[4];
+                    inputStreamZip.read(magicNumber);
+
+                    if (Arrays.equals(magicNumber, ENC_MAGIC_NUMBER)) {
+                        progressDialog.dismiss();
+                        activity.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                AlertDialog alertDialog = new MaterialAlertDialogBuilder(activity)
+                                        .setTitle(R.string.restore_backup)
+                                        .setView(R.layout.dialog_restore)
+                                        .setPositiveButton("Importieren", null)
+                                        .setNegativeButton(R.string.cancel, null)
+                                        .setCancelable(false)
+                                        .create();
+
+                                alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+                                    @Override
+                                    public void onShow(DialogInterface dialogInterface) {
+                                        Button importButton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
+                                        TextInputLayout restorePasswordLayout = alertDialog.findViewById(R.id.restorePasswordLayout);
+                                        TextInputEditText restorePassword = alertDialog.findViewById(R.id.restorePassword);
+
+                                        restorePassword.addTextChangedListener(new TextWatcher() {
+                                            @Override
+                                            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                                            }
+
+                                            @Override
+                                            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                                                restorePasswordLayout.setError(null);
+                                            }
+
+                                            @Override
+                                            public void afterTextChanged(Editable editable) {
+
+                                            }
+                                        });
+
+                                        importButton.setOnClickListener(new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View view) {
+                                                String password = restorePassword.getText().toString();
+                                                ProgressDialog progressDialog = new ProgressDialog(activity);
+                                                progressDialog.setTitle("Export");
+                                                progressDialog.setMessage("Bitte warten");
+                                                progressDialog.setCancelable(false);
+                                                progressDialog.show();
+                                                new Thread(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        boolean success = restoreFile(data, activity, password);
+                                                        progressDialog.dismiss();
+                                                        if (success) {
+                                                            alertDialog.dismiss();
+                                                        } else {
+                                                            activity.runOnUiThread(new Runnable() {
+                                                                @Override
+                                                                public void run() {
+                                                                    restorePasswordLayout.setError("Passwort oder Datei falsch");
+                                                                }
+                                                            });
+                                                        }
+                                                    }
+                                                }).start();
+                                            }
+                                        });
+                                    }
+                                });
+
+                                alertDialog.show();
+                            }
+                        });
+                    } else if (Arrays.equals(magicNumber, NOENC_MAGIC_NUMBER)) {
+                        restoreFile(data, activity, null);
+                        progressDialog.dismiss();
+                    } else {
+                        progressDialog.dismiss();
+                        Snackbar.make(activity.findViewById(android.R.id.content), activity.getString(R.string.no_backup_file), BaseTransientBottomBar.LENGTH_SHORT).show();
+                    }
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+
+    }
+
+    public static boolean restoreFile(Intent data, Activity activity, String filePassword) {
         try {
             InputStream inputStreamZip = activity.getContentResolver().openInputStream(data.getData());
 
-            ZipInputStream zipInputStream = new ZipInputStream(decrypt("password", inputStreamZip));
+            InputStream inputStream;
+            if (filePassword != null) {
+                inputStream = decrypt(filePassword, inputStreamZip);
+            } else {
+                byte[] magicNmber = new byte[4];
+                inputStreamZip.read(magicNmber);
+                inputStream = inputStreamZip;
+            }
+
+            ZipInputStream zipInputStream = new ZipInputStream(inputStream);
 
             ZipEntry zipEntry;
             while ((zipEntry = zipInputStream.getNextEntry()) != null) {
@@ -204,10 +472,11 @@ public class BackupHandler {
             inputStreamZip.close();
 
             Snackbar.make(activity.findViewById(android.R.id.content), activity.getString(R.string.backup_restored), BaseTransientBottomBar.LENGTH_SHORT).show();
+            return true;
             //TODO: App neustarten
         } catch (Exception e) {
             e.printStackTrace();
-            Snackbar.make(activity.findViewById(android.R.id.content), activity.getString(R.string.default_error_msg), BaseTransientBottomBar.LENGTH_SHORT).show();
+            return false;
         }
     }
 
@@ -218,6 +487,12 @@ public class BackupHandler {
         reader.lines().forEach(stringBuilder::append);
         reader.close();
         String file = stringBuilder.toString();
+        byte[] fileBytes = file.getBytes(StandardCharsets.UTF_8);
+        byte[] magicnumber = Arrays.copyOfRange(fileBytes, 0, 4);
+
+        if (Arrays.equals(magicnumber, ENC_MAGIC_NUMBER)) {
+            file = new String(Arrays.copyOfRange(fileBytes, 4, fileBytes.length));
+        }
 
         String[] data = file.split("__:__");
         byte[] encryptedData = Base64.getDecoder().decode(data[0]);

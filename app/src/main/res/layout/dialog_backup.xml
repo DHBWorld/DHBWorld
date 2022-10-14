@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+
+    android:orientation="vertical">
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="24dp"
+            android:paddingBottom="28dp"
+            android:paddingTop="16dp"
+            android:orientation="vertical" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Das Backup enthält alle Einstellungen der App, den Kalender, Persönliche Infos und optional die Dualis Login-Daten. Das Backup kann zusätzlich verschlüsselt werden."
+                android:layout_marginBottom="8dp"/>
+
+            <CheckBox
+                android:id="@+id/dualis_export_checkbox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Dualis Login exportieren" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/backupPasswordLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="(Optional) Passwort">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/backupPassword"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/backupPasswordRepeatLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="(Optional) Passwort wiederholen">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/backupPasswordRepeat"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+</ScrollView>
