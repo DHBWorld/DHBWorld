@@ -103,11 +103,11 @@ public class DashboardActivity extends AppCompatActivity {
     MaterialCardView card_dash_mealPlan;
     MaterialCardView card_dash_info;
 
-    private LinearLayout buttonCardCalendar;
-    private LinearLayout buttonCardPI;
-    private LinearLayout buttonCardMealPlan;
-    private LinearLayout buttonCardKvv;
-    private LinearLayout buttonCardInfo;
+    private LinearLayout boxCardCalendar;
+    private LinearLayout boxCardPI;
+    private LinearLayout boxCardMealPlan;
+    private LinearLayout boxCardKvv;
+    private LinearLayout boxCardInfo;
 
     private LinearLayout card_dash_calendar_layout;
     private LinearLayout card_dash_pi_layout;
@@ -176,11 +176,11 @@ public class DashboardActivity extends AppCompatActivity {
         card_dash_mealPlan = findViewById(R.id.card_dash_mealPlan);
         card_dash_info= findViewById(R.id.card_dash_info);
 
-        buttonCardCalendar= findViewById(R.id.buttonCardCalendar);
-        buttonCardPI= findViewById(R.id.buttonCardPI);
-        buttonCardMealPlan= findViewById(R.id.buttonCardMealPlan);
-        buttonCardKvv= findViewById(R.id.buttonCardKvv);
-        buttonCardInfo= findViewById(R.id.buttonCardInfo);
+        boxCardCalendar= findViewById(R.id.buttonCardCalendar);
+        boxCardPI= findViewById(R.id.buttonCardPI);
+        boxCardMealPlan= findViewById(R.id.buttonCardMealPlan);
+        boxCardKvv= findViewById(R.id.buttonCardKvv);
+        boxCardInfo= findViewById(R.id.buttonCardInfo);
 
         card_dash_calendar_layout = findViewById(R.id.card_dash_calendar_layout);
         card_dash_pi_layout = findViewById(R.id.card_dash_pi_layout);
@@ -195,11 +195,11 @@ public class DashboardActivity extends AppCompatActivity {
 
         configurationModus=false;
 
-        buttonCardCalendar.setBackgroundColor((ColorUtils.setAlphaComponent(getResources().getColor(R.color.black),0)));
-        buttonCardPI.setBackgroundColor((ColorUtils.setAlphaComponent(getResources().getColor(R.color.black),0)));
-        buttonCardMealPlan.setBackgroundColor((ColorUtils.setAlphaComponent(getResources().getColor(R.color.black),0)));
-        buttonCardKvv.setBackgroundColor((ColorUtils.setAlphaComponent(getResources().getColor(R.color.black),0)));
-        buttonCardInfo.setBackgroundColor((ColorUtils.setAlphaComponent(getResources().getColor(R.color.black),0)));
+        boxCardCalendar.setBackgroundColor((ColorUtils.setAlphaComponent(getResources().getColor(R.color.black),0)));
+        boxCardPI.setBackgroundColor((ColorUtils.setAlphaComponent(getResources().getColor(R.color.black),0)));
+        boxCardMealPlan.setBackgroundColor((ColorUtils.setAlphaComponent(getResources().getColor(R.color.black),0)));
+        boxCardKvv.setBackgroundColor((ColorUtils.setAlphaComponent(getResources().getColor(R.color.black),0)));
+        boxCardInfo.setBackgroundColor((ColorUtils.setAlphaComponent(getResources().getColor(R.color.black),0)));
 
         cardCalendar_isVisible = sp.getBoolean("cardCalendar", true);
         cardPI_isVisible = sp.getBoolean("cardPI", true);
@@ -330,116 +330,9 @@ public class DashboardActivity extends AppCompatActivity {
                 }else{
                     Intent intent = new Intent(DashboardActivity.this, SettingsActivity.class);
                     startActivity(intent);
-
                 }
             }
         });
-
-
-     /*   buttonCardCalendar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (configurationModus){
-                    if (cardCalendar_isVisible){
-                        cardCalendar_isVisible=false;
-                        card_dash_calendar.setStrokeColor(ColorUtils.setAlphaComponent(card_dash_calendar.getStrokeColor(),50));
-                        card_dash_calendar_layout.setBackgroundColor(ColorUtils.setAlphaComponent(card_dash_calendar.getStrokeColor(),50));
-                    }else{
-                        cardCalendar_isVisible=true;
-                        card_dash_calendar.setStrokeColor(ColorUtils.setAlphaComponent(card_dash_calendar.getStrokeColor(),255));
-                        card_dash_calendar_layout.setBackgroundColor(ColorUtils.setAlphaComponent(card_dash_calendar.getStrokeColor(),255));
-                    }
-                }else{
-                    Intent intent = new Intent(DashboardActivity.this, CalendarActivity.class);
-                    startActivity(intent);
-
-                }
-            }
-        });
-
-        buttonCardPI.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (configurationModus) {
-                    if (cardPI_isVisible) {
-                        cardPI_isVisible = false; //True = Card is visible
-                        card_dash_pi.setStrokeColor(ColorUtils.setAlphaComponent(card_dash_pi.getStrokeColor(), 50));
-                        card_dash_pi_layout.setBackgroundColor(ColorUtils.setAlphaComponent(card_dash_pi.getStrokeColor(), 50));
-                        card_dash_pi_layout.setBackgroundColor(ColorUtils.setAlphaComponent(card_dash_pi.getStrokeColor(), 50));
-                    } else {
-                        cardPI_isVisible = true;//True = Card is visible
-                        card_dash_pi.setStrokeColor(ColorUtils.setAlphaComponent(card_dash_pi.getStrokeColor(), 255));
-                        card_dash_pi_layout.setBackgroundColor(ColorUtils.setAlphaComponent(card_dash_pi.getStrokeColor(), 255));
-                    }
-                }else{
-                    Intent intent = new Intent(DashboardActivity.this, MainActivity.class);
-                    startActivity(intent);
-
-                }
-            }
-        });
-
-        buttonCardMealPlan.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (configurationModus) {
-                    if (cardMealPlan_isVisible) {
-                        cardMealPlan_isVisible = false; //True = Card is visible
-                        card_dash_mealPlan.setStrokeColor(ColorUtils.setAlphaComponent(card_dash_mealPlan.getStrokeColor(), 50));
-                        card_dash_mealPlan_layout.setBackgroundColor(ColorUtils.setAlphaComponent(card_dash_mealPlan.getStrokeColor(), 50));
-                    } else {
-                        cardMealPlan_isVisible = true;//True = Card is visible
-                        card_dash_mealPlan.setStrokeColor(ColorUtils.setAlphaComponent(card_dash_mealPlan.getStrokeColor(), 255));
-                        card_dash_mealPlan_layout.setBackgroundColor(ColorUtils.setAlphaComponent(card_dash_mealPlan.getStrokeColor(), 255));
-                    }
-                }else{
-                    Intent intent = new Intent(DashboardActivity.this, CantineActivity.class);
-                    startActivity(intent);
-
-                }
-            }
-        });
-        buttonCardKvv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (configurationModus) {
-                    if (cardKvv_isVisible) {
-                        cardKvv_isVisible = false; //True = Card is visible
-                        card_dash_kvv.setStrokeColor(ColorUtils.setAlphaComponent(card_dash_kvv.getStrokeColor(), 50));
-                        card_dash_kvv_layout.setBackgroundColor(ColorUtils.setAlphaComponent(card_dash_kvv.getStrokeColor(), 50));
-                    } else {
-                        cardKvv_isVisible = true;//True = Card is visible
-                        card_dash_kvv.setStrokeColor(ColorUtils.setAlphaComponent(card_dash_kvv.getStrokeColor(), 255));
-                        card_dash_kvv_layout.setBackgroundColor(ColorUtils.setAlphaComponent(card_dash_kvv.getStrokeColor(), 255));
-                    }
-                }else{
-                    Intent intent = new Intent(DashboardActivity.this, KVVActivity.class);
-                    startActivity(intent);
-
-                }
-            }
-        });
-        buttonCardInfo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (configurationModus) {
-                    if (cardInfo_isVisible) {
-                        cardInfo_isVisible = false; //True = Card is visible
-                        card_dash_info.setStrokeColor(ColorUtils.setAlphaComponent(card_dash_info.getStrokeColor(), 50));
-                        card_dash_info_layout.setBackgroundColor(ColorUtils.setAlphaComponent(card_dash_info.getStrokeColor(), 50));
-                    } else {
-                        cardInfo_isVisible = true;//True = Card is visible
-                        card_dash_info.setStrokeColor(ColorUtils.setAlphaComponent(card_dash_info.getStrokeColor(), 255));
-                        card_dash_info_layout.setBackgroundColor(ColorUtils.setAlphaComponent(card_dash_info.getStrokeColor(), 255));
-                    }
-                }else{
-                    Intent intent = new Intent(DashboardActivity.this, SettingsActivity.class);
-                    startActivity(intent);
-
-                }
-            }
-        }); */
-
     }
 
     private void loadCalendar(){
@@ -817,12 +710,6 @@ public class DashboardActivity extends AppCompatActivity {
             card_dash_mealPlan.setVisibility(View.VISIBLE);
             card_dash_info.setVisibility(View.VISIBLE);
 
-            buttonCardCalendar.setVisibility(View.VISIBLE);
-            buttonCardPI.setVisibility(View.VISIBLE);
-            buttonCardMealPlan.setVisibility(View.VISIBLE);
-            buttonCardKvv.setVisibility(View.VISIBLE);
-            buttonCardInfo.setVisibility(View.VISIBLE);
-
             if (!cardCalendar_isVisible){
                 card_dash_calendar.setStrokeColor(ColorUtils.setAlphaComponent(card_dash_calendar.getStrokeColor(),50));
                 card_dash_calendar_layout.setBackgroundColor(ColorUtils.setAlphaComponent(card_dash_calendar.getStrokeColor(),50));
@@ -856,8 +743,6 @@ public class DashboardActivity extends AppCompatActivity {
             card_dash_mealPlan_layout.setBackgroundColor(ColorUtils.setAlphaComponent(card_dash_mealPlan.getStrokeColor(),255));
             card_dash_info.setStrokeColor(ColorUtils.setAlphaComponent(card_dash_info.getStrokeColor(),255));
             card_dash_info_layout.setBackgroundColor(ColorUtils.setAlphaComponent(card_dash_info.getStrokeColor(),255));
-
-
             if (!cardCalendar_isVisible){
                 card_dash_calendar.setVisibility(View.GONE);
             }
@@ -880,7 +765,6 @@ public class DashboardActivity extends AppCompatActivity {
             editor.putBoolean("cardInfo", cardInfo_isVisible);
             editor.apply();
             configurationModus=false;
-
         }
     }
 
