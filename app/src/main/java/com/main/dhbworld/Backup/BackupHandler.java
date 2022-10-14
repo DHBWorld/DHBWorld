@@ -25,6 +25,7 @@ import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.main.dhbworld.DashboardActivity;
 import com.main.dhbworld.Dualis.SecureStore;
 import com.main.dhbworld.R;
 
@@ -78,9 +79,6 @@ public class BackupHandler {
     private static final byte[] NOENC_MAGIC_NUMBER = new byte[]{50, 80, 20, 50};
 
     public static void exportBackup(Activity activity, URI pickerInitialUri) {
-
-        //TODO: Information über Backup mit Dialog
-        //TODO: Dualis mit Passwort verschlüsseln
 
         Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
@@ -472,12 +470,33 @@ public class BackupHandler {
             inputStreamZip.close();
 
             Snackbar.make(activity.findViewById(android.R.id.content), activity.getString(R.string.backup_restored), BaseTransientBottomBar.LENGTH_SHORT).show();
+            showAppNeedsRestart(activity);
             return true;
-            //TODO: App neustarten
         } catch (Exception e) {
             e.printStackTrace();
             return false;
         }
+    }
+
+    private static void showAppNeedsRestart(Activity activity) {
+        activity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                new MaterialAlertDialogBuilder(activity)
+                        .setTitle("Neustart erforderlich")
+                        .setMessage("Das Backup wurde erfolgreich wiederhergestellt. Die App wird neu gestartet, um die Änderungen anzuwenden.")
+                        .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                Intent intent = new Intent(activity, DashboardActivity.class);
+                                System.exit(0);
+                                activity.startActivity(intent);
+                            }
+                        })
+                        .setCancelable(false)
+                        .show();
+            }
+        });
     }
 
     private static InputStream decrypt(String password, InputStream in) throws Exception {
