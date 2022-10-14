@@ -259,4 +259,5 @@ E-Mail-Adresse: <p><a href="mailto:zaeske.christian@gmail.com">zaeske.christian@
     <string name="main_entry">Main entrance</string>
     <string name="left">Left</string>
     <string name="right">Right</string>
+    <string name="timeplan">Time plan:</string>
 </resources>

@@ -68,11 +68,15 @@ public class OrganizerRoomAdapter extends RecyclerView.Adapter<OrganizerRoomAdap
                     TextView roomType = bottomSheetDialog.findViewById(R.id.organizerRoomTypeText);
                     Objects.requireNonNull(roomType).setText(room.roomType);
                     TextView roomUrl = bottomSheetDialog.findViewById(R.id.organizerRoomUrlText);
+                    TextView titleRoomUrl = bottomSheetDialog.findViewById(R.id.organizerRoomUrlTitle);
                     if(room.url != null && roomUrl != null) {
                         roomUrl.setText(room.url);
+                        titleRoomUrl.setText(R.string.timeplan);
+
                     }
                     else {
                         Objects.requireNonNull(roomUrl).setVisibility(View.GONE);
+                        Objects.requireNonNull(titleRoomUrl).setVisibility(View.GONE);
                     }
                     bottomSheetDialog.show();
                 }

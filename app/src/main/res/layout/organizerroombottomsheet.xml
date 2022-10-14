@@ -55,6 +55,14 @@
         android:background="?android:attr/selectableItemBackground"
         android:padding="8dp">
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/organizerRoomUrlTitle"
+            android:textIsSelectable="true"
+            android:layout_gravity="top"
+            android:padding="8dp"/>
+
 
         <TextView
             android:layout_width="wrap_content"
