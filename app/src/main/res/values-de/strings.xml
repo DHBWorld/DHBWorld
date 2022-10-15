@@ -279,4 +279,5 @@ E-Mail-Adresse: <p><a href="mailto:zaeske.christian@gmail.com">zaeske.christian@
     <string name="backup_encrypted">Das Backup ist verschlüsselt. Bitte gebe das Passwort ein.</string>
     <string name="export_backup_helptext">Das Backup enthält alle Einstellungen der App, den Kalender, Persönliche Infos und optional die Dualis Login-Daten. Das Backup kann zusätzlich verschlüsselt werden.</string>
     <string name="export_dualis">Dualis Login exportieren</string>
+    <string name="url">URL:</string>
 </resources>

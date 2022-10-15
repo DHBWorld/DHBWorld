@@ -111,7 +111,7 @@ public class OrganizerCourseAdapter extends RecyclerView.Adapter<OrganizerCourse
                             TextView urlText = bottomSheetDialog.findViewById(R.id.organizerCourseUrlText);
                             TextView titleCourseUrl = bottomSheetDialog.findViewById(R.id.organizerCourseUrlTitle);
                             if(course.url != null && urlText != null && titleCourseUrl != null) {
-                                titleCourseUrl.setText("URL:");
+                                titleCourseUrl.setText(R.string.url);
                                 (urlText).setText(Html.fromHtml(course.url,0));
                                 urlText.setMovementMethod(LinkMovementMethod.getInstance());
                             }

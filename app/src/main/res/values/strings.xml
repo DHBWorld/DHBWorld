@@ -280,4 +280,5 @@ E-Mail-Adresse: <p><a href="mailto:zaeske.christian@gmail.com">zaeske.christian@
     <string name="backup_encrypted">The backup is encrypted. Please type in the password.</string>
     <string name="export_backup_helptext">The Backup contains all settings, the calendar, personal information and optionally the dualis login. Additionally the backup can be encrypted.</string>
     <string name="export_dualis">Export dualis login</string>
+    <string name="url">URL:</string>
 </resources>
