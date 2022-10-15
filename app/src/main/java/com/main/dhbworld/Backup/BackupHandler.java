@@ -130,9 +130,10 @@ public class BackupHandler {
             cancelButton.setOnClickListener(view -> {
                 try {
                     DocumentsContract.deleteDocument(activity.getApplicationContext().getContentResolver(), data.getData());
-                    alertDialog.dismiss();
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
+                } finally {
+                    alertDialog.dismiss();
                 }
             });
 
