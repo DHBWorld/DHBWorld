@@ -109,12 +109,17 @@ public class OrganizerCourseAdapter extends RecyclerView.Adapter<OrganizerCourse
                                 (roomView).setVisibility(View.GONE);
                             }
                             TextView urlText = bottomSheetDialog.findViewById(R.id.organizerCourseUrlText);
-                            if(course.url != null && urlText != null) {
-                                (urlText).setText("URL: " + Html.fromHtml(course.url,0));
+                            TextView titleCourseUrl = bottomSheetDialog.findViewById(R.id.organizerCourseUrlTitle);
+                            if(course.url != null && urlText != null && titleCourseUrl != null) {
+                                titleCourseUrl.setText("URL:");
+                                (urlText).setText(Html.fromHtml(course.url,0));
                                 urlText.setMovementMethod(LinkMovementMethod.getInstance());
                             }
                             else{
-                                (roomView).setVisibility(View.GONE);
+                                assert urlText != null;
+                                (urlText).setVisibility(View.GONE);
+                                assert titleCourseUrl != null;
+                                (titleCourseUrl).setVisibility(View.GONE);
                             }
                             TextView directorView = bottomSheetDialog.findViewById(R.id.organizerCourseDirectorText);
                             if(course.courseDirector != null && directorView != null) {
