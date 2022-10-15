@@ -2,7 +2,6 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-
     android:orientation="vertical">
 
         <androidx.appcompat.widget.LinearLayoutCompat
@@ -16,21 +15,21 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Das Backup enthält alle Einstellungen der App, den Kalender, Persönliche Infos und optional die Dualis Login-Daten. Das Backup kann zusätzlich verschlüsselt werden."
+                android:text="@string/export_backup_helptext"
                 android:layout_marginBottom="8dp"/>
 
             <CheckBox
                 android:id="@+id/dualis_export_checkbox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Dualis Login exportieren" />
+                android:text="@string/export_dualis" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/backupPasswordLayout"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="(Optional) Passwort">
+                android:hint="@string/optional_password">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/backupPassword"
@@ -44,7 +43,7 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="(Optional) Passwort wiederholen">
+                android:hint="@string/optional_repeat_password">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/backupPasswordRepeat"

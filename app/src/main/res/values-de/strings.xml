@@ -268,4 +268,14 @@ E-Mail-Adresse: <p><a href="mailto:zaeske.christian@gmail.com">zaeske.christian@
     <string name="repeat_password">Passwort wiederholen</string>
     <string name="optional_password">(Optional) Passwort</string>
     <string name="optional_repeat_password">(Optional) Passwort wiederholen</string>
+    <string name="password_reqired">Passwort muss gesetzt sein</string>
+    <string name="passwords_dont_match">Passwörter stimmen nicht überein</string>
+    <string name="import_">Importieren</string>
+    <string name="password_or_file_wrong">Passwort oder Datei falsch</string>
+    <string name="needs_restart">Neustart erforderlich</string>
+    <string name="needs_restart_helptext">Das Backup wurde erfolgreich wiederhergestellt. Die App wird neu gestartet, um die Änderungen anzuwenden.</string>
+    <string name="ok">OK</string>
+    <string name="backup_encrypted">Das Backup ist verschlüsselt. Bitte gebe das Passwort ein.</string>
+    <string name="export_backup_helptext">Das Backup enthält alle Einstellungen der App, den Kalender, Persönliche Infos und optional die Dualis Login-Daten. Das Backup kann zusätzlich verschlüsselt werden.</string>
+    <string name="export_dualis">Dualis Login exportieren</string>
 </resources>
