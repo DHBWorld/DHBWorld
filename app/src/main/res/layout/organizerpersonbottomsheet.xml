@@ -20,7 +20,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/organizerPersonNameText"
             android:text="Prof. Dr. J. Freudenmann"
-            android:textSize="11pt"
+            android:textSize="24sp"
             android:layout_gravity="center_vertical"
             android:padding="8dp"/>
 
@@ -41,7 +41,7 @@
             android:id="@+id/organizerPersonStudyText"
             android:text="Gesundheitswissenschaften"
             android:layout_gravity="center_vertical"
-            android:textSize="9pt"
+            android:textSize="20sp"
             android:padding="8dp"/>
     </LinearLayout>
 
