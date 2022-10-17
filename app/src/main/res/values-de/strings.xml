@@ -258,4 +258,5 @@ E-Mail-Adresse: <p><a href="mailto:zaeske.christian@gmail.com">zaeske.christian@
     <string name="main_entry">Haupteingang</string>
     <string name="left">Links</string>
     <string name="right">Rechts</string>
+    <string name="feedback">Feedback</string>
 </resources>

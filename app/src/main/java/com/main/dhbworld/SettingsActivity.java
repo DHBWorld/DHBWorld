@@ -120,6 +120,7 @@ public class SettingsActivity extends AppCompatActivity {
             Preference information = findPreference("informations");
             Preference licenses = findPreference("licenses");
             Preference privacy = findPreference("dataprivacy");
+            Preference feedback = findPreference("feedback");
 
             SwitchPreference mensaPreference = findPreference("notifications_mensa");
             SwitchPreference coffeePreference = findPreference("notifications_coffee");
@@ -137,6 +138,7 @@ public class SettingsActivity extends AppCompatActivity {
             Objects.requireNonNull(information).setOnPreferenceClickListener(this);
             Objects.requireNonNull(licenses).setOnPreferenceClickListener(this);
             Objects.requireNonNull(privacy).setOnPreferenceClickListener(this);
+            Objects.requireNonNull(feedback).setOnPreferenceClickListener(this);
 
             Objects.requireNonNull(mensaPreference).setOnPreferenceChangeListener(this);
             Objects.requireNonNull(coffeePreference).setOnPreferenceChangeListener(this);
@@ -241,6 +243,10 @@ public class SettingsActivity extends AppCompatActivity {
                 case "dataprivacy":
                     Intent DataPrivacyIntent = new Intent(context, DataPrivacyActivity.class);
                     startActivity(DataPrivacyIntent);
+                    return true;
+                case "feedback":
+                    Intent feedbackIntent = new Intent(context, FeedbackActivity.class);
+                    startActivity(feedbackIntent);
                     return true;
                 case "calendarURL":
                     MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(context);
