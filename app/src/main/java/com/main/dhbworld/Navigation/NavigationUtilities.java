@@ -1,9 +1,12 @@
 package com.main.dhbworld.Navigation;
 
 import android.app.Activity;
+import android.app.ActivityManager;
+import android.content.Context;
 import android.content.Intent;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.view.GravityCompat;
@@ -22,6 +25,8 @@ import com.main.dhbworld.Organizer.OrganizerActivity;
 import com.main.dhbworld.R;
 import com.main.dhbworld.SettingsActivity;
 import com.main.dhbworld.UserInteraction;
+
+import java.util.List;
 
 public class NavigationUtilities {
     public static void setUpNavigation(Activity activity, int checkedItem) {
@@ -87,6 +92,18 @@ public class NavigationUtilities {
         activity.startActivity(intent);
         if (!(activity instanceof DashboardActivity)) {
             activity.finish();
+        }
+        ActivityManager activityManager = (ActivityManager)activity.getSystemService(Context.ACTIVITY_SERVICE);
+        List<ActivityManager.RunningTaskInfo> tasks = activityManager.getRunningTasks(Integer.MAX_VALUE);
+        for (ActivityManager.RunningTaskInfo info : tasks) {
+            if (info.toString().contains("OrganizerActivity")) {
+                Intent dashboardIntent = new Intent(activity, DashboardActivity.class);
+                dashboardIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                activity.startActivity(dashboardIntent);
+                Intent goalIntent = new Intent(activity, cls);
+                goalIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                activity.startActivity(goalIntent);
+            }
         }
     }
 }

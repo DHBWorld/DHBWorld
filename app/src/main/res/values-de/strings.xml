@@ -256,6 +256,8 @@ E-Mail-Adresse: <p><a href="mailto:zaeske.christian@gmail.com">zaeske.christian@
     <string name="entry">Eingang</string>
     <string name="show_route">Weg anzeigen</string>
     <string name="main_entry">Haupteingang</string>
-    <string name="left">Links</string>
-    <string name="right">Rechts</string>
+    <string name="left">Eingang Süd</string>
+    <string name="right">Eingang Nord</string>
+    <string name="no_map_available">Keine Karte verfügbar</string>
+    <string name="find_room">Raum finden</string>
 </resources>

@@ -72,7 +72,7 @@ public class OrganizerOverallFragment extends Fragment{
             parseThread.join();
             courseAdapter = new OrganizerCourseAdapter(getContext(), courses);
             personAdapter = new OrganizerPersonAdapter(getContext(), people);
-            roomAdapter = new OrganizerRoomAdapter(rooms);
+            roomAdapter = new OrganizerRoomAdapter(getActivity(), rooms);
             switch(position) {
                 case 0:
                     recyclerView.setAdapter(courseAdapter);
