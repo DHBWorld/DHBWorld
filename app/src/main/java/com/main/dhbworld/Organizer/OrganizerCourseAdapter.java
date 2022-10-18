@@ -79,12 +79,12 @@ public class OrganizerCourseAdapter extends RecyclerView.Adapter<OrganizerCourse
                 contact.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        String fbUrl="";
                         if (task.isSuccessful()){
                             DocumentSnapshot doc= task.getResult();
                             course.setCourseDirector(doc.getString("CourseDirector"));
-                            if (course.url==null){
-                                course.setUrl(doc.getString("URL"));
-                            }
+                            fbUrl=doc.getString("URL");
+                            course.setUrl(fbUrl);
                         }
                         try {
                             TextView entryView = bottomSheetDialog.findViewById(R.id.organizerCourseEntryText);
