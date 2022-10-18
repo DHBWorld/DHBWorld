@@ -84,7 +84,9 @@ public class OrganizerCourseAdapter extends RecyclerView.Adapter<OrganizerCourse
                             DocumentSnapshot doc= task.getResult();
                             course.setCourseDirector(doc.getString("CourseDirector"));
                             fbUrl=doc.getString("URL");
-                            course.setUrl(fbUrl);
+                            if ((fbUrl!=null) && (!fbUrl.equals(""))){
+                                course.setUrl(fbUrl);
+                            }
                         }
                         try {
                             TextView entryView = bottomSheetDialog.findViewById(R.id.organizerCourseEntryText);
