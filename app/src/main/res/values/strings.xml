@@ -282,5 +282,6 @@ E-Mail-Adresse: <p><a href="mailto:zaeske.christian@gmail.com">zaeske.christian@
     <string name="left">South entrance</string>
     <string name="right">North entrance</string>
     <string name="no_map_available">No map available</string>
-    <string name="find_room">Find room</string>
+    <string name="find_room">Show on map</string>
+    <string name="network_error">Network Error! Couldn\'t fetch data from Server.</string>
 </resources>

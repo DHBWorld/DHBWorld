@@ -2,13 +2,10 @@ package com.main.dhbworld.Organizer;
 
 import android.app.SearchManager;
 import android.content.Context;
-import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.ListView;
 import android.widget.SearchView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -24,11 +21,11 @@ import com.main.dhbworld.Navigation.NavigationUtilities;
 import com.main.dhbworld.R;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 
 public class OrganizerActivity extends AppCompatActivity {
-    ListView listView;
     ViewPager2 viewPager;
     OrganizerFragmentAdapter organizerFragmentAdapter;
     MaterialToolbar toolbar;
@@ -39,7 +36,37 @@ public class OrganizerActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ArrayList<Course> courses = new ArrayList<>();
+        for (int i=0; i<10; i++) {
+            Course course = new Course();
+            course.setName("██████████████");
+            course.setStudy("████████████████████████████");
+            courses.add(course);
+        }
+
+        ArrayList<Person> persons = new ArrayList<>();
+        for (int i=0; i<10; i++) {
+            Person person = new Person();
+            person.setName("██████████████");
+            person.setStudy("████████████████████████████");
+            persons.add(person);
+        }
+
+        ArrayList<Room> rooms = new ArrayList<>();
+        for (int i=0; i<10; i++) {
+            Room room = new Room();
+            room.setName("██████████████");
+            room.setRoomType("████████████████████████████");
+            rooms.add(room);
+        }
+
+        entryMap = new HashMap<>();
+        entryMap.put("courses", courses);
+        entryMap.put("people", persons);
+        entryMap.put("rooms", rooms);
+
         intitalSetup();
+        createView();
     }
 
     private void intitalSetup(){
@@ -55,27 +82,19 @@ public class OrganizerActivity extends AppCompatActivity {
         @Override
         public void run() {
             OrganizerParser organizerParser = new OrganizerParser();
-            entryMap = organizerParser.getAllElements(OrganizerActivity.this);
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    checkNetwork();
-                    searchConfigViewPager();
+            Map<String, ArrayList> entryMapParser = organizerParser.getAllElements(OrganizerActivity.this);
+            entryMap.clear();
+            entryMap.putAll(entryMapParser);
+
+            runOnUiThread(() -> {
+                if (!entryMap.isEmpty()) {
+                    organizerFragmentAdapter.updateData(entryMapParser);
+                } else {
+                    Snackbar.make(OrganizerActivity.this.findViewById(android.R.id.content), R.string.network_error, BaseTransientBottomBar.LENGTH_LONG).show();
                 }
+                searchConfigViewPager();
             });
         }});
-
-    private void checkNetwork(){
-        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        try {
-            cm.getActiveNetworkInfo().isConnected();
-                createView();
-        }
-        catch (Exception e){
-            Snackbar.make(this.findViewById(android.R.id.content), "Network Error! Couldn't fetch data from Server.", BaseTransientBottomBar.LENGTH_LONG).show();
-            e.printStackTrace();
-        }
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -128,7 +147,6 @@ public class OrganizerActivity extends AppCompatActivity {
     public void createView() {
         TabLayout tabLayout = findViewById(R.id.organizerTabLayout);
         viewPager = findViewById(R.id.organizerViewPager);
-        listView = findViewById(R.id.org_recylclerview);
         organizerFragmentAdapter = new OrganizerFragmentAdapter(this, entryMap);
         viewPager.setAdapter(organizerFragmentAdapter);
         viewPager.setOffscreenPageLimit(2);

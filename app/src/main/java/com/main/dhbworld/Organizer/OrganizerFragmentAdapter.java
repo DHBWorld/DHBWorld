@@ -52,4 +52,10 @@ public class OrganizerFragmentAdapter extends FragmentStateAdapter {
         personFragment.setQuery(query);
         roomFragment.setQuery(query);
     }
+
+    public void updateData(Map<String, ArrayList> map) {
+        courseFragment.updateData(map);
+        personFragment.updateData(map);
+        roomFragment.updateData(map);
+    }
 }
