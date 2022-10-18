@@ -7,6 +7,7 @@ import android.app.PendingIntent;
 import android.app.TaskStackBuilder;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -15,6 +16,7 @@ import android.os.Looper;
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
+import androidx.preference.PreferenceManager;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.MessagingAnalytics;
@@ -45,14 +47,26 @@ public class UserInteractionMessagingService extends FirebaseMessagingService {
                     }
                     int problem = Integer.parseInt(remoteMessage.getData().get("problem"));
                     String title = "";
+
+                    SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+
                     switch (category) {
                         case Utilities.CATEGORY_CAFETERIA:
+                            if (!sharedPreferences.getBoolean("notifications_mensa", true)) {
+                                return;
+                            }
                             title = getResources().getString(R.string.canteen);
                             break;
                         case Utilities.CATEGORY_COFFEE:
+                            if (!sharedPreferences.getBoolean("notifications_coffee", true)) {
+                                return;
+                            }
                             title = getResources().getString(R.string.coffee_machine);
                             break;
                         case Utilities.CATEGORY_PRINTER:
+                            if (!sharedPreferences.getBoolean("notifications_printer", true)) {
+                                return;
+                            }
                             title = getResources().getString(R.string.Printer);
                             break;
                     }
