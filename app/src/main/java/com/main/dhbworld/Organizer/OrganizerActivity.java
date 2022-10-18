@@ -60,7 +60,7 @@ public class OrganizerActivity extends AppCompatActivity {
                 @Override
                 public void run() {
                     checkNetwork();
-                    addSearchBar(menu);
+                    searchConfigViewPager();
                 }
             });
         }});
@@ -82,6 +82,7 @@ public class OrganizerActivity extends AppCompatActivity {
         this.menu = menu;
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.organizer_top_app_bar, menu);
+        addSearchBar(menu);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -106,7 +107,6 @@ public class OrganizerActivity extends AppCompatActivity {
             searchViewModel.setQuery("");
             return false;
         });
-        searchConfigViewPager();
     }
 
     private void searchConfigViewPager(){
