@@ -35,18 +35,25 @@ public class OrganizerOverallFragment extends Fragment{
     CourseDataHandler courseDataHandler;
     PersonDataHandler personDataHandler;
     RoomsDataHandler roomsDataHandler;
+    Map<String, ArrayList> entryMap;
 
 
 
-    public OrganizerOverallFragment(int position, String currentQuery) {
+    public OrganizerOverallFragment(int position, String currentQuery, Map<String, ArrayList> entryMap) {
         this.position = position;
         this.currentQuery = currentQuery;
+        this.entryMap = entryMap;
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        parseThread.start();
+        getElements();
+    }
+    private void getElements(){
+        courses = entryMap.get("courses");
+        people = entryMap.get("people");
+        rooms = entryMap.get("rooms");
     }
 
     @Override
@@ -68,8 +75,7 @@ public class OrganizerOverallFragment extends Fragment{
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),layoutManager.getOrientation());
         recyclerView.addItemDecoration(dividerItemDecoration);
 
-        try {
-            parseThread.join();
+
             courseAdapter = new OrganizerCourseAdapter(getContext(), courses);
             personAdapter = new OrganizerPersonAdapter(getContext(), people);
             roomAdapter = new OrganizerRoomAdapter(getActivity(), rooms);
@@ -86,9 +92,6 @@ public class OrganizerOverallFragment extends Fragment{
                 default:
                     break;
             }
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
     }
 
     @Nullable
@@ -98,23 +101,9 @@ public class OrganizerOverallFragment extends Fragment{
         return view;
     }
 
-    Thread parseThread = new Thread(new Runnable() {
-        @Override
-        public void run() {
-            OrganizerParser organizerParser = new OrganizerParser();
-            Map<String, ArrayList> entryMap = organizerParser.getAllElements(getContext());
-
-            courses = entryMap.get("courses");
-            courseDataHandler = new CourseDataHandler(courses);
-            people = entryMap.get("people");
-            personDataHandler = new PersonDataHandler(people);
-            rooms = entryMap.get("rooms");
-            roomsDataHandler = new RoomsDataHandler(rooms);
-        }});
 
     public void setQuery(String query){
         currentQuery = query;
-
         switch(position) {
             case 0:
                 courses.clear();

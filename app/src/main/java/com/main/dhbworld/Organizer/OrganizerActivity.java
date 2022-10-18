@@ -23,6 +23,9 @@ import com.google.android.material.tabs.TabLayoutMediator;
 import com.main.dhbworld.Navigation.NavigationUtilities;
 import com.main.dhbworld.R;
 
+import java.util.ArrayList;
+import java.util.Map;
+
 
 public class OrganizerActivity extends AppCompatActivity {
     ListView listView;
@@ -30,41 +33,54 @@ public class OrganizerActivity extends AppCompatActivity {
     OrganizerFragmentAdapter organizerFragmentAdapter;
     MaterialToolbar toolbar;
     SearchViewModel searchViewModel;
+    Map<String, ArrayList> entryMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        try {
-            super.onCreate(savedInstanceState);
-            setContentView(R.layout.organizer_layout);
-            toolbar = findViewById(R.id.topAppBar);
-            setSupportActionBar(toolbar);
-            NavigationUtilities.setUpNavigation(this, R.id.organizer);
-            if(isNetworkConnected()){
-                createView();
-            }
-            else {
-                displayError();
-            }
-        }
-        catch (Exception e){
-            e.printStackTrace();
-        }
-
+        super.onCreate(savedInstanceState);
+        intitalSetup();
     }
 
-    private boolean isNetworkConnected() {
-        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+    private void intitalSetup(){
+        setContentView(R.layout.organizer_layout);
+        toolbar = findViewById(R.id.topAppBar);
+        setSupportActionBar(toolbar);
+        NavigationUtilities.setUpNavigation(this, R.id.organizer);
+        parseThread.start();
+    }
 
-        return cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnected();
+
+    Thread parseThread = new Thread(new Runnable() {
+        @Override
+        public void run() {
+            OrganizerParser organizerParser = new OrganizerParser();
+            entryMap = organizerParser.getAllElements(OrganizerActivity.this);
+            runOnUiThread(() -> checkNetwork());
+        }});
+
+    private void checkNetwork(){
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        try {
+            cm.getActiveNetworkInfo().isConnected();
+                createView();
+        }
+        catch (Exception e){
+            Snackbar.make(this.findViewById(android.R.id.content), "Network Error! Couldn't fetch data from Server.", BaseTransientBottomBar.LENGTH_LONG).show();
+            e.printStackTrace();
+        }
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.organizer_top_app_bar, menu);
+        addSearchBar(menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    private void addSearchBar(Menu menu){
         searchViewModel = new ViewModelProvider(this).get(SearchViewModel.class);
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-
         SearchView searchView = (SearchView) menu.findItem(R.id.organizerSearchIcon).getActionView();
         searchView.setQueryHint("Search in all Tabs");
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
@@ -83,30 +99,30 @@ public class OrganizerActivity extends AppCompatActivity {
             searchViewModel.setQuery("");
             return false;
         });
+        searchConfigViewPager();
+    }
+
+    private void searchConfigViewPager(){
         // When viewPager changes tab, searchViewModel clears current Query.
         viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
                 super.onPageSelected(position);
                 searchViewModel.setQuery("");
-
                 //force close keyboard
-                View view = getCurrentFocus();
-                if (view != null) {
+                if (getCurrentFocus() != null) {
                     InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                    imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
                 }
             }
         });
-
-       return super.onCreateOptionsMenu(menu);
     }
 
     public void createView() {
         TabLayout tabLayout = findViewById(R.id.organizerTabLayout);
         viewPager = findViewById(R.id.organizerViewPager);
         listView = findViewById(R.id.org_recylclerview);
-        organizerFragmentAdapter = new OrganizerFragmentAdapter(this);
+        organizerFragmentAdapter = new OrganizerFragmentAdapter(this, entryMap);
         viewPager.setAdapter(organizerFragmentAdapter);
         viewPager.setOffscreenPageLimit(2);
 
@@ -134,17 +150,11 @@ public class OrganizerActivity extends AppCompatActivity {
     @Override
     public void onBackPressed(){
         if (viewPager.getCurrentItem() == 0) {
-            // If the user is currently looking at the first step, allow the system to handle the
-            // Back button. This calls finish() on this activity and pops the back stack.
             super.onBackPressed();
         } else {
             // Otherwise, select the previous step.
             viewPager.setCurrentItem(viewPager.getCurrentItem() - 1);
         }
-    }
-
-    public void displayError(){
-        Snackbar.make(this.findViewById(android.R.id.content), "Network Error! Couldn't fetch data from Server.", BaseTransientBottomBar.LENGTH_LONG).show();
     }
 }
 
