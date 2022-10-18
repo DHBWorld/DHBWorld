@@ -52,8 +52,11 @@ public class OrganizerOverallFragment extends Fragment{
     }
     private void getElements(){
         courses = entryMap.get("courses");
+        courseDataHandler = new CourseDataHandler(courses);
         people = entryMap.get("people");
+        personDataHandler = new PersonDataHandler(people);
         rooms = entryMap.get("rooms");
+        roomsDataHandler = new RoomsDataHandler(rooms);
     }
 
     @Override

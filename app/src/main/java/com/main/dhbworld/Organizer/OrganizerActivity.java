@@ -34,6 +34,7 @@ public class OrganizerActivity extends AppCompatActivity {
     MaterialToolbar toolbar;
     SearchViewModel searchViewModel;
     Map<String, ArrayList> entryMap;
+    Menu menu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +56,13 @@ public class OrganizerActivity extends AppCompatActivity {
         public void run() {
             OrganizerParser organizerParser = new OrganizerParser();
             entryMap = organizerParser.getAllElements(OrganizerActivity.this);
-            runOnUiThread(() -> checkNetwork());
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    checkNetwork();
+                    addSearchBar(menu);
+                }
+            });
         }});
 
     private void checkNetwork(){
@@ -72,9 +79,9 @@ public class OrganizerActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        this.menu = menu;
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.organizer_top_app_bar, menu);
-        addSearchBar(menu);
         return super.onCreateOptionsMenu(menu);
     }
 
