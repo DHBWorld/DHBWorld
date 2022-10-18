@@ -36,13 +36,21 @@
 
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:id="@+id/organizerRoomTypeText"
             android:text="Hörsaal"
             android:layout_gravity="center_vertical"
             android:textSize="20sp"
+            android:layout_weight="1"
             android:padding="8dp"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/find_room_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:text="@string/find_room" />
     </LinearLayout>
 
 

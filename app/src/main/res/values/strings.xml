@@ -257,8 +257,6 @@ E-Mail-Adresse: <p><a href="mailto:zaeske.christian@gmail.com">zaeske.christian@
     <string name="entry">Entrance</string>
     <string name="show_route">Show route</string>
     <string name="main_entry">Main entrance</string>
-    <string name="left">Left</string>
-    <string name="right">Right</string>
     <string name="timeplan">Time plan:</string>
     <string name="export_backup">Export backup</string>
     <string name="restore_backup">Restore backup</string>
@@ -281,4 +279,8 @@ E-Mail-Adresse: <p><a href="mailto:zaeske.christian@gmail.com">zaeske.christian@
     <string name="export_backup_helptext">The Backup contains all settings, the calendar, personal information and optionally the dualis login. Additionally the backup can be encrypted.</string>
     <string name="export_dualis">Export dualis login</string>
     <string name="url">URL:</string>
+    <string name="left">South entrance</string>
+    <string name="right">North entrance</string>
+    <string name="no_map_available">No map available</string>
+    <string name="find_room">Find room</string>
 </resources>

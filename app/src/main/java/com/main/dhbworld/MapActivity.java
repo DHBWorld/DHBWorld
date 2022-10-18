@@ -9,6 +9,8 @@ import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.material.snackbar.BaseTransientBottomBar;
+import com.google.android.material.snackbar.Snackbar;
 import com.jsibbold.zoomage.ZoomageView;
 import com.main.dhbworld.Navigation.NavigationUtilities;
 
@@ -53,8 +55,22 @@ public class MapActivity extends AppCompatActivity {
             String selectedEntry = entryDropdown.getText().toString();
 
             Drawable map = getImage(selectedRoom, selectedEntry, entryItems);
-            mapImageView.setImageDrawable(map);
+            if (map != null) {
+                mapImageView.setImageDrawable(map);
+            } else {
+                Snackbar.make(MapActivity.this.findViewById(android.R.id.content),
+                                getResources().getString(R.string.no_map_available),
+                                BaseTransientBottomBar.LENGTH_LONG)
+                        .show();
+            }
+
         });
+
+        if (getIntent() != null && getIntent().hasExtra("room")) {
+            String roomname = getIntent().getStringExtra("room");
+            roomDropdown.setText(roomname);
+            showMapButton.callOnClick();
+        }
     }
 
     private void hideKeyboard() {

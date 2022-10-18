@@ -1,22 +1,30 @@
 package com.main.dhbworld.Organizer;
+
 import android.annotation.SuppressLint;
-import android.text.Html;
-import android.text.method.LinkMovementMethod;
+import android.app.Activity;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.*;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.main.dhbworld.MapActivity;
 import com.main.dhbworld.R;
+
 import java.util.ArrayList;
 import java.util.Objects;
 
 public class OrganizerRoomAdapter extends RecyclerView.Adapter<OrganizerRoomAdapter.ViewHolder>{
     ArrayList<Room> rooms;
+    Activity activity;
 
-    public OrganizerRoomAdapter(ArrayList<Room> rooms) {
+    public OrganizerRoomAdapter(Activity activity, ArrayList<Room> rooms) {
+        this.activity = activity;
         this.rooms = rooms;
     }
 
@@ -77,6 +85,15 @@ public class OrganizerRoomAdapter extends RecyclerView.Adapter<OrganizerRoomAdap
                     else {
                         Objects.requireNonNull(roomUrl).setVisibility(View.GONE);
                         Objects.requireNonNull(titleRoomUrl).setVisibility(View.GONE);
+                    }
+
+                    Button button = bottomSheetDialog.findViewById(R.id.find_room_button);
+                    if (button != null) {
+                        button.setOnClickListener(view -> {
+                            Intent intent = new Intent(activity, MapActivity.class);
+                            intent.putExtra("room", room.name);
+                            activity.startActivity(intent);
+                        });
                     }
                     bottomSheetDialog.show();
                 }
