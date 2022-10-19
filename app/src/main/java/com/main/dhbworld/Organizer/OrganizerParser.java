@@ -14,19 +14,19 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class OrganizerParser {
-    static Course course;
-    static Person person;
-    static Room room;
-    static ArrayList<Course> courses = new ArrayList<>();
-    static ArrayList<Person> people = new ArrayList<>();
-    static ArrayList<Room> rooms = new ArrayList<>();
-    static Map<String, ArrayList> entryMap = new HashMap<>();
-    static String text;
-    static XmlPullParser parser;
+    Course course;
+    Person person;
+    Room room;
+    ArrayList<Course> courses = new ArrayList<>();
+    ArrayList<Person> people = new ArrayList<>();
+    ArrayList<Room> rooms = new ArrayList<>();
+    Map<String, ArrayList> entryMap = new HashMap<>();
+    String text;
+    XmlPullParser parser;
 
-    static ArrayList<String> courseStrings = new ArrayList<>();
-    static ArrayList<String> personStrings = new ArrayList<>();
-    static ArrayList<String> roomStrings = new ArrayList<>();
+    ArrayList<String> courseStrings = new ArrayList<>();
+    ArrayList<String> personStrings = new ArrayList<>();
+    ArrayList<String> roomStrings = new ArrayList<>();
 
     public Map<String, ArrayList> getAllElements(Context context){
         try {

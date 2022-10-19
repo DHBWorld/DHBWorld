@@ -2,13 +2,12 @@ package com.main.dhbworld.Organizer;
 
 import android.app.SearchManager;
 import android.content.Context;
-import android.net.ConnectivityManager;
+import android.content.Intent;
+import android.net.Network;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.ListView;
 import android.widget.SearchView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,51 +19,86 @@ import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
+import com.main.dhbworld.Calendar.CalendarActivity;
+import com.main.dhbworld.DashboardActivity;
 import com.main.dhbworld.Navigation.NavigationUtilities;
+import com.main.dhbworld.NetworkAvailability;
 import com.main.dhbworld.R;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class OrganizerActivity extends AppCompatActivity {
-    ListView listView;
     ViewPager2 viewPager;
     OrganizerFragmentAdapter organizerFragmentAdapter;
-    MaterialToolbar toolbar;
     SearchViewModel searchViewModel;
+    Map<String, ArrayList> entryMap;
+    Menu menu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        try {
-            super.onCreate(savedInstanceState);
-            setContentView(R.layout.organizer_layout);
-            toolbar = findViewById(R.id.topAppBar);
-            setSupportActionBar(toolbar);
-            NavigationUtilities.setUpNavigation(this, R.id.organizer);
-            if(isNetworkConnected()){
-                createView();
-            }
-            else {
-                displayError();
-            }
-        }
-        catch (Exception e){
-            e.printStackTrace();
-        }
+        super.onCreate(savedInstanceState);
+        if (NetworkAvailability.check(OrganizerActivity.this)) {
+            ArrayList<Course> courses = new ArrayList<>();
+            ArrayList<Person> persons = new ArrayList<>();
+            ArrayList<Room> rooms = new ArrayList<>();
+            createMockData(courses, persons, rooms);
 
+            entryMap = new HashMap<>();
+            entryMap.put("courses", courses);
+            entryMap.put("people", persons);
+            entryMap.put("rooms", rooms);
+
+            intitalSetup();
+            createView();
+        } else {
+            Snackbar.make(this.findViewById(android.R.id.content), getResources().getString(R.string.problemsWithInternetConnection), BaseTransientBottomBar.LENGTH_LONG).show();
+            Intent intent = new Intent(OrganizerActivity.this, DashboardActivity.class);
+            startActivity(intent);
+        }
     }
 
-    private boolean isNetworkConnected() {
-        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-
-        return cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnected();
+    private void intitalSetup(){
+        setContentView(R.layout.organizer_layout);
+        MaterialToolbar toolbar = findViewById(R.id.topAppBar);
+        setSupportActionBar(toolbar);
+        NavigationUtilities.setUpNavigation(this, R.id.organizer);
+        parseThread.start();
     }
+
+    Thread parseThread = new Thread(new Runnable() {
+        @Override
+        public void run() {
+            OrganizerParser organizerParser = new OrganizerParser();
+            Map<String, ArrayList> entryMapParser = organizerParser.getAllElements(OrganizerActivity.this);
+            entryMap.clear();
+            entryMap.putAll(entryMapParser);
+
+            runOnUiThread(() -> {
+                if (!entryMap.isEmpty()) {
+                    organizerFragmentAdapter.updateData(entryMapParser);
+                } else {
+                    Snackbar.make(OrganizerActivity.this.findViewById(android.R.id.content), R.string.network_error, BaseTransientBottomBar.LENGTH_LONG).show();
+                }
+                searchConfigViewPager();
+            });
+        }});
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        this.menu = menu;
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.organizer_top_app_bar, menu);
+        addSearchBar(menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    private void addSearchBar(Menu menu){
         searchViewModel = new ViewModelProvider(this).get(SearchViewModel.class);
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-
         SearchView searchView = (SearchView) menu.findItem(R.id.organizerSearchIcon).getActionView();
         searchView.setQueryHint("Search in all Tabs");
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
@@ -83,30 +117,28 @@ public class OrganizerActivity extends AppCompatActivity {
             searchViewModel.setQuery("");
             return false;
         });
+    }
+
+    private void searchConfigViewPager(){
         // When viewPager changes tab, searchViewModel clears current Query.
         viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
                 super.onPageSelected(position);
                 searchViewModel.setQuery("");
-
                 //force close keyboard
-                View view = getCurrentFocus();
-                if (view != null) {
+                if (getCurrentFocus() != null) {
                     InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                    imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
                 }
             }
         });
-
-       return super.onCreateOptionsMenu(menu);
     }
 
     public void createView() {
         TabLayout tabLayout = findViewById(R.id.organizerTabLayout);
         viewPager = findViewById(R.id.organizerViewPager);
-        listView = findViewById(R.id.org_recylclerview);
-        organizerFragmentAdapter = new OrganizerFragmentAdapter(this);
+        organizerFragmentAdapter = new OrganizerFragmentAdapter(this, entryMap);
         viewPager.setAdapter(organizerFragmentAdapter);
         viewPager.setOffscreenPageLimit(2);
 
@@ -131,20 +163,37 @@ public class OrganizerActivity extends AppCompatActivity {
         tabLayoutMediator.attach();
     }
 
+    private void createMockData(ArrayList<Course> courses,ArrayList<Person> persons,ArrayList<Room> rooms){
+        String mock1 = "██████████████";
+        String mock2 = "████████████████████████████";
+        for (int i=0; i<10; i++) {
+            Course course = new Course();
+            Room room = new Room();
+            Person person = new Person();
+
+            room.setName(mock1);
+            room.setRoomType(mock2);
+
+            course.setName(mock1);
+            course.setStudy(mock2);
+
+            person.setName(mock1);
+            person.setStudy(mock2);
+
+            rooms.add(room);
+            persons.add(person);
+            courses.add(course);
+        }
+    }
+
     @Override
     public void onBackPressed(){
         if (viewPager.getCurrentItem() == 0) {
-            // If the user is currently looking at the first step, allow the system to handle the
-            // Back button. This calls finish() on this activity and pops the back stack.
             super.onBackPressed();
         } else {
             // Otherwise, select the previous step.
             viewPager.setCurrentItem(viewPager.getCurrentItem() - 1);
         }
-    }
-
-    public void displayError(){
-        Snackbar.make(this.findViewById(android.R.id.content), "Network Error! Couldn't fetch data from Server.", BaseTransientBottomBar.LENGTH_LONG).show();
     }
 }
 

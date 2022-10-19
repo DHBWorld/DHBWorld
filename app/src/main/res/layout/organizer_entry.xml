@@ -2,24 +2,51 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="70dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/info_box1"
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:id="@+id/shimmer_view_container"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_weight="2"
-        android:gravity="start"
-        android:text="TINF20B4"
-        android:textStyle="bold"
-        android:textSize="18sp" />
-    <TextView
-        android:id="@+id/info_box2"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_weight="3"
-        android:text="Angewandte Hebammenwissenschaften"
-        android:gravity="end"
-        android:textSize="16sp" />
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.5"
+        app:shimmer_duration="1000">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/info_box1"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:gravity="start"
+                android:text="TINF20B4"
+                android:background="?android:attr/textColor"
+                android:textColor="@android:color/transparent"
+                android:textStyle="bold"
+                android:textSize="18sp"
+                android:layout_marginBottom="4dp"/>
+
+            <TextView
+                android:id="@+id/info_box2"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="3"
+                android:text="Angewandte Hebammenwissenschaft"
+                android:background="?android:attr/textColor"
+                android:textColor="@android:color/transparent"
+                android:gravity="end"
+                android:textSize="16sp" />
+
+        </LinearLayout>
+
+    </com.facebook.shimmer.ShimmerFrameLayout>
 
 </LinearLayout>

@@ -1,14 +1,20 @@
 package com.main.dhbworld.Organizer;
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.res.Resources;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.*;
+
+import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.main.dhbworld.R;
 import java.util.ArrayList;
@@ -36,8 +42,19 @@ public class OrganizerPersonAdapter extends RecyclerView.Adapter<OrganizerPerson
     @Override
     public void onBindViewHolder(@NonNull OrganizerPersonAdapter.ViewHolder holder, int position) {
         // setting data to our views of recycler view.
+        if (!people.get(position).getName().contains("█")) {
+            ShimmerFrameLayout container = holder.shimmerFrameLayout;
+            container.stopShimmer();
+            container.hideShimmer();
+
+            holder.tvName.setBackgroundColor(context.getColor(android.R.color.transparent));
+            holder.tvName.setTextColor(colorFromAttr(context, android.R.attr.textColor));
+            holder.tvHome.setBackgroundColor(context.getColor(android.R.color.transparent));
+            holder.tvHome.setTextColor(colorFromAttr(context, android.R.attr.textColor));
+        }
         Person person = people.get(position);
         holder.tvName.setText(person.getName());
+
         holder.tvHome.setText(person.getStudy());
         // Return the completed view to render on screen
         setOnClickListener(holder.itemView,person);
@@ -100,16 +117,25 @@ public class OrganizerPersonAdapter extends RecyclerView.Adapter<OrganizerPerson
         });
     }
 
+    private int colorFromAttr(Context context, int attr) {
+        TypedValue typedValue = new TypedValue();
+        Resources.Theme theme = context.getTheme();
+        theme.resolveAttribute(attr, typedValue, true);
+        @ColorInt int color = typedValue.data;
+        return color;
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder {
         // creating variables for our views.
         private final TextView tvName;
         private final TextView tvHome;
+        private final ShimmerFrameLayout shimmerFrameLayout;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             // initializing our views with their ids.
             tvName = itemView.findViewById(R.id.info_box1);
             tvHome = itemView.findViewById(R.id.info_box2);
-
+            shimmerFrameLayout = itemView.findViewById(R.id.shimmer_view_container);
         }
     }
 }

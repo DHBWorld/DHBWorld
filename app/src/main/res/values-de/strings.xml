@@ -281,5 +281,6 @@ E-Mail-Adresse: <p><a href="mailto:zaeske.christian@gmail.com">zaeske.christian@
     <string name="left">Eingang Süd</string>
     <string name="right">Eingang Nord</string>
     <string name="no_map_available">Keine Karte verfügbar</string>
-    <string name="find_room">Raum finden</string>
+    <string name="find_room">Auf Karte anzeigen</string>
+    <string name="network_error">Netzwerkfehler! Daten konnten nicht geladen werden.</string>
 </resources>
