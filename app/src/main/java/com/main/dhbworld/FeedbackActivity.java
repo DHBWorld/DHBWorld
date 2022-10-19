@@ -2,16 +2,31 @@ package com.main.dhbworld;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Patterns;
 import android.view.View;
+import android.widget.Toast;
 
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLEncoder;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+import javax.net.ssl.HttpsURLConnection;
 
 public class FeedbackActivity extends AppCompatActivity {
 
@@ -34,6 +49,7 @@ public class FeedbackActivity extends AppCompatActivity {
         TextInputEditText feedbackDescription = findViewById(R.id.feedbackDescription);
 
         MaterialButton sendButton = findViewById(R.id.sendFeedbackButton);
+        MaterialButton openGitHubButton = findViewById(R.id.openGithubButton);
 
         removeErrorOnType(feedbackName, feedbackNameLayout);
         removeErrorOnType(feedbackEmail, feedbackEmailLayout);
@@ -61,6 +77,53 @@ public class FeedbackActivity extends AppCompatActivity {
 
             //TODO: INFOS SENDEN
 
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    URL url = null;
+                    try {
+                        url = new URL("https://dhbworld.blitzdose.de/create-issue.php");
+                        HttpsURLConnection urlConnection = (HttpsURLConnection) url.openConnection();
+                        urlConnection.setRequestMethod("POST");
+                        urlConnection.setRequestProperty( "Content-type", "application/x-www-form-urlencoded");
+
+                        OutputStreamWriter writer = new OutputStreamWriter(urlConnection.getOutputStream());
+                        String[] data = new String[4];
+                        data[0] = "name=" + name;
+                        data[1] = "email=" + email;
+                        data[2] = "title=" + title;
+                        data[3] = "body=" + description;
+
+                        writer.write(String.join("&", data));
+                        writer.flush();
+                        writer.close();
+
+                        int status = urlConnection.getResponseCode();
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (status == 200) {
+                                    Toast.makeText(FeedbackActivity.this, "Success", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Toast.makeText(FeedbackActivity.this, status, Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
+
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }).start();
+
+        });
+
+        openGitHubButton.setOnClickListener(view -> {
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/inFumumVerti/DHBWorld/issues"));
+            try {
+                FeedbackActivity.this.startActivity(browserIntent);
+            } catch (Exception ignored) { }
         });
     }
 

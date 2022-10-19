@@ -109,6 +109,14 @@
                 app:icon="@drawable/ic_baseline_arrow_forward_24"
                 app:iconGravity="end"/>
 
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/openGithubButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Direkt zu GitHub"
+                android:layout_gravity="end"
+                android:layout_marginTop="16dp"
+                app:iconGravity="end"/>
 
         </LinearLayout>
 
