@@ -40,46 +40,35 @@
             android:layout_height="wrap_content"
             android:id="@+id/organizerRoomTypeText"
             android:text="Hörsaal"
-            android:layout_gravity="center_vertical"
+            android:layout_gravity="top"
             android:textSize="20sp"
             android:layout_weight="1"
             android:padding="8dp"/>
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/find_room_button"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            style="@style/Widget.MaterialComponents.Button"
-            android:text="@string/find_room" />
+            android:gravity="right"
+            android:orientation="vertical"
+            android:background="?android:attr/selectableItemBackground"
+            >
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/show_timeplan_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/grey_dark"
+                style="@style/Widget.MaterialComponents.Button"
+                android:text="Time plan" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/find_room_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/Widget.MaterialComponents.Button"
+                android:text="@string/find_room" />
+        </LinearLayout>
     </LinearLayout>
 
-
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:id="@+id/organizerRoomUrlView"
-        android:background="?android:attr/selectableItemBackground"
-        android:padding="8dp">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/organizerRoomUrlTitle"
-            android:textIsSelectable="true"
-            android:layout_gravity="top"
-            android:padding="8dp"/>
-
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/organizerRoomUrlText"
-            android:autoLink="web"
-            android:textIsSelectable="true"
-            android:layout_gravity="center_vertical"
-            android:padding="8dp"/>
-    </LinearLayout>
 
 </LinearLayout>
