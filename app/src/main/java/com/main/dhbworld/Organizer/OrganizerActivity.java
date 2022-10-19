@@ -2,6 +2,8 @@ package com.main.dhbworld.Organizer;
 
 import android.app.SearchManager;
 import android.content.Context;
+import android.content.Intent;
+import android.net.Network;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -17,9 +19,13 @@ import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
+import com.main.dhbworld.Calendar.CalendarActivity;
+import com.main.dhbworld.DashboardActivity;
 import com.main.dhbworld.Navigation.NavigationUtilities;
+import com.main.dhbworld.NetworkAvailability;
 import com.main.dhbworld.R;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -28,7 +34,6 @@ import java.util.Map;
 public class OrganizerActivity extends AppCompatActivity {
     ViewPager2 viewPager;
     OrganizerFragmentAdapter organizerFragmentAdapter;
-    MaterialToolbar toolbar;
     SearchViewModel searchViewModel;
     Map<String, ArrayList> entryMap;
     Menu menu;
@@ -36,47 +41,33 @@ public class OrganizerActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ArrayList<Course> courses = new ArrayList<>();
-        for (int i=0; i<10; i++) {
-            Course course = new Course();
-            course.setName("██████████████");
-            course.setStudy("████████████████████████████");
-            courses.add(course);
+        if (NetworkAvailability.check(OrganizerActivity.this)) {
+            ArrayList<Course> courses = new ArrayList<>();
+            ArrayList<Person> persons = new ArrayList<>();
+            ArrayList<Room> rooms = new ArrayList<>();
+            createMockData(courses, persons, rooms);
+
+            entryMap = new HashMap<>();
+            entryMap.put("courses", courses);
+            entryMap.put("people", persons);
+            entryMap.put("rooms", rooms);
+
+            intitalSetup();
+            createView();
+        } else {
+            Snackbar.make(this.findViewById(android.R.id.content), getResources().getString(R.string.problemsWithInternetConnection), BaseTransientBottomBar.LENGTH_LONG).show();
+            Intent intent = new Intent(OrganizerActivity.this, DashboardActivity.class);
+            startActivity(intent);
         }
-
-        ArrayList<Person> persons = new ArrayList<>();
-        for (int i=0; i<10; i++) {
-            Person person = new Person();
-            person.setName("██████████████");
-            person.setStudy("████████████████████████████");
-            persons.add(person);
-        }
-
-        ArrayList<Room> rooms = new ArrayList<>();
-        for (int i=0; i<10; i++) {
-            Room room = new Room();
-            room.setName("██████████████");
-            room.setRoomType("████████████████████████████");
-            rooms.add(room);
-        }
-
-        entryMap = new HashMap<>();
-        entryMap.put("courses", courses);
-        entryMap.put("people", persons);
-        entryMap.put("rooms", rooms);
-
-        intitalSetup();
-        createView();
     }
 
     private void intitalSetup(){
         setContentView(R.layout.organizer_layout);
-        toolbar = findViewById(R.id.topAppBar);
+        MaterialToolbar toolbar = findViewById(R.id.topAppBar);
         setSupportActionBar(toolbar);
         NavigationUtilities.setUpNavigation(this, R.id.organizer);
         parseThread.start();
     }
-
 
     Thread parseThread = new Thread(new Runnable() {
         @Override
@@ -170,6 +161,29 @@ public class OrganizerActivity extends AppCompatActivity {
             }
         });
         tabLayoutMediator.attach();
+    }
+
+    private void createMockData(ArrayList<Course> courses,ArrayList<Person> persons,ArrayList<Room> rooms){
+        String mock1 = "██████████████";
+        String mock2 = "████████████████████████████";
+        for (int i=0; i<10; i++) {
+            Course course = new Course();
+            Room room = new Room();
+            Person person = new Person();
+
+            room.setName(mock1);
+            room.setRoomType(mock2);
+
+            course.setName(mock1);
+            course.setStudy(mock2);
+
+            person.setName(mock1);
+            person.setStudy(mock2);
+
+            rooms.add(room);
+            persons.add(person);
+            courses.add(course);
+        }
     }
 
     @Override
