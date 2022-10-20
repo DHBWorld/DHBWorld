@@ -3,7 +3,6 @@ package com.main.dhbworld.Organizer;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Network;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -19,16 +18,15 @@ import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
-import com.main.dhbworld.Calendar.CalendarActivity;
 import com.main.dhbworld.DashboardActivity;
 import com.main.dhbworld.Navigation.NavigationUtilities;
 import com.main.dhbworld.NetworkAvailability;
 import com.main.dhbworld.R;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 
 public class OrganizerActivity extends AppCompatActivity {
@@ -73,13 +71,13 @@ public class OrganizerActivity extends AppCompatActivity {
         @Override
         public void run() {
             OrganizerParser organizerParser = new OrganizerParser();
-            Map<String, ArrayList> entryMapParser = organizerParser.getAllElements(OrganizerActivity.this);
-            entryMap.clear();
-            entryMap.putAll(entryMapParser);
+            entryMap = organizerParser.getAllElements(OrganizerActivity.this);
+
+            System.out.println("Number of Rooms: " + Objects.requireNonNull(entryMap.get("rooms")).size());
 
             runOnUiThread(() -> {
                 if (!entryMap.isEmpty()) {
-                    organizerFragmentAdapter.updateData(entryMapParser);
+                    organizerFragmentAdapter.updateData(entryMap);
                 } else {
                     Snackbar.make(OrganizerActivity.this.findViewById(android.R.id.content), R.string.network_error, BaseTransientBottomBar.LENGTH_LONG).show();
                 }

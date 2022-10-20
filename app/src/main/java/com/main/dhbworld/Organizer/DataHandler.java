@@ -43,7 +43,6 @@ class PersonDataHandler extends DataHandler{
 
     @Override
     ArrayList<Person> filter(String query) {
-        System.out.println(list.size());
         ArrayList<Person> newPeople = new ArrayList<>();
         query = query.toLowerCase();
         if(query.isEmpty() | query.length() == 0){

@@ -144,6 +144,7 @@ public class OrganizerOverallFragment extends Fragment{
 
         this.rooms.clear();
         this.rooms.addAll(map.get("rooms"));
+        System.out.println("Number of Rooms2: " + this.rooms.size());
         this.roomsDataHandler.setList(map.get("rooms"));
         this.roomAdapter.notifyDataSetChanged();
 
