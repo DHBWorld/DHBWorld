@@ -56,14 +56,17 @@ public class PredictionActivity {
     });
 
     public void parseUrls(ArrayList<String> urls) {
-        Thread a;
+        Thread a = null;
         for (String url : urls) {
             this.url = url;
             a = new Thread(t2);
             a.start();
         }
-        System.out.println(squashedAppointsments.size());
-       calc(squashedAppointsments);
+        while(a.isAlive()){
+            if(!a.isAlive()){
+                calc(squashedAppointsments);
+            }
+        }
     }
 
     Thread t2 = new Thread(new Runnable() {
@@ -84,16 +87,62 @@ public class PredictionActivity {
     public void calc(ArrayList<Appointment> aps){
         int avgStart = 0;
         int avgEnd = 0;
+
+        int ten = 0;
+        int eleven = 0;
+        int twelve = 0;
+        int thirteen = 0;
+        int fourteen = 0;
+        int error = 0;
+
+
+
         for(Appointment a : aps){
-           if(a.getEndDate().getHour() > 11 || a.getStartDate().getHour() < 14){
+
                 avgStart += a.getStartDate().getHour();
                 avgEnd += a.getEndDate().getHour();
-           }
+
+                switch (a.getEndDate().getHour()){
+                    case 10:
+                        ten++;
+                        break;
+                    case 11:
+                        eleven++;
+                        break;
+                    case 12:
+                        twelve++;
+                        break;
+                    case 13:
+                        thirteen++;
+                        break;
+                    case 14:
+                        fourteen++;
+                        break;
+                    default:
+                        error++;
+               }
+
         }
+
+        /*
+
+        10: Wie viele Vorlesungen haben bereits um 10 aufgehört?
+        11: Wie
+        12
+        13
+
+
+         */
+
+
+
+
+
         avgStart = avgStart / aps.size();
         avgEnd = avgEnd / aps.size();
         LocalDate d = aps.get(0).getStartDate().toLocalDate();
         System.out.println("Average starting time for " + d.getDayOfMonth() + ". " + d.getMonth() + " is: " + avgStart);
         System.out.println("Average end time for " + d.getDayOfMonth() + ". " + d.getMonth() + " is: " + avgEnd);
+        System.out.println("Number of Events Ending at given times. \n Ten: " + ten + "\n + Eleven: " + eleven + "\n + Twelve: " + twelve + "\n + Thirteen: " + thirteen + "\n + Fourteen: " + fourteen + " \n + Errors: " + error);
     }
 }
