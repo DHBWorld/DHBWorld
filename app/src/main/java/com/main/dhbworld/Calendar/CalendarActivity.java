@@ -371,12 +371,7 @@ public class CalendarActivity extends AppCompatActivity{
         cal.setAdapter(adapter);
         EventCreator.fillData(data, date);
         fillAdapter(adapter);
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                progressBar.setVisibility(View.INVISIBLE);
-            }
-        });
+        runOnUiThread(() -> progressBar.setVisibility(View.INVISIBLE));
     }
 
     public static void setEvents(ArrayList<Events> events) {

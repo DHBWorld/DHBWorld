@@ -293,6 +293,67 @@ public final class DataImporter {
         return weekAppointments;
     }
 
+    public static ArrayList<Appointment> ImportDay(LocalDate localDate, String connectionURL) throws IOException, ParserConfigurationException, IllegalAccessException {
+        String line, pageContent;
+        ArrayList<Appointment> dailyAppointsments = new ArrayList<>();
+        StringBuilder pageContentBuilder = new StringBuilder();
+        URLConnection webConnection = new URL(connectionURL).openConnection();
+        BufferedReader br = new BufferedReader(new InputStreamReader(webConnection.getInputStream(), StandardCharsets.UTF_8));
+        localDate = DateUtilities.Normalize(localDate);
+
+        // Read the whole page
+        while ((line = br.readLine()) != null) {
+            pageContentBuilder.append(line).append("\n");
+        }
+        br.close();
+        pageContent = pageContentBuilder.toString();
+
+        // Trim and filter to correct tbody inner HTML
+        pageContent = ("<?xml version=\"1.0\"?>\n" + pageContent.substring(pageContent.indexOf("<tbody>"), pageContent.lastIndexOf("</tbody>") + 8))
+                .replaceAll("&nbsp;", "&#160;")
+                .replaceAll("<br>", "<br/>");
+
+        Pattern pattern = Pattern.compile("(<a.*</a>)");
+        Matcher matcher = pattern.matcher(pageContent);
+        while(matcher.find()) {
+            String anchor = matcher.group(1);
+            if (anchor == null) {
+                continue;
+            }
+            String[] anchorSplit = anchor.split("\"");
+            if (anchorSplit[1].contains("<") || anchorSplit[1].contains(">")) {
+                pageContent = pageContent.replaceAll(anchor, "");
+            }
+        }
+
+        // Parse the document
+        DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+        try {
+            Document doc = dBuilder.parse(new InputSource(new ByteArrayInputStream(pageContent.getBytes("utf-8"))));
+            doc.getDocumentElement().normalize();
+
+            // Scan the table row by row
+            NodeList nList = doc.getDocumentElement().getChildNodes();
+            Node tableRow;
+            for (int temp = 0; temp < nList.getLength(); temp++) {
+                tableRow = nList.item(temp);
+                if (tableRow.getNodeType() == Node.ELEMENT_NODE) {
+                    importTableRow(dailyAppointsments, tableRow, DateUtilities.Clone(localDate));
+                }
+            }
+
+        } catch (SAXException e) {
+            System.out.println("FAIL!");
+            System.out.println("Error while parsing:" + System.lineSeparator() + pageContent);
+            e.printStackTrace();
+        }
+
+        return dailyAppointsments;
+    }
+
+
+
     /**
      * Checks if the URL pattern matches a regular expression and pings the server
      * @param fullURL The full URL to test against
@@ -342,7 +403,7 @@ public final class DataImporter {
         NodeList aChildren = block.getFirstChild().getChildNodes();
 
         String time = getTime(aChildren);
-
+//break here and check if url has key=..., when yes return only times
         if(aChildren.item(aChildren.getLength() - 1).getLastChild() != null && aChildren.item(aChildren.getLength() - 1).getNodeName().equals("span")){
             // Rows from table body
             NodeList rows = aChildren.item(aChildren.getLength() - 1).getLastChild().getChildNodes();

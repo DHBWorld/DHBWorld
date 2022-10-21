@@ -73,8 +73,6 @@ public class OrganizerActivity extends AppCompatActivity {
             OrganizerParser organizerParser = new OrganizerParser();
             entryMap = organizerParser.getAllElements(OrganizerActivity.this);
 
-            System.out.println("Number of Rooms: " + Objects.requireNonNull(entryMap.get("rooms")).size());
-
             runOnUiThread(() -> {
                 if (!entryMap.isEmpty()) {
                     organizerFragmentAdapter.updateData(entryMap);

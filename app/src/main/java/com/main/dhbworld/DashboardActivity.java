@@ -58,6 +58,7 @@ import com.main.dhbworld.KVV.Departure;
 import com.main.dhbworld.KVV.Disruption;
 import com.main.dhbworld.KVV.KVVDataLoader;
 import com.main.dhbworld.Navigation.NavigationUtilities;
+import com.main.dhbworld.PredictionEngine.PredictionActivity;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -119,8 +120,10 @@ public class DashboardActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         Debugging.startDebugging(this);
+        PredictionActivity predictionActivity = new PredictionActivity(DashboardActivity.this);
+        predictionActivity.begin();
+
 
         SharedPreferences defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         int darkmode = Integer.parseInt(defaultSharedPreferences.getString("darkmode", "-1"));
