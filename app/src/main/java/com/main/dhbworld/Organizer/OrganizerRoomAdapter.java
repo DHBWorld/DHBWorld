@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.net.Uri;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -91,17 +92,6 @@ public class OrganizerRoomAdapter extends RecyclerView.Adapter<OrganizerRoomAdap
                     Objects.requireNonNull(roomName).setText(room.name);
                     TextView roomType = bottomSheetDialog.findViewById(R.id.organizerRoomTypeText);
                     Objects.requireNonNull(roomType).setText(room.roomType);
-                    TextView roomUrl = bottomSheetDialog.findViewById(R.id.organizerRoomUrlText);
-                    TextView titleRoomUrl = bottomSheetDialog.findViewById(R.id.organizerRoomUrlTitle);
-                    if(room.url != null && roomUrl != null) {
-                        roomUrl.setText(room.url);
-                        titleRoomUrl.setText(R.string.timeplan);
-
-                    }
-                    else {
-                        Objects.requireNonNull(roomUrl).setVisibility(View.GONE);
-                        Objects.requireNonNull(titleRoomUrl).setVisibility(View.GONE);
-                    }
 
                     Button button = bottomSheetDialog.findViewById(R.id.find_room_button);
                     if (button != null) {
@@ -111,6 +101,20 @@ public class OrganizerRoomAdapter extends RecyclerView.Adapter<OrganizerRoomAdap
                             activity.startActivity(intent);
                         });
                     }
+                    Button showTimeplanButton= bottomSheetDialog.findViewById(R.id.show_timeplan_button);
+                    if ((showTimeplanButton != null) ) {
+
+                        showTimeplanButton.setOnClickListener(view -> {
+                            Uri uri=Uri.parse(room.url);
+                            Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                            activity.startActivity(intent);
+                        });
+                        if (room.url==null){
+                            showTimeplanButton.setVisibility(View.GONE);
+                        }
+
+                    }
+
                     bottomSheetDialog.show();
                 }
                 catch (Exception e){
