@@ -59,7 +59,7 @@
                 android:layout_height="wrap_content"
                 android:backgroundTint="@color/grey_dark"
                 style="@style/Widget.MaterialComponents.Button"
-                android:text="Time plan" />
+                android:text="@string/timeplan" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/find_room_button"
