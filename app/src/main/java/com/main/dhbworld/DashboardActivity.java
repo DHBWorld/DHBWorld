@@ -714,6 +714,7 @@ public class DashboardActivity extends AppCompatActivity {
             card_dash_mealPlan.setVisibility(View.VISIBLE);
             card_dash_info.setVisibility(View.VISIBLE);
 
+
             if (!cardCalendar_isVisible){
                 card_dash_calendar.setStrokeColor(ColorUtils.setAlphaComponent(card_dash_calendar.getStrokeColor(),50));
                 card_dash_calendar_layout.setBackgroundColor(ColorUtils.setAlphaComponent(card_dash_calendar.getStrokeColor(),50));
@@ -731,6 +732,7 @@ public class DashboardActivity extends AppCompatActivity {
                 card_dash_kvv_layout.setBackgroundColor(ColorUtils.setAlphaComponent(card_dash_kvv.getStrokeColor(),50));
             }
             if (!cardInfo_isVisible){
+                loadInfo();
                 card_dash_info.setStrokeColor(ColorUtils.setAlphaComponent(card_dash_info.getStrokeColor(),50));
                 card_dash_info_layout.setBackgroundColor(ColorUtils.setAlphaComponent(card_dash_info.getStrokeColor(),50));
             }
