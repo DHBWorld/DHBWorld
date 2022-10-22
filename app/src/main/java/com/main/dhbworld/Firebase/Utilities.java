@@ -65,7 +65,6 @@ public class Utilities {
         mAuth.addAuthStateListener(new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                System.out.println();
                 if (firebaseAuth.getCurrentUser() != null) {
                     user = firebaseAuth.getCurrentUser();
                     signedInListener.onSignedIn(user);

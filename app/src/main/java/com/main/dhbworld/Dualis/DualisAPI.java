@@ -202,7 +202,6 @@ public class DualisAPI {
 
                 RequestQueue queue = Volley.newRequestQueue(context);
                 String url = "https://dualis.dhbw.de" + link;
-                System.out.println(url);
                 int finalJ = j;
                 StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                         response -> {
