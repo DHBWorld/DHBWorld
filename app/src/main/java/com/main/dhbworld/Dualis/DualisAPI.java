@@ -257,19 +257,21 @@ public class DualisAPI {
                                 String noteCurrent = pruefungen.getJSONObject(k).getString("note");
                                 String noteSaved = savedJson.getJSONArray("semester").getJSONObject(i).getJSONArray("Vorlesungen").getJSONObject(j).getJSONArray("pruefungen").getJSONObject(k).getString("note");
                                 if (!noteCurrent.equals(noteSaved)) {
-                                    String noteCurrentDot = noteCurrent.replace(",", ".").trim();
+                                    String noteCurrentDot = noteCurrent.replace(",", "").trim();
                                     try {
                                         Integer.parseInt(noteCurrentDot);
                                         sendNotification(context,
                                                 context.getResources().getString(R.string.new_grade_exam),
                                                 context.getResources().getString(R.string.new_grade_exam_text, vorlesung.getString("name"), noteCurrent),
                                                 calcID(vorlesung.getString("name") + noteCurrent));
-                                    } catch (NumberFormatException ignored) {}
+                                    } catch (NumberFormatException ignored) {
+                                        ignored.printStackTrace();
+                                    }
 
                                 }
                             }
                             if (!endnoteCurrent.equals(endnoteSaved)) {
-                                String endnoteCurrentDot = endnoteCurrent.replace(",", ".").trim();
+                                String endnoteCurrentDot = endnoteCurrent.replace(",", "").trim();
                                 try {
                                     Integer.parseInt(endnoteCurrentDot);
                                     sendNotification(context,
