@@ -9,6 +9,7 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.Icon;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -330,8 +331,8 @@ public class DashboardActivity extends AppCompatActivity {
                         card_dash_info_layout.setBackgroundColor(ColorUtils.setAlphaComponent(card_dash_info.getStrokeColor(), 255));
                     }
                 }else{
-                    Intent intent = new Intent(DashboardActivity.this, SettingsActivity.class);
-                    startActivity(intent);
+                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/inFumumVerti/DHBWorld/releases/latest"));
+                    startActivity(browserIntent);
                 }
             }
         });
