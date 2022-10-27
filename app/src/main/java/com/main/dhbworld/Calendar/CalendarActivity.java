@@ -216,7 +216,7 @@ public class CalendarActivity extends AppCompatActivity{
                             editor.apply();
                             courseInFirestore.put("URL", urlString);
                         }
-                        else if(urlString.isEmpty() && !courseName.isEmpty()){
+                        else if(urlString.isEmpty() && !courseName.isEmpty() && !courseDirector.isEmpty()){
                             urlString = ("https://rapla.dhbw-karlsruhe.de/rapla?page=calendar&user=" + courseDirector + "&file=" + courseName);
                             SharedPreferences.Editor editor = preferences.edit();
                             editor.putString("CurrentURL", urlString);
@@ -242,7 +242,7 @@ public class CalendarActivity extends AppCompatActivity{
                             if (connection.getResponseCode() == 200) {
                                 firestore.collection("Courses").document(courseName.toLowerCase()).set(courseInFirestore, SetOptions.merge());
                             }
-                        } catch (IOException e) {}
+                        } catch (IOException | IllegalArgumentException ignored) {}
                     }
                 }).start();
                 restart(CalendarActivity.this);

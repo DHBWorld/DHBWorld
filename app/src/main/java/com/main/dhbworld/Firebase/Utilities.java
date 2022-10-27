@@ -183,7 +183,9 @@ public class Utilities {
                         issuesDatabase.setValue(issue);
                     }
                 } else {
-                    dataSendListener.failed(task.getException());
+                    if (dataSendListener != null) {
+                        dataSendListener.failed(task.getException());
+                    }
                 }
             }
         });

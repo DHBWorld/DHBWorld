@@ -312,7 +312,7 @@ public class SettingsActivity extends AppCompatActivity {
                                             if (connection.getResponseCode() == 200) {
                                                 firestore.collection("Courses").document(courseName.toLowerCase()).set(courseInFirestore, SetOptions.merge());
                                             }
-                                        } catch (IOException e) {}
+                                        } catch (IOException | IllegalArgumentException ignored) {}
 
                                     }
                                 }).start();
