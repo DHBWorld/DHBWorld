@@ -286,7 +286,7 @@ public class SettingsActivity extends AppCompatActivity {
                                             editor.apply();
                                             courseInFirestore.put("URL", urlString);
                                         }
-                                        else if(urlString.isEmpty() && !courseName.isEmpty()){
+                                        else if(urlString.isEmpty() && !courseName.isEmpty() && !courseDirector.isEmpty()){
                                             urlString = ("https://rapla.dhbw-karlsruhe.de/rapla?page=calendar&user=" + courseDirector + "&file=" + courseName);
                                             SharedPreferences.Editor editor = preferences.edit();
                                             editor.putString("CurrentURL", urlString);
