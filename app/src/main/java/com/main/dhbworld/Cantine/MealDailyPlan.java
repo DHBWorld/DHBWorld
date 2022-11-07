@@ -68,6 +68,18 @@ public class MealDailyPlan {
         return names;
     }
 
+    public  List <String> getMainCourseNamesWithSalat(){
+        List <String> names= new ArrayList<>();
+        for (Meal m:mainCourses){
+            if (m.getNotes().contains("Mit Salat oder Obst")) {
+                names.add(m.getName() + " - Mit Salat oder Obst");
+            } else {
+                names.add(m.getName());
+            }
+        }
+        return names;
+    }
+
     public  List <Meal> getMainCourses(){
         return mainCourses;
     }

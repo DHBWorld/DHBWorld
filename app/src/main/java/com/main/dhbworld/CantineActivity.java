@@ -313,7 +313,7 @@ public class CantineActivity extends AppCompatActivity {
 
         try {
             MealDailyPlan plan= new MealDailyPlan(result);
-            meals= plan.getMainCourseNames();
+            meals= plan.getMainCourseNamesWithSalat();
         } catch (JSONException e) {
             e.printStackTrace();
         }
