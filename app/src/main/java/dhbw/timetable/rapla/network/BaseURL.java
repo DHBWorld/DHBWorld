@@ -5,7 +5,7 @@ package dhbw.timetable.rapla.network;
  */
 public enum BaseURL {
 
-    STUTTGART("stuttgart"), KARLSRUHE("karlsruhe"), MANNHEIM("mannheim");
+    STUTTGART("stuttgart"), KARLSRUHE("karlsruhe"), MANNHEIM("mannheim"), NONE("");
 
     private final String text;
 

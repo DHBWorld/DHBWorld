@@ -176,10 +176,26 @@ public final class DataImporter {
      * @throws IllegalAccessException If the passed arguments don't match
      */
     public static Map<LocalDate, ArrayList<Appointment>> ImportWeekRange(LocalDate startDate, LocalDate endDate, String url) throws MalformedURLException, NoConnectionException, IllegalAccessException {
-        final String deSuffix = ".de/rapla?", cityPrefix = "dhbw-";
-        int urlSplit = url.indexOf(deSuffix);
-        final String regularPrefix = url.substring(0, url.indexOf(cityPrefix));
-        return ImportWeekRange(startDate, endDate, BaseURL.valueOf(url.substring(regularPrefix.length() + cityPrefix.length(), urlSplit).toUpperCase()), url.substring(urlSplit + deSuffix.length()));
+        String deSuffix;
+        String cityPrefix;
+        String regularPrefix;
+        int urlSplit;
+
+        if(!url.contains("dhbw-")){
+            return ImportWeekRange(startDate,endDate,BaseURL.valueOf("https://rapla.dhbw.de/rapla/calendar?"), "key=2a9Bq7PTVcTMvCSNwYoQRrO0GK9bccz-i39YnTK__wfzLf7zoDljz6ez6o-rF2Fsp4Cjn3VUMgfKBZ_BsAJvOcGkFsW49XkYpq5u9TSYXj8&salt=11988947&allocatable_id=rd9161f4-18b9-4ec2-8d51-5d9c645c52f0#17");
+//
+//            deSuffix = ".de/rapla/calendar?";
+//            cityPrefix = "dhbw";
+//            regularPrefix = "https://rapla.";
+//            urlSplit = url.indexOf(deSuffix);
+        }
+        else{
+             deSuffix = ".de/rapla?";
+             cityPrefix = "dhbw-";
+             regularPrefix = url.substring(0, url.indexOf(cityPrefix));
+             urlSplit = url.indexOf(deSuffix);
+            return ImportWeekRange(startDate, endDate, BaseURL.valueOf(url.substring(regularPrefix.length() + cityPrefix.length(), urlSplit).toUpperCase()), url.substring(urlSplit + deSuffix.length()));
+        }
     }
 
     /**
