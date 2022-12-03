@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Random;
@@ -102,8 +103,8 @@ public class EventCreator {
         if(eventList.get(i).getEndDate().get(Calendar.HOUR_OF_DAY) - eventList.get(i).getStartDate().get(Calendar.HOUR_OF_DAY) >= 8){
             style = new WeekViewEntity.Style.Builder().setBackgroundColor(Color.parseColor("#86c5da")).build();
         }
-        else if(eventList.get(i).getTitle().contains("Klausur")){
-            style = new WeekViewEntity.Style.Builder().setBackgroundColor(R.color.red).build();
+        else if(eventList.get(i).getTitle().toLowerCase().contains("klausur")){
+            style = new WeekViewEntity.Style.Builder().setBackgroundColor(Color.parseColor("#E2001A")).build();
         }
         else if(eventList.get(i).getEndDate().before(Calendar.getInstance())){
             style = new WeekViewEntity.Style.Builder().setBackgroundColor(Color.parseColor("#A9A9A9")).build();

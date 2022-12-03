@@ -96,6 +96,7 @@ public class CalendarActivity extends AppCompatActivity{
         setDates();
         //reset Variables of EventCreator class. Relevant after applying filters.
         EventCreator.instantiateVariables();
+
         executor.submit(importWeek);
         setOnTouchListener(cal, executor);
     }
@@ -361,10 +362,27 @@ public class CalendarActivity extends AppCompatActivity{
             try {
                 stillLoading = true;
                 saveValues(data);
+                cacheVals(data);
+
             } catch (Exception e) {
                 e.printStackTrace();
             }
         };
+
+
+    public void cacheVals(Map<LocalDate, ArrayList<Appointment>> data){
+        SharedPreferences preferences = PreferenceManager
+                .getDefaultSharedPreferences(CalendarActivity.this);
+        SharedPreferences.Editor editor = preferences.edit();
+
+        //convert to string using gson
+        Gson gson = new Gson();
+        String hashMapString = gson.toJson(data);
+
+        editor.putString("CalendarData", hashMapString);
+        editor.apply();
+
+    }
 
     public void saveValues(Map<LocalDate, ArrayList<Appointment>> data){
         Adapter adapter = new Adapter();
