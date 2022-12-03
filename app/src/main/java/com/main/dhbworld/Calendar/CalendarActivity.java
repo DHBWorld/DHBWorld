@@ -67,6 +67,7 @@ public class CalendarActivity extends AppCompatActivity{
     static ArrayList<String> blackList = new ArrayList<>();
     String url;
     boolean stillLoading = false;
+    boolean showSat = false;
     LinearProgressIndicator progressBar;
     FirebaseFirestore firestore;
 
@@ -104,7 +105,7 @@ public class CalendarActivity extends AppCompatActivity{
         cal = findViewById(R.id.weekView);
 
         SharedPreferences defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        boolean showSat = defaultSharedPreferences.getBoolean("calendarShowSat", false);
+        showSat = defaultSharedPreferences.getBoolean("calendarShowSat", false);
 
         if (showSat) {
             //Show Mon-Sat
@@ -153,7 +154,7 @@ public class CalendarActivity extends AppCompatActivity{
                 date.getActualMinimum(Calendar.DAY_OF_WEEK) + 1);
 
         Calendar tempCal = Calendar.getInstance();
-        if(tempCal.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY){
+        if(tempCal.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY && !showSat){
             tempCal.add(Calendar.DAY_OF_WEEK,2);
             date = tempCal;
         }
@@ -441,7 +442,7 @@ public class CalendarActivity extends AppCompatActivity{
                 currentDate.getActualMinimum(Calendar.DAY_OF_WEEK) + 1);
 
         Calendar tempCal = Calendar.getInstance();
-        if(tempCal.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY){
+        if(tempCal.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY && !showSat){
             tempCal.add(Calendar.DAY_OF_WEEK,2);
             currentDate = tempCal;
         }
