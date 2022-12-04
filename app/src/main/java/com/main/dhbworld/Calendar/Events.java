@@ -13,6 +13,9 @@ public class Events {
     WeekViewEntity.Style style;
     static ArrayList<Events> events = new ArrayList<>();
 
+    Events(){
+    }
+
     Events(long id, String title, Calendar startTime, Calendar endTime, String description, WeekViewEntity.Style style) {
         this.id = id;
         this.title = title;
@@ -28,4 +31,28 @@ public class Events {
         return events;
     }
 
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setStartTime(Calendar startTime) {
+        this.startTime = startTime;
+    }
+
+    public void setEndTime(Calendar endTime) {
+        this.endTime = endTime;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setStyle(WeekViewEntity.Style style) {
+        this.style = style;
+    }
 }

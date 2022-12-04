@@ -2,11 +2,25 @@ package com.main.dhbworld.Calendar;
 
 
 import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import androidx.core.graphics.ColorUtils;
+import androidx.preference.PreferenceManager;
+
 import com.alamkanak.weekview.WeekViewEntity;
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.google.gson.reflect.TypeToken;
 import com.main.dhbworld.R;
 
+import java.lang.reflect.Array;
+import java.lang.reflect.Type;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -28,8 +42,10 @@ public class EventCreator {
    static ArrayList<Event> eventList;
    static ArrayList<Long> uniqueIds;
    static ArrayList<String> filterTitles;
+   static SharedPreferences preferences;
 
-    public static void instantiateVariables(){
+    public static void instantiateVariables(Context context){
+       preferences = PreferenceManager.getDefaultSharedPreferences(context);
        blackList = new ArrayList<>();
        filteredEvents = new ArrayList<>();
        events = new ArrayList<>();
@@ -73,11 +89,68 @@ public class EventCreator {
             }
         }
         eventList.clear();
+        cacheData();
+        applyBlackList();
+    }
+
+    public static void cacheData(){
+        SharedPreferences.Editor editor = preferences.edit();
+
+        //convert to string using gson
+        Gson gson = new Gson();
+        String eventString = gson.toJson(events);
+
+        //save string in sharedpreferences as "hashMapString"
+        editor.putString("CalendarData", eventString);
+        editor.apply();
+    }
+
+
+
+    public static void getCachedData() throws ParseException {
+        String eventString = preferences.getString("CalendarData", null);
+        Gson gson = new Gson();
+        ArrayList e = gson.fromJson(eventString, ArrayList.class);
+
+
+        for(int i = 0; i < e.size(); i++){
+           JsonObject elem = (JsonObject) e.get(i);
+           String start = elem.get("startTime").getAsString();
+           SimpleDateFormat sdf = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.GERMANY);
+           Calendar cal = Calendar.getInstance().setTime(sdf.parse(start));
+            Events event = new Events(
+                    elem.get("id").getAsLong(),
+                    elem.get("title").getAsString(),
+                    elem.get(i).getStartDate(),
+                    elem.get(i).getEndDate(),
+                    elem.get(i).getPerson() + ", " +
+                            elem.get(i).getResource(),
+                    setEventColor(i));
+
+           elem.get("id");
+        }
+
+
+        Type eventType = new TypeToken<ArrayList<Events>>() {}.getType();
+        events = gson.fromJson(eventString,eventType);
+
+        eventList.clear();
         applyBlackList();
     }
 
     public static void setBlackList(ArrayList<String> blackList){
         EventCreator.blackList = blackList;
+    }
+
+    public static void applyBlackListCached(){
+        blackList = updateBlackList();
+        filteredEvents.clear();
+        for(int i = 0; i < events.size(); i++){
+            if(!blackList.contains(events.get(i).title)){
+                filteredEvents.add(events.get(i));
+            }
+        }
+        CalendarActivity.setEvents(filteredEvents);
     }
 
     public static void applyBlackList(){
