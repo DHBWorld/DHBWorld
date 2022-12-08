@@ -79,7 +79,7 @@ public class Events {
     }
 
     public void setStyle(String color){
-        style = new WeekViewEntity.Style.Builder().setBackgroundColor(Color.parseColor(color)).build();
+        style = new WeekViewEntity.Style.Builder().setBackgroundColor(color.hashCode()).build();
     }
 
 }

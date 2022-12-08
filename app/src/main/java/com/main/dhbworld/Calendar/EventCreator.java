@@ -31,7 +31,7 @@ public class EventCreator {
     static List<String> blackList;
     static ArrayList<Events> newEvents;
     static ArrayList<Events> events;
-    static Map<String, Integer> colorMap;
+    static Map<String, String> colorMap;
    static ArrayList<Event> eventList;
    static ArrayList<Long> uniqueIds;
    static ArrayList<String> filterTitles;
@@ -115,23 +115,11 @@ public class EventCreator {
         EventCreator.blackList = blackList;
     }
 
-    public static void applyBlackListCached(){
-        blackList = updateBlackList();
-        newEvents.clear();
-        for(int i = 0; i < events.size(); i++){
-            if(!blackList.contains(events.get(i).title)){
-                newEvents.add(events.get(i));
-            }
-        }
-        CalendarActivity.setEvents(newEvents);
-    }
-
     public static void applyColorBlacklist(){
-
-
         blackList = updateBlackList();
         newEvents.clear();
         for(int i = 0; i < events.size(); i++){
+            setEventColor(i);
             setEventColor(i);
             if(!blackList.contains(events.get(i).title)){
                 newEvents.add(events.get(i));
@@ -144,23 +132,21 @@ public class EventCreator {
         return CalendarActivity.getBlackList();
     }
 
-
     @SuppressLint("ResourceAsColor")
-    public static WeekViewEntity.Style setEventColor(int i) throws NullPointerException{
-        WeekViewEntity.Style style = null;
+    public static void setEventColor(int i) throws NullPointerException{
         Random rnd = new Random();
 
-        if(events.get(i).getEndTime().get(Calendar.HOUR_OF_DAY) - eventList.get(i).getStartDate().get(Calendar.HOUR_OF_DAY) >= 8){
-            style = new WeekViewEntity.Style.Builder().setBackgroundColor(Color.parseColor("#86c5da")).build();
+        if(events.get(i).getEndTime().get(Calendar.HOUR_OF_DAY) - events.get(i).getStartTime().get(Calendar.HOUR_OF_DAY) >= 8){
+            events.get(i).setStyle("#86c5da");
         }
-        else if(eventList.get(i).getTitle().toLowerCase().contains("klausur")){
-            style = new WeekViewEntity.Style.Builder().setBackgroundColor(Color.parseColor("#E2001A")).build();
+        else if(events.get(i).getTitle().toLowerCase().contains("klausur")){
+            events.get(i).setStyle("#E2001A");
         }
-        else if(eventList.get(i).getEndDate().before(Calendar.getInstance())){
-            style = new WeekViewEntity.Style.Builder().setBackgroundColor(Color.parseColor("#A9A9A9")).build();
+        else if(events.get(i).getEndTime().before(Calendar.getInstance())){
+            events.get(i).setStyle("#A9A9A9");
         }
-        else if(colorMap.containsKey(eventList.get(i).getTitle())){
-            try { style = new WeekViewEntity.Style.Builder().setBackgroundColor(Objects.requireNonNull(colorMap.get(eventList.get(i).getTitle()))).build(); }
+        else if(colorMap.containsKey(events.get(i).getTitle())){
+            try { events.get(i).setStyle(Objects.requireNonNull(colorMap.get(events.get(i).getTitle())));}
             catch (Exception e){ e.printStackTrace(); }
         }
         else {
@@ -169,11 +155,10 @@ public class EventCreator {
             final int green = (rnd.nextInt(150) + 20);
             final int blue = (rnd.nextInt(190) + 20);
             int rndColor = Color.rgb(red, green, blue);
-            int mix = ColorUtils.blendARGB(white, rndColor, 0.8F);
-            colorMap.put(eventList.get(i).getTitle(), mix);
-            style = new WeekViewEntity.Style.Builder().setBackgroundColor(rndColor).build();
+            String colorString = String.valueOf(ColorUtils.blendARGB(white, rndColor, 0.8F));
+            System.out.println(colorString);
+            colorMap.put(events.get(i).getTitle(), colorString);
         }
-        return style;
     }
 
     public static Calendar localDateTimeToDate(LocalDateTime localDateTime) {
