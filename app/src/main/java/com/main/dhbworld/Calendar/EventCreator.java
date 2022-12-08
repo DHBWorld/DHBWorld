@@ -10,17 +10,11 @@ import androidx.preference.PreferenceManager;
 
 import com.alamkanak.weekview.WeekViewEntity;
 import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
+import com.google.gson.GsonBuilder;
+import com.google.gson.InstanceCreator;
 import com.google.gson.reflect.TypeToken;
-import com.main.dhbworld.R;
 
-import java.lang.reflect.Array;
 import java.lang.reflect.Type;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -28,7 +22,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Random;
@@ -36,7 +29,7 @@ import dhbw.timetable.rapla.data.event.Appointment;
 
 public class EventCreator {
     static List<String> blackList;
-    static ArrayList<Events> filteredEvents;
+    static ArrayList<Events> newEvents;
     static ArrayList<Events> events;
     static Map<String, Integer> colorMap;
    static ArrayList<Event> eventList;
@@ -47,7 +40,7 @@ public class EventCreator {
     public static void instantiateVariables(Context context){
        preferences = PreferenceManager.getDefaultSharedPreferences(context);
        blackList = new ArrayList<>();
-       filteredEvents = new ArrayList<>();
+       newEvents = new ArrayList<>();
        events = new ArrayList<>();
        colorMap = new HashMap<>();
        eventList = new ArrayList<>();
@@ -83,59 +76,39 @@ public class EventCreator {
                         eventList.get(i).getStartDate(),
                         eventList.get(i).getEndDate(),
                         eventList.get(i).getPerson() + ", " +
-                                eventList.get(i).getResource(),
-                        setEventColor(i));
+                                eventList.get(i).getResource());
                 events.add(event);
             }
         }
         eventList.clear();
         cacheData();
-        applyBlackList();
+        applyColorBlacklist();
     }
 
     public static void cacheData(){
         SharedPreferences.Editor editor = preferences.edit();
-
         //convert to string using gson
         Gson gson = new Gson();
         String eventString = gson.toJson(events);
-
         //save string in sharedpreferences as "hashMapString"
         editor.putString("CalendarData", eventString);
         editor.apply();
     }
 
-
-
-    public static void getCachedData() throws ParseException {
+    public static void getCachedData(){
         String eventString = preferences.getString("CalendarData", null);
-        Gson gson = new Gson();
-        ArrayList e = gson.fromJson(eventString, ArrayList.class);
 
-
-        for(int i = 0; i < e.size(); i++){
-           JsonObject elem = (JsonObject) e.get(i);
-           String start = elem.get("startTime").getAsString();
-           SimpleDateFormat sdf = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.GERMANY);
-           Calendar cal = Calendar.getInstance().setTime(sdf.parse(start));
-            Events event = new Events(
-                    elem.get("id").getAsLong(),
-                    elem.get("title").getAsString(),
-                    elem.get(i).getStartDate(),
-                    elem.get(i).getEndDate(),
-                    elem.get(i).getPerson() + ", " +
-                            elem.get(i).getResource(),
-                    setEventColor(i));
-
-           elem.get("id");
-        }
-
+        Gson gson = new GsonBuilder()
+                .registerTypeAdapter(WeekViewEntity.Style.class, (InstanceCreator<WeekViewEntity.Style>) type -> {
+                    return new WeekViewEntity.Style(); // Initialize and return a new instance of the Style class here.
+                })
+                .create();
 
         Type eventType = new TypeToken<ArrayList<Events>>() {}.getType();
         events = gson.fromJson(eventString,eventType);
 
         eventList.clear();
-        applyBlackList();
+        applyColorBlacklist();
     }
 
     public static void setBlackList(ArrayList<String> blackList){
@@ -144,36 +117,40 @@ public class EventCreator {
 
     public static void applyBlackListCached(){
         blackList = updateBlackList();
-        filteredEvents.clear();
+        newEvents.clear();
         for(int i = 0; i < events.size(); i++){
             if(!blackList.contains(events.get(i).title)){
-                filteredEvents.add(events.get(i));
+                newEvents.add(events.get(i));
             }
         }
-        CalendarActivity.setEvents(filteredEvents);
+        CalendarActivity.setEvents(newEvents);
     }
 
-    public static void applyBlackList(){
+    public static void applyColorBlacklist(){
+
+
         blackList = updateBlackList();
-        filteredEvents.clear();
+        newEvents.clear();
         for(int i = 0; i < events.size(); i++){
+            setEventColor(i);
             if(!blackList.contains(events.get(i).title)){
-                filteredEvents.add(events.get(i));
+                newEvents.add(events.get(i));
             }
         }
-        CalendarActivity.setEvents(filteredEvents);
+        CalendarActivity.setEvents(newEvents);
     }
 
     public static ArrayList<String> updateBlackList(){
         return CalendarActivity.getBlackList();
     }
 
+
     @SuppressLint("ResourceAsColor")
     public static WeekViewEntity.Style setEventColor(int i) throws NullPointerException{
         WeekViewEntity.Style style = null;
         Random rnd = new Random();
 
-        if(eventList.get(i).getEndDate().get(Calendar.HOUR_OF_DAY) - eventList.get(i).getStartDate().get(Calendar.HOUR_OF_DAY) >= 8){
+        if(events.get(i).getEndTime().get(Calendar.HOUR_OF_DAY) - eventList.get(i).getStartDate().get(Calendar.HOUR_OF_DAY) >= 8){
             style = new WeekViewEntity.Style.Builder().setBackgroundColor(Color.parseColor("#86c5da")).build();
         }
         else if(eventList.get(i).getTitle().toLowerCase().contains("klausur")){
@@ -219,11 +196,11 @@ public class EventCreator {
     }
 
     public static void clearEvents(){
-        filteredEvents.clear();
+        newEvents.clear();
         eventList.clear();
         events.clear();
     }
     public static ArrayList<Events> getEvents() {
-       return filteredEvents;
+       return newEvents;
     }
 }

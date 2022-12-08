@@ -2,7 +2,6 @@ package com.main.dhbworld.Calendar;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -172,7 +171,7 @@ public class CalendarActivity extends AppCompatActivity{
         blackList = removeDuplicates(blackList);
         EventCreator.clearEvents();
         EventCreator.setBlackList(blackList);
-        EventCreator.applyBlackList();
+        EventCreator.applyColorBlacklist();
         loadedDateList.clear();
         saveBlackList(blackList,"blackList");
         restart(CalendarActivity.this);
@@ -301,38 +300,15 @@ public class CalendarActivity extends AppCompatActivity{
             }
         }
         else{
-            saveCachedValues();
+
             try {
+                saveCachedValues();
                 stillLoading = true;
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
         };
-
-
-
-//    public Map<LocalDate, ArrayList<Appointment>> getCache(){
-//        Gson gson = new Gson();
-//
-//        String dataString = preferences.getString("CalendarData",null);
-//        Map<LocalDate, ArrayList<Appointment>> data = gson.fromJson(dataString, Map.class);
-//
-//        System.out.println("hello mate!");
-//        return data;
-//    }
-//
-//    public void cacheValues(Map<LocalDate, ArrayList<Appointment>> data){
-//        SharedPreferences.Editor editor = preferences.edit();
-//
-//        //convert to string using gson
-//        Gson gson = new Gson();
-//        String hashMapString = gson.toJson(data);
-//
-//        //save string in sharedpreferences as "hashMapString"
-//        editor.putString("CalendarData", hashMapString);
-//        editor.apply();
-//    }
 
     public void saveCachedValues(){
         EventCreator.getCachedData();
