@@ -64,7 +64,7 @@ public class CalendarActivity extends AppCompatActivity{
     SharedPreferences preferences;
     BottomSheetDialog bottomSheetDialog;
     AlertDialog alertDialog;
-    static ArrayList<Events> events = new ArrayList<>();
+    static ArrayList<EventWStyle> events = new ArrayList<>();
     static ArrayList<String> blackList = new ArrayList<>();
     String url;
     boolean stillLoading = false;
@@ -327,7 +327,7 @@ public class CalendarActivity extends AppCompatActivity{
         runOnUiThread(() -> progressBar.setVisibility(View.INVISIBLE));
     }
 
-    public static void setEvents(ArrayList<Events> events) {
+    public static void setEvents(ArrayList<EventWStyle> events) {
         CalendarActivity.events = events;
     }
 
@@ -336,7 +336,7 @@ public class CalendarActivity extends AppCompatActivity{
         adapter.submitList(events);
     }
 
-    public void showBottomSheet(Events event){
+    public void showBottomSheet(EventWStyle event){
         bottomSheetDialog = new BottomSheetDialog(this);
         LocalTime startTimeAsLocalDate = LocalDateTime.ofInstant(event.startTime.toInstant(), ZoneId.systemDefault()).toLocalTime();
         LocalTime endTimeAsLocalDate = LocalDateTime.ofInstant(event.endTime.toInstant(), ZoneId.systemDefault()).toLocalTime();
@@ -438,11 +438,10 @@ public class CalendarActivity extends AppCompatActivity{
         });
     }
 
-
-    class Adapter extends WeekView.SimpleAdapter<Events> implements com.main.dhbworld.Adapter {
+    class Adapter extends WeekView.SimpleAdapter<EventWStyle> implements com.main.dhbworld.Adapter {
         @NonNull
         @Override
-        public WeekViewEntity onCreateEntity(Events item) {
+        public WeekViewEntity onCreateEntity(EventWStyle item) {
             return new WeekViewEntity.Event.Builder<>(item)
                     .setId(item.id)
                     .setTitle(item.title)
@@ -453,7 +452,7 @@ public class CalendarActivity extends AppCompatActivity{
         }
 
         @Override
-        public void onEventClick(Events data) {
+        public void onEventClick(EventWStyle data) {
             CalendarActivity.this.showBottomSheet(data);
             super.onEventClick(data);
         }

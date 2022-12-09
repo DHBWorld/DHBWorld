@@ -6,14 +6,16 @@ import com.alamkanak.weekview.WeekViewEntity;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-public class Events {
+public class EventWStyle {
     long id;
     String title;
     Calendar startTime;
     Calendar endTime;
     String description;
+    WeekViewEntity.Style style;
 
-    Events(String title, Calendar startTime, Calendar endTime, String description) {
+    EventWStyle(long id, String title, Calendar startTime, Calendar endTime, String description) {
+        this.id = id;
         this.title = title;
         this.startTime = startTime;
         this.endTime = endTime;
@@ -44,8 +46,7 @@ public class Events {
         this.title = title;
     }
 
-    public void createId(){
-       id = (title + startTime.toString() + description).hashCode();
-    }
+    public void setStyle(String color){
+    style = new WeekViewEntity.Style.Builder().setBackgroundColor(color.hashCode()).build(); }
 
 }
