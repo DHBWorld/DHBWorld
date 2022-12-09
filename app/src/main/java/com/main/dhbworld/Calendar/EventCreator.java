@@ -8,10 +8,7 @@ import android.graphics.Color;
 import androidx.core.graphics.ColorUtils;
 import androidx.preference.PreferenceManager;
 
-import com.alamkanak.weekview.WeekViewEntity;
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.InstanceCreator;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
@@ -63,7 +60,7 @@ public class EventCreator {
         }
 
         cacheData();
-        applyColorBlacklist();
+        styleAndFilter();
     }
 
     public static void cacheData(){
@@ -82,36 +79,29 @@ public class EventCreator {
         Type eventType = new TypeToken<ArrayList<Events>>() {}.getType();
         eventList = gson.fromJson(eventString,eventType);
     //  eventList.clear();
-        applyColorBlacklist();
+        styleAndFilter();
     }
 
-    public static void applyStyle(){
-        for(int i = 0; i < eventList.size(); i++){
-           setEventColor(i);
-            styledEvents.add(new EventWStyle(
-                    eventList.get(i).id,
-                    eventList.get(i).title,
-                    eventList.get(i).startTime,
-                    eventList.get(i).endTime,
-                    eventList.get(i).description));
+    public static void styleAndFilter(){
+        for(int i = 0; i < eventList.size(); i++) {
+            setEventColor(i);
+            if (!blackList.contains(eventList.get(i).title)) {
+                styledEvents.add(new EventWStyle(
+                        eventList.get(i).id,
+                        eventList.get(i).title,
+                        eventList.get(i).startTime,
+                        eventList.get(i).endTime,
+                        eventList.get(i).description,
+                        setEventColor(i)
+                ));
+            }
         }
         CalendarActivity.setEvents(styledEvents);
     }
 
+
     public static void setBlackList(ArrayList<String> blackList){
         EventCreator.blackList = blackList;
-    }
-
-    public static void applyColorBlacklist(){
-        blackList = updateBlackList();
-        newEventList.clear();
-        for(int i = 0; i < eventList.size(); i++){
-            setEventColor(i);
-            if(!blackList.contains(eventList.get(i).title)){
-                newEventList.add(eventList.get(i));
-            }
-        }
-        applyStyle();
     }
 
     public static ArrayList<String> updateBlackList(){
@@ -119,32 +109,31 @@ public class EventCreator {
     }
 
     @SuppressLint("ResourceAsColor")
-    public static void setEventColor(int i) throws NullPointerException{
+    public static String setEventColor(int i) throws NullPointerException{
         Random rnd = new Random();
 
         if(eventList.get(i).getEndTime().get(Calendar.HOUR_OF_DAY) - eventList.get(i).getStartTime().get(Calendar.HOUR_OF_DAY) >= 8){
-            styledEvents.get(i).setStyle("#86c5da");
+            return "#86c5da";
         }
         else if(eventList.get(i).getTitle().toLowerCase().contains("klausur")){
-            styledEvents.get(i).setStyle("#E2001A");
+            return "E2001A";
         }
         else if(eventList.get(i).getEndTime().before(Calendar.getInstance())){
-            styledEvents.get(i).setStyle("#A9A9A9");
+            return "A9A9A9";
         }
         else if(colorMap.containsKey(eventList.get(i).getTitle())){
-            try { styledEvents.get(i).setStyle(Objects.requireNonNull(colorMap.get(eventList.get(i).getTitle())));}
+            try {
+                return Objects.requireNonNull(colorMap.get(eventList.get(i).getTitle()));}
             catch (Exception e){ e.printStackTrace(); }
         }
-        else {
-            final int white = Color.WHITE;
-            final int red = (rnd.nextInt(130) + 20);
-            final int green = (rnd.nextInt(150) + 20);
-            final int blue = (rnd.nextInt(190) + 20);
-            int rndColor = Color.rgb(red, green, blue);
-            String colorString = String.valueOf(ColorUtils.blendARGB(white, rndColor, 0.8F));
-            System.out.println(colorString);
-            colorMap.put(eventList.get(i).getTitle(), colorString);
-        }
+        final int white = Color.WHITE;
+        final int red = (rnd.nextInt(130) + 20);
+        final int green = (rnd.nextInt(150) + 20);
+        final int blue = (rnd.nextInt(190) + 20);
+        int rndColor = Color.rgb(red, green, blue);
+        String colorString = String.valueOf(ColorUtils.blendARGB(white, rndColor, 0.8F));
+        colorMap.put(eventList.get(i).getTitle(), colorString);
+        return colorString;
     }
 
     public static Calendar localDateTimeToDate(LocalDateTime localDateTime) {
@@ -169,6 +158,7 @@ public class EventCreator {
     public static void clearEvents(){
         newEventList.clear();
         eventList.clear();
+        styledEvents.clear();
     }
     public static ArrayList<EventWStyle> getEvents() {
        return styledEvents;

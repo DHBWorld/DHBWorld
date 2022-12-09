@@ -171,7 +171,7 @@ public class CalendarActivity extends AppCompatActivity{
         blackList = removeDuplicates(blackList);
         EventCreator.clearEvents();
         EventCreator.setBlackList(blackList);
-        EventCreator.applyColorBlacklist();
+        EventCreator.styleAndFilter();
         loadedDateList.clear();
         saveBlackList(blackList,"blackList");
         restart(CalendarActivity.this);
