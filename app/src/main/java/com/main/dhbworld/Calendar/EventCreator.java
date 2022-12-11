@@ -1,7 +1,5 @@
 package com.main.dhbworld.Calendar;
 
-
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -29,7 +27,7 @@ import dhbw.timetable.rapla.data.event.Appointment;
 public class EventCreator {
     static List<String> blackList;
     static ArrayList<Events> newEventList;
-    static Map<String, String> colorMap;
+    static Map<String, Integer> colorMap;
    static ArrayList<Events> eventList;
    static ArrayList<String> filterTitles;
    static SharedPreferences preferences;
@@ -81,44 +79,10 @@ public class EventCreator {
             // Add the current data to the currentlyLoaded list
             currentlyLoaded.add(keySet);
 
-
-            compareListSizes();
-
-
-
             cacheData();
             styleAndFilter();
         }
     }
-
-    // A debugging method that compares the size of all lists in the EventCreator class
-    public static void compareListSizes(){
-        // Get the sizes of all the lists
-        int blackListSize = blackList.size();
-        int newEventListSize = newEventList.size();
-        int colorMapSize = colorMap.size();
-        int eventListSize = eventList.size();
-        int filterTitlesSize = filterTitles.size();
-        int styledEventsSize = styledEvents.size();
-        int currentlyLoadedSize = currentlyLoaded.size();
-
-        // Compare the sizes of the lists and print the result
-        if(blackListSize == newEventListSize && newEventListSize == colorMapSize && colorMapSize == eventListSize &&
-                eventListSize == filterTitlesSize && filterTitlesSize == styledEventsSize && styledEventsSize == currentlyLoadedSize){
-            System.out.println("All lists have the same size: " + blackListSize);
-        }
-        else{
-            System.out.println("List sizes are not equal!");
-            System.out.println("blackListSize: " + blackListSize);
-            System.out.println("newEventListSize: " + newEventListSize);
-            System.out.println("colorMapSize: " + colorMapSize);
-            System.out.println("eventListSize: " + eventListSize);
-            System.out.println("filterTitlesSize: " + filterTitlesSize);
-            System.out.println("styledEventsSize: " + styledEventsSize);
-            System.out.println("currentlyLoadedSize: " + currentlyLoadedSize);
-        }
-    }
-
 
     public static void cacheData(){
         SharedPreferences.Editor editor = preferences.edit();
@@ -135,7 +99,6 @@ public class EventCreator {
         Gson gson = new Gson();
         Type eventType = new TypeToken<ArrayList<Events>>() {}.getType();
         eventList = gson.fromJson(eventString,eventType);
-    //  eventList.clear();
         styleAndFilter();
     }
 
@@ -168,18 +131,17 @@ public class EventCreator {
          blackList = CalendarActivity.getBlackList();
     }
 
-    @SuppressLint("ResourceAsColor")
-    public static String setEventColor(int i) throws NullPointerException{
+    public static int setEventColor(int i){
         Random rnd = new Random();
 
         if(eventList.get(i).getEndTime().get(Calendar.HOUR_OF_DAY) - eventList.get(i).getStartTime().get(Calendar.HOUR_OF_DAY) >= 8){
-            return "#86c5da";
+            return Color.BLUE;
         }
         else if(eventList.get(i).getTitle().toLowerCase().contains("klausur")){
-            return "E2001A";
+            return 0xFFcf0606;
         }
         else if(eventList.get(i).getEndTime().before(Calendar.getInstance())){
-            return "A9A9A9";
+            return 0xFF968686;
         }
         else if(colorMap.containsKey(eventList.get(i).getTitle())){
             try {
@@ -191,10 +153,11 @@ public class EventCreator {
         final int green = (rnd.nextInt(150) + 20);
         final int blue = (rnd.nextInt(190) + 20);
         int rndColor = Color.rgb(red, green, blue);
-        String colorString = String.valueOf(ColorUtils.blendARGB(white, rndColor, 0.8F));
-        colorMap.put(eventList.get(i).getTitle(), colorString);
-        return colorString;
+        int lessTransparentColor = (ColorUtils.blendARGB(white, rndColor, 0.8F));
+        colorMap.put(eventList.get(i).getTitle(), lessTransparentColor);
+        return lessTransparentColor;
     }
+
 
     public static Calendar localDateTimeToDate(LocalDateTime localDateTime) {
         Calendar calendar = Calendar.getInstance();

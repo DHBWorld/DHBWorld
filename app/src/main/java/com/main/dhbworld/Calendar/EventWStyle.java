@@ -11,13 +11,13 @@ public class EventWStyle {
     String description;
     WeekViewEntity.Style style;
 
-    EventWStyle(long id, String title, Calendar startTime, Calendar endTime, String description, String styleString) {
+    EventWStyle(long id, String title, Calendar startTime, Calendar endTime, String description, int styleString) {
         this.id = id;
         this.title = title;
         this.startTime = startTime;
         this.endTime = endTime;
         this.description = description;
-        this.style = new WeekViewEntity.Style.Builder().setBackgroundColor(styleString.hashCode()).build();
+        this.style = new WeekViewEntity.Style.Builder().setBackgroundColor(styleString).build();
     }
 
     public long getId() {
