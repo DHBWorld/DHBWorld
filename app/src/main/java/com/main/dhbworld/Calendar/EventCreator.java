@@ -22,6 +22,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Random;
+import java.util.Set;
+
 import dhbw.timetable.rapla.data.event.Appointment;
 
 public class EventCreator {
@@ -32,6 +34,7 @@ public class EventCreator {
    static ArrayList<String> filterTitles;
    static SharedPreferences preferences;
     static ArrayList<EventWStyle> styledEvents;
+    static ArrayList<Set<LocalDate>> currentlyLoaded;
 
     public static void instantiateVariables(Context context){
        preferences = PreferenceManager.getDefaultSharedPreferences(context);
@@ -41,27 +44,81 @@ public class EventCreator {
        eventList = new ArrayList<>();
        styledEvents = new ArrayList<>();
        filterTitles = new ArrayList<>();
+       currentlyLoaded = new ArrayList<>();
    }
 
-    //TODO merge fillData and createEvents methods, Event Class is unnecessary
+    // Fills data for a given date into the appropriate variables
     public static void fillData(Map<LocalDate, ArrayList<Appointment>> data, Calendar date){
-        LocalDate asLocalDate = LocalDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault()).toLocalDate();
-        ArrayList<Appointment> currentData = data.get(asLocalDate);
-        for (int i = 0; i < Objects.requireNonNull(currentData).size(); i++){
-            filterTitles.add(currentData.get(i).getTitle());
-            Events newEvent = new Events(currentData.get(i).getTitle(),
-                    localDateTimeToDate(currentData.get(i).getStartDate()),
-                    localDateTimeToDate(currentData.get(i).getEndDate()),
-                    currentData.get(i).getPersons() + ", " +
-                            currentData.get(i).getResources().replace(",","\n"));
-            newEvent.createId();
-            eventList.add(newEvent);
+        // Get the set of keys (dates) in the data map
+        Set<LocalDate> keySet = data.keySet();
 
+        // Check if the currently loaded data contains the given date
+        if(!currentlyLoaded.contains(keySet)){
+            // Convert the given Calendar date to a LocalDate
+            LocalDate asLocalDate = LocalDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault()).toLocalDate();
+
+            // Get the list of appointments for the given date
+            ArrayList<Appointment> currentData = data.get(asLocalDate);
+
+            // Iterate through the list of appointments
+            for (int i = 0; i < Objects.requireNonNull(currentData).size(); i++) {
+                // Add the title of the current appointment to the filterTitles list
+                filterTitles.add(currentData.get(i).getTitle());
+
+                // Create a new event using the data from the current appointment
+                Events newEvent = new Events(currentData.get(i).getTitle(),
+                        localDateTimeToDate(currentData.get(i).getStartDate()),
+                        localDateTimeToDate(currentData.get(i).getEndDate()),
+                        currentData.get(i).getPersons() + ", " +
+                                currentData.get(i).getResources().replace(",", "\n"));
+
+                // Generate an ID for the new event
+                newEvent.createId();
+
+                // Add the new event to the eventList
+                eventList.add(newEvent);
+            }
+            // Add the current data to the currentlyLoaded list
+            currentlyLoaded.add(keySet);
+
+
+            compareListSizes();
+
+
+
+            cacheData();
+            styleAndFilter();
         }
-
-        cacheData();
-        styleAndFilter();
     }
+
+    // A debugging method that compares the size of all lists in the EventCreator class
+    public static void compareListSizes(){
+        // Get the sizes of all the lists
+        int blackListSize = blackList.size();
+        int newEventListSize = newEventList.size();
+        int colorMapSize = colorMap.size();
+        int eventListSize = eventList.size();
+        int filterTitlesSize = filterTitles.size();
+        int styledEventsSize = styledEvents.size();
+        int currentlyLoadedSize = currentlyLoaded.size();
+
+        // Compare the sizes of the lists and print the result
+        if(blackListSize == newEventListSize && newEventListSize == colorMapSize && colorMapSize == eventListSize &&
+                eventListSize == filterTitlesSize && filterTitlesSize == styledEventsSize && styledEventsSize == currentlyLoadedSize){
+            System.out.println("All lists have the same size: " + blackListSize);
+        }
+        else{
+            System.out.println("List sizes are not equal!");
+            System.out.println("blackListSize: " + blackListSize);
+            System.out.println("newEventListSize: " + newEventListSize);
+            System.out.println("colorMapSize: " + colorMapSize);
+            System.out.println("eventListSize: " + eventListSize);
+            System.out.println("filterTitlesSize: " + filterTitlesSize);
+            System.out.println("styledEventsSize: " + styledEventsSize);
+            System.out.println("currentlyLoadedSize: " + currentlyLoadedSize);
+        }
+    }
+
 
     public static void cacheData(){
         SharedPreferences.Editor editor = preferences.edit();
@@ -83,6 +140,9 @@ public class EventCreator {
     }
 
     public static void styleAndFilter(){
+        // Clear the styledEvents list before adding new events to it
+        styledEvents.clear();
+        updateBlackList();
         for(int i = 0; i < eventList.size(); i++) {
             setEventColor(i);
             if (!blackList.contains(eventList.get(i).title)) {
@@ -104,8 +164,8 @@ public class EventCreator {
         EventCreator.blackList = blackList;
     }
 
-    public static ArrayList<String> updateBlackList(){
-        return CalendarActivity.getBlackList();
+    public static void updateBlackList(){
+         blackList = CalendarActivity.getBlackList();
     }
 
     @SuppressLint("ResourceAsColor")
