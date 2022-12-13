@@ -85,23 +85,37 @@ public class EventCreator {
     }
 
     public static void cacheData(){
+        // Get a reference to the SharedPreferences object
         SharedPreferences.Editor editor = preferences.edit();
-        //convert to string using gson
+
+        // Convert the eventList to a JSON string using Gson
         Gson gson = new Gson();
         String eventString = gson.toJson(eventList);
-        //save string in sharedpreferences as "hashMapString"
+
+        // Save the JSON string in the SharedPreferences object under the key "CalendarData"
         editor.putString("CalendarData", eventString);
+
+        // Save the changes to the SharedPreferences object
         editor.apply();
     }
 
     public static void getCachedData(){
+        // Retrieve the JSON string from the SharedPreferences object using the key "CalendarData"
         String eventString = preferences.getString("CalendarData", null);
+
+        // Use Gson to convert the JSON string back into a list of Events objects
         Gson gson = new Gson();
         Type eventType = new TypeToken<ArrayList<Events>>() {}.getType();
         eventList = gson.fromJson(eventString,eventType);
+
+        // Apply some styling and filtering to the eventList
         styleAndFilter();
     }
 
+
+
+
+    // Pass each Event into the EventWStyle class while also applying the users filter
     public static void styleAndFilter(){
         // Clear the styledEvents list before adding new events to it
         styledEvents.clear();

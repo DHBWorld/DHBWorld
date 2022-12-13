@@ -148,7 +148,6 @@ public class DashboardActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
         NavigationUtilities.setUpNavigation(this,R.id.dashboard);
-
         defineViews();
         userConfigurationOfDashboard();
         loadUserInteraction();
@@ -159,10 +158,12 @@ public class DashboardActivity extends AppCompatActivity {
             if (cardInfo_isVisible){
                 loadInfo();
             }
-        }else{
+        }
+        else{
             Snackbar.make(this.findViewById(android.R.id.content), getResources().getString(R.string.problemsWithInternetConnection), BaseTransientBottomBar.LENGTH_LONG).show();
         }
         loadPersonalInformation();
+        loadCalendar();
     }
 
     private void defineViews(){

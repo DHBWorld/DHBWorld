@@ -48,4 +48,7 @@ public class Events {
        id = (title + startTime.toString() + description).hashCode();
     }
 
+    public String getDescription() {
+        return description;
+    }
 }
