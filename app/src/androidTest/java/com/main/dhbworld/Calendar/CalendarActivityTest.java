@@ -84,7 +84,7 @@ public class CalendarActivityTest{
                 Calendar nextWeek = (Calendar) now.clone();
                 nextWeek.add(Calendar.WEEK_OF_YEAR,1);
                 WeekViewEntity.Style style = new WeekViewEntity.Style.Builder().setBackgroundColor(Color.parseColor("#86c5da")).build();
-                bottomSheetEvent = new EventWStyle(1,"TestTitle",now,nextWeek,"TestDescription");
+                bottomSheetEvent = new EventWStyle(1,"TestTitle",now,nextWeek,"TestDescription", Color.BLUE);
                 activity.showBottomSheet(bottomSheetEvent);
                 BottomSheetDialog bottomSheetDialog = activity.bottomSheetDialog;
                 assertTrue(bottomSheetDialog.isShowing());
