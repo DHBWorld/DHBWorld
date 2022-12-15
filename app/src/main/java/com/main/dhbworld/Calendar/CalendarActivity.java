@@ -64,7 +64,7 @@ public class CalendarActivity extends AppCompatActivity{
     SharedPreferences preferences;
     BottomSheetDialog bottomSheetDialog;
     AlertDialog alertDialog;
-    static ArrayList<Events> events = new ArrayList<>();
+    static ArrayList<EventWStyle> events = new ArrayList<>();
     static ArrayList<String> blackList = new ArrayList<>();
     String url;
     boolean stillLoading = false;
