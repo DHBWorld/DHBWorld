@@ -1,23 +1,23 @@
 package com.main.dhbworld.Calendar;
 
-import android.graphics.Color;
-
 import com.alamkanak.weekview.WeekViewEntity;
-import java.util.ArrayList;
 import java.util.Calendar;
 
-public class Events {
+public class EventWStyle {
     long id;
     String title;
     Calendar startTime;
     Calendar endTime;
     String description;
+    WeekViewEntity.Style style;
 
-    Events(String title, Calendar startTime, Calendar endTime, String description) {
+    EventWStyle(long id, String title, Calendar startTime, Calendar endTime, String description, int styleString) {
+        this.id = id;
         this.title = title;
         this.startTime = startTime;
         this.endTime = endTime;
         this.description = description;
+        this.style = new WeekViewEntity.Style.Builder().setBackgroundColor(styleString).build();
     }
 
     public long getId() {
@@ -32,10 +32,6 @@ public class Events {
         return startTime;
     }
 
-    public Calendar getEndTime() {
-        return endTime;
-    }
-
     public void setId(long id) {
         this.id = id;
     }
@@ -44,11 +40,5 @@ public class Events {
         this.title = title;
     }
 
-    public void createId(){
-       id = (title + startTime.toString() + description).hashCode();
     }
 
-    public String getDescription() {
-        return description;
-    }
-}
