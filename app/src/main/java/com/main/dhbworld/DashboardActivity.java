@@ -161,9 +161,10 @@ public class DashboardActivity extends AppCompatActivity {
         }
         else{
             Snackbar.make(this.findViewById(android.R.id.content), getResources().getString(R.string.problemsWithInternetConnection), BaseTransientBottomBar.LENGTH_LONG).show();
+            loadPersonalInformation();
+            loadCalendar();
         }
-        loadPersonalInformation();
-        loadCalendar();
+
     }
 
     private void defineViews(){
