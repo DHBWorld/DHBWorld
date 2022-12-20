@@ -195,9 +195,9 @@ public class CalendarActivity extends AppCompatActivity{
                 EditText urlEditText = tempView.findViewById(R.id.urlEditText);
                 EditText courseEditText = tempView.findViewById(R.id.urlCourseName);
                 EditText courseDirEditText = tempView.findViewById(R.id.urlCourseDirector);
-                String courseDirector = courseDirEditText.getText().toString().toLowerCase().replace(" ", "");
-                String courseName = courseEditText.getText().toString().toUpperCase().replace(" ","");
-                String urlString = urlEditText.getText().toString();
+                String courseDirector = Objects.requireNonNull(courseDirEditText).getText().toString().toLowerCase().replace(" ", "");
+                String courseName = Objects.requireNonNull(courseEditText).getText().toString().toUpperCase().replace(" ","");
+                String urlString = Objects.requireNonNull(urlEditText).getText().toString();
                 Map<String, Object> courseInFirestore = new HashMap<>();
                 SharedPreferences.Editor editor = preferences.edit();
 
@@ -287,7 +287,7 @@ public class CalendarActivity extends AppCompatActivity{
                 progressBar.setVisibility(View.VISIBLE);
             }
         });
-        Map<LocalDate, ArrayList<Appointment>> data = new HashMap<>();
+        Map<LocalDate, ArrayList<Appointment>> data;
         LocalDate thisWeek = LocalDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault()).toLocalDate();
         loadedDateList.add(date.toInstant());
         Calendar dateCopy = (Calendar) date.clone();
