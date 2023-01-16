@@ -45,6 +45,11 @@ public class DualisDocumentFragment extends Fragment implements DualisAPI.Docume
 
     private View mainView;
 
+    public DualisDocumentFragment() {
+        arguments = "";
+        cookies = new ArrayList<>();
+    }
+
     public DualisDocumentFragment(String arguments, List<HttpCookie> cookies) {
         this.arguments = arguments;
         this.cookies = cookies;
@@ -70,6 +75,11 @@ public class DualisDocumentFragment extends Fragment implements DualisAPI.Docume
         dualisAPI = new DualisAPI();
         dualisAPI.setDocumentsLoadedListener(this);
         dualisAPI.setDocumentsErrorListener(this);
+
+        if (cookies.size() == 0) {
+            Snackbar.make(mainView.findViewById(android.R.id.content), getResources().getString(R.string.error_getting_kvv_data), BaseTransientBottomBar.LENGTH_SHORT).show();
+            return;
+        }
 
         CookieManager cookieManager = new CookieManager();
         try {
