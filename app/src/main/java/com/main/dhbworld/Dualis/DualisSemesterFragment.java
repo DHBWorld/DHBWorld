@@ -50,6 +50,10 @@ public class DualisSemesterFragment extends Fragment implements DualisAPI.Course
 
     View mainView;
 
+    public DualisSemesterFragment() {
+        this.arguments = "";
+        this.cookies = new ArrayList<>();
+    }
     public DualisSemesterFragment(String arguments, List<HttpCookie> cookies) {
         this.arguments = arguments;
         this.cookies = cookies;
@@ -73,6 +77,11 @@ public class DualisSemesterFragment extends Fragment implements DualisAPI.Course
         dualisAPI = new DualisAPI();
         dualisAPI.setOnCourseDataLoadedListener(this);
         dualisAPI.setOnCourseErrorListener(this);
+
+        if (cookies.size() == 0) {
+            Snackbar.make(mainView.findViewById(android.R.id.content), getResources().getString(R.string.error_getting_kvv_data), BaseTransientBottomBar.LENGTH_SHORT).show();
+            return;
+        }
 
         CookieManager cookieManager = new CookieManager();
         try {

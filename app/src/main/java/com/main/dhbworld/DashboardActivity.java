@@ -151,18 +151,16 @@ public class DashboardActivity extends AppCompatActivity {
         defineViews();
         userConfigurationOfDashboard();
         loadUserInteraction();
+        loadPersonalInformation();
+        loadCalendar();
         if (NetworkAvailability.check(DashboardActivity.this)){
             loadMealPlan();
-            loadCalendar();
             loadKvv();
             if (cardInfo_isVisible){
                 loadInfo();
             }
-        }
-        else{
+        } else {
             Snackbar.make(this.findViewById(android.R.id.content), getResources().getString(R.string.problemsWithInternetConnection), BaseTransientBottomBar.LENGTH_LONG).show();
-            loadPersonalInformation();
-            loadCalendar();
         }
 
     }

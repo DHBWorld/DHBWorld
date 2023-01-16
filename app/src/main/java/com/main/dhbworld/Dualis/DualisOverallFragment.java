@@ -51,6 +51,11 @@ public class DualisOverallFragment extends Fragment implements DualisAPI.Overall
 
     View mainView;
 
+    public DualisOverallFragment() {
+        this.arguments = "";
+        this.cookies = new ArrayList<>();
+    }
+
     public DualisOverallFragment(String arguments, List<HttpCookie> cookies) {
         this.arguments = arguments;
         this.cookies = cookies;
@@ -78,6 +83,11 @@ public class DualisOverallFragment extends Fragment implements DualisAPI.Overall
         dualisAPI = new DualisAPI();
         dualisAPI.setOnOverallDataLoadedListener(this);
         dualisAPI.setOnOverallErrorListener(this);
+
+        if (cookies.size() == 0) {
+            Snackbar.make(mainView.findViewById(android.R.id.content), getResources().getString(R.string.error_getting_kvv_data), BaseTransientBottomBar.LENGTH_SHORT).show();
+            return;
+        }
 
         CookieManager cookieManager = new CookieManager();
         try {
