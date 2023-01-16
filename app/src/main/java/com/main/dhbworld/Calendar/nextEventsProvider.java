@@ -33,10 +33,9 @@ public class nextEventsProvider {
 
     public Appointment getNextEvent(){
         String eventString = sp.getString("CalendarData", null);
+        //load next event if internet connection available
         if (NetworkAvailability.check(context)) {
             try {
-
-
                 String url = getUrl();
                 blackList = getBlackList(context);
                 Calendar thisWeekCal = Calendar.getInstance();
@@ -54,7 +53,7 @@ public class nextEventsProvider {
                 e.printStackTrace();
             }
         }
-
+        //return cache if available
         else if(!eventString.isEmpty()){
             ArrayList<Events> eventList;
             // Use Gson to convert the JSON string back into a list of Events objects
@@ -82,6 +81,7 @@ public class nextEventsProvider {
             }
             return disectData(appointmentList);
         }
+        //return null if no internet connection or cached data
         return null;
     }
 
@@ -97,12 +97,15 @@ public class nextEventsProvider {
 
     public Appointment disectData(ArrayList<Appointment> data){
         ArrayList<Appointment> futureEvents = getFutureEvents(data);
+        Calendar plusTwoWeeksCal = Calendar.getInstance();
+        plusTwoWeeksCal.add(Calendar.WEEK_OF_YEAR,2);
+        LocalDate plusTwoWeeks = LocalDateTime.ofInstant(plusTwoWeeksCal.toInstant(),ZoneId.systemDefault()).toLocalDate();
         if(futureEvents == null | Objects.requireNonNull(futureEvents).isEmpty()){
             return new Appointment(null,null,context.getString(R.string.no_classes),"","");
         }
         Appointment nextEvent = futureEvents.get(0);
             for(int i = 0; i < futureEvents.size(); i++){
-                if(futureEvents.get(i).getStartDate().isBefore(nextEvent.getStartDate())){
+                if(futureEvents.get(i).getStartDate().isBefore(nextEvent.getStartDate()) &&  futureEvents.get(i).getStartDate().toLocalDate().isBefore(plusTwoWeeks)){
                     nextEvent = futureEvents.get(i);
                 }
             }
