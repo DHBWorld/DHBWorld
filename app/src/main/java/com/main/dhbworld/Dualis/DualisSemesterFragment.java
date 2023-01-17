@@ -108,8 +108,6 @@ public class DualisSemesterFragment extends Fragment implements DualisAPI.Course
 
     @Override
     public void onCourseDataLoaded(JSONObject data) {
-        DualisAPI.setAlarmManager(getContext());
-
         DualisAPI.copareAndSave(getContext(), data);
         ArrayList<String> items = new ArrayList<>();
         try {

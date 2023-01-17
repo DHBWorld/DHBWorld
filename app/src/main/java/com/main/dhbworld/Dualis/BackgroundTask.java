@@ -10,11 +10,9 @@ import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 
-import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
-import androidx.work.Worker;
-import androidx.work.WorkerParameters;
+import androidx.work.ListenableWorker;
 
 import com.main.dhbworld.DualisActivity;
 import com.main.dhbworld.R;
@@ -26,39 +24,31 @@ import java.net.HttpCookie;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
-import java.text.SimpleDateFormat;
-import java.time.Instant;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import javax.net.ssl.HttpsURLConnection;
 
-public class BackgroundWorker extends Worker {
+class BackgroundTask {
 
-    private static final String TAG = "ExampleJobService";
+    private Context context;
+
     private String username = "";
     private String password = "";
-    private final Context context;
 
-    public BackgroundWorker(@NonNull Context context, @NonNull WorkerParameters workerParams) {
-        super(context, workerParams);
+    protected BackgroundTask(Context context) {
         this.context = context;
     }
 
-    @NonNull
-    @Override
-    public Result doWork() {
+    protected void doWork() {
         SharedPreferences sharedPref = context.getSharedPreferences("Dualis", MODE_PRIVATE);
 
         if (!sharedPref.getBoolean("saveCredentials", false)) {
-            return Result.success();
+            return;
         }
 
-        Log.d(TAG, "CALLED!");
         SecureStore secureStore = new SecureStore(context, sharedPref);
         Map<String, String> credentials = null;
         try {
@@ -70,7 +60,7 @@ public class BackgroundWorker extends Worker {
         }
 
         if (password == null || username == null) {
-            return Result.success();
+            return;
         }
 
         new Thread(() -> {
@@ -133,6 +123,6 @@ public class BackgroundWorker extends Worker {
                 }
             });
         }).start();
-        return Result.success();
+        return;
     }
 }

@@ -332,31 +332,6 @@ public class DualisAPI {
         notificationManager.notify(id, builder.build());
     }
 
-    public static void setAlarmManager(Context context) {
-        SharedPreferences settingsPref = PreferenceManager.getDefaultSharedPreferences(context);
-        SharedPreferences sharedPref = context.getSharedPreferences("Dualis", Context.MODE_PRIVATE);
-        if (!sharedPref.getBoolean("saveCredentials", false) || !settingsPref.getBoolean("sync", true)) {
-            return;
-        }
-
-        int time = Integer.parseInt(settingsPref.getString("sync_time", "15"));
-
-        createAlarmManager(context, time);
-    }
-
-    public static void createAlarmManager(Context context, int time) {
-        Constraints constraints = new Constraints.Builder()
-                .setRequiredNetworkType(NetworkType.CONNECTED)
-                .build();
-
-        PeriodicWorkRequest periodicWorkRequest = new PeriodicWorkRequest.Builder(BackgroundWorker.class, time, TimeUnit.MINUTES)
-                .setConstraints(constraints)
-                .build();
-
-        WorkManager workManager = WorkManager.getInstance(context.getApplicationContext());
-        workManager.enqueueUniquePeriodicWork("DualisNotifierDHBWorld", ExistingPeriodicWorkPolicy.REPLACE, periodicWorkRequest);
-    }
-
     public static void createNotificationChannelNewGrade(Context context) {
         String name = context.getString(R.string.channel_name_dualis);
         String description = context.getString(R.string.channel_description_dualis);

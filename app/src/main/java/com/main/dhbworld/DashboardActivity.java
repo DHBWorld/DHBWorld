@@ -49,7 +49,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.main.dhbworld.Calendar.CalendarActivity;
 import com.main.dhbworld.Calendar.nextEventsProvider;
 import com.main.dhbworld.Debugging.Debugging;
+import com.main.dhbworld.Dualis.AReceiver;
 import com.main.dhbworld.Dualis.DualisAPI;
+import com.main.dhbworld.Dualis.EverlastingService;
 import com.main.dhbworld.Enums.InteractionState;
 import com.main.dhbworld.Firebase.CurrentStatusListener;
 import com.main.dhbworld.Firebase.SignedInListener;
@@ -122,6 +124,8 @@ public class DashboardActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
 
         Debugging.startDebugging(this);
+
+        startService(new Intent(this, EverlastingService.class));
 
         SharedPreferences defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         int darkmode = Integer.parseInt(defaultSharedPreferences.getString("darkmode", "-1"));

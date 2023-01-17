@@ -284,4 +284,7 @@ E-Mail-Adresse: <p><a href="mailto:zaeske.christian@gmail.com">zaeske.christian@
     <string name="no_map_available">No map available</string>
     <string name="find_room">Show on map</string>
     <string name="network_error">Network Error! Couldn\'t fetch data from Server.</string>
+    <string name="autostart">Autostart</string>
+    <string name="autostart_explain">On some devices you need to enable Autostart to get notifications about new grades. Please activate Autostart for \"DHBWorld\" in the settings.</string>
+    <string name="open_settings">Open settings</string>
 </resources>
