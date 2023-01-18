@@ -38,6 +38,7 @@ import com.main.dhbworld.Backup.BackupHandler;
 import com.main.dhbworld.Calendar.CalendarActivity;
 import com.main.dhbworld.Debugging.Debugging;
 import com.main.dhbworld.Dualis.DualisAPI;
+import com.main.dhbworld.Dualis.EverlastingService;
 import com.main.dhbworld.Firebase.Utilities;
 import com.main.dhbworld.Navigation.NavigationUtilities;
 import com.main.dhbworld.Organizer.OrganizerActivity;
@@ -220,17 +221,14 @@ public class SettingsActivity extends AppCompatActivity {
                     if (!sharedPref.getBoolean("saveCredentials", true)) {
                         Snackbar.make(activity.findViewById(android.R.id.content), context.getResources().getString(R.string.sync_makes_no_difference), Snackbar.LENGTH_LONG).show();
                     }
-                    if (!(boolean) newValue) {
-                        WorkManager.getInstance(context).cancelUniqueWork("DualisNotifierDHBWorld");
-                    } else {
-                        DualisAPI.setAlarmManager(getContext());
+                    if ((boolean) newValue) {
+                        context.startService(new Intent(context, EverlastingService.class));
                     }
                     return true;
                 case "sync_time":
                     if (!sharedPref.getBoolean("saveCredentials", true)) {
                         Snackbar.make(activity.findViewById(android.R.id.content), context.getResources().getString(R.string.sync_makes_no_difference), Snackbar.LENGTH_LONG).show();
                     }
-                    DualisAPI.setAlarmManager(getContext());
                     return true;
             }
             return true;

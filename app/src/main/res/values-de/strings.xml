@@ -283,4 +283,7 @@ E-Mail-Adresse: <p><a href="mailto:zaeske.christian@gmail.com">zaeske.christian@
     <string name="no_map_available">Keine Karte verfügbar</string>
     <string name="find_room">Auf Karte anzeigen</string>
     <string name="network_error">Netzwerkfehler! Daten konnten nicht geladen werden.</string>
+    <string name="autostart">Autostart</string>
+    <string name="autostart_explain">Auf einigen Geräten muss der Autostart aktiviert werden, damit du Benachrichtigungen über neue Apps erhalten kannst. Aktiviere dafür den Autostart bei \"DHBWorld\" in den Einstellungen.</string>
+    <string name="open_settings">Einstellungen öffnen</string>
 </resources>

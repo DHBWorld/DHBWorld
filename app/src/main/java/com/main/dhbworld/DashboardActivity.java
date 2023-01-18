@@ -7,18 +7,12 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.Icon;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.text.Html;
-import android.text.method.LinkMovementMethod;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -30,7 +24,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.content.res.AppCompatResources;
 import androidx.core.content.ContextCompat;
-import androidx.core.content.res.ResourcesCompat;
 import androidx.core.graphics.ColorUtils;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -49,7 +42,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.main.dhbworld.Calendar.CalendarActivity;
 import com.main.dhbworld.Calendar.nextEventsProvider;
 import com.main.dhbworld.Debugging.Debugging;
-import com.main.dhbworld.Dualis.DualisAPI;
+import com.main.dhbworld.Dualis.EverlastingService;
 import com.main.dhbworld.Enums.InteractionState;
 import com.main.dhbworld.Firebase.CurrentStatusListener;
 import com.main.dhbworld.Firebase.SignedInListener;
@@ -60,18 +53,13 @@ import com.main.dhbworld.KVV.Disruption;
 import com.main.dhbworld.KVV.KVVDataLoader;
 import com.main.dhbworld.Navigation.NavigationUtilities;
 
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.Objects;
 
 import dhbw.timetable.rapla.data.event.Appointment;
 
@@ -122,6 +110,12 @@ public class DashboardActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
 
         Debugging.startDebugging(this);
+
+        System.out.println("Running: " + EverlastingService.isRunning);
+
+        if (!EverlastingService.isRunning) {
+            startService(new Intent(this, EverlastingService.class));
+        }
 
         SharedPreferences defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         int darkmode = Integer.parseInt(defaultSharedPreferences.getString("darkmode", "-1"));

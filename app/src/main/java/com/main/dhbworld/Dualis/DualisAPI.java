@@ -5,17 +5,10 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.util.Log;
 
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
-import androidx.preference.PreferenceManager;
-import androidx.work.Constraints;
-import androidx.work.ExistingPeriodicWorkPolicy;
-import androidx.work.NetworkType;
-import androidx.work.PeriodicWorkRequest;
-import androidx.work.WorkManager;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -30,25 +23,14 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.jsoup.nodes.Document;
-import org.myjson.Cookie;
 
-import java.io.IOException;
 import java.net.CookieHandler;
 import java.net.CookieManager;
-import java.net.HttpCookie;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.time.Instant;
 import java.time.temporal.ChronoField;
-import java.time.temporal.TemporalField;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 public class DualisAPI {
 
@@ -332,31 +314,6 @@ public class DualisAPI {
         notificationManager.notify(id, builder.build());
     }
 
-    public static void setAlarmManager(Context context) {
-        SharedPreferences settingsPref = PreferenceManager.getDefaultSharedPreferences(context);
-        SharedPreferences sharedPref = context.getSharedPreferences("Dualis", Context.MODE_PRIVATE);
-        if (!sharedPref.getBoolean("saveCredentials", false) || !settingsPref.getBoolean("sync", true)) {
-            return;
-        }
-
-        int time = Integer.parseInt(settingsPref.getString("sync_time", "15"));
-
-        createAlarmManager(context, time);
-    }
-
-    public static void createAlarmManager(Context context, int time) {
-        Constraints constraints = new Constraints.Builder()
-                .setRequiredNetworkType(NetworkType.CONNECTED)
-                .build();
-
-        PeriodicWorkRequest periodicWorkRequest = new PeriodicWorkRequest.Builder(BackgroundWorker.class, time, TimeUnit.MINUTES)
-                .setConstraints(constraints)
-                .build();
-
-        WorkManager workManager = WorkManager.getInstance(context.getApplicationContext());
-        workManager.enqueueUniquePeriodicWork("DualisNotifierDHBWorld", ExistingPeriodicWorkPolicy.REPLACE, periodicWorkRequest);
-    }
-
     public static void createNotificationChannelNewGrade(Context context) {
         String name = context.getString(R.string.channel_name_dualis);
         String description = context.getString(R.string.channel_description_dualis);
@@ -372,7 +329,7 @@ public class DualisAPI {
     }
 
     static void createNotificationChannel(Context context, String id, String name, String description) {
-        int importance = NotificationManager.IMPORTANCE_DEFAULT;
+        int importance = NotificationManager.IMPORTANCE_HIGH;
         NotificationChannel channel = new NotificationChannel(id, name, importance);
         channel.setDescription(description);
         NotificationManager notificationManager = context.getSystemService(NotificationManager.class);
