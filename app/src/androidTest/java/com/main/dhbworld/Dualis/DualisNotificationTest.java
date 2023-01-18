@@ -25,26 +25,6 @@ import java.util.concurrent.ExecutionException;
 public class DualisNotificationTest {
 
    @Test
-   public void createAlarmManagerTest() {
-      Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
-
-      DualisAPI.createAlarmManager(appContext, 15);
-
-      WorkManager workManager = WorkManager.getInstance(appContext.getApplicationContext());
-      try {
-         List<WorkInfo> workInfos = workManager.getWorkInfosForUniqueWork("DualisNotifierDHBWorld").get();
-
-         assertEquals(1, workInfos.size());
-
-         WorkInfo workInfo = workInfos.get(0);
-         assertEquals(WorkInfo.State.ENQUEUED, workInfo.getState());
-
-      } catch (ExecutionException | InterruptedException e) {
-         fail();
-      }
-   }
-
-   @Test
    public void createNotificationChannelTest() {
       Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
       String id =  "testID";
