@@ -11,12 +11,10 @@ import android.os.HandlerThread;
 import android.os.IBinder;
 import android.os.Looper;
 import android.os.SystemClock;
-import android.util.Log;
 
 import androidx.annotation.WorkerThread;
 import androidx.preference.PreferenceManager;
 
-import java.time.Instant;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class EverlastingService extends Service {
@@ -26,14 +24,16 @@ public class EverlastingService extends Service {
    @SuppressWarnings("FieldCanBeLocal")
    private volatile HandlerThread mHandlerThread;
    private volatile Handler mHandler;
-   private String mName;
-   private boolean mLogging;
+   private int mName;
    private final AtomicBoolean isDestroyed = new AtomicBoolean();
 
    private Thread mainBackgroundThread;
 
+   public static boolean isRunning = false;
+
    public EverlastingService() {
       super();
+      mName = Long.hashCode(System.currentTimeMillis());
    }
 
    /**
@@ -44,6 +44,8 @@ public class EverlastingService extends Service {
    @WorkerThread
    protected void run() {
 
+      isRunning = true;
+
       SharedPreferences settingsPref = PreferenceManager.getDefaultSharedPreferences(this);
       long sleepTimeMinutes = Long.parseLong(settingsPref.getString("sync_time", "15"));
 
@@ -51,12 +53,9 @@ public class EverlastingService extends Service {
          return;
       }
 
-      DualisAPI.sendNotification(this, "Test-Notification", "Time: " + Instant.now().toString(), Long.hashCode(System.currentTimeMillis()));
-
       try {
-         for (int i=0; i<sleepTimeMinutes*60; i++) {
-            Thread.sleep(1000);
-            System.out.println("Still here");
+         for (int i=0; i<sleepTimeMinutes*6; i++) {
+            Thread.sleep(10000);
          }
       } catch (InterruptedException ignored) {
          return;
@@ -73,7 +72,7 @@ public class EverlastingService extends Service {
     */
    @WorkerThread
    protected void finish() {
-
+      isRunning = false;
    }
 
    /**
