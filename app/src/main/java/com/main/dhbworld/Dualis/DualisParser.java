@@ -92,6 +92,9 @@ public class DualisParser {
 
     public static JSONArray parseCoursesOverall(JSONObject mainJson, Document doc) {
         Elements resultTables = doc.select(".nb.list.students_results");
+        if (resultTables.size() == 0) {
+            return new JSONArray();
+        }
         Element resultModulesTable = resultTables.get(0);
         Elements resultModules = resultModulesTable.select("tr:not(.subhead,.tbsubhead)");
 

@@ -360,10 +360,10 @@ public class DashboardActivity extends AppCompatActivity {
                         layoutCardCalendar.post(new Runnable() {
                             @Override
                             public void run() {
-                                if(nextClass.getStartDate() == null){
+                                if(nextClass == null || nextClass.getStartDate() == null){
                                     indicator.hide();
                                     layoutCardCalendarInformation.setVisibility(View.VISIBLE);
-                                    nextClassView.setText(nextClass.getTitle());
+                                    nextClassView.setText(getString(R.string.no_classes));
                                     layoutTimeDigit.setVisibility(View.GONE);
                                     layoutTime.setVisibility(View.GONE);
                                     timeView.setVisibility(View.GONE);
