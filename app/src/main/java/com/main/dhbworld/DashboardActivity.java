@@ -429,7 +429,6 @@ public class DashboardActivity extends AppCompatActivity {
                             }
                         });
                     } catch (Exception e) {
-                        e.printStackTrace();
                         layoutCardCalendar.post(new Runnable() {
                             @Override
                             public void run() {
