@@ -85,7 +85,9 @@ public class DualisOverallFragment extends Fragment implements DualisAPI.Overall
         dualisAPI.setOnOverallErrorListener(this);
 
         if (cookies.size() == 0) {
-            Snackbar.make(mainView.findViewById(android.R.id.content), getResources().getString(R.string.error_getting_kvv_data), BaseTransientBottomBar.LENGTH_SHORT).show();
+            if (getActivity() != null) {
+                Snackbar.make(getActivity().findViewById(android.R.id.content), getResources().getString(R.string.error_getting_kvv_data), BaseTransientBottomBar.LENGTH_SHORT).show();
+            }
             return;
         }
 
