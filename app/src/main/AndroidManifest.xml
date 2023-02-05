@@ -28,7 +28,7 @@
 
         <activity
             android:name=".DualisActivity"
-            android:exported="false"
+            android:exported="true"
             android:screenOrientation="portrait" />
         <activity
             android:name=".KVVActivity"

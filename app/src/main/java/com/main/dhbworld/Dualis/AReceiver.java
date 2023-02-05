@@ -8,6 +8,8 @@ public class AReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        context.startService(new Intent(context, EverlastingService.class));
+        try {
+            context.startService(new Intent(context, EverlastingService.class));
+        } catch (IllegalStateException ignored) { }
     }
 }
