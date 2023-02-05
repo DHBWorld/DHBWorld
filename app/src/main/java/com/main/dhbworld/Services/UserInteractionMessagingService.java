@@ -1,5 +1,6 @@
 package com.main.dhbworld.Services;
 
+import android.Manifest;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -8,12 +9,14 @@ import android.app.TaskStackBuilder;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.preference.PreferenceManager;
@@ -107,7 +110,9 @@ public class UserInteractionMessagingService extends FirebaseMessagingService {
                     if (notificationManager.getNotificationChannel("warnings") == null) {
                         createNotificationChannel(UserInteractionMessagingService.this);
                     }
-                    notificationManager.notify(icon, builder.build());
+                    if (ActivityCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED) {
+                        notificationManager.notify(icon, builder.build());
+                    }
                 }
             });
         }
