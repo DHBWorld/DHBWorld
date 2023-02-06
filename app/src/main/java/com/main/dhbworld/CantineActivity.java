@@ -211,7 +211,8 @@ public class CantineActivity extends AppCompatActivity {
                 chipLayout.addView(chip);
             }
             LinearLayout preisLayout = new LinearLayout(CantineActivity.this);
-            preisLayout.setLayoutParams(new ViewGroup.LayoutParams(120, ViewGroup.LayoutParams.MATCH_PARENT));
+            preisLayout.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT));
+            preisLayout.setPadding(10, 0, 10, 0);
             preisLayout.setOrientation(LinearLayout.VERTICAL);
 
             TypedValue valuePreisBg = new TypedValue();
