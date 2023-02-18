@@ -49,7 +49,7 @@ jobs:
       with:
         cmd: ./gradlew jacocoCombinedTestReports
         api: 32
-        tag: default
+        tag: google_apis
         abi: x86_64
         cmdOptions: -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim
         
