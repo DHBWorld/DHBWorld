@@ -286,4 +286,5 @@ E-Mail-Adresse: <p><a href="mailto:zaeske.christian@gmail.com">zaeske.christian@
     <string name="autostart">Autostart</string>
     <string name="autostart_explain">Auf einigen Geräten muss der Autostart aktiviert werden, damit du Benachrichtigungen über neue Apps erhalten kannst. Aktiviere dafür den Autostart bei \"DHBWorld\" in den Einstellungen.</string>
     <string name="open_settings">Einstellungen öffnen</string>
+    <string name="clicked_too_often">Bitte warte, bevor du erneut etwas meldest</string>
 </resources>
