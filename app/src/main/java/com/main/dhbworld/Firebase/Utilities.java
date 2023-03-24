@@ -113,14 +113,16 @@ public class Utilities {
      * @see #setDataSendListener(DataSendListener)
      */
     public void addToDatabase(String category, int problem) {
+        lastClick = preferences.getLong("last_clicked_time_user_interaction", 0);
         if (lastClick + invalidateTimeClicks > System.currentTimeMillis()) {
-            lastClick = System.currentTimeMillis();
+            editor.putLong("last_clicked_time_user_interaction", System.currentTimeMillis());
+            editor.apply();
             if (dataSendListener != null) {
                 dataSendListener.failed(new TooManyClicksException("Clicked too often"));
             }
             return;
         }
-        lastClick = System.currentTimeMillis();
+
         DatabaseReference issuesDatabase = getIssueDatabaseWithUser(category);
         issuesDatabase.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
@@ -137,6 +139,7 @@ public class Utilities {
                                 return;
                             }
                             editor.putLong("last_switch_time", System.currentTimeMillis());
+                            editor.putLong("last_clicked_time_user_interaction", System.currentTimeMillis());
                             editor.apply();
                         }
                         issuesDatabase.setValue(new Issue(System.currentTimeMillis(), problem)).addOnCompleteListener(new OnCompleteListener<Void>() {
