@@ -287,4 +287,5 @@ E-Mail-Adresse: <p><a href="mailto:zaeske.christian@gmail.com">zaeske.christian@
     <string name="autostart">Autostart</string>
     <string name="autostart_explain">On some devices you need to enable Autostart to get notifications about new grades. Please activate Autostart for \"DHBWorld\" in the settings.</string>
     <string name="open_settings">Open settings</string>
+    <string name="clicked_too_often">Please wait before submitting again</string>
 </resources>
