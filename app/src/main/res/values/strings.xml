@@ -288,4 +288,36 @@ E-Mail-Adresse: <p><a href="mailto:zaeske.christian@gmail.com">zaeske.christian@
     <string name="autostart_explain">On some devices you need to enable Autostart to get notifications about new grades. Please activate Autostart for \"DHBWorld\" in the settings.</string>
     <string name="open_settings">Open settings</string>
     <string name="clicked_too_often">Please wait before submitting again</string>
+    
+    <!-- WEATHER TRANSLATIONS -->
+    <string name="clear_sky">Clear sky</string>
+    <string name="mainly_clear">Mainly clear</string>
+    <string name="partly_cloudy">Partly cloudy</string>
+    <string name="overcast">Overcast</string>
+    <string name="fog">Fog</string>
+    <string name="depositing_rime_fog">Depositing rime fog</string>
+    <string name="light_drizzle">Light drizzle</string>
+    <string name="moderate_drizzle">Moderate drizzle</string>
+    <string name="dense_drizzle">Dense drizzle</string>
+    <string name="light_freezing_drizzle">Light freezing drizzle</string>
+    <string name="dense_freezing_drizzle">Dense freezing drizzle</string>
+    <string name="slight_rain">Slight rain</string>
+    <string name="moderate_rain">Moderate rain</string>
+    <string name="heavy_rain">Heavy rain</string>
+    <string name="light_freezing_rain">Light freezing rain</string>
+    <string name="heavy_freezing_rain">Heavy freezing rain</string>
+    <string name="slight_snowfall">Slight snowfall</string>
+    <string name="moderate_snowfall">Moderate snowfall</string>
+    <string name="heavy_snowfall">Heavy snwofall</string>
+    <string name="snow_grains">Snow grains</string>
+    <string name="slight_rain_showers">Slight rain showers</string>
+    <string name="moderate_rain_showers">Moderate rain showers</string>
+    <string name="violent_rain_showers">Violent rain showers</string>
+    <string name="slight_snow_showers">Slight snow showers</string>
+    <string name="heavy_snow_showers">Heavy snow showers</string>
+    <string name="slight_thunderstorm">Slight thunderstorm</string>
+    <string name="heavy_thunderstorm">Heavy thunderstorm</string>
+    <string name="thunderstorm_with_slight_hail">Thunderstorm with slight hail</string>
+    <string name="thunderstorm_with_heavy_hail">Thunderstorm with heavy hail</string>
+    <string name="unknown_condition">Unknown condition</string>
 </resources>
