@@ -14,6 +14,8 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.Transformation;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -24,6 +26,7 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.content.res.AppCompatResources;
+import androidx.constraintlayout.widget.Constraints;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.ColorUtils;
@@ -54,6 +57,7 @@ import com.main.dhbworld.KVV.Departure;
 import com.main.dhbworld.KVV.Disruption;
 import com.main.dhbworld.KVV.KVVDataLoader;
 import com.main.dhbworld.Navigation.NavigationUtilities;
+import com.main.dhbworld.Weather.Forecast;
 import com.main.dhbworld.Weather.WeatherApi;
 import com.main.dhbworld.Weather.WeatherData;
 
@@ -61,6 +65,7 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
+import java.time.format.TextStyle;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -98,6 +103,8 @@ public class DashboardActivity extends AppCompatActivity {
     MaterialCardView card_dash_info;
     MaterialCardView card_dash_user_interaction;
     MaterialCardView card_dash_weather;
+
+    private LinearLayout forecastLayout;
 
     private LinearLayout boxCardCalendar;
     private LinearLayout boxCardPI;
@@ -347,7 +354,7 @@ public class DashboardActivity extends AppCompatActivity {
         });
         card_dash_weather.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View view) {
                 if (configurationModus) {
                     if (cardWeather_isVisible) {
                         cardWeather_isVisible = false; //True = Card is visible
@@ -356,10 +363,59 @@ public class DashboardActivity extends AppCompatActivity {
                         cardWeather_isVisible = true;//True = Card is visible
                         card_dash_weather.setStrokeColor(ColorUtils.setAlphaComponent(card_dash_weather.getStrokeColor(), 255));
                     }
-                }else{
-                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/inFumumVerti/DHBWorld/releases/latest"));
-                    startActivity(browserIntent);
+                } else {
+                    if (forecastLayout.getVisibility() == View.GONE) {
+                        expand(forecastLayout);
+                    } else {
+                        collapse(forecastLayout);
+                    }
                 }
+            }
+
+            public void expand(final View v) {
+                int matchParentMeasureSpec = View.MeasureSpec.makeMeasureSpec(((View) v.getParent()).getWidth(), View.MeasureSpec.EXACTLY);
+                int wrapContentMeasureSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
+                v.measure(matchParentMeasureSpec, wrapContentMeasureSpec);
+                final int targetHeight = v.getMeasuredHeight();
+
+                // Older versions of android (pre API 21) cancel animations for views with a height of 0.
+                v.getLayoutParams().height = 1;
+                v.setVisibility(View.VISIBLE);
+                Animation a = new Animation()
+                {
+                    @Override
+                    protected void applyTransformation(float interpolatedTime, Transformation t) {
+                        v.getLayoutParams().height = interpolatedTime == 1
+                                ? Constraints.LayoutParams.WRAP_CONTENT
+                                : (int)(targetHeight * interpolatedTime);
+                        v.requestLayout();
+                    }
+                };
+
+                // Expansion speed of 1dp/ms
+                a.setDuration((int)(targetHeight / v.getContext().getResources().getDisplayMetrics().density));
+                v.startAnimation(a);
+            }
+
+            public void collapse(final View v) {
+                final int initialHeight = v.getMeasuredHeight();
+
+                Animation a = new Animation()
+                {
+                    @Override
+                    protected void applyTransformation(float interpolatedTime, Transformation t) {
+                        if(interpolatedTime == 1){
+                            v.setVisibility(View.GONE);
+                        }else{
+                            v.getLayoutParams().height = initialHeight - (int)(initialHeight * interpolatedTime);
+                            v.requestLayout();
+                        }
+                    }
+                };
+
+                // Collapse speed of 1dp/ms
+                a.setDuration((int)(initialHeight / v.getContext().getResources().getDisplayMetrics().density));
+                v.startAnimation(a);
             }
         });
     }
@@ -553,17 +609,68 @@ public class DashboardActivity extends AppCompatActivity {
         ImageView iconImageView = findViewById(R.id.weather_icon_imageview);
         TextView statusTextView = findViewById(R.id.weather_status_textview);
 
+        forecastLayout = findViewById(R.id.weather_forecast);
+
+        TextView weatherLocation = findViewById(R.id.weather_location);
+
+        TextView day1 = findViewById(R.id.forecast_day_1);
+        TextView day2 = findViewById(R.id.forecast_day_2);
+        TextView day3 = findViewById(R.id.forecast_day_3);
+        TextView day4 = findViewById(R.id.forecast_day_4);
+
+        TextView maxTempDay1 = findViewById(R.id.forecast_temp_max_1);
+        TextView maxTempDay2 = findViewById(R.id.forecast_temp_max_2);
+        TextView maxTempDay3 = findViewById(R.id.forecast_temp_max_3);
+        TextView maxTempDay4 = findViewById(R.id.forecast_temp_max_4);
+
+        TextView minTempDay1 = findViewById(R.id.forecast_temp_min_1);
+        TextView minTempDay2 = findViewById(R.id.forecast_temp_min_2);
+        TextView minTempDay3 = findViewById(R.id.forecast_temp_min_3);
+        TextView minTempDay4 = findViewById(R.id.forecast_temp_min_4);
+
+        ImageView iconDay1 = findViewById(R.id.weather_icon_imageview_1);
+        ImageView iconDay2 = findViewById(R.id.weather_icon_imageview_2);
+        ImageView iconDay3 = findViewById(R.id.weather_icon_imageview_3);
+        ImageView iconDay4 = findViewById(R.id.weather_icon_imageview_4);
+
         WeatherApi weatherApi = new WeatherApi(WeatherApi.City.Karlsruhe);
+
+        weatherLocation.setText(WeatherApi.City.Karlsruhe.toString());
+
         weatherApi.requestData(this, new WeatherApi.WeatherDataListener() {
             @Override
             public void onSuccess(WeatherData weatherData) {
                 iconImageView.setImageDrawable(weatherData.getIcon(DashboardActivity.this));
                 statusTextView.setText(String.format("%s, %s°C", weatherData.getTranslatedWeatherCode(DashboardActivity.this), weatherData.getCurrentTemperature()));
+
+                ArrayList<Forecast> forecasts = weatherData.getForecasts();
+                if (forecasts.size() < 5) {
+                    return;
+                }
+                day1.setText(forecasts.get(1).getTime().getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.getDefault()));
+                day2.setText(forecasts.get(2).getTime().getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.getDefault()));
+                day3.setText(forecasts.get(3).getTime().getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.getDefault()));
+                day4.setText(forecasts.get(4).getTime().getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.getDefault()));
+
+                maxTempDay1.setText(String.format("%s°C", forecasts.get(1).getMaxTemperature()));
+                maxTempDay2.setText(String.format("%s°C", forecasts.get(2).getMaxTemperature()));
+                maxTempDay3.setText(String.format("%s°C", forecasts.get(3).getMaxTemperature()));
+                maxTempDay4.setText(String.format("%s°C", forecasts.get(4).getMaxTemperature()));
+
+                minTempDay1.setText(String.format("%s°C", forecasts.get(1).getMinTemperature()));
+                minTempDay2.setText(String.format("%s°C", forecasts.get(2).getMinTemperature()));
+                minTempDay3.setText(String.format("%s°C", forecasts.get(3).getMinTemperature()));
+                minTempDay4.setText(String.format("%s°C", forecasts.get(4).getMinTemperature()));
+
+                iconDay1.setImageDrawable(forecasts.get(1).getIcon(DashboardActivity.this));
+                iconDay2.setImageDrawable(forecasts.get(2).getIcon(DashboardActivity.this));
+                iconDay3.setImageDrawable(forecasts.get(3).getIcon(DashboardActivity.this));
+                iconDay4.setImageDrawable(forecasts.get(4).getIcon(DashboardActivity.this));
             }
 
             @Override
             public void onError() {
-                statusTextView.setText("Cannot get Weather");
+                statusTextView.setText(R.string.cannot_get_weather);
                 iconImageView.setImageDrawable(null);
             }
         });
@@ -730,6 +837,7 @@ public class DashboardActivity extends AppCompatActivity {
                         loadMealPlan();
                         loadCalendar();
                         loadKvv();
+                        loadWeather();
                         if (cardInfo_isVisible){
                             loadInfo();
                         }

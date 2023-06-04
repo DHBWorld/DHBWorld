@@ -320,4 +320,5 @@ E-Mail-Adresse: <p><a href="mailto:zaeske.christian@gmail.com">zaeske.christian@
     <string name="thunderstorm_with_slight_hail">Thunderstorm with slight hail</string>
     <string name="thunderstorm_with_heavy_hail">Thunderstorm with heavy hail</string>
     <string name="unknown_condition">Unknown condition</string>
+    <string name="cannot_get_weather">Cannot get weatherdata</string>
 </resources>

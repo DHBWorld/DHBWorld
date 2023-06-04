@@ -31,7 +31,7 @@ public class WeatherApi {
         }
     }
 
-    private static final String urlStr = "https://api.open-meteo.com/v1/forecast?hourly=temperature_2m,is_day&daily=weathercode,temperature_2m_max,temperature_2m_min&timezone=Europe%2FBerlin";
+    private static final String urlStr = "https://api.open-meteo.com/v1/forecast?hourly=temperature_2m,is_day,weathercode&daily=weathercode,temperature_2m_max,temperature_2m_min&timezone=Europe%2FBerlin";
     private final City city;
 
 
@@ -68,6 +68,8 @@ public class WeatherApi {
                             continue;
                         }
 
+                        System.out.println(i-1);
+
                         weatherData.setCurrentTemperature(
                                 hourly
                                         .getJSONArray("temperature_2m")
@@ -76,8 +78,11 @@ public class WeatherApi {
                         weatherData.setDay(
                                 hourly
                                         .getJSONArray("is_day")
-                                        .getInt(Math.max(i-1, 0))
-                        );
+                                        .getInt(Math.max(i-1, 0)));
+
+                        weatherData.setWeatherCode(
+                                hourly.getJSONArray("weathercode")
+                                        .getInt(Math.max(i-1, 0)));
                         break;
                     }
 
@@ -91,10 +96,6 @@ public class WeatherApi {
                         double minTemperature = daily.getJSONArray("temperature_2m_min").getDouble(i);
 
                         weatherData.addForecast(new Forecast(time, minTemperature, maxTemperature, weathercode));
-
-                        if (i == 0) {
-                            weatherData.setWeatherCode(weathercode);
-                        }
                     }
 
                     weatherDataListener.onSuccess(weatherData);

@@ -317,4 +317,5 @@ E-Mail-Adresse: <p><a href="mailto:zaeske.christian@gmail.com">zaeske.christian@
     <string name="thunderstorm_with_slight_hail">Leichtes Gewitter mit Hagel</string>
     <string name="thunderstorm_with_heavy_hail">Schweres Gewitter mit Hagel</string>
     <string name="unknown_condition">Unbekannte Situation</string>
+    <string name="cannot_get_weather">Wetterdaten nicht verfügbar</string>
 </resources>
