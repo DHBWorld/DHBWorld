@@ -22,6 +22,10 @@ public class WeatherData {
       return currentTemperature;
    }
 
+   public int getCurrentTemperatureRounded() {
+      return (int) Math.round(currentTemperature);
+   }
+
    protected void setCurrentTemperature(double currentTemperature) {
       this.currentTemperature = currentTemperature;
    }

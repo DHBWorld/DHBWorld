@@ -33,6 +33,14 @@ public class Forecast {
       return maxTemperature;
    }
 
+   public int getMinTemperatureRounded() {
+      return (int) Math.round(minTemperature);
+   }
+
+   public int getMaxTemperatureRounded() {
+      return (int) Math.round(maxTemperature);
+   }
+
    public int getWeatherCode() {
       return weatherCode;
    }

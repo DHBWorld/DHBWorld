@@ -653,15 +653,15 @@ public class DashboardActivity extends AppCompatActivity {
                 day3.setText(forecasts.get(3).getTime().getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.getDefault()));
                 day4.setText(forecasts.get(4).getTime().getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.getDefault()));
 
-                maxTempDay1.setText(String.format("%s°C", forecasts.get(1).getMaxTemperature()));
-                maxTempDay2.setText(String.format("%s°C", forecasts.get(2).getMaxTemperature()));
-                maxTempDay3.setText(String.format("%s°C", forecasts.get(3).getMaxTemperature()));
-                maxTempDay4.setText(String.format("%s°C", forecasts.get(4).getMaxTemperature()));
+                maxTempDay1.setText(String.format("%s°C", forecasts.get(1).getMaxTemperatureRounded()));
+                maxTempDay2.setText(String.format("%s°C", forecasts.get(2).getMaxTemperatureRounded()));
+                maxTempDay3.setText(String.format("%s°C", forecasts.get(3).getMaxTemperatureRounded()));
+                maxTempDay4.setText(String.format("%s°C", forecasts.get(4).getMaxTemperatureRounded()));
 
-                minTempDay1.setText(String.format("%s°C", forecasts.get(1).getMinTemperature()));
-                minTempDay2.setText(String.format("%s°C", forecasts.get(2).getMinTemperature()));
-                minTempDay3.setText(String.format("%s°C", forecasts.get(3).getMinTemperature()));
-                minTempDay4.setText(String.format("%s°C", forecasts.get(4).getMinTemperature()));
+                minTempDay1.setText(String.format("%s°C", forecasts.get(1).getMinTemperatureRounded()));
+                minTempDay2.setText(String.format("%s°C", forecasts.get(2).getMinTemperatureRounded()));
+                minTempDay3.setText(String.format("%s°C", forecasts.get(3).getMinTemperatureRounded()));
+                minTempDay4.setText(String.format("%s°C", forecasts.get(4).getMinTemperatureRounded()));
 
                 iconDay1.setImageDrawable(forecasts.get(1).getIcon(DashboardActivity.this));
                 iconDay2.setImageDrawable(forecasts.get(2).getIcon(DashboardActivity.this));
