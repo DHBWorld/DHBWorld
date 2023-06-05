@@ -22,6 +22,7 @@ import android.widget.TextView;
 
 import com.main.dhbworld.Cantine.CantineParser;
 import com.main.dhbworld.Cantine.CantineUtilities;
+import com.main.dhbworld.Cantine.Meal;
 import com.main.dhbworld.Cantine.MealDailyPlan;
 import com.main.dhbworld.Navigation.NavigationUtilities;
 import java.io.BufferedReader;
@@ -29,9 +30,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Currency;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -172,7 +175,9 @@ public class CantineActivity extends AppCompatActivity {
             cardLayout.setPadding(0,20,0,20);
             mealCard.addView(cardLayout);
             LinearLayout mealLayout = new LinearLayout(CantineActivity.this);
-            mealLayout.setLayoutParams(new ViewGroup.LayoutParams(pageTitleExtra.getWidth()-120, ViewGroup.LayoutParams.WRAP_CONTENT));
+            LinearLayout.LayoutParams mealLayoutParams = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT);
+            mealLayoutParams.weight = 1f;
+            mealLayout.setLayoutParams(mealLayoutParams);
             mealLayout.setOrientation(LinearLayout.VERTICAL);
             mealLayout.setPadding(0,0,10,0);
             cardLayout.addView(mealLayout);
@@ -211,7 +216,8 @@ public class CantineActivity extends AppCompatActivity {
                 chipLayout.addView(chip);
             }
             LinearLayout preisLayout = new LinearLayout(CantineActivity.this);
-            preisLayout.setLayoutParams(new ViewGroup.LayoutParams(120, ViewGroup.LayoutParams.MATCH_PARENT));
+            preisLayout.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT));
+            preisLayout.setPadding(10, 0, 10, 0);
             preisLayout.setOrientation(LinearLayout.VERTICAL);
 
             TypedValue valuePreisBg = new TypedValue();
@@ -222,12 +228,24 @@ public class CantineActivity extends AppCompatActivity {
             TextView preisView = new TextView(CantineActivity.this);
             preisView.setTextSize(18);
             //preisView.setTextColor(getResources().getColor(R.color.grey_dark));
-            preisView.setText(mealDailyPlan.getMeal()[i].getPrice());
+            preisView.setText(formatMealPrice(mealDailyPlan.getMeal()[i]));
             preisView.setGravity(Gravity.CENTER);
+            preisView.setMaxLines(1);
             preisView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
             preisLayout.addView(preisView);
             }
 
+    }
+
+    private String formatMealPrice(Meal meal) {
+        try {
+            double price = Double.parseDouble(meal.getPrice());
+            NumberFormat format = NumberFormat.getCurrencyInstance();
+            format.setCurrency(Currency.getInstance("EUR"));
+            return format.format(price);
+        } catch (NumberFormatException e) {
+            return "-";
+        }
     }
 
     private void mealPlanFromOpenMensa(Date date) throws IOException {
@@ -313,7 +331,7 @@ public class CantineActivity extends AppCompatActivity {
 
         try {
             MealDailyPlan plan= new MealDailyPlan(result);
-            meals= plan.getMainCourseNames();
+            meals= plan.getMainCourseNamesWithSalat();
         } catch (JSONException e) {
             e.printStackTrace();
         }

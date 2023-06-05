@@ -1,21 +1,17 @@
 package com.main.dhbworld.Dualis;
 
+import android.Manifest;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.util.Log;
 
+import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
-import androidx.preference.PreferenceManager;
-import androidx.work.Constraints;
-import androidx.work.ExistingPeriodicWorkPolicy;
-import androidx.work.NetworkType;
-import androidx.work.PeriodicWorkRequest;
-import androidx.work.WorkManager;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -30,25 +26,14 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.jsoup.nodes.Document;
-import org.myjson.Cookie;
 
-import java.io.IOException;
 import java.net.CookieHandler;
 import java.net.CookieManager;
-import java.net.HttpCookie;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.time.Instant;
 import java.time.temporal.ChronoField;
-import java.time.temporal.TemporalField;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 public class DualisAPI {
 
@@ -98,7 +83,8 @@ public class DualisAPI {
 
             try {
                 mainJson.put("documents", documentsArray);
-            } catch (JSONException ignored) { }
+            } catch (JSONException ignored) {
+            }
 
             if (documentsListener != null) {
                 documentsListener.onDocumentsLoaded(mainJson);
@@ -121,7 +107,8 @@ public class DualisAPI {
 
             try {
                 mainJson.put("courses", coursesJsonArray);
-            } catch (JSONException ignored) { }
+            } catch (JSONException ignored) {
+            }
 
             if (overallListener != null) {
                 overallListener.onOverallDataLoaded(mainJson);
@@ -143,7 +130,7 @@ public class DualisAPI {
 
             try {
                 mainJson.put("semester", semesterOptionen);
-                for (int i=0; i<semesterOptionen.length(); i++) {
+                for (int i = 0; i < semesterOptionen.length(); i++) {
                     requestSemester(i, context, cookieHandler);
                 }
             } catch (Exception e) {
@@ -167,7 +154,7 @@ public class DualisAPI {
                 try {
                     mainJson.getJSONArray("semester").getJSONObject(semesterIndex).put("Vorlesungen", vorlesungen);
                     boolean vorlesungFehlt = false;
-                    for (int i=0; i<mainJson.getJSONArray("semester").length(); i++) {
+                    for (int i = 0; i < mainJson.getJSONArray("semester").length(); i++) {
                         JSONObject semester = mainJson.getJSONArray("semester").getJSONObject(i);
                         if (!semester.has("Vorlesungen")) {
                             vorlesungFehlt = true;
@@ -193,16 +180,15 @@ public class DualisAPI {
         final int[] count = {0};
         final int[] anzahl = {0};
         JSONArray semesterArray = mainJson.getJSONArray("semester");
-        for (int i=0; i<semesterArray.length(); i++) {
+        for (int i = 0; i < semesterArray.length(); i++) {
             JSONObject semester = semesterArray.getJSONObject(i);
             JSONArray vorlesungen = semester.getJSONArray("Vorlesungen");
-            for (int j=0; j<vorlesungen.length(); j++) {
+            for (int j = 0; j < vorlesungen.length(); j++) {
                 anzahl[0]++;
                 String link = vorlesungen.getJSONObject(j).getString("link");
 
                 RequestQueue queue = Volley.newRequestQueue(context);
                 String url = "https://dualis.dhbw.de" + link;
-                System.out.println(url);
                 int finalJ = j;
                 StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                         response -> {
@@ -246,38 +232,41 @@ public class DualisAPI {
                 Log.d("DualisAPI", "No new grades");
             } else {
                 try {
-                    for (int i=0; i<mainJson.getJSONArray("semester").length(); i++) {
-                        for (int j=0; j<mainJson.getJSONArray("semester").getJSONObject(i).getJSONArray("Vorlesungen").length(); j++) {
+                    for (int i = 0; i < mainJson.getJSONArray("semester").length(); i++) {
+                        for (int j = 0; j < mainJson.getJSONArray("semester").getJSONObject(i).getJSONArray("Vorlesungen").length(); j++) {
                             JSONObject vorlesung = mainJson.getJSONArray("semester").getJSONObject(i).getJSONArray("Vorlesungen").getJSONObject(j);
                             String endnoteCurrent = vorlesung.getString("note");
                             String endnoteSaved = savedJson.getJSONArray("semester").getJSONObject(i).getJSONArray("Vorlesungen").getJSONObject(j).getString("note");
 
                             JSONArray pruefungen = vorlesung.getJSONArray("pruefungen");
 
-                            for (int k=0; k<pruefungen.length(); k++) {
+                            for (int k = 0; k < pruefungen.length(); k++) {
                                 String noteCurrent = pruefungen.getJSONObject(k).getString("note");
                                 String noteSaved = savedJson.getJSONArray("semester").getJSONObject(i).getJSONArray("Vorlesungen").getJSONObject(j).getJSONArray("pruefungen").getJSONObject(k).getString("note");
                                 if (!noteCurrent.equals(noteSaved)) {
-                                    String noteCurrentDot = noteCurrent.replace(",", ".").trim();
+                                    String noteCurrentDot = noteCurrent.replace(",", "").trim();
                                     try {
                                         Integer.parseInt(noteCurrentDot);
                                         sendNotification(context,
                                                 context.getResources().getString(R.string.new_grade_exam),
                                                 context.getResources().getString(R.string.new_grade_exam_text, vorlesung.getString("name"), noteCurrent),
                                                 calcID(vorlesung.getString("name") + noteCurrent));
-                                    } catch (NumberFormatException ignored) {}
+                                    } catch (NumberFormatException ignored) {
+                                        ignored.printStackTrace();
+                                    }
 
                                 }
                             }
                             if (!endnoteCurrent.equals(endnoteSaved)) {
-                                String endnoteCurrentDot = endnoteCurrent.replace(",", ".").trim();
+                                String endnoteCurrentDot = endnoteCurrent.replace(",", "").trim();
                                 try {
                                     Integer.parseInt(endnoteCurrentDot);
                                     sendNotification(context,
                                             context.getResources().getString(R.string.new_grade_final),
                                             context.getResources().getString(R.string.new_grade_final_text, vorlesung.getString("name"), endnoteCurrent),
                                             calcID(vorlesung.getString("name") + endnoteCurrent));
-                                } catch (NumberFormatException ignored) {}
+                                } catch (NumberFormatException ignored) {
+                                }
                             }
                         }
                     }
@@ -289,8 +278,7 @@ public class DualisAPI {
         }
         try {
             DualisParser.saveFileContent(context, mainJson);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -312,7 +300,7 @@ public class DualisAPI {
         return Instant.now().get(ChronoField.SECOND_OF_DAY);
     }
 
-    static void sendNotification(Context context, String title, String message, int id) {
+    public static void sendNotification(Context context, String title, String message, int id) {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "1234")
                 .setSmallIcon(R.drawable.ic_baseline_school_24)
                 .setContentTitle(title)
@@ -328,32 +316,9 @@ public class DualisAPI {
         builder.setContentIntent(intent);
 
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
-        notificationManager.notify(id, builder.build());
-    }
-
-    public static void setAlarmManager(Context context) {
-        SharedPreferences settingsPref = PreferenceManager.getDefaultSharedPreferences(context);
-        SharedPreferences sharedPref = context.getSharedPreferences("Dualis", Context.MODE_PRIVATE);
-        if (!sharedPref.getBoolean("saveCredentials", false) || !settingsPref.getBoolean("sync", true)) {
-            return;
+        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED) {
+            notificationManager.notify(id, builder.build());
         }
-
-        int time = Integer.parseInt(settingsPref.getString("sync_time", "15"));
-
-        createAlarmManager(context, time);
-    }
-
-    public static void createAlarmManager(Context context, int time) {
-        Constraints constraints = new Constraints.Builder()
-                .setRequiredNetworkType(NetworkType.CONNECTED)
-                .build();
-
-        PeriodicWorkRequest periodicWorkRequest = new PeriodicWorkRequest.Builder(BackgroundWorker.class, time, TimeUnit.MINUTES)
-                .setConstraints(constraints)
-                .build();
-
-        WorkManager workManager = WorkManager.getInstance(context.getApplicationContext());
-        workManager.enqueueUniquePeriodicWork("DualisNotifierDHBWorld", ExistingPeriodicWorkPolicy.REPLACE, periodicWorkRequest);
     }
 
     public static void createNotificationChannelNewGrade(Context context) {
@@ -371,7 +336,7 @@ public class DualisAPI {
     }
 
     static void createNotificationChannel(Context context, String id, String name, String description) {
-        int importance = NotificationManager.IMPORTANCE_DEFAULT;
+        int importance = NotificationManager.IMPORTANCE_HIGH;
         NotificationChannel channel = new NotificationChannel(id, name, importance);
         channel.setDescription(description);
         NotificationManager notificationManager = context.getSystemService(NotificationManager.class);

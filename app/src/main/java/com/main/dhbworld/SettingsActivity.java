@@ -2,6 +2,7 @@ package com.main.dhbworld;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -33,9 +34,11 @@ import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.SetOptions;
+import com.main.dhbworld.Backup.BackupHandler;
 import com.main.dhbworld.Calendar.CalendarActivity;
 import com.main.dhbworld.Debugging.Debugging;
 import com.main.dhbworld.Dualis.DualisAPI;
+import com.main.dhbworld.Dualis.EverlastingService;
 import com.main.dhbworld.Firebase.Utilities;
 import com.main.dhbworld.Navigation.NavigationUtilities;
 import com.main.dhbworld.Organizer.OrganizerActivity;
@@ -78,16 +81,22 @@ public class SettingsActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK && requestCode == 1 && data != null) {
-            try {
-                OutputStream outputStream = getContentResolver().openOutputStream(data.getData());
-                Files.copy(Debugging.getLog(this).toPath(), outputStream);
-                Snackbar.make(this.findViewById(android.R.id.content), this.getString(R.string.file_saved), BaseTransientBottomBar.LENGTH_SHORT).show();
-            } catch (IOException e) {
-                e.printStackTrace();
-                Snackbar.make(this.findViewById(android.R.id.content), this.getString(R.string.default_error_msg), BaseTransientBottomBar.LENGTH_SHORT).show();
+        if (resultCode == RESULT_OK && data != null) {
+            Activity activity = this;
+            if (requestCode == 1) {
+                try {
+                    OutputStream outputStream = getContentResolver().openOutputStream(data.getData());
+                    Files.copy(Debugging.getLog(this).toPath(), outputStream);
+                    Snackbar.make(this.findViewById(android.R.id.content), this.getString(R.string.file_saved), BaseTransientBottomBar.LENGTH_SHORT).show();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    Snackbar.make(this.findViewById(android.R.id.content), this.getString(R.string.default_error_msg), BaseTransientBottomBar.LENGTH_SHORT).show();
+                }
+            } else if (requestCode == 2) {
+                BackupHandler.saveBackupAskPassword(data, activity);
+            } else if (requestCode == 3) {
+                BackupHandler.restoreCheckPassword(data, activity);
             }
-
         }
     }
 
@@ -135,6 +144,9 @@ public class SettingsActivity extends AppCompatActivity {
 
             Preference debugLog = findPreference("exportDebugLog");
 
+            Preference exportBackup = findPreference("exportBackup");
+            Preference restoreBackup = findPreference("restoreBackup");
+
             Objects.requireNonNull(information).setOnPreferenceClickListener(this);
             Objects.requireNonNull(licenses).setOnPreferenceClickListener(this);
             Objects.requireNonNull(privacy).setOnPreferenceClickListener(this);
@@ -155,6 +167,9 @@ public class SettingsActivity extends AppCompatActivity {
             Objects.requireNonNull(calendar).setOnPreferenceClickListener(this);
 
             Objects.requireNonNull(debugLog).setOnPreferenceClickListener(this);
+
+            Objects.requireNonNull(exportBackup).setOnPreferenceClickListener(this);
+            Objects.requireNonNull(restoreBackup).setOnPreferenceClickListener(this);
         }
 
         @Override
@@ -208,17 +223,14 @@ public class SettingsActivity extends AppCompatActivity {
                     if (!sharedPref.getBoolean("saveCredentials", true)) {
                         Snackbar.make(activity.findViewById(android.R.id.content), context.getResources().getString(R.string.sync_makes_no_difference), Snackbar.LENGTH_LONG).show();
                     }
-                    if (!(boolean) newValue) {
-                        WorkManager.getInstance(context).cancelUniqueWork("DualisNotifierDHBWorld");
-                    } else {
-                        DualisAPI.setAlarmManager(getContext());
+                    if ((boolean) newValue) {
+                        context.startService(new Intent(context, EverlastingService.class));
                     }
                     return true;
                 case "sync_time":
                     if (!sharedPref.getBoolean("saveCredentials", true)) {
                         Snackbar.make(activity.findViewById(android.R.id.content), context.getResources().getString(R.string.sync_makes_no_difference), Snackbar.LENGTH_LONG).show();
                     }
-                    DualisAPI.setAlarmManager(getContext());
                     return true;
             }
             return true;
@@ -278,7 +290,7 @@ public class SettingsActivity extends AppCompatActivity {
                                             editor.apply();
                                             courseInFirestore.put("URL", urlString);
                                         }
-                                        else if(urlString.isEmpty() && !courseName.isEmpty()){
+                                        else if(urlString.isEmpty() && !courseName.isEmpty() && !courseDirector.isEmpty()){
                                             urlString = ("https://rapla.dhbw-karlsruhe.de/rapla?page=calendar&user=" + courseDirector + "&file=" + courseName);
                                             SharedPreferences.Editor editor = preferences.edit();
                                             editor.putString("CurrentURL", urlString);
@@ -304,7 +316,7 @@ public class SettingsActivity extends AppCompatActivity {
                                             if (connection.getResponseCode() == 200) {
                                                 firestore.collection("Courses").document(courseName.toLowerCase()).set(courseInFirestore, SetOptions.merge());
                                             }
-                                        } catch (IOException e) {}
+                                        } catch (IOException | IllegalArgumentException ignored) {}
 
                                     }
                                 }).start();
@@ -329,6 +341,12 @@ public class SettingsActivity extends AppCompatActivity {
                     return true;
                 case "exportDebugLog":
                     Debugging.createFile(activity, context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS).toURI());
+                    return true;
+                case "exportBackup":
+                    BackupHandler.exportBackup(activity, context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS).toURI());
+                    return true;
+                case "restoreBackup":
+                    BackupHandler.restoreBackup(activity, context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS).toURI());
                     return true;
             }
             return false;

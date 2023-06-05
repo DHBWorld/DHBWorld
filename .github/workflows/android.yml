@@ -35,7 +35,7 @@ jobs:
     
     - uses: blitzdose/action-android/install-sdk@release/0.1.4
       with:
-        url: https://dl.google.com/android/repository/commandlinetools-linux-8512546_latest.zip
+        url: https://dl.google.com/android/repository/commandlinetools-linux-9123335_latest.zip
       # Set up platform tools like adb.
     - run: sdkmanager platform-tools
 
@@ -48,8 +48,8 @@ jobs:
     - uses: blitzdose/action-android/emulator-run-cmd@release/0.1.4
       with:
         cmd: ./gradlew jacocoCombinedTestReports
-        api: 30
-        tag: default
+        api: 32
+        tag: google_apis
         abi: x86_64
         cmdOptions: -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim
         

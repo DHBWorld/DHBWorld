@@ -1,22 +1,36 @@
 package com.main.dhbworld.Organizer;
+
 import android.annotation.SuppressLint;
-import android.text.Html;
-import android.text.method.LinkMovementMethod;
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.content.res.Resources;
+import android.net.Uri;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
+
+import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.*;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.main.dhbworld.MapActivity;
 import com.main.dhbworld.R;
+
 import java.util.ArrayList;
 import java.util.Objects;
 
 public class OrganizerRoomAdapter extends RecyclerView.Adapter<OrganizerRoomAdapter.ViewHolder>{
     ArrayList<Room> rooms;
+    Activity activity;
 
-    public OrganizerRoomAdapter(ArrayList<Room> rooms) {
+    public OrganizerRoomAdapter(Activity activity, ArrayList<Room> rooms) {
+        this.activity = activity;
         this.rooms = rooms;
     }
 
@@ -32,6 +46,17 @@ public class OrganizerRoomAdapter extends RecyclerView.Adapter<OrganizerRoomAdap
     @Override
     public void onBindViewHolder(@NonNull OrganizerRoomAdapter.ViewHolder holder, int position) {
         // setting data to our views of recycler view.
+        if (!rooms.get(position).getName().contains("█")) {
+            ShimmerFrameLayout container = holder.shimmerFrameLayout;
+            container.stopShimmer();
+            container.hideShimmer();
+
+            holder.tvName.setBackgroundColor(activity.getColor(android.R.color.transparent));
+            holder.tvName.setTextColor(colorFromAttr(activity, android.R.attr.textColor));
+            holder.tvHome.setBackgroundColor(activity.getColor(android.R.color.transparent));
+            holder.tvHome.setTextColor(colorFromAttr(activity, android.R.attr.textColor));
+        }
+
         Room room = rooms.get(position);
         holder.tvName.setText(room.getName());
         holder.tvHome.setText(room.getRoomType());
@@ -67,13 +92,29 @@ public class OrganizerRoomAdapter extends RecyclerView.Adapter<OrganizerRoomAdap
                     Objects.requireNonNull(roomName).setText(room.name);
                     TextView roomType = bottomSheetDialog.findViewById(R.id.organizerRoomTypeText);
                     Objects.requireNonNull(roomType).setText(room.roomType);
-                    TextView roomUrl = bottomSheetDialog.findViewById(R.id.organizerRoomUrlText);
-                    if(room.url != null && roomUrl != null) {
-                        roomUrl.setText(room.url);
+
+                    Button button = bottomSheetDialog.findViewById(R.id.find_room_button);
+                    if (button != null) {
+                        button.setOnClickListener(view -> {
+                            Intent intent = new Intent(activity, MapActivity.class);
+                            intent.putExtra("room", room.name);
+                            activity.startActivity(intent);
+                        });
                     }
-                    else {
-                        Objects.requireNonNull(roomUrl).setVisibility(View.GONE);
+                    Button showTimeplanButton= bottomSheetDialog.findViewById(R.id.show_timeplan_button);
+                    if ((showTimeplanButton != null) ) {
+
+                        showTimeplanButton.setOnClickListener(view -> {
+                            Uri uri=Uri.parse(room.url);
+                            Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                            activity.startActivity(intent);
+                        });
+                        if (room.url==null){
+                            showTimeplanButton.setVisibility(View.GONE);
+                        }
+
                     }
+
                     bottomSheetDialog.show();
                 }
                 catch (Exception e){
@@ -83,16 +124,25 @@ public class OrganizerRoomAdapter extends RecyclerView.Adapter<OrganizerRoomAdap
         });
     }
 
+    private int colorFromAttr(Context context, int attr) {
+        TypedValue typedValue = new TypedValue();
+        Resources.Theme theme = context.getTheme();
+        theme.resolveAttribute(attr, typedValue, true);
+        @ColorInt int color = typedValue.data;
+        return color;
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder {
         // creating variables for our views.
         private final TextView tvName;
         private final TextView tvHome;
+        private final ShimmerFrameLayout shimmerFrameLayout;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             // initializing our views with their ids.
             tvName = itemView.findViewById(R.id.info_box1);
             tvHome = itemView.findViewById(R.id.info_box2);
-
+            shimmerFrameLayout = itemView.findViewById(R.id.shimmer_view_container);
         }
     }
 }

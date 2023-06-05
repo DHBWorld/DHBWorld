@@ -1,12 +1,17 @@
 package com.main.dhbworld;
 
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.provider.Settings;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
@@ -19,6 +24,7 @@ import androidx.preference.PreferenceManager;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.checkbox.MaterialCheckBox;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.progressindicator.CircularProgressIndicator;
 import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
@@ -100,6 +106,10 @@ public class DualisActivity extends AppCompatActivity {
         settingsPrefs = PreferenceManager.getDefaultSharedPreferences(this);
         settingsEditor = settingsPrefs.edit();
 
+        if (!sharedPreferences.getBoolean("autostart", false)) {
+            askForAutostart();
+        }
+
         dualisEmail = findViewById(R.id.dualisEmail);
         dualisPassword = findViewById(R.id.dualisPassword);
         dualisEmailLayout = findViewById(R.id.dualisEmailLayout);
@@ -180,6 +190,44 @@ public class DualisActivity extends AppCompatActivity {
                 }).start();
             }
         });
+    }
+
+    private void askForAutostart() {
+        Intent[] POWERMANAGER_INTENTS = {
+                new Intent().setComponent(new ComponentName("com.miui.securitycenter", "com.miui.permcenter.autostart.AutoStartManagementActivity")),
+                new Intent().setComponent(new ComponentName("com.letv.android.letvsafe", "com.letv.android.letvsafe.AutobootManageActivity")),
+                new Intent().setComponent(new ComponentName("com.huawei.systemmanager", "com.huawei.systemmanager.startupmgr.ui.StartupNormalAppListActivity")),
+                new Intent().setComponent(new ComponentName("com.huawei.systemmanager", "com.huawei.systemmanager.optimize.process.ProtectActivity")),
+                new Intent().setComponent(new ComponentName("com.huawei.systemmanager", "com.huawei.systemmanager.appcontrol.activity.StartupAppControlActivity")),
+                new Intent().setComponent(new ComponentName("com.coloros.safecenter", "com.coloros.safecenter.permission.startup.StartupAppListActivity")),
+                new Intent().setComponent(new ComponentName("com.coloros.safecenter", "com.coloros.safecenter.startupapp.StartupAppListActivity")),
+                new Intent().setComponent(new ComponentName("com.oppo.safe", "com.oppo.safe.permission.startup.StartupAppListActivity")),
+                new Intent().setComponent(new ComponentName("com.iqoo.secure", "com.iqoo.secure.ui.phoneoptimize.AddWhiteListActivity")),
+                new Intent().setComponent(new ComponentName("com.iqoo.secure", "com.iqoo.secure.ui.phoneoptimize.BgStartUpManager")),
+                new Intent().setComponent(new ComponentName("com.vivo.permissionmanager", "com.vivo.permissionmanager.activity.BgStartUpManagerActivity")),
+                new Intent().setComponent(new ComponentName("com.samsung.android.lool", "com.samsung.android.sm.ui.battery.BatteryActivity")),
+                new Intent().setComponent(new ComponentName("com.htc.pitroad", "com.htc.pitroad.landingpage.activity.LandingPageActivity")),
+                new Intent().setComponent(new ComponentName("com.asus.mobilemanager", "com.asus.mobilemanager.MainActivity"))
+        };
+
+
+        for (Intent intent : POWERMANAGER_INTENTS)
+            if (getPackageManager().resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY) != null) {
+                new MaterialAlertDialogBuilder(this)
+                        .setTitle(R.string.autostart)
+                        .setMessage(R.string.autostart_explain)
+                        .setPositiveButton(R.string.open_settings, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                editor.putBoolean("autostart", true);
+                                editor.apply();
+                                startActivity(intent);
+                            }
+                        })
+                        .setCancelable(false)
+                        .show();
+                break;
+            }
     }
 
     private void login(String email, String password, boolean saveCredentials, SecureStore secureStore) {

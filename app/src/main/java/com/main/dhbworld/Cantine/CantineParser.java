@@ -224,7 +224,8 @@ public class CantineParser {
             }
 
             Element mealsBody = mealsBodys.get(0);
-            for (Element meal : mealsBody.children()) {
+            for (int j=0; j<mealsBody.children().size(); j++) {
+               Element meal = mealsBody.children().get(j);
                ArrayList<String> extras = new ArrayList<>();
                if (meal.childrenSize() != 3) {
                   continue;
@@ -237,6 +238,8 @@ public class CantineParser {
                if (titles.size() < 1) {
                   continue;
                }
+
+               System.out.println("SIZE: " + mealsBody.children().size());
 
                String titleWithExtras = titles.get(0).text();
                String extrasStr;
@@ -252,6 +255,20 @@ public class CantineParser {
                   String[] extrasArray = extrasStr.split(",");
                   for (String extra : extrasArray) {
                      extras.add(legend.get(extra));
+                  }
+               }
+
+               if (mealsBody.children().size() > j+1) {
+                  for (int k=j+1; k<mealsBody.children().size(); k++) {
+                     Element nextMeal = mealsBody.children().get(k);
+                     Elements titlesNext = nextMeal.getElementsByClass("menu-title");
+                     if (titlesNext.size() >= 1) {
+                        String extra = titlesNext.get(0).text();
+                        if (extra.contains("zu diesem Gericht reichen wir frisches Obst oder Salat")) {
+                           extras.add(0, "Mit Salat oder Obst");
+                        }
+                        break;
+                     }
                   }
                }
 

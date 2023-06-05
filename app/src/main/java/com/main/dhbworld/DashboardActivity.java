@@ -1,5 +1,6 @@
 package com.main.dhbworld;
 
+import android.Manifest;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
@@ -7,17 +8,15 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.Icon;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.text.Html;
-import android.text.method.LinkMovementMethod;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
+import android.view.animation.Animation;
+import android.view.animation.Transformation;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -28,8 +27,9 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.content.res.AppCompatResources;
+import androidx.constraintlayout.widget.Constraints;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.core.content.res.ResourcesCompat;
 import androidx.core.graphics.ColorUtils;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -48,7 +48,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.main.dhbworld.Calendar.CalendarActivity;
 import com.main.dhbworld.Calendar.nextEventsProvider;
 import com.main.dhbworld.Debugging.Debugging;
-import com.main.dhbworld.Dualis.DualisAPI;
+import com.main.dhbworld.Dualis.EverlastingService;
 import com.main.dhbworld.Enums.InteractionState;
 import com.main.dhbworld.Firebase.CurrentStatusListener;
 import com.main.dhbworld.Firebase.SignedInListener;
@@ -58,19 +58,18 @@ import com.main.dhbworld.KVV.Departure;
 import com.main.dhbworld.KVV.Disruption;
 import com.main.dhbworld.KVV.KVVDataLoader;
 import com.main.dhbworld.Navigation.NavigationUtilities;
+import com.main.dhbworld.Weather.Forecast;
+import com.main.dhbworld.Weather.WeatherApi;
+import com.main.dhbworld.Weather.WeatherData;
 
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
+import java.time.format.TextStyle;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.Objects;
 
 import dhbw.timetable.rapla.data.event.Appointment;
 
@@ -96,12 +95,17 @@ public class DashboardActivity extends AppCompatActivity {
     Boolean cardMealPlan_isVisible = true;
     Boolean cardKvv_isVisible = true;
     Boolean cardInfo_isVisible = true;
+    Boolean cardWeather_isVisible = true;
 
     MaterialCardView card_dash_calendar;
     MaterialCardView card_dash_pi;
     MaterialCardView card_dash_kvv;
     MaterialCardView card_dash_mealPlan;
     MaterialCardView card_dash_info;
+    MaterialCardView card_dash_user_interaction;
+    MaterialCardView card_dash_weather;
+
+    private LinearLayout forecastLayout;
 
     private LinearLayout boxCardCalendar;
     private LinearLayout boxCardPI;
@@ -120,6 +124,12 @@ public class DashboardActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
 
         Debugging.startDebugging(this);
+
+        System.out.println("Running: " + EverlastingService.isRunning);
+
+        if (!EverlastingService.isRunning) {
+            startService(new Intent(this, EverlastingService.class));
+        }
 
         SharedPreferences defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         int darkmode = Integer.parseInt(defaultSharedPreferences.getString("darkmode", "-1"));
@@ -142,25 +152,29 @@ public class DashboardActivity extends AppCompatActivity {
             resources.updateConfiguration(config, resources.getDisplayMetrics());
         }
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.POST_NOTIFICATIONS}, 23);
+        }
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
         NavigationUtilities.setUpNavigation(this,R.id.dashboard);
-
         defineViews();
+        loadWeather();
         userConfigurationOfDashboard();
         loadUserInteraction();
+        loadPersonalInformation();
+        loadCalendar();
         if (NetworkAvailability.check(DashboardActivity.this)){
             loadMealPlan();
-            loadCalendar();
             loadKvv();
             if (cardInfo_isVisible){
                 loadInfo();
             }
-        }else{
+        } else {
             Snackbar.make(this.findViewById(android.R.id.content), getResources().getString(R.string.problemsWithInternetConnection), BaseTransientBottomBar.LENGTH_LONG).show();
         }
-        loadPersonalInformation();
+
     }
 
     private void defineViews(){
@@ -175,6 +189,8 @@ public class DashboardActivity extends AppCompatActivity {
         card_dash_kvv = findViewById(R.id.card_dash_kvv);
         card_dash_mealPlan = findViewById(R.id.card_dash_mealPlan);
         card_dash_info= findViewById(R.id.card_dash_info);
+        card_dash_user_interaction= findViewById(R.id.card_dash_userInteraction);
+        card_dash_weather = findViewById(R.id.card_dash_weather);
 
         boxCardCalendar= findViewById(R.id.buttonCardCalendar);
         boxCardPI= findViewById(R.id.buttonCardPI);
@@ -206,6 +222,7 @@ public class DashboardActivity extends AppCompatActivity {
         cardMealPlan_isVisible = sp.getBoolean("cardMealPlan", true);
         cardKvv_isVisible = sp.getBoolean("cardKvv", true);
         cardInfo_isVisible = sp.getBoolean("cardInfo", true);
+        cardWeather_isVisible = sp.getBoolean("cardWeather", true);
 
        if (!cardCalendar_isVisible){
            card_dash_calendar.setVisibility(View.GONE);
@@ -222,9 +239,12 @@ public class DashboardActivity extends AppCompatActivity {
         if (!cardInfo_isVisible){
             card_dash_info.setVisibility(View.GONE);
         }
+        if (!cardWeather_isVisible) {
+            card_dash_weather.setVisibility(View.GONE);
+        }
 
         //TODO integrate onClickListeners more easily
-        card_dash_calendar_layout.setOnClickListener(new View.OnClickListener() {
+        card_dash_calendar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (configurationModus){
@@ -244,7 +264,7 @@ public class DashboardActivity extends AppCompatActivity {
                 }
             }
         });
-        card_dash_pi_layout.setOnClickListener(new View.OnClickListener() {
+        card_dash_pi.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (configurationModus) {
@@ -265,7 +285,7 @@ public class DashboardActivity extends AppCompatActivity {
                 }
             }
         });
-        card_dash_kvv_layout.setOnClickListener(new View.OnClickListener() {
+        card_dash_kvv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (configurationModus) {
@@ -285,7 +305,7 @@ public class DashboardActivity extends AppCompatActivity {
                 }
             }
         });
-        card_dash_mealPlan_layout.setOnClickListener(new View.OnClickListener() {
+        card_dash_mealPlan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (configurationModus) {
@@ -305,7 +325,7 @@ public class DashboardActivity extends AppCompatActivity {
                 }
             }
         });
-        card_dash_user_interaction_layout.setOnClickListener(new View.OnClickListener() {
+        card_dash_user_interaction.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(!configurationModus){
@@ -314,7 +334,7 @@ public class DashboardActivity extends AppCompatActivity {
                 }
             }
         });
-        card_dash_info_layout.setOnClickListener(new View.OnClickListener() {
+        card_dash_info.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (configurationModus) {
@@ -328,9 +348,75 @@ public class DashboardActivity extends AppCompatActivity {
                         card_dash_info_layout.setBackgroundColor(ColorUtils.setAlphaComponent(card_dash_info.getStrokeColor(), 255));
                     }
                 }else{
-                    Intent intent = new Intent(DashboardActivity.this, SettingsActivity.class);
-                    startActivity(intent);
+                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/inFumumVerti/DHBWorld/releases/latest"));
+                    startActivity(browserIntent);
                 }
+            }
+        });
+        card_dash_weather.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (configurationModus) {
+                    if (cardWeather_isVisible) {
+                        cardWeather_isVisible = false; //True = Card is visible
+                        card_dash_weather.setStrokeColor(ColorUtils.setAlphaComponent(card_dash_weather.getStrokeColor(), 50));
+                    } else {
+                        cardWeather_isVisible = true;//True = Card is visible
+                        card_dash_weather.setStrokeColor(ColorUtils.setAlphaComponent(card_dash_weather.getStrokeColor(), 255));
+                    }
+                } else {
+                    if (forecastLayout.getVisibility() == View.GONE) {
+                        expand(forecastLayout);
+                    } else {
+                        collapse(forecastLayout);
+                    }
+                }
+            }
+
+            public void expand(final View v) {
+                int matchParentMeasureSpec = View.MeasureSpec.makeMeasureSpec(((View) v.getParent()).getWidth(), View.MeasureSpec.EXACTLY);
+                int wrapContentMeasureSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
+                v.measure(matchParentMeasureSpec, wrapContentMeasureSpec);
+                final int targetHeight = v.getMeasuredHeight();
+
+                // Older versions of android (pre API 21) cancel animations for views with a height of 0.
+                v.getLayoutParams().height = 1;
+                v.setVisibility(View.VISIBLE);
+                Animation a = new Animation()
+                {
+                    @Override
+                    protected void applyTransformation(float interpolatedTime, Transformation t) {
+                        v.getLayoutParams().height = interpolatedTime == 1
+                                ? Constraints.LayoutParams.WRAP_CONTENT
+                                : (int)(targetHeight * interpolatedTime);
+                        v.requestLayout();
+                    }
+                };
+
+                // Expansion speed of 1dp/ms
+                a.setDuration((int)(targetHeight / v.getContext().getResources().getDisplayMetrics().density));
+                v.startAnimation(a);
+            }
+
+            public void collapse(final View v) {
+                final int initialHeight = v.getMeasuredHeight();
+
+                Animation a = new Animation()
+                {
+                    @Override
+                    protected void applyTransformation(float interpolatedTime, Transformation t) {
+                        if(interpolatedTime == 1){
+                            v.setVisibility(View.GONE);
+                        }else{
+                            v.getLayoutParams().height = initialHeight - (int)(initialHeight * interpolatedTime);
+                            v.requestLayout();
+                        }
+                    }
+                };
+
+                // Collapse speed of 1dp/ms
+                a.setDuration((int)(initialHeight / v.getContext().getResources().getDisplayMetrics().density));
+                v.startAnimation(a);
             }
         });
     }
@@ -363,10 +449,10 @@ public class DashboardActivity extends AppCompatActivity {
                         layoutCardCalendar.post(new Runnable() {
                             @Override
                             public void run() {
-                                if(nextClass.getStartDate() == null){
+                                if(nextClass == null || nextClass.getStartDate() == null){
                                     indicator.hide();
                                     layoutCardCalendarInformation.setVisibility(View.VISIBLE);
-                                    nextClassView.setText(nextClass.getTitle());
+                                    nextClassView.setText(getString(R.string.no_classes));
                                     layoutTimeDigit.setVisibility(View.GONE);
                                     layoutTime.setVisibility(View.GONE);
                                     timeView.setVisibility(View.GONE);
@@ -432,7 +518,6 @@ public class DashboardActivity extends AppCompatActivity {
                             }
                         });
                     } catch (Exception e) {
-                        e.printStackTrace();
                         layoutCardCalendar.post(new Runnable() {
                             @Override
                             public void run() {
@@ -519,6 +604,77 @@ public class DashboardActivity extends AppCompatActivity {
         });
         LocalDateTime now = LocalDateTime.now();
         dataLoader.loadData(now);
+    }
+
+    private void loadWeather() {
+        ImageView iconImageView = findViewById(R.id.weather_icon_imageview);
+        TextView statusTextView = findViewById(R.id.weather_status_textview);
+
+        forecastLayout = findViewById(R.id.weather_forecast);
+
+        TextView weatherLocation = findViewById(R.id.weather_location);
+
+        TextView day1 = findViewById(R.id.forecast_day_1);
+        TextView day2 = findViewById(R.id.forecast_day_2);
+        TextView day3 = findViewById(R.id.forecast_day_3);
+        TextView day4 = findViewById(R.id.forecast_day_4);
+
+        TextView maxTempDay1 = findViewById(R.id.forecast_temp_max_1);
+        TextView maxTempDay2 = findViewById(R.id.forecast_temp_max_2);
+        TextView maxTempDay3 = findViewById(R.id.forecast_temp_max_3);
+        TextView maxTempDay4 = findViewById(R.id.forecast_temp_max_4);
+
+        TextView minTempDay1 = findViewById(R.id.forecast_temp_min_1);
+        TextView minTempDay2 = findViewById(R.id.forecast_temp_min_2);
+        TextView minTempDay3 = findViewById(R.id.forecast_temp_min_3);
+        TextView minTempDay4 = findViewById(R.id.forecast_temp_min_4);
+
+        ImageView iconDay1 = findViewById(R.id.weather_icon_imageview_1);
+        ImageView iconDay2 = findViewById(R.id.weather_icon_imageview_2);
+        ImageView iconDay3 = findViewById(R.id.weather_icon_imageview_3);
+        ImageView iconDay4 = findViewById(R.id.weather_icon_imageview_4);
+
+        WeatherApi weatherApi = new WeatherApi(WeatherApi.City.Karlsruhe);
+
+        weatherLocation.setText(WeatherApi.City.Karlsruhe.toString());
+
+        weatherApi.requestData(this, new WeatherApi.WeatherDataListener() {
+            @Override
+            public void onSuccess(WeatherData weatherData) {
+                iconImageView.setImageDrawable(weatherData.getIcon(DashboardActivity.this));
+                statusTextView.setText(String.format("%s, %s°C", weatherData.getTranslatedWeatherCode(DashboardActivity.this), weatherData.getCurrentTemperature()));
+
+                ArrayList<Forecast> forecasts = weatherData.getForecasts();
+                if (forecasts.size() < 5) {
+                    return;
+                }
+                day1.setText(forecasts.get(1).getTime().getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.getDefault()));
+                day2.setText(forecasts.get(2).getTime().getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.getDefault()));
+                day3.setText(forecasts.get(3).getTime().getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.getDefault()));
+                day4.setText(forecasts.get(4).getTime().getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.getDefault()));
+
+                maxTempDay1.setText(String.format("%s°C", forecasts.get(1).getMaxTemperatureRounded()));
+                maxTempDay2.setText(String.format("%s°C", forecasts.get(2).getMaxTemperatureRounded()));
+                maxTempDay3.setText(String.format("%s°C", forecasts.get(3).getMaxTemperatureRounded()));
+                maxTempDay4.setText(String.format("%s°C", forecasts.get(4).getMaxTemperatureRounded()));
+
+                minTempDay1.setText(String.format("%s°C", forecasts.get(1).getMinTemperatureRounded()));
+                minTempDay2.setText(String.format("%s°C", forecasts.get(2).getMinTemperatureRounded()));
+                minTempDay3.setText(String.format("%s°C", forecasts.get(3).getMinTemperatureRounded()));
+                minTempDay4.setText(String.format("%s°C", forecasts.get(4).getMinTemperatureRounded()));
+
+                iconDay1.setImageDrawable(forecasts.get(1).getIcon(DashboardActivity.this));
+                iconDay2.setImageDrawable(forecasts.get(2).getIcon(DashboardActivity.this));
+                iconDay3.setImageDrawable(forecasts.get(3).getIcon(DashboardActivity.this));
+                iconDay4.setImageDrawable(forecasts.get(4).getIcon(DashboardActivity.this));
+            }
+
+            @Override
+            public void onError() {
+                statusTextView.setText(R.string.cannot_get_weather);
+                iconImageView.setImageDrawable(null);
+            }
+        });
     }
 
     private void loadUserInteraction(){
@@ -682,6 +838,7 @@ public class DashboardActivity extends AppCompatActivity {
                         loadMealPlan();
                         loadCalendar();
                         loadKvv();
+                        loadWeather();
                         if (cardInfo_isVisible){
                             loadInfo();
                         }
@@ -704,11 +861,14 @@ public class DashboardActivity extends AppCompatActivity {
         if (!configurationModus){ //User can configure his dashboard
             item.setIcon(AppCompatResources.getDrawable(DashboardActivity.this, R.drawable.ic_done));
             Snackbar.make(this.findViewById(android.R.id.content), getResources().getString(R.string.chooseTheCardForConfiguration), BaseTransientBottomBar.LENGTH_SHORT).show();
+            card_dash_user_interaction.setClickable(false);
             card_dash_calendar.setVisibility(View.VISIBLE);
             card_dash_pi.setVisibility(View.VISIBLE);
             card_dash_kvv.setVisibility(View.VISIBLE);
             card_dash_mealPlan.setVisibility(View.VISIBLE);
             card_dash_info.setVisibility(View.VISIBLE);
+            card_dash_weather.setVisibility(View.VISIBLE);
+
 
             if (!cardCalendar_isVisible){
                 card_dash_calendar.setStrokeColor(ColorUtils.setAlphaComponent(card_dash_calendar.getStrokeColor(),50));
@@ -727,12 +887,18 @@ public class DashboardActivity extends AppCompatActivity {
                 card_dash_kvv_layout.setBackgroundColor(ColorUtils.setAlphaComponent(card_dash_kvv.getStrokeColor(),50));
             }
             if (!cardInfo_isVisible){
+                loadInfo();
                 card_dash_info.setStrokeColor(ColorUtils.setAlphaComponent(card_dash_info.getStrokeColor(),50));
                 card_dash_info_layout.setBackgroundColor(ColorUtils.setAlphaComponent(card_dash_info.getStrokeColor(),50));
+            }
+            if (!cardWeather_isVisible) {
+                card_dash_weather.setStrokeColor(ColorUtils.setAlphaComponent(card_dash_weather.getStrokeColor(),50));
+                //card_dash_weather_layout.setBackgroundColor(ColorUtils.setAlphaComponent(card_dash_weather.getStrokeColor(),50));
             }
             configurationModus=true;
         } else{
             item.setIcon(AppCompatResources.getDrawable(DashboardActivity.this, R.drawable.ic_construction));
+            card_dash_user_interaction.setClickable(true);
             card_dash_calendar.setStrokeColor(ColorUtils.setAlphaComponent(card_dash_calendar.getStrokeColor(),255));
             card_dash_calendar_layout.setBackgroundColor(ColorUtils.setAlphaComponent(card_dash_calendar.getStrokeColor(),255));
             card_dash_pi.setStrokeColor(ColorUtils.setAlphaComponent(card_dash_pi.getStrokeColor(),255));
@@ -743,6 +909,7 @@ public class DashboardActivity extends AppCompatActivity {
             card_dash_mealPlan_layout.setBackgroundColor(ColorUtils.setAlphaComponent(card_dash_mealPlan.getStrokeColor(),255));
             card_dash_info.setStrokeColor(ColorUtils.setAlphaComponent(card_dash_info.getStrokeColor(),255));
             card_dash_info_layout.setBackgroundColor(ColorUtils.setAlphaComponent(card_dash_info.getStrokeColor(),255));
+            card_dash_weather.setStrokeColor(ColorUtils.setAlphaComponent(card_dash_weather.getStrokeColor(),255));
             if (!cardCalendar_isVisible){
                 card_dash_calendar.setVisibility(View.GONE);
             }
@@ -758,11 +925,15 @@ public class DashboardActivity extends AppCompatActivity {
             if (!cardInfo_isVisible){
                 card_dash_info.setVisibility(View.GONE);
             }
+            if (!cardWeather_isVisible) {
+                card_dash_weather.setVisibility(View.GONE);
+            }
             editor.putBoolean("cardCalendar", cardCalendar_isVisible);
             editor.putBoolean("cardPI", cardPI_isVisible);
             editor.putBoolean("cardMealPlan", cardMealPlan_isVisible);
             editor.putBoolean("cardKvv", cardKvv_isVisible);
             editor.putBoolean("cardInfo", cardInfo_isVisible);
+            editor.putBoolean("cardWeather", cardWeather_isVisible);
             editor.apply();
             configurationModus=false;
         }

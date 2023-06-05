@@ -28,6 +28,10 @@ class CourseDataHandler extends DataHandler{
         }
         return newCourses;
     }
+
+    public void setList(ArrayList<Course> list) {
+        this.list = new ArrayList<>(list);
+    }
 }
 
 class PersonDataHandler extends DataHandler{
@@ -39,7 +43,6 @@ class PersonDataHandler extends DataHandler{
 
     @Override
     ArrayList<Person> filter(String query) {
-        System.out.println(list.size());
         ArrayList<Person> newPeople = new ArrayList<>();
         query = query.toLowerCase();
         if(query.isEmpty() | query.length() == 0){
@@ -53,6 +56,10 @@ class PersonDataHandler extends DataHandler{
             }
         }
         return newPeople;
+    }
+
+    public void setList(ArrayList<Person> list) {
+        this.list = new ArrayList<>(list);
     }
 }
 
@@ -78,5 +85,9 @@ class RoomsDataHandler extends DataHandler{
             }
         }
         return newRooms;
+    }
+
+    public void setList(ArrayList<Room> list) {
+        this.list = new ArrayList<>(list);
     }
 }

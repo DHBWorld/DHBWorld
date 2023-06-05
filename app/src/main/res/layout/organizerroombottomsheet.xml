@@ -20,7 +20,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/organizerRoomNameText"
             android:text="D224"
-            android:textSize="11pt"
+            android:textSize="24sp"
             android:layout_gravity="center_vertical"
             android:padding="8dp"/>
 
@@ -36,34 +36,39 @@
 
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:id="@+id/organizerRoomTypeText"
             android:text="Hörsaal"
-            android:layout_gravity="center_vertical"
-            android:textSize="9pt"
+            android:layout_gravity="top"
+            android:textSize="20sp"
+            android:layout_weight="1"
             android:padding="8dp"/>
-    </LinearLayout>
 
-
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:id="@+id/organizerRoomUrlView"
-        android:background="?android:attr/selectableItemBackground"
-        android:padding="8dp">
-
-
-        <TextView
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/organizerRoomUrlText"
-            android:autoLink="web"
-            android:textIsSelectable="true"
-            android:layout_gravity="center_vertical"
-            android:padding="8dp"/>
+            android:gravity="right"
+            android:orientation="vertical"
+            android:background="?android:attr/selectableItemBackground"
+            >
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/show_timeplan_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/grey_dark"
+                style="@style/Widget.MaterialComponents.Button"
+                android:text="@string/timeplan" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/find_room_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/Widget.MaterialComponents.Button"
+                android:text="@string/find_room" />
+        </LinearLayout>
     </LinearLayout>
+
 
 </LinearLayout>

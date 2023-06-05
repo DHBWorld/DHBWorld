@@ -66,6 +66,13 @@ public class DualisParser {
 
     public static void parseGPA(Document doc, JSONObject mainJson) {
         Elements resultTables = doc.select(".nb.list.students_results");
+        if (resultTables.size() == 0) {
+            try {
+                mainJson.put("totalGPA", "N/A");
+                mainJson.put("majorCourseGPA", "N/A");
+            } catch (JSONException ignored) { }
+            return;
+        }
         Element resultSum = resultTables.get(1);
 
         resultSum.select("tr").forEach(element -> {
@@ -85,6 +92,9 @@ public class DualisParser {
 
     public static JSONArray parseCoursesOverall(JSONObject mainJson, Document doc) {
         Elements resultTables = doc.select(".nb.list.students_results");
+        if (resultTables.size() == 0) {
+            return new JSONArray();
+        }
         Element resultModulesTable = resultTables.get(0);
         Elements resultModules = resultModulesTable.select("tr:not(.subhead,.tbsubhead)");
 

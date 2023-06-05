@@ -53,6 +53,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:cardElevation="0dp"
+                    app:rippleColor="@color/white"
                     app:strokeColor="@color/grey_light"
                     app:strokeWidth="3dp">
 
@@ -90,9 +91,218 @@
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
 
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/card_dash_weather"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardElevation="0dp"
+                    android:layout_marginTop="15dp"
+                    app:rippleColor="@color/white"
+                    app:strokeColor="@color/grey_light"
+                    app:strokeWidth="3dp">
+
+                    <LinearLayout
+                        android:id="@+id/card_dash_weather_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:background="?attr/dashboardCardBackground"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center">
+
+                            <ImageView
+                                android:id="@+id/weather_icon_imageview"
+                                android:layout_width="50dp"
+                                android:layout_height="50dp"
+                                android:layout_margin="10dp" />
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical" >
+
+                                <TextView
+                                    android:id="@+id/weather_location"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textSize="16sp"
+                                    android:textStyle="bold"/>
+
+                                <TextView
+                                    android:id="@+id/weather_status_textview"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="" />
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/weather_forecast"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:orientation="vertical"
+                            android:layout_marginBottom="10dp"
+                            android:visibility="gone">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:orientation="horizontal" >
+
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="center"
+                                    android:orientation="vertical" >
+
+                                    <TextView
+                                        android:id="@+id/forecast_day_1"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"/>
+
+                                    <ImageView
+                                        android:id="@+id/weather_icon_imageview_1"
+                                        android:layout_width="50dp"
+                                        android:layout_height="50dp"
+                                        android:layout_margin="10dp" />
+
+                                    <TextView
+                                        android:id="@+id/forecast_temp_max_1"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"/>
+
+                                    <TextView
+                                        android:id="@+id/forecast_temp_min_1"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:textColor="@color/grey_dark_but_a_bit_lighter"/>
+
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="center"
+                                    android:orientation="vertical" >
+
+                                    <TextView
+                                        android:id="@+id/forecast_day_2"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"/>
+
+                                    <ImageView
+                                        android:id="@+id/weather_icon_imageview_2"
+                                        android:layout_width="50dp"
+                                        android:layout_height="50dp"
+                                        android:layout_margin="10dp" />
+
+                                    <TextView
+                                        android:id="@+id/forecast_temp_max_2"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"/>
+
+                                    <TextView
+                                        android:id="@+id/forecast_temp_min_2"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:textColor="@color/grey_dark_but_a_bit_lighter"/>
+
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="center"
+                                    android:orientation="vertical" >
+
+                                    <TextView
+                                        android:id="@+id/forecast_day_3"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"/>
+
+                                    <ImageView
+                                        android:id="@+id/weather_icon_imageview_3"
+                                        android:layout_width="50dp"
+                                        android:layout_height="50dp"
+                                        android:layout_margin="10dp" />
+
+                                    <TextView
+                                        android:id="@+id/forecast_temp_max_3"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"/>
+
+                                    <TextView
+                                        android:id="@+id/forecast_temp_min_3"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:textColor="@color/grey_dark_but_a_bit_lighter"/>
+
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="center"
+                                    android:orientation="vertical" >
+
+                                    <TextView
+                                        android:id="@+id/forecast_day_4"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"/>
+
+                                    <ImageView
+                                        android:id="@+id/weather_icon_imageview_4"
+                                        android:layout_width="50dp"
+                                        android:layout_height="50dp"
+                                        android:layout_margin="10dp" />
+
+                                    <TextView
+                                        android:id="@+id/forecast_temp_max_4"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"/>
+
+                                    <TextView
+                                        android:id="@+id/forecast_temp_min_4"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:textColor="@color/grey_dark_but_a_bit_lighter" />
+
+                                </LinearLayout>
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="end"
+                                android:layout_marginHorizontal="10dp"
+                                android:layout_marginTop="5dp">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/weather_data_by_open_meteo_com"
+                                    android:textColor="@color/grey_dark_but_a_bit_lighter"/>
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
 
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/card_dash_calendar"
+                    app:rippleColor="@color/white"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
@@ -213,6 +423,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
                     android:baselineAligned="false"
+                    app:rippleColor="@color/white"
                     app:cardElevation="0dp"
                     app:strokeColor="@color/grey_light"
                     app:strokeWidth="3dp">
@@ -370,6 +581,7 @@
                     android:id="@+id/card_dash_mealPlan"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    app:rippleColor="@color/white"
                     android:layout_marginTop="15dp"
                     android:baselineAligned="false"
                     app:cardElevation="0dp"
@@ -469,6 +681,7 @@
 
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/card_dash_pi"
+                    app:rippleColor="@color/white"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
@@ -587,6 +800,7 @@
                     android:baselineAligned="false"
                     app:cardElevation="0dp"
                     app:strokeColor="@color/red"
+                    app:rippleColor="@color/white"
                     app:strokeWidth="3dp">
 
                     <LinearLayout
