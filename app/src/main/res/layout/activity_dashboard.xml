@@ -98,7 +98,7 @@
                     app:cardElevation="0dp"
                     android:layout_marginTop="15dp"
                     app:rippleColor="@color/white"
-                    app:strokeColor="@color/red"
+                    app:strokeColor="@color/grey_light"
                     app:strokeWidth="3dp">
 
                     <LinearLayout
