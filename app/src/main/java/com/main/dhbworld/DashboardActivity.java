@@ -8,11 +8,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.text.Html;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
@@ -45,8 +43,13 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.main.dhbworld.Calendar.CalendarActivity;
 import com.main.dhbworld.Calendar.nextEventsProvider;
+import com.main.dhbworld.Dashboard.CardType;
+import com.main.dhbworld.Dashboard.Dashboard;
+import com.main.dhbworld.Dashboard.DashboardCard;
+import com.main.dhbworld.Dashboard.DashboardCardInfo;
+import com.main.dhbworld.Dashboard.DashboardCardUserInt;
+import com.main.dhbworld.Dashboard.DashboardCardWeather;
 import com.main.dhbworld.Debugging.Debugging;
 import com.main.dhbworld.Dualis.EverlastingService;
 import com.main.dhbworld.Enums.InteractionState;
@@ -119,7 +122,15 @@ public class DashboardActivity extends AppCompatActivity {
     private LinearLayout card_dash_mealPlan_layout;
     private LinearLayout card_dash_user_interaction_layout;
     private LinearLayout card_dash_info_layout;
+    DashboardCard dashboardCardMealPlan;
+    DashboardCard dashboardCarCalender;
+    DashboardCard dashboardKvv;
+    DashboardCard dashboardPI;
+    DashboardCard dashboardCardInfo;
+    DashboardCard dashboardCardWeather;
+    DashboardCard dashboardCardUserInt;
 
+   private Dashboard dashboard;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -193,10 +204,10 @@ public class DashboardActivity extends AppCompatActivity {
         card_dash_weather = findViewById(R.id.card_dash_weather);
 
         boxCardCalendar= findViewById(R.id.buttonCardCalendar);
-        boxCardPI= findViewById(R.id.buttonCardPI);
-        boxCardMealPlan= findViewById(R.id.buttonCardMealPlan);
-        boxCardKvv= findViewById(R.id.buttonCardKvv);
-        boxCardInfo= findViewById(R.id.buttonCardInfo);
+        boxCardPI = findViewById(R.id.buttonCardPI);
+        boxCardMealPlan = findViewById(R.id.buttonCardMealPlan);
+        boxCardKvv = findViewById(R.id.buttonCardKvv);
+        boxCardInfo = findViewById(R.id.buttonCardInfo);
 
         card_dash_calendar_layout = findViewById(R.id.card_dash_calendar_layout);
         card_dash_pi_layout = findViewById(R.id.card_dash_pi_layout);
@@ -204,6 +215,28 @@ public class DashboardActivity extends AppCompatActivity {
         card_dash_mealPlan_layout = findViewById(R.id.card_dash_mealPlan_layout);
         card_dash_user_interaction_layout = findViewById(R.id.card_dash_userInteraction_layout);
         card_dash_info_layout = findViewById(R.id.card_dash_info_layout);
+
+        forecastLayout = findViewById(R.id.weather_forecast);
+
+        dashboardCardMealPlan = new DashboardCard(CardType.CARD_MEAL_PLAN, layoutCardMealPlan, card_dash_mealPlan, boxCardMealPlan, card_dash_mealPlan_layout);
+        dashboardCarCalender = new DashboardCard(CardType.CARD_CALENDAR, layoutCardCalendar, card_dash_calendar, boxCardCalendar, card_dash_calendar_layout);
+        dashboardKvv = new DashboardCard(CardType.CARD_KVV, layoutCardKvv, card_dash_kvv, boxCardKvv, card_dash_kvv_layout);
+        dashboardPI = new DashboardCard(CardType.CARD_PI, layoutCardPI, card_dash_pi, boxCardPI, card_dash_pi_layout);
+        dashboardCardInfo = new DashboardCardInfo(CardType.CARD_INFO, layoutCardInfo, card_dash_info, boxCardInfo, card_dash_info_layout);
+        dashboardCardWeather= new DashboardCardWeather(CardType.CARD_WEATHER, null, card_dash_weather, null,  null, forecastLayout);
+        dashboardCardUserInt=new DashboardCardUserInt(CardType.CARD_USER_INTERACTION, null, card_dash_user_interaction,  null, card_dash_user_interaction_layout);
+
+        dashboard = new Dashboard();
+        dashboard.addCard(dashboardCardMealPlan);
+        dashboard.addCard(dashboardCarCalender);
+        dashboard.addCard(dashboardKvv);
+        dashboard.addCard(dashboardPI);
+        dashboard.addCard(dashboardCardInfo);
+        dashboard.addCard(dashboardCardWeather);
+        dashboard.addCard(dashboardCardUserInt);
+
+
+
     }
 
     private void userConfigurationOfDashboard(){
@@ -211,120 +244,24 @@ public class DashboardActivity extends AppCompatActivity {
 
         configurationModus=false;
 
-        boxCardCalendar.setBackgroundColor((ColorUtils.setAlphaComponent(getResources().getColor(R.color.black),0)));
-        boxCardPI.setBackgroundColor((ColorUtils.setAlphaComponent(getResources().getColor(R.color.black),0)));
-        boxCardMealPlan.setBackgroundColor((ColorUtils.setAlphaComponent(getResources().getColor(R.color.black),0)));
-        boxCardKvv.setBackgroundColor((ColorUtils.setAlphaComponent(getResources().getColor(R.color.black),0)));
-        boxCardInfo.setBackgroundColor((ColorUtils.setAlphaComponent(getResources().getColor(R.color.black),0)));
+        dashboard.setConfigurationModus(false);
+        dashboard.setColorIntensity((ColorUtils.setAlphaComponent(getResources().getColor(R.color.black), 0)));
+        dashboard.changeCardVisibility(this.getApplicationContext());
 
-        cardCalendar_isVisible = sp.getBoolean("cardCalendar", true);
-        cardPI_isVisible = sp.getBoolean("cardPI", true);
-        cardMealPlan_isVisible = sp.getBoolean("cardMealPlan", true);
-        cardKvv_isVisible = sp.getBoolean("cardKvv", true);
-        cardInfo_isVisible = sp.getBoolean("cardInfo", true);
-        cardWeather_isVisible = sp.getBoolean("cardWeather", true);
 
-       if (!cardCalendar_isVisible){
-           card_dash_calendar.setVisibility(View.GONE);
-       }
-        if (!cardPI_isVisible){
-            card_dash_pi.setVisibility(View.GONE);
-        }
-        if (!cardMealPlan_isVisible){
-            card_dash_mealPlan.setVisibility(View.GONE);
-        }
-        if (!cardKvv_isVisible){
-            card_dash_kvv.setVisibility(View.GONE);
-        }
-        if (!cardInfo_isVisible){
-            card_dash_info.setVisibility(View.GONE);
-        }
-        if (!cardWeather_isVisible) {
-            card_dash_weather.setVisibility(View.GONE);
-        }
 
-        //TODO integrate onClickListeners more easily
-        card_dash_calendar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (configurationModus){
-                    if (cardCalendar_isVisible){
-                        cardCalendar_isVisible=false;
-                        card_dash_calendar.setStrokeColor(ColorUtils.setAlphaComponent(card_dash_calendar.getStrokeColor(),50));
-                        card_dash_calendar_layout.setBackgroundColor(ColorUtils.setAlphaComponent(card_dash_calendar.getStrokeColor(),50));
-                    }else{
-                        cardCalendar_isVisible=true;
-                        card_dash_calendar.setStrokeColor(ColorUtils.setAlphaComponent(card_dash_calendar.getStrokeColor(),255));
-                        card_dash_calendar_layout.setBackgroundColor(ColorUtils.setAlphaComponent(card_dash_calendar.getStrokeColor(),255));
-                    }
-                }else{
-                    Intent intent = new Intent(DashboardActivity.this, CalendarActivity.class);
-                    startActivity(intent);
 
-                }
-            }
-        });
-        card_dash_pi.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (configurationModus) {
-                    if (cardPI_isVisible) {
-                        cardPI_isVisible = false; //True = Card is visible
-                        card_dash_pi.setStrokeColor(ColorUtils.setAlphaComponent(card_dash_pi.getStrokeColor(), 50));
-                        card_dash_pi_layout.setBackgroundColor(ColorUtils.setAlphaComponent(card_dash_pi.getStrokeColor(), 50));
-                        card_dash_pi_layout.setBackgroundColor(ColorUtils.setAlphaComponent(card_dash_pi.getStrokeColor(), 50));
-                    } else {
-                        cardPI_isVisible = true;//True = Card is visible
-                        card_dash_pi.setStrokeColor(ColorUtils.setAlphaComponent(card_dash_pi.getStrokeColor(), 255));
-                        card_dash_pi_layout.setBackgroundColor(ColorUtils.setAlphaComponent(card_dash_pi.getStrokeColor(), 255));
-                    }
-                }else{
-                    Intent intent = new Intent(DashboardActivity.this, MainActivity.class);
-                    startActivity(intent);
 
-                }
-            }
-        });
-        card_dash_kvv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (configurationModus) {
-                    if (cardKvv_isVisible) {
-                        cardKvv_isVisible = false; //True = Card is visible
-                        card_dash_kvv.setStrokeColor(ColorUtils.setAlphaComponent(card_dash_kvv.getStrokeColor(), 50));
-                        card_dash_kvv_layout.setBackgroundColor(ColorUtils.setAlphaComponent(card_dash_kvv.getStrokeColor(), 50));
-                    } else {
-                        cardKvv_isVisible = true;//True = Card is visible
-                        card_dash_kvv.setStrokeColor(ColorUtils.setAlphaComponent(card_dash_kvv.getStrokeColor(), 255));
-                        card_dash_kvv_layout.setBackgroundColor(ColorUtils.setAlphaComponent(card_dash_kvv.getStrokeColor(), 255));
-                    }
-                }else{
-                    Intent intent = new Intent(DashboardActivity.this, KVVActivity.class);
-                    startActivity(intent);
 
-                }
-            }
-        });
-        card_dash_mealPlan.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (configurationModus) {
-                    if (cardMealPlan_isVisible) {
-                        cardMealPlan_isVisible = false; //True = Card is visible
-                        card_dash_mealPlan.setStrokeColor(ColorUtils.setAlphaComponent(card_dash_mealPlan.getStrokeColor(), 50));
-                        card_dash_mealPlan_layout.setBackgroundColor(ColorUtils.setAlphaComponent(card_dash_mealPlan.getStrokeColor(), 50));
-                    } else {
-                        cardMealPlan_isVisible = true;//True = Card is visible
-                        card_dash_mealPlan.setStrokeColor(ColorUtils.setAlphaComponent(card_dash_mealPlan.getStrokeColor(), 255));
-                        card_dash_mealPlan_layout.setBackgroundColor(ColorUtils.setAlphaComponent(card_dash_mealPlan.getStrokeColor(), 255));
-                    }
-                }else{
-                    Intent intent = new Intent(DashboardActivity.this, CantineActivity.class);
-                    startActivity(intent);
 
-                }
-            }
-        });
+       dashboard.configurateClickers(DashboardActivity.this);
+
+
+      //  dashboardCardMealPlan.configurateClickers(DashboardActivity.this, CalendarActivity.class);
+
+
+        /* //TODO integrate onClickListeners more easily
+
         card_dash_user_interaction.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -334,26 +271,7 @@ public class DashboardActivity extends AppCompatActivity {
                 }
             }
         });
-        card_dash_info.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (configurationModus) {
-                    if (cardInfo_isVisible) {
-                        cardInfo_isVisible = false; //True = Card is visible
-                        card_dash_info.setStrokeColor(ColorUtils.setAlphaComponent(card_dash_info.getStrokeColor(), 50));
-                        card_dash_info_layout.setBackgroundColor(ColorUtils.setAlphaComponent(card_dash_info.getStrokeColor(), 50));
-                    } else {
-                        cardInfo_isVisible = true;//True = Card is visible
-                        card_dash_info.setStrokeColor(ColorUtils.setAlphaComponent(card_dash_info.getStrokeColor(), 255));
-                        card_dash_info_layout.setBackgroundColor(ColorUtils.setAlphaComponent(card_dash_info.getStrokeColor(), 255));
-                    }
-                }else{
-                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/inFumumVerti/DHBWorld/releases/latest"));
-                    startActivity(browserIntent);
-                }
-            }
-        });
-        card_dash_weather.setOnClickListener(new View.OnClickListener() {
+       card_dash_weather.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (configurationModus) {
@@ -418,7 +336,7 @@ public class DashboardActivity extends AppCompatActivity {
                 a.setDuration((int)(initialHeight / v.getContext().getResources().getDisplayMetrics().density));
                 v.startAnimation(a);
             }
-        });
+        });*/
     }
 
     private void loadCalendar(){
@@ -610,7 +528,7 @@ public class DashboardActivity extends AppCompatActivity {
         ImageView iconImageView = findViewById(R.id.weather_icon_imageview);
         TextView statusTextView = findViewById(R.id.weather_status_textview);
 
-        forecastLayout = findViewById(R.id.weather_forecast);
+
 
         TextView weatherLocation = findViewById(R.id.weather_location);
 
@@ -861,80 +779,39 @@ public class DashboardActivity extends AppCompatActivity {
         if (!configurationModus){ //User can configure his dashboard
             item.setIcon(AppCompatResources.getDrawable(DashboardActivity.this, R.drawable.ic_done));
             Snackbar.make(this.findViewById(android.R.id.content), getResources().getString(R.string.chooseTheCardForConfiguration), BaseTransientBottomBar.LENGTH_SHORT).show();
-            card_dash_user_interaction.setClickable(false);
-            card_dash_calendar.setVisibility(View.VISIBLE);
-            card_dash_pi.setVisibility(View.VISIBLE);
-            card_dash_kvv.setVisibility(View.VISIBLE);
-            card_dash_mealPlan.setVisibility(View.VISIBLE);
-            card_dash_info.setVisibility(View.VISIBLE);
-            card_dash_weather.setVisibility(View.VISIBLE);
+          //  card_dash_user_interaction.setClickable(false);
+
+            dashboard.showAll();
 
 
-            if (!cardCalendar_isVisible){
-                card_dash_calendar.setStrokeColor(ColorUtils.setAlphaComponent(card_dash_calendar.getStrokeColor(),50));
-                card_dash_calendar_layout.setBackgroundColor(ColorUtils.setAlphaComponent(card_dash_calendar.getStrokeColor(),50));
-            }
-            if (!cardPI_isVisible){
-                card_dash_pi.setStrokeColor(ColorUtils.setAlphaComponent(card_dash_pi.getStrokeColor(),50));
-                card_dash_pi_layout.setBackgroundColor(ColorUtils.setAlphaComponent(card_dash_pi.getStrokeColor(),50));
-            }
-            if (!cardMealPlan_isVisible){
-                card_dash_mealPlan.setStrokeColor(ColorUtils.setAlphaComponent(card_dash_mealPlan.getStrokeColor(),50));
-                card_dash_mealPlan_layout.setBackgroundColor(ColorUtils.setAlphaComponent(card_dash_mealPlan.getStrokeColor(),50));
-            }
-            if (!cardKvv_isVisible){
-                card_dash_kvv.setStrokeColor(ColorUtils.setAlphaComponent(card_dash_kvv.getStrokeColor(),50));
-                card_dash_kvv_layout.setBackgroundColor(ColorUtils.setAlphaComponent(card_dash_kvv.getStrokeColor(),50));
-            }
-            if (!cardInfo_isVisible){
+
+
+            dashboard.setColorIntensity(50);
+
+
+            if (!dashboardCardInfo.cardIsVisible()){
                 loadInfo();
-                card_dash_info.setStrokeColor(ColorUtils.setAlphaComponent(card_dash_info.getStrokeColor(),50));
-                card_dash_info_layout.setBackgroundColor(ColorUtils.setAlphaComponent(card_dash_info.getStrokeColor(),50));
             }
-            if (!cardWeather_isVisible) {
-                card_dash_weather.setStrokeColor(ColorUtils.setAlphaComponent(card_dash_weather.getStrokeColor(),50));
-                //card_dash_weather_layout.setBackgroundColor(ColorUtils.setAlphaComponent(card_dash_weather.getStrokeColor(),50));
-            }
+
+
+
+            dashboard.setConfigurationModus(true);
+
+
             configurationModus=true;
         } else{
             item.setIcon(AppCompatResources.getDrawable(DashboardActivity.this, R.drawable.ic_construction));
-            card_dash_user_interaction.setClickable(true);
-            card_dash_calendar.setStrokeColor(ColorUtils.setAlphaComponent(card_dash_calendar.getStrokeColor(),255));
-            card_dash_calendar_layout.setBackgroundColor(ColorUtils.setAlphaComponent(card_dash_calendar.getStrokeColor(),255));
-            card_dash_pi.setStrokeColor(ColorUtils.setAlphaComponent(card_dash_pi.getStrokeColor(),255));
-            card_dash_pi_layout.setBackgroundColor(ColorUtils.setAlphaComponent(card_dash_pi.getStrokeColor(),255));
-            card_dash_kvv.setStrokeColor(ColorUtils.setAlphaComponent(card_dash_kvv.getStrokeColor(),255));
-            card_dash_kvv_layout.setBackgroundColor(ColorUtils.setAlphaComponent(card_dash_kvv.getStrokeColor(),255));
-            card_dash_mealPlan.setStrokeColor(ColorUtils.setAlphaComponent(card_dash_mealPlan.getStrokeColor(),255));
-            card_dash_mealPlan_layout.setBackgroundColor(ColorUtils.setAlphaComponent(card_dash_mealPlan.getStrokeColor(),255));
-            card_dash_info.setStrokeColor(ColorUtils.setAlphaComponent(card_dash_info.getStrokeColor(),255));
-            card_dash_info_layout.setBackgroundColor(ColorUtils.setAlphaComponent(card_dash_info.getStrokeColor(),255));
-            card_dash_weather.setStrokeColor(ColorUtils.setAlphaComponent(card_dash_weather.getStrokeColor(),255));
-            if (!cardCalendar_isVisible){
-                card_dash_calendar.setVisibility(View.GONE);
-            }
-            if (!cardPI_isVisible){
-                card_dash_pi.setVisibility(View.GONE);
-            }
-            if (!cardMealPlan_isVisible){
-                card_dash_mealPlan.setVisibility(View.GONE);
-            }
-            if (!cardKvv_isVisible){
-                card_dash_kvv.setVisibility(View.GONE);
-            }
-            if (!cardInfo_isVisible){
-                card_dash_info.setVisibility(View.GONE);
-            }
-            if (!cardWeather_isVisible) {
-                card_dash_weather.setVisibility(View.GONE);
-            }
-            editor.putBoolean("cardCalendar", cardCalendar_isVisible);
-            editor.putBoolean("cardPI", cardPI_isVisible);
-            editor.putBoolean("cardMealPlan", cardMealPlan_isVisible);
-            editor.putBoolean("cardKvv", cardKvv_isVisible);
-            editor.putBoolean("cardInfo", cardInfo_isVisible);
-            editor.putBoolean("cardWeather", cardWeather_isVisible);
-            editor.apply();
+            //card_dash_user_interaction.setClickable(true);
+
+            dashboard.setColorIntensity(255);
+
+            dashboard.syncVisibility();
+
+            dashboard.saveChanges(this.getApplicationContext());
+
+
+            dashboard.setConfigurationModus(false);
+
             configurationModus=false;
         }
     }
