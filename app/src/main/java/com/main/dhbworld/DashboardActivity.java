@@ -664,7 +664,6 @@ public class DashboardActivity extends AppCompatActivity {
         }
         String message=getResources().getString(R.string.chooseTheCardForConfiguration);
         dashboard.configurationClick(item, this.getApplicationContext(), snackbarContent, message);
-
     }
 
     private void loadInfo() {
