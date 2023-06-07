@@ -10,9 +10,9 @@ import androidx.core.graphics.ColorUtils;
 import com.google.android.material.card.MaterialCardView;
 import com.main.dhbworld.DashboardActivity;
 
-public  class DashboardCard extends Activity {
+public class DashboardCard extends Activity {
 
-    LinearLayout outerLayout;
+    private LinearLayout outerLayout;
     MaterialCardView materialCard;
     LinearLayout coloredButtonBox;
     LinearLayout innerlayout;
@@ -31,7 +31,6 @@ public  class DashboardCard extends Activity {
 
 
     }
-
 
 
     public void makeCardVisible() {
@@ -58,17 +57,16 @@ public  class DashboardCard extends Activity {
     }
 
 
+    //TODO integrate onClickListeners more easily
     public void configurateClickers(DashboardActivity currentActivity, Class<Activity> nextActivity) {
         materialCard.setOnClickListener(v -> {
             if (configurationModus) {
                 if (card_isVisible) {
                     card_isVisible = false; //True = Card is visible
-                    materialCard.setStrokeColor(ColorUtils.setAlphaComponent(materialCard.getStrokeColor(), 50));
-                    innerlayout.setBackgroundColor(ColorUtils.setAlphaComponent(materialCard.getStrokeColor(), 50));
+                    coloreCard(50);
                 } else {
                     card_isVisible = true;//True = Card is visible
-                    materialCard.setStrokeColor(ColorUtils.setAlphaComponent(materialCard.getStrokeColor(), 255));
-                    innerlayout.setBackgroundColor(ColorUtils.setAlphaComponent(materialCard.getStrokeColor(), 255));
+                    coloreCard(255);
                 }
 
             } else {
@@ -84,11 +82,15 @@ public  class DashboardCard extends Activity {
         currentActivity.startActivity(intent);
     }
 
-    public void coloreCard(int intensity) {
+    public void coloreVisibleCard(int intensity) {
         if (!card_isVisible) {
-            materialCard.setStrokeColor(ColorUtils.setAlphaComponent(materialCard.getStrokeColor(), intensity));
-            innerlayout.setBackgroundColor(ColorUtils.setAlphaComponent(materialCard.getStrokeColor(), intensity));
+            coloreCard(intensity);
         }
+    }
+
+    public void coloreCard(int intensity) {
+        materialCard.setStrokeColor(ColorUtils.setAlphaComponent(materialCard.getStrokeColor(), intensity));
+        innerlayout.setBackgroundColor(ColorUtils.setAlphaComponent(materialCard.getStrokeColor(), intensity));
     }
 
     public void setColor(int setAlphaComponent) {

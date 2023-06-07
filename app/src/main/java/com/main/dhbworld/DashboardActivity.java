@@ -13,8 +13,6 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.Transformation;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -25,7 +23,6 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.content.res.AppCompatResources;
-import androidx.constraintlayout.widget.Constraints;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.ColorUtils;
@@ -85,20 +82,16 @@ public class DashboardActivity extends AppCompatActivity {
     private LinearLayout layoutCardPI;
     private LinearLayout layoutCardInfo;
 
-    SharedPreferences sp;
+
 
     public static final String MyPREFERENCES = "myPreferencesKey" ;
-    public static final String dashboardSettings="dashboardSettings";
+
     FirebaseFirestore firestore;
 
     Boolean refreshIsEnable=true;
-    Boolean configurationModus;
-    Boolean cardCalendar_isVisible = true;
-    Boolean cardPI_isVisible = true;
-    Boolean cardMealPlan_isVisible = true;
-    Boolean cardKvv_isVisible = true;
+
     Boolean cardInfo_isVisible = true;
-    Boolean cardWeather_isVisible = true;
+
 
     MaterialCardView card_dash_calendar;
     MaterialCardView card_dash_pi;
@@ -108,20 +101,6 @@ public class DashboardActivity extends AppCompatActivity {
     MaterialCardView card_dash_user_interaction;
     MaterialCardView card_dash_weather;
 
-    private LinearLayout forecastLayout;
-
-    private LinearLayout boxCardCalendar;
-    private LinearLayout boxCardPI;
-    private LinearLayout boxCardMealPlan;
-    private LinearLayout boxCardKvv;
-    private LinearLayout boxCardInfo;
-
-    private LinearLayout card_dash_calendar_layout;
-    private LinearLayout card_dash_pi_layout;
-    private LinearLayout card_dash_kvv_layout;
-    private LinearLayout card_dash_mealPlan_layout;
-    private LinearLayout card_dash_user_interaction_layout;
-    private LinearLayout card_dash_info_layout;
     DashboardCard dashboardCardMealPlan;
     DashboardCard dashboardCarCalender;
     DashboardCard dashboardKvv;
@@ -203,20 +182,20 @@ public class DashboardActivity extends AppCompatActivity {
         card_dash_user_interaction= findViewById(R.id.card_dash_userInteraction);
         card_dash_weather = findViewById(R.id.card_dash_weather);
 
-        boxCardCalendar= findViewById(R.id.buttonCardCalendar);
-        boxCardPI = findViewById(R.id.buttonCardPI);
-        boxCardMealPlan = findViewById(R.id.buttonCardMealPlan);
-        boxCardKvv = findViewById(R.id.buttonCardKvv);
-        boxCardInfo = findViewById(R.id.buttonCardInfo);
+        LinearLayout boxCardCalendar = findViewById(R.id.buttonCardCalendar);
+        LinearLayout boxCardPI = findViewById(R.id.buttonCardPI);
+        LinearLayout boxCardMealPlan = findViewById(R.id.buttonCardMealPlan);
+        LinearLayout boxCardKvv = findViewById(R.id.buttonCardKvv);
+        LinearLayout boxCardInfo = findViewById(R.id.buttonCardInfo);
 
-        card_dash_calendar_layout = findViewById(R.id.card_dash_calendar_layout);
-        card_dash_pi_layout = findViewById(R.id.card_dash_pi_layout);
-        card_dash_kvv_layout = findViewById(R.id.card_dash_kvv_layout);
-        card_dash_mealPlan_layout = findViewById(R.id.card_dash_mealPlan_layout);
-        card_dash_user_interaction_layout = findViewById(R.id.card_dash_userInteraction_layout);
-        card_dash_info_layout = findViewById(R.id.card_dash_info_layout);
+        LinearLayout card_dash_calendar_layout = findViewById(R.id.card_dash_calendar_layout);
+        LinearLayout card_dash_pi_layout = findViewById(R.id.card_dash_pi_layout);
+        LinearLayout card_dash_kvv_layout = findViewById(R.id.card_dash_kvv_layout);
+        LinearLayout card_dash_mealPlan_layout = findViewById(R.id.card_dash_mealPlan_layout);
+        LinearLayout card_dash_user_interaction_layout = findViewById(R.id.card_dash_userInteraction_layout);
+        LinearLayout card_dash_info_layout = findViewById(R.id.card_dash_info_layout);
 
-        forecastLayout = findViewById(R.id.weather_forecast);
+        LinearLayout forecastLayout = findViewById(R.id.weather_forecast);
 
         dashboardCardMealPlan = new DashboardCard(CardType.CARD_MEAL_PLAN, layoutCardMealPlan, card_dash_mealPlan, boxCardMealPlan, card_dash_mealPlan_layout);
         dashboardCarCalender = new DashboardCard(CardType.CARD_CALENDAR, layoutCardCalendar, card_dash_calendar, boxCardCalendar, card_dash_calendar_layout);
@@ -240,103 +219,7 @@ public class DashboardActivity extends AppCompatActivity {
     }
 
     private void userConfigurationOfDashboard(){
-        sp = getSharedPreferences(dashboardSettings, Context.MODE_PRIVATE);
-
-        configurationModus=false;
-
-        dashboard.setConfigurationModus(false);
-        dashboard.setColorIntensity((ColorUtils.setAlphaComponent(getResources().getColor(R.color.black), 0)));
-        dashboard.changeCardVisibility(this.getApplicationContext());
-
-
-
-
-
-
-
-       dashboard.configurateClickers(DashboardActivity.this);
-
-
-      //  dashboardCardMealPlan.configurateClickers(DashboardActivity.this, CalendarActivity.class);
-
-
-        /* //TODO integrate onClickListeners more easily
-
-        card_dash_user_interaction.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(!configurationModus){
-                    Intent intent = new Intent(DashboardActivity.this, UserInteraction.class);
-                    startActivity(intent);
-                }
-            }
-        });
-       card_dash_weather.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (configurationModus) {
-                    if (cardWeather_isVisible) {
-                        cardWeather_isVisible = false; //True = Card is visible
-                        card_dash_weather.setStrokeColor(ColorUtils.setAlphaComponent(card_dash_weather.getStrokeColor(), 50));
-                    } else {
-                        cardWeather_isVisible = true;//True = Card is visible
-                        card_dash_weather.setStrokeColor(ColorUtils.setAlphaComponent(card_dash_weather.getStrokeColor(), 255));
-                    }
-                } else {
-                    if (forecastLayout.getVisibility() == View.GONE) {
-                        expand(forecastLayout);
-                    } else {
-                        collapse(forecastLayout);
-                    }
-                }
-            }
-
-            public void expand(final View v) {
-                int matchParentMeasureSpec = View.MeasureSpec.makeMeasureSpec(((View) v.getParent()).getWidth(), View.MeasureSpec.EXACTLY);
-                int wrapContentMeasureSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
-                v.measure(matchParentMeasureSpec, wrapContentMeasureSpec);
-                final int targetHeight = v.getMeasuredHeight();
-
-                // Older versions of android (pre API 21) cancel animations for views with a height of 0.
-                v.getLayoutParams().height = 1;
-                v.setVisibility(View.VISIBLE);
-                Animation a = new Animation()
-                {
-                    @Override
-                    protected void applyTransformation(float interpolatedTime, Transformation t) {
-                        v.getLayoutParams().height = interpolatedTime == 1
-                                ? Constraints.LayoutParams.WRAP_CONTENT
-                                : (int)(targetHeight * interpolatedTime);
-                        v.requestLayout();
-                    }
-                };
-
-                // Expansion speed of 1dp/ms
-                a.setDuration((int)(targetHeight / v.getContext().getResources().getDisplayMetrics().density));
-                v.startAnimation(a);
-            }
-
-            public void collapse(final View v) {
-                final int initialHeight = v.getMeasuredHeight();
-
-                Animation a = new Animation()
-                {
-                    @Override
-                    protected void applyTransformation(float interpolatedTime, Transformation t) {
-                        if(interpolatedTime == 1){
-                            v.setVisibility(View.GONE);
-                        }else{
-                            v.getLayoutParams().height = initialHeight - (int)(initialHeight * interpolatedTime);
-                            v.requestLayout();
-                        }
-                    }
-                };
-
-                // Collapse speed of 1dp/ms
-                a.setDuration((int)(initialHeight / v.getContext().getResources().getDisplayMetrics().density));
-                v.startAnimation(a);
-            }
-        });*/
+        dashboard.setUp(this.getApplicationContext(), getResources().getColor(R.color.black), DashboardActivity.this);
     }
 
     private void loadCalendar(){
@@ -739,7 +622,7 @@ public class DashboardActivity extends AppCompatActivity {
         }
 
     public void refreshClick(@NonNull MenuItem item) throws NullPointerException{
-            if (!configurationModus){
+            if (!dashboard.getConfigurationModus()){
                 if (refreshIsEnable){
                     refreshIsEnable=false;
                     new CountDownTimer(10000,1000) {
@@ -774,46 +657,14 @@ public class DashboardActivity extends AppCompatActivity {
     }
 
     public void configurationClick(@NonNull MenuItem item) throws NullPointerException{
-        sp = getSharedPreferences(dashboardSettings, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sp.edit();
-        if (!configurationModus){ //User can configure his dashboard
-            item.setIcon(AppCompatResources.getDrawable(DashboardActivity.this, R.drawable.ic_done));
-            Snackbar.make(this.findViewById(android.R.id.content), getResources().getString(R.string.chooseTheCardForConfiguration), BaseTransientBottomBar.LENGTH_SHORT).show();
-          //  card_dash_user_interaction.setClickable(false);
 
-            dashboard.showAll();
-
-
-
-
-            dashboard.setColorIntensity(50);
-
-
-            if (!dashboardCardInfo.cardIsVisible()){
-                loadInfo();
-            }
-
-
-
-            dashboard.setConfigurationModus(true);
-
-
-            configurationModus=true;
-        } else{
-            item.setIcon(AppCompatResources.getDrawable(DashboardActivity.this, R.drawable.ic_construction));
-            //card_dash_user_interaction.setClickable(true);
-
-            dashboard.setColorIntensity(255);
-
-            dashboard.syncVisibility();
-
-            dashboard.saveChanges(this.getApplicationContext());
-
-
-            dashboard.setConfigurationModus(false);
-
-            configurationModus=false;
+        View snackbarContent=this.findViewById(android.R.id.content);
+        if (!dashboardCardInfo.cardIsVisible()){
+            loadInfo();
         }
+        String message=getResources().getString(R.string.chooseTheCardForConfiguration);
+        dashboard.configurationClick(item, this.getApplicationContext(), snackbarContent, message);
+
     }
 
     private void loadInfo() {

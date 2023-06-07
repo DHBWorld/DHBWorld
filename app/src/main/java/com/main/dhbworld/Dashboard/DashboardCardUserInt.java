@@ -46,7 +46,7 @@ public class DashboardCardUserInt extends DashboardCard {
     }
 
     @Override
-    public void coloreCard(int intensity) {
+    public void coloreVisibleCard(int intensity) {
 
     }
 

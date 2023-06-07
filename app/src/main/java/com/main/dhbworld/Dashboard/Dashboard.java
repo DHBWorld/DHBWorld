@@ -2,8 +2,17 @@ package com.main.dhbworld.Dashboard;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.view.MenuItem;
+import android.view.View;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.content.res.AppCompatResources;
+import androidx.core.graphics.ColorUtils;
+
+import com.google.android.material.snackbar.BaseTransientBottomBar;
+import com.google.android.material.snackbar.Snackbar;
 import com.main.dhbworld.DashboardActivity;
+import com.main.dhbworld.R;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,11 +20,13 @@ import java.util.List;
 public class Dashboard {
     SharedPreferences sp;
     public static final String dashboardSettings = "dashboardSettings";
-    private List<DashboardCard> cards;
+    private final List<DashboardCard> cards;
+    private Boolean configurationModus;
 
 
     public Dashboard() {
         cards = new ArrayList<>();
+        configurationModus = false;
 
     }
 
@@ -24,14 +35,19 @@ public class Dashboard {
     }
 
     public void setConfigurationModus(boolean b) {
+        this.configurationModus = b;
         for (DashboardCard card : cards) {
             card.setConfigurationModus(b);
         }
     }
 
+    public Boolean getConfigurationModus() {
+        return configurationModus;
+    }
+
     public void setColorIntensity(int intensity) {
         for (DashboardCard card : cards) {
-            card.coloreCard(intensity);
+            card.coloreVisibleCard(intensity);
         }
     }
 
@@ -53,6 +69,7 @@ public class Dashboard {
     public void showAll() {
         for (DashboardCard card : cards) {
             card.makeCardVisible();
+            card.coloreVisibleCard(50);
         }
     }
 
@@ -71,5 +88,36 @@ public class Dashboard {
         }
 
         editor.apply();
+    }
+
+    public void configurationIsOn() {
+        showAll();
+        setConfigurationModus(true);
+    }
+
+    public void configurationIsOff(Context applicationContext) {
+        setColorIntensity(255);
+        syncVisibility();
+        saveChanges(applicationContext);
+        setConfigurationModus(false);
+
+    }
+
+    public void configurationClick(@NonNull MenuItem item, Context context, View snackbarContent, String message) throws NullPointerException {
+        if (!configurationModus) { //User can configure his dashboard
+            item.setIcon(AppCompatResources.getDrawable(context, R.drawable.ic_done));
+            Snackbar.make(snackbarContent, message, BaseTransientBottomBar.LENGTH_SHORT).show();
+            configurationIsOn();
+        } else {
+            item.setIcon(AppCompatResources.getDrawable(context, R.drawable.ic_construction));
+            configurationIsOff(context);
+        }
+    }
+
+    public void setUp(Context context, int color, DashboardActivity dashboardActivity) {
+       setConfigurationModus(false);
+        setColorIntensity((ColorUtils.setAlphaComponent(color, 0)));
+       changeCardVisibility(context);
+        configurateClickers(dashboardActivity);
     }
 }
