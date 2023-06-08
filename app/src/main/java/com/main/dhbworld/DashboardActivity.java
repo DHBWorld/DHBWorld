@@ -65,7 +65,6 @@ public class DashboardActivity extends AppCompatActivity {
     public static final String MyPREFERENCES = "myPreferencesKey";
 
     Boolean refreshIsEnable = true;
-
     Boolean cardInfo_isVisible = true;
 
 
