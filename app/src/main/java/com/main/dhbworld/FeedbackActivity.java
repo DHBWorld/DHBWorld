@@ -13,6 +13,9 @@ import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.main.dhbworld.Feedback.FeedbackAdapter;
 import com.main.dhbworld.Feedback.FeedbackIssue;
 import com.main.dhbworld.Feedback.NewFeedbackActivity;
@@ -33,14 +36,13 @@ import java.util.List;
 public class FeedbackActivity extends AppCompatActivity {
 
     private LinearProgressIndicator progressIndicator;
-    private FloatingActionButton addFeedbackButton;
     private RecyclerView recyclerView;
 
-    private ArrayList<FeedbackIssue> feedbackArrayList = new ArrayList<>();
+    private final ArrayList<FeedbackIssue> feedbackArrayList = new ArrayList<>();
 
-    private boolean issueListingInProgress = false;
+    private boolean issueListingInProgress = true;
 
-    private String token = "";
+    private String token;
     private String userId;
 
     @Override
@@ -52,7 +54,7 @@ public class FeedbackActivity extends AppCompatActivity {
         toolbar.setNavigationOnClickListener(v -> finish());
 
         progressIndicator = findViewById(R.id.feedback_activity_progressindicator);
-        addFeedbackButton = findViewById(R.id.add_feedback);
+        FloatingActionButton addFeedbackButton = findViewById(R.id.add_feedback);
         recyclerView = findViewById(R.id.feedback_recyclerview);
         addFeedbackButton.setOnClickListener(v -> {
             Intent intent = new Intent(FeedbackActivity.this, NewFeedbackActivity.class);
@@ -60,18 +62,45 @@ public class FeedbackActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
-        Utilities utilities = new Utilities(this);
-        utilities.setSignedInListener(new SignedInListener() {
+        requestUserAndToken(new UserAndTokenListener() {
             @Override
-            public void onSignedIn(FirebaseUser user) {
-                utilities.saveFCMToken();
-                userId = user.getUid();
+            public void onData(String userId, String token) {
+                FeedbackActivity.this.token = token;
+                FeedbackActivity.this.userId = userId;
+                issueListingInProgress = false;
                 listIssues();
             }
 
             @Override
-            public void onSignInError() {
+            public void onError() {
 
+            }
+        });
+    }
+
+    private void requestUserAndToken(UserAndTokenListener userAndTokenListener) {
+        FirebaseFirestore firestore= FirebaseFirestore.getInstance();
+        DocumentReference github = firestore.collection("General").document("GithubToken");
+        Utilities utilities = new Utilities(this);
+
+        utilities.setSignedInListener(new SignedInListener() {
+            @Override
+            public void onSignedIn(FirebaseUser user) {
+                utilities.saveFCMToken();
+                github.get().addOnCompleteListener(task -> {
+                    if (task.isSuccessful()){
+                        DocumentSnapshot doc= task.getResult();
+                        token = doc.getString("token");
+                        userAndTokenListener.onData(user.getUid(), token);
+                    } else {
+                        userAndTokenListener.onError();
+                    }
+                });
+            }
+
+            @Override
+            public void onSignInError() {
+                userAndTokenListener.onError();
             }
         });
         utilities.signIn();
@@ -120,5 +149,10 @@ public class FeedbackActivity extends AppCompatActivity {
         progressIndicator.setVisibility(View.VISIBLE);
         listIssues();
         super.onResume();
+    }
+
+    interface UserAndTokenListener {
+        void onData(String userId, String token);
+        void onError();
     }
 }
