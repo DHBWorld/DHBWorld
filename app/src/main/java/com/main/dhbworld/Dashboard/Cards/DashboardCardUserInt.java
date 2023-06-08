@@ -1,4 +1,4 @@
-package com.main.dhbworld.Dashboard;
+package com.main.dhbworld.Dashboard.Cards;
 
 import android.app.Activity;
 import android.widget.LinearLayout;

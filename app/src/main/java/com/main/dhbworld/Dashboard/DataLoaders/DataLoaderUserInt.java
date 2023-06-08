@@ -1,4 +1,4 @@
-package com.main.dhbworld.Dashboard;
+package com.main.dhbworld.Dashboard.DataLoaders;
 
 import android.content.Context;
 import android.widget.ImageView;
@@ -27,7 +27,7 @@ public class DataLoaderUserInt {
     public void load() {
         Utilities utilities = new Utilities(context);
         image_canteen.setColorFilter(ContextCompat.getColor(context, R.color.grey_light));
-        image_coffee.setColorFilter(ContextCompat.getColor(context, R.color.green_queue));
+        image_coffee.setColorFilter(ContextCompat.getColor(context, R.color.grey_light));
         image_printer.setColorFilter(ContextCompat.getColor(context, R.color.grey_light));
 
 

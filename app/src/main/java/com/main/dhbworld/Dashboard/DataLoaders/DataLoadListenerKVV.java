@@ -1,4 +1,4 @@
-package com.main.dhbworld.Dashboard;
+package com.main.dhbworld.Dashboard.DataLoaders;
 
 import android.content.Context;
 import android.view.View;

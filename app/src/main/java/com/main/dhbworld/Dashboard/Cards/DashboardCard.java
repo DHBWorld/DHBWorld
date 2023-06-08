@@ -1,4 +1,4 @@
-package com.main.dhbworld.Dashboard;
+package com.main.dhbworld.Dashboard.Cards;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -12,7 +12,7 @@ import com.main.dhbworld.DashboardActivity;
 
 public class DashboardCard extends Activity {
 
-    private LinearLayout outerLayout;
+    LinearLayout outerLayout;
     MaterialCardView materialCard;
     LinearLayout coloredButtonBox;
     LinearLayout innerlayout;
@@ -95,5 +95,9 @@ public class DashboardCard extends Activity {
 
     public void setColor(int setAlphaComponent) {
         coloredButtonBox.setBackgroundColor((setAlphaComponent));
+    }
+
+    public CardType getCardType() {
+        return cardType;
     }
 }

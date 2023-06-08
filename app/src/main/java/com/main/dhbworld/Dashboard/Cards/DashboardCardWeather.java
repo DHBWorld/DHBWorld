@@ -1,4 +1,4 @@
-package com.main.dhbworld.Dashboard;
+package com.main.dhbworld.Dashboard.Cards;
 
 import android.app.Activity;
 import android.view.View;
@@ -10,6 +10,8 @@ import androidx.constraintlayout.widget.Constraints;
 import androidx.core.graphics.ColorUtils;
 
 import com.google.android.material.card.MaterialCardView;
+import com.main.dhbworld.Dashboard.Cards.CardType;
+import com.main.dhbworld.Dashboard.Cards.DashboardCard;
 import com.main.dhbworld.DashboardActivity;
 
 public class DashboardCardWeather extends DashboardCard {

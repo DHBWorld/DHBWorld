@@ -11,6 +11,7 @@ import androidx.core.graphics.ColorUtils;
 
 import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
+import com.main.dhbworld.Dashboard.Cards.DashboardCard;
 import com.main.dhbworld.DashboardActivity;
 import com.main.dhbworld.R;
 
@@ -24,9 +25,11 @@ public class Dashboard {
     private Boolean configurationModus;
 
 
+
     public Dashboard() {
         cards = new ArrayList<>();
         configurationModus = false;
+
 
     }
 
@@ -56,13 +59,13 @@ public class Dashboard {
         sp = context.getSharedPreferences(dashboardSettings, Context.MODE_PRIVATE);
 
         for (DashboardCard card : cards) {
-            card.setCardVisibility(sp.getBoolean(card.cardType.getSavedIn(), true));
+            card.setCardVisibility(sp.getBoolean(card.getCardType().getSavedIn(), true));
         }
     }
 
     public void configurateClickers(DashboardActivity dashboardActivity) {
         for (DashboardCard card : cards) {
-            card.configurateClickers(dashboardActivity, card.cardType.getLink());
+            card.configurateClickers(dashboardActivity, card.getCardType().getLink());
         }
     }
 
@@ -84,7 +87,7 @@ public class Dashboard {
         SharedPreferences.Editor editor = sp.edit();
 
         for (DashboardCard card : cards) {
-            editor.putBoolean(card.cardType.getSavedIn(), card.cardIsVisible());
+            editor.putBoolean(card.getCardType().getSavedIn(), card.cardIsVisible());
         }
 
         editor.apply();
@@ -116,7 +119,7 @@ public class Dashboard {
 
     public void setUp(Context context, int color, DashboardActivity dashboardActivity) {
        setConfigurationModus(false);
-        setColorIntensity((ColorUtils.setAlphaComponent(color, 0)));
+        setColorIntensity((ColorUtils.setAlphaComponent(context.getResources().getColor(R.color.black), 0)));
        changeCardVisibility(context);
         configurateClickers(dashboardActivity);
     }
