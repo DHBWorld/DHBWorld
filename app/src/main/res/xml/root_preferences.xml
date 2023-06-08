@@ -94,6 +94,7 @@
             app:title="@string/data_privacy_title" />
 
         <Preference
+            android:icon="@drawable/baseline_feedback_24"
             android:key="feedback"
             app:title="@string/feedback" />
 
