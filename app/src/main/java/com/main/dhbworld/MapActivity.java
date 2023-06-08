@@ -88,7 +88,7 @@ public class MapActivity extends AppCompatActivity {
         entryItems.add(getString(R.string.main_entry));
         entryItems.add(getString(R.string.left));
         entryItems.add(getString(R.string.right));
-        ArrayAdapter<String> arrayAdapterEntry = new ArrayAdapter<>(this, R.layout.dualis_semester_list_item, entryItems);
+        ArrayAdapter<String> arrayAdapterEntry = new ArrayAdapter<>(this, R.layout.dropdown_list_item, entryItems);
         entryDropdown.setAdapter(arrayAdapterEntry);
         entryDropdown.setText(entryItems.get(0), false);
         return entryItems;
@@ -97,7 +97,7 @@ public class MapActivity extends AppCompatActivity {
     private void setRooms() {
         ArrayList<String> roomItems = getRoomItems();
 
-        ArrayAdapter<String> arrayAdapterRoom = new ArrayAdapter<>(this, R.layout.dualis_semester_list_item, roomItems);
+        ArrayAdapter<String> arrayAdapterRoom = new ArrayAdapter<>(this, R.layout.dropdown_list_item, roomItems);
         roomDropdown.setAdapter(arrayAdapterRoom);
     }
 

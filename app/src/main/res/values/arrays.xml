@@ -1133,4 +1133,10 @@ Copyright © 2002 JSON.org
 \nSOFTWARE.
        </item>
     </string-array>
+    <string-array name="feedback_types" >
+       <item>Bug</item>
+       <item>Enhancement</item>
+       <item>Feedback</item>
+       <item>Help wanted</item>
+    </string-array>
 </resources>

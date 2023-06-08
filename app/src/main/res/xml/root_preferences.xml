@@ -93,6 +93,10 @@
             app:key="dataprivacy"
             app:title="@string/data_privacy_title" />
 
+        <Preference
+            android:key="feedback"
+            app:title="@string/feedback" />
+
     </PreferenceCategory>
 
     <PreferenceCategory app:title="@string/calendar">

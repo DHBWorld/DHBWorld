@@ -10,7 +10,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -25,10 +24,16 @@ import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.MessagingAnalytics;
 import com.google.firebase.messaging.RemoteMessage;
 import com.main.dhbworld.BroadcastReceiver.UpdateEventsReceiver;
+import com.main.dhbworld.DashboardActivity;
 import com.main.dhbworld.Enums.InteractionState;
+import com.main.dhbworld.Feedback.DetailFeedbackActivity;
+import com.main.dhbworld.FeedbackActivity;
 import com.main.dhbworld.Firebase.Utilities;
 import com.main.dhbworld.R;
+import com.main.dhbworld.SettingsActivity;
 import com.main.dhbworld.UserInteraction;
+
+import java.util.Random;
 
 public class UserInteractionMessagingService extends FirebaseMessagingService {
     @Override
@@ -46,6 +51,53 @@ public class UserInteractionMessagingService extends FirebaseMessagingService {
                 public void run() {
                     String category = remoteMessage.getData().get("category");
                     if (category == null || remoteMessage.getData().get("problem") == null) {
+                        if (remoteMessage.getData().get("issue_number") != null) {
+                            NotificationManagerCompat notificationManager = NotificationManagerCompat.from(getApplicationContext());
+
+                            Intent feedbackActivity = new Intent(getApplicationContext(), FeedbackActivity.class);
+                            Intent mainActivity = new Intent(getApplicationContext(), DashboardActivity.class);
+                            Intent settingsActivity = new Intent(getApplicationContext(), SettingsActivity.class);
+                            TaskStackBuilder stackBuilder = TaskStackBuilder.create(getApplicationContext());
+                            stackBuilder.addNextIntentWithParentStack(mainActivity);
+                            stackBuilder.addNextIntentWithParentStack(settingsActivity);
+                            stackBuilder.addNextIntentWithParentStack(feedbackActivity);
+                            PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+
+                            System.out.println(remoteMessage.getData().get("issue"));
+
+                            NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), "feedback")
+                                    .setSmallIcon(R.drawable.baseline_language_24_red)
+                                    .setContentTitle(getResources().getString(R.string.new_activity_on_issue))
+                                    .setStyle(new NotificationCompat.BigTextStyle().bigText(getResources().getString(R.string.new_activity_on_issue_body)))
+                                    .setContentText(getResources().getString(R.string.new_activity_on_issue_body))
+                                    .setPriority(NotificationCompat.PRIORITY_HIGH)
+                                    .setDefaults(Notification.DEFAULT_ALL)
+                                    .setContentIntent(resultPendingIntent)
+                                    .setAutoCancel(true);
+
+                            if (notificationManager.getNotificationChannel("feedback") == null) {
+                                createNotificationChannel(UserInteractionMessagingService.this, "feedback", "Information zu deinem Feedback");
+                            }
+                            if (ActivityCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED) {
+                                notificationManager.notify(new Random().nextInt(Integer.MAX_VALUE), builder.build());
+                            }
+                        } else {
+                            NotificationManagerCompat notificationManager = NotificationManagerCompat.from(getApplicationContext());
+
+                            NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), "feedback")
+                                    .setSmallIcon(R.drawable.baseline_language_24_red)
+                                    .setContentTitle(remoteMessage.getNotification().getTitle())
+                                    .setStyle(new NotificationCompat.BigTextStyle().bigText(remoteMessage.getNotification().getBody()))
+                                    .setContentText(remoteMessage.getNotification().getBody())
+                                    .setPriority(NotificationCompat.PRIORITY_HIGH)
+                                    .setDefaults(Notification.DEFAULT_ALL);
+                            if (notificationManager.getNotificationChannel("general") == null) {
+                                createNotificationChannel(UserInteractionMessagingService.this, "general", "Allgemeine Informationen");
+                            }
+                            if (ActivityCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED) {
+                                notificationManager.notify(new Random().nextInt(Integer.MAX_VALUE), builder.build());
+                            }
+                        }
                         return;
                     }
                     int problem = Integer.parseInt(remoteMessage.getData().get("problem"));
@@ -108,7 +160,7 @@ public class UserInteractionMessagingService extends FirebaseMessagingService {
                             .setContentIntent(resultPendingIntent);
 
                     if (notificationManager.getNotificationChannel("warnings") == null) {
-                        createNotificationChannel(UserInteractionMessagingService.this);
+                        createNotificationChannel(UserInteractionMessagingService.this, "warnings", "Warnungen (User Interaction)");
                     }
                     if (ActivityCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED) {
                         notificationManager.notify(icon, builder.build());
@@ -124,7 +176,6 @@ public class UserInteractionMessagingService extends FirebaseMessagingService {
      */
     @Override
     public void handleIntent(@NonNull Intent intent) {
-        System.out.println(intent.getStringExtra("message_type"));
         if (intent.getStringExtra("message_type") == null) {
             Bundle var2 = intent.getExtras();
             if (var2 == null) {
@@ -139,9 +190,9 @@ public class UserInteractionMessagingService extends FirebaseMessagingService {
         MessagingAnalytics.logNotificationReceived(intent);
     }
 
-    public static void createNotificationChannel(Context context) {
+    public static void createNotificationChannel(Context context, String id, String name) {
         int importance = NotificationManager.IMPORTANCE_HIGH;
-        NotificationChannel channel = new NotificationChannel("warnings", "Warnungen (User Interaction)", importance);
+        NotificationChannel channel = new NotificationChannel(id, name, importance);
         channel.setDescription(context.getResources().getString(R.string.event_notifications));
         NotificationManager notificationManager = context.getSystemService(NotificationManager.class);
         notificationManager.createNotificationChannel(channel);

@@ -121,7 +121,7 @@ public class DualisSemesterFragment extends Fragment implements DualisAPI.Course
             e.printStackTrace();
         }
 
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(getContext(), R.layout.dualis_semester_list_item, items);
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(getContext(), R.layout.dropdown_list_item, items);
         semesterDropdown.setAdapter(arrayAdapter);
         if (items.contains(currentSemester)) {
             semesterDropdown.setText(currentSemester, false);

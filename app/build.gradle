@@ -1,6 +1,5 @@
 plugins {
     id 'com.android.application'
-    id 'kotlin-android'
 }
 
 apply plugin: 'com.google.gms.google-services'
@@ -128,5 +127,5 @@ dependencies {
 
     implementation 'com.facebook.shimmer:shimmer:0.5.0'
 
-    implementation 'com.open-meteo:open-meteo-api-kotlin:0.4.0-alpha.0'
+    implementation 'org.kohsuke:github-api:1.315'
 }
