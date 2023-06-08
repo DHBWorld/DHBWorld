@@ -1,0 +1,35 @@
+name: Send notification to user on new comment
+on:
+  issue_comment:
+    types: [created]
+  
+jobs:
+  send_notification:
+    if: ${{ !github.event.issue.pull_request }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: get UserId
+        id: getUserId
+        continue-on-error: true
+        run: |
+          USERID=$( echo '${{ github.event.issue.title }}' | sed 's/.*#\([^ ].*\)/\1/' )
+          USERID=$( echo $USERID | grep "^[A-Za-z0-9]*\$")
+          echo "USERID=$USERID" >> $GITHUB_ENV
+      - name: get FCM Token
+        id: getFCMToken
+        if: ${{ steps.getUserId.outcome == 'success' && env.USERID != '' }}
+        run: |
+          URL=$(echo ${{ secrets.FIREBASE_FCM_TOKEN_URL }}'?orderBy="$key"&equalTo="'${{ env.USERID }}'"')
+          RESULT=$(curl -s $URL)
+          echo "RESULT=$RESULT" >> $GITHUB_ENV
+      - name: Read Properties
+        id: readFCMToken
+        continue-on-error: true
+        uses:  ashley-taylor/read-json-property-action@v1.0
+        with:
+          json: ${{ env.RESULT }}
+          property: ${{ env.USERID }}
+      - name: Send Notification
+        if: ${{ steps.readFCMToken.outcome == 'success' && steps.readFCMToken.outputs.value != '' }}
+        run: |
+          curl -X POST -H "Authorization: key=${{ secrets.FIREBASE_SERVER_SECRET }}" -H "Content-Type: application/json" -d '{"data": {"issue_number": "${{ github.event.issue.number }}"}, "notification": {"body": "", "title": ""}, "to": "${{ steps.readFCMToken.outputs.value }}"}' 'https://fcm.googleapis.com/fcm/send'
