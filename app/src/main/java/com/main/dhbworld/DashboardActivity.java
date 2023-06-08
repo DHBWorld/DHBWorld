@@ -44,6 +44,7 @@ import com.main.dhbworld.Dashboard.Cards.DashboardCardUserInt;
 import com.main.dhbworld.Dashboard.Cards.DashboardCardWeather;
 import com.main.dhbworld.Dashboard.DataLoaders.DataLoadListenerKVV;
 import com.main.dhbworld.Dashboard.DataLoaders.DataLoaderCalendar;
+import com.main.dhbworld.Dashboard.DataLoaders.DataLoaderPersonalInfo;
 import com.main.dhbworld.Dashboard.DataLoaders.DataLoaderUserInt;
 import com.main.dhbworld.Debugging.Debugging;
 import com.main.dhbworld.Dualis.EverlastingService;
@@ -324,22 +325,7 @@ public class DashboardActivity extends AppCompatActivity {
         dataLoaderUserInt.load();
     }
 
-    private void copyClick(ImageButton button, String copyText){
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-                ClipData clip = ClipData.newPlainText("", copyText);
-                clipboard.setPrimaryClip(clip);
-                Snackbar.make(DashboardActivity.this.findViewById(android.R.id.content), getResources().getString(R.string.copied), BaseTransientBottomBar.LENGTH_SHORT).show();
-            }
-        });
-
-    }
-
     private void loadPersonalInformation(){
-        SharedPreferences sp = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
-
         LinearLayout[] layoutInfo = new LinearLayout[3];
         layoutInfo[0] = findViewById(R.id.layoutInfoOne);
         layoutInfo[1] = findViewById(R.id.layoutInfoTwo);
@@ -352,32 +338,9 @@ public class DashboardActivity extends AppCompatActivity {
         infoView[0] = findViewById(R.id.textViewPersonalInfoOne);
         infoView[1] = findViewById(R.id.textViewPersonalInfoTwo);
         infoView[2] = findViewById(R.id.textViewPersonalInfoThree);
-        String[] markerTitle = new String[3];
-        markerTitle[0]=getString(R.string.matriculationNumber)+"\n";
-        markerTitle[1]=getString(R.string.libraryNumber)+"\n" ;
-        markerTitle[2]=getString(R.string.emailStudent)+"\n";
-        Boolean emptyCard=true;
-        String[] info = new String[3];
-        info[0]=sp.getString("matriculationNumberKey", "");
-        info[1]=sp.getString("libraryNumberKey", "");
-        info[2]=sp.getString("studentMailKey", "");
 
-        for (int i=0;i<3;i++){
-            layoutInfo[i].setVisibility(View.VISIBLE);
-            imageButtonCopy[i].setVisibility(View.VISIBLE);
-            if ((!info[i].equals("")) && (!info[i].equals(" "))){
-                emptyCard=false;
-                infoView[i].setText( markerTitle[i]+info[i]);
-                copyClick(imageButtonCopy[i], info[i]);
-            }else{
-                layoutInfo[i].setVisibility(View.GONE);
-            }
-        }
-        if (emptyCard){
-            layoutInfo[0].setVisibility(View.VISIBLE);
-            imageButtonCopy[0].setVisibility(View.GONE);
-            infoView[0].setText(getResources().getString(R.string.thereIsntAnyPersonalData));
-        }
+        DataLoaderPersonalInfo dataLoaderPersonalInfo = new DataLoaderPersonalInfo(this, layoutInfo, imageButtonCopy, infoView, DashboardActivity.this.findViewById(android.R.id.content));
+        dataLoaderPersonalInfo.load();
     }
 
     private void loadMealPlan(){
