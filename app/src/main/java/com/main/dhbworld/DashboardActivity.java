@@ -49,6 +49,7 @@ import com.main.dhbworld.Dashboard.DashboardCardUserInt;
 import com.main.dhbworld.Dashboard.DashboardCardWeather;
 import com.main.dhbworld.Dashboard.DataLoadListenerKVV;
 import com.main.dhbworld.Dashboard.DataLoaderCalendar;
+import com.main.dhbworld.Dashboard.DataLoaderUserInt;
 import com.main.dhbworld.Debugging.Debugging;
 import com.main.dhbworld.Dualis.EverlastingService;
 import com.main.dhbworld.Enums.InteractionState;
@@ -220,7 +221,6 @@ public class DashboardActivity extends AppCompatActivity {
 
     }
 
-
     private void loadCalendar() {
         ImageView uniImage = findViewById(R.id.imageViewCalendar);
         TextView nextClassView = findViewById(R.id.nextClassView);
@@ -334,45 +334,11 @@ public class DashboardActivity extends AppCompatActivity {
     }
 
     private void loadUserInteraction(){
-        Utilities utilities = new Utilities(this);
         ImageView image_canteen = findViewById(R.id.imageBox_dashboard_canteen);
         ImageView image_coffee= findViewById(R.id.imageBox_dashboard_coffee);
         ImageView image_printer = findViewById(R.id.imageBox_dashboard_printer);
-        image_canteen.setColorFilter(ContextCompat.getColor(this, R.color.grey_light));
-        image_coffee.setColorFilter(ContextCompat.getColor(this, R.color.grey_light));
-        image_printer.setColorFilter(ContextCompat.getColor(this, R.color.grey_light));
-
-        utilities.setSignedInListener(new SignedInListener() {
-            @Override
-            public void onSignedIn(FirebaseUser user) {
-                utilities.setCurrentStatusListener(new CurrentStatusListener() {
-                    @Override
-                    public void onStatusReceived(String category, int status) {
-                        switch (category) {
-                            case Utilities.CATEGORY_CAFETERIA:
-                                InteractionState stateCanteen = InteractionState.parseId(status);
-                                image_canteen.setColorFilter(getColor(stateCanteen.getColor()));
-                                break;
-                            case Utilities.CATEGORY_COFFEE:
-                                InteractionState stateCoffee = InteractionState.parseId(status);
-                                image_coffee.setColorFilter(getColor(stateCoffee.getColor()));
-                                break;
-                            case Utilities.CATEGORY_PRINTER:
-                                InteractionState statePrinter = InteractionState.parseId(status);
-                                image_printer.setColorFilter(getColor(statePrinter.getColor()));
-                                break;
-                        }
-                    }
-                });
-                utilities.getCurrentStatus(Utilities.CATEGORY_CAFETERIA);
-                utilities.getCurrentStatus(Utilities.CATEGORY_PRINTER);
-                utilities.getCurrentStatus(Utilities.CATEGORY_COFFEE);
-            }
-            @Override
-            public void onSignInError() {
-            }
-        });
-        utilities.signIn();
+        DataLoaderUserInt dataLoaderUserInt= new DataLoaderUserInt(this, image_canteen,image_coffee,image_printer);
+        dataLoaderUserInt.load();
     }
 
     private void copyClick(ImageButton button, String copyText){
