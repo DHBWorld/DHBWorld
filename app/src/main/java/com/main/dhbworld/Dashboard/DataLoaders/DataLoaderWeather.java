@@ -15,19 +15,14 @@ import java.util.ArrayList;
 import java.util.Locale;
 
 public class DataLoaderWeather {
-    ImageView iconImageView ;
-    TextView statusTextView ;
-
-    TextView weatherLocation ;
-
-    TextView[] day ;
-
-    TextView[] maxTempDay ;
-
-    TextView[] minTempDay;
-
-    ImageView[] iconDay ;
-    Context context;
+   private final ImageView iconImageView ;
+    private final TextView statusTextView ;
+    private final TextView weatherLocation ;
+    private final TextView[] day ;
+    private final TextView[] maxTempDay ;
+    private final TextView[] minTempDay;
+    private final ImageView[] iconDay ;
+    private final Context context;
 
 
     public DataLoaderWeather(Context context, ImageView iconImageView, TextView statusTextView, TextView weatherLocation, TextView[] day, TextView[] maxTempDay, TextView[] minTempDay, ImageView[] iconDay) {

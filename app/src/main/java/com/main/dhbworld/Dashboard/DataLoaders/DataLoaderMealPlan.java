@@ -14,11 +14,11 @@ import java.util.List;
 
 public class DataLoaderMealPlan {
 
-    Context context;
-    LinearLayout layoutCardMealPlan;
-    LinearLayout[] layoutMeal;
-    TextView[] textViewMeal;
-    ImageView imageViewMeal;
+    private final Context context;
+    private final LinearLayout layoutCardMealPlan;
+    private final LinearLayout[] layoutMeal;
+    private final TextView[] textViewMeal;
+    private final ImageView imageViewMeal;
 
     public DataLoaderMealPlan(Context context, LinearLayout layoutCardMealPlan, LinearLayout[] layoutMeal, TextView[] textViewMeal, ImageView imageViewMeal) {
         this.context = context;

@@ -19,13 +19,13 @@ import java.time.format.FormatStyle;
 import java.util.ArrayList;
 
 public class DataLoadListenerKVV implements DataLoaderListener {
-    LinearLayout[] layoutTram ;
-    ProgressIndicator indicator;
-    TextView[] tramView ;
-    TextView[] platformView ;
-    TextView[] timeView ;
-    ImageView tramImageOne;
-    Context context;
+    private final LinearLayout[] layoutTram ;
+    private final ProgressIndicator indicator;
+    private final TextView[] tramView ;
+    private final TextView[] platformView ;
+    private final TextView[] timeView ;
+    private final ImageView tramImageOne;
+    private final Context context;
 
 
 

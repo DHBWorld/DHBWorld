@@ -22,16 +22,16 @@ import dhbw.timetable.rapla.data.event.Appointment;
 
 public class DataLoaderCalendar {
 
-    ImageView uniImage ;
-    TextView nextClassView ;
-    LinearLayout layoutTime ;
-    LinearLayout layoutCardCalendarInformation ;
-    LinearLayout layoutTimeDigit ;
-    TextView timeView ;
-    TextView timeViewMin ;
-    TextView letterTimeView ;
-    Context context;
-    LinearLayout layoutCardCalendar;
+    private final ImageView uniImage ;
+    private final TextView nextClassView ;
+    private final LinearLayout layoutTime ;
+    private final LinearLayout layoutCardCalendarInformation ;
+    private final LinearLayout layoutTimeDigit ;
+    private final TextView timeView ;
+    private final TextView timeViewMin ;
+    private final TextView letterTimeView ;
+    private final Context context;
+    private final LinearLayout layoutCardCalendar;
 
     public DataLoaderCalendar(Context context, LinearLayout layoutCardCalendar,  ImageView uniImage, TextView nextClassView, LinearLayout layoutTime, LinearLayout layoutCardCalendarInformation, LinearLayout layoutTimeDigit, TextView timeView, TextView timeViewMin, TextView letterTimeView) {
     this.uniImage=uniImage;

@@ -12,11 +12,11 @@ import com.main.dhbworld.R;
 import com.main.dhbworld.Utilities.OnClickListenerCopy;
 
 public class DataLoaderPersonalInfo {
-    LinearLayout[] layoutInfo;
-    ImageButton[] imageButtonCopy;
-    TextView[] infoView;
-    Context context;
-    View snackbarView;
+    private final LinearLayout[] layoutInfo;
+    private final ImageButton[] imageButtonCopy;
+    private final TextView[] infoView;
+    private final Context context;
+    private final View snackbarView;
 
     public DataLoaderPersonalInfo(Context context, LinearLayout[] layoutInfo, ImageButton[] imageButtonCopy, TextView[] infoView, View snackbarView) {
         this.imageButtonCopy = imageButtonCopy;
