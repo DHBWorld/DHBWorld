@@ -1,15 +1,12 @@
 package com.main.dhbworld;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.tabs.TabLayout;
 import org.json.JSONException;
 
-import android.graphics.PorterDuff;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -25,11 +22,9 @@ import com.main.dhbworld.Cantine.CantineUtilities;
 import com.main.dhbworld.Cantine.Meal;
 import com.main.dhbworld.Cantine.MealDailyPlan;
 import com.main.dhbworld.Navigation.NavigationUtilities;
-import java.io.BufferedReader;
+import com.main.dhbworld.Utilities.ProgressIndicator;
+
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.URL;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -38,15 +33,13 @@ import java.util.Currency;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.stream.Collectors;
-import javax.net.ssl.HttpsURLConnection;
 
 
 public class CantineActivity extends AppCompatActivity {
     private LinearLayout layoutMealCardsBasic;
     private LinearLayout layoutMealCardsExtra;
     private String inputFromApi;
-    private  ProgressIndicator indicator;
+    private ProgressIndicator indicator;
     TabLayout tabLayout;
     Date[] currentWeek;
     static String inputForDashboard;

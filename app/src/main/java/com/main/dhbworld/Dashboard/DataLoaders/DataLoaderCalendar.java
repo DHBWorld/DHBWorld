@@ -12,8 +12,7 @@ import androidx.appcompat.content.res.AppCompatResources;
 import androidx.preference.PreferenceManager;
 
 import com.main.dhbworld.Calendar.nextEventsProvider;
-import com.main.dhbworld.DashboardActivity;
-import com.main.dhbworld.ProgressIndicator;
+import com.main.dhbworld.Utilities.ProgressIndicator;
 import com.main.dhbworld.R;
 
 import java.time.Duration;

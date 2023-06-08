@@ -43,6 +43,7 @@ import com.main.dhbworld.Debugging.Debugging;
 import com.main.dhbworld.Dualis.EverlastingService;
 import com.main.dhbworld.KVV.KVVDataLoader;
 import com.main.dhbworld.Navigation.NavigationUtilities;
+import com.main.dhbworld.Utilities.ProgressIndicator;
 import com.main.dhbworld.Weather.Forecast;
 import com.main.dhbworld.Weather.WeatherApi;
 import com.main.dhbworld.Weather.WeatherData;

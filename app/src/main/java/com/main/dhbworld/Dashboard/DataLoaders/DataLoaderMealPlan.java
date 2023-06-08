@@ -7,7 +7,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.main.dhbworld.CantineActivity;
-import com.main.dhbworld.ProgressIndicator;
+import com.main.dhbworld.Utilities.ProgressIndicator;
 import com.main.dhbworld.R;
 
 import java.util.List;

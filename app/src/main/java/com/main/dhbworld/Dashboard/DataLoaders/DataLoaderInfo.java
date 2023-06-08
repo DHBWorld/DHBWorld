@@ -8,7 +8,7 @@ import android.widget.TextView;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.main.dhbworld.ProgressIndicator;
+import com.main.dhbworld.Utilities.ProgressIndicator;
 
 public class DataLoaderInfo {
     Context context;

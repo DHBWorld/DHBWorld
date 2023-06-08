@@ -8,11 +8,10 @@ import android.widget.TextView;
 
 import androidx.appcompat.content.res.AppCompatResources;
 
-import com.main.dhbworld.DashboardActivity;
 import com.main.dhbworld.KVV.DataLoaderListener;
 import com.main.dhbworld.KVV.Departure;
 import com.main.dhbworld.KVV.Disruption;
-import com.main.dhbworld.ProgressIndicator;
+import com.main.dhbworld.Utilities.ProgressIndicator;
 import com.main.dhbworld.R;
 
 import java.time.format.DateTimeFormatter;
