@@ -44,6 +44,7 @@ import com.main.dhbworld.Dashboard.Cards.DashboardCardUserInt;
 import com.main.dhbworld.Dashboard.Cards.DashboardCardWeather;
 import com.main.dhbworld.Dashboard.DataLoaders.DataLoadListenerKVV;
 import com.main.dhbworld.Dashboard.DataLoaders.DataLoaderCalendar;
+import com.main.dhbworld.Dashboard.DataLoaders.DataLoaderMealPlan;
 import com.main.dhbworld.Dashboard.DataLoaders.DataLoaderPersonalInfo;
 import com.main.dhbworld.Dashboard.DataLoaders.DataLoaderUserInt;
 import com.main.dhbworld.Debugging.Debugging;
@@ -352,40 +353,11 @@ public class DashboardActivity extends AppCompatActivity {
         textViewMeal[0] = findViewById(R.id.textViewMealOne);
         textViewMeal[1] = findViewById(R.id.textViewMealTwo);
         textViewMeal[2] = findViewById(R.id.textViewMealThree);
-        ProgressIndicator indicator= new ProgressIndicator(DashboardActivity.this, layoutCardMealPlan, layoutMeal);
-        indicator.show();
 
-        new Thread(new Runnable() {
-            @RequiresApi(api = Build.VERSION_CODES.N)
-            @Override
-            public void run() {
-               List<String> meals = CantineActivity.loadDataForDashboard();
-                layoutCardMealPlan.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        ImageView imageViewMeal= findViewById(R.id.imageViewMeal);
-                        indicator.hide();
-                        if((meals==null) || (meals.size()==0)){
-                            imageViewMeal.setImageResource(R.drawable.ic_no_meals);
-                            textViewMeal[0].setText(R.string.thereIsntAnyInfo);
-                            layoutMeal[1].setVisibility(View.GONE);
-                            layoutMeal[2].setVisibility(View.GONE);
-                        }else{
-                            imageViewMeal.setImageResource(R.drawable.ic_restaurant);
-                            for (int i=0;i<3;i++){
-                                textViewMeal[i].setVisibility(View.VISIBLE);
-                                if (meals.size()>i){
-                                    textViewMeal[i].setText(meals.get(i));
-                                }else{
-                                    layoutMeal[i].setVisibility(View.GONE);
-                                }
-                            }
-                        }
+        ImageView imageViewMeal= findViewById(R.id.imageViewMeal);
 
-                    }
-                });
-            }
-        }).start();
+        DataLoaderMealPlan dataLoaderMealPlan= new DataLoaderMealPlan(DashboardActivity.this, layoutCardMealPlan, layoutMeal,textViewMeal, imageViewMeal);
+        dataLoaderMealPlan.load();
         }
 
     public void refreshClick(@NonNull MenuItem item) throws NullPointerException{
