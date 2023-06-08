@@ -48,6 +48,7 @@ import com.main.dhbworld.Dashboard.DashboardCardInfo;
 import com.main.dhbworld.Dashboard.DashboardCardUserInt;
 import com.main.dhbworld.Dashboard.DashboardCardWeather;
 import com.main.dhbworld.Dashboard.DataLoadListenerKVV;
+import com.main.dhbworld.Dashboard.DataLoaderCalendar;
 import com.main.dhbworld.Debugging.Debugging;
 import com.main.dhbworld.Dualis.EverlastingService;
 import com.main.dhbworld.Enums.InteractionState;
@@ -220,12 +221,7 @@ public class DashboardActivity extends AppCompatActivity {
     }
 
 
-
-    private void loadCalendar(){
-        SharedPreferences preferences = PreferenceManager
-                .getDefaultSharedPreferences(DashboardActivity.this);
-        String url = preferences.getString("CurrentURL",null);
-
+    private void loadCalendar() {
         ImageView uniImage = findViewById(R.id.imageViewCalendar);
         TextView nextClassView = findViewById(R.id.nextClassView);
         LinearLayout layoutTime = findViewById(R.id.layoutTimeCalendarCard);
@@ -235,116 +231,8 @@ public class DashboardActivity extends AppCompatActivity {
         TextView timeViewMin = findViewById(R.id.timeViewMinCalendarDashboard);
         TextView letterTimeView = findViewById(R.id.letterTimeViewCalendarDashboard);
 
-        if (!(url ==null) && (!url.equals(""))) {
-            layoutCardCalendarInformation.setVisibility(View.GONE);
-            ProgressIndicator indicator= new ProgressIndicator(DashboardActivity.this, layoutCardCalendar);
-            indicator.show();
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        nextEventsProvider nextEventsProvider = new nextEventsProvider(DashboardActivity.this);
-                        Appointment nextClass = nextEventsProvider.getNextEvent();
-
-                        layoutCardCalendar.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                if(nextClass == null || nextClass.getStartDate() == null){
-                                    indicator.hide();
-                                    layoutCardCalendarInformation.setVisibility(View.VISIBLE);
-                                    nextClassView.setText(getString(R.string.no_classes));
-                                    layoutTimeDigit.setVisibility(View.GONE);
-                                    layoutTime.setVisibility(View.GONE);
-                                    timeView.setVisibility(View.GONE);
-                                    timeViewMin.setVisibility(View.GONE);
-                                    letterTimeView.setVisibility(View.GONE);
-                                    uniImage.setBackground(AppCompatResources.getDrawable(DashboardActivity.this, R.drawable.ic_pause));
-                                }
-                                else {
-                                    LocalDateTime now = LocalDateTime.now();
-                                    LocalDateTime startClass = nextClass.getStartDate();
-                                    LocalDateTime endClass = nextClass.getEndDate();
-                                    Duration durationUntilStartOfClass = Duration.between(now, startClass);
-                                    Duration durationUntilEndOfClass = Duration.between(now, endClass);
-                                    indicator.hide();
-                                    layoutCardCalendarInformation.setVisibility(View.VISIBLE);
-                                    if ((durationUntilStartOfClass.toHours() <= 8) && (durationUntilEndOfClass.toMinutes() >= 0)) {
-                                        uniImage.setBackground(AppCompatResources.getDrawable(DashboardActivity.this, R.drawable.ic_uni));
-                                        nextClassView.setText(nextClass.getTitle());
-                                        timeView.setText(nextClass.getStartTime());
-                                        timeViewMin.setVisibility(View.VISIBLE);
-                                        timeViewMin.setText(getResources().getString(R.string.min));
-                                        if (durationUntilStartOfClass.toMinutes() >= 0) {
-                                            new CountDownTimer(durationUntilStartOfClass.toMinutes() * 60000, 60000) {
-                                                public void onTick(long millisUtilFinished) {
-                                                    timeView.setText(Long.toString(millisUtilFinished / 60000 + 1));
-                                                    letterTimeView.setText(getResources().getString(R.string.startsIn));
-                                                    timeViewMin.setText(getResources().getString(R.string.min));
-                                                }
-
-                                                @Override
-                                                public void onFinish() {
-                                                    timeView.setText(getResources().getString(R.string.now));
-                                                    letterTimeView.setText("");
-                                                    timeViewMin.setText("");
-                                                }
-                                            }.start();
-                                        } else {
-                                            new CountDownTimer(durationUntilEndOfClass.toMinutes() * 60000, 60000) {
-                                                public void onTick(long millisUtilFinished) {
-                                                    timeView.setText(Long.toString(millisUtilFinished / 60000 + 1));
-                                                    letterTimeView.setText(getResources().getString(R.string.endsIn));
-                                                    timeViewMin.setText(getResources().getString(R.string.min));
-                                                }
-
-                                                @Override
-                                                public void onFinish() {
-                                                    timeView.setText("");
-                                                    nextClassView.setText(getResources().getString(R.string.pause));
-                                                    letterTimeView.setText("");
-                                                    timeViewMin.setText("");
-                                                    uniImage.setBackground(AppCompatResources.getDrawable(DashboardActivity.this, R.drawable.ic_pause));
-                                                }
-                                            }.start();
-                                        }
-                                    } else {
-                                        uniImage.setBackground(AppCompatResources.getDrawable(DashboardActivity.this, R.drawable.ic_uni));
-                                        nextClassView.setText(nextClass.getTitle());
-                                        timeView.setText(nextClass.getStartTime());
-                                        timeViewMin.setVisibility(View.GONE);
-                                        letterTimeView.setText(startClass.getDayOfWeek().toString());
-                                    }
-                                }
-                            }
-                        });
-                    } catch (Exception e) {
-                        layoutCardCalendar.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                indicator.hide();
-                                layoutCardCalendarInformation.setVisibility(View.VISIBLE);
-                                layoutTimeDigit.setVisibility(View.GONE);
-                                layoutTime.setVisibility(View.GONE);
-                                uniImage.setVisibility(View.GONE);
-                                timeView.setVisibility(View.GONE);
-                                timeViewMin.setVisibility(View.GONE);
-                                letterTimeView.setVisibility(View.GONE);
-                                nextClassView.setText(getResources().getString(R.string.problemsWithCalenderView));
-                            }
-                        });
-                    }
-                }
-            }).start();
-        }else{
-            layoutTimeDigit.setVisibility(View.GONE);
-            layoutTime.setVisibility(View.GONE);
-            uniImage.setVisibility(View.GONE);
-            timeView.setVisibility(View.GONE);
-            timeViewMin.setVisibility(View.GONE);
-            letterTimeView.setVisibility(View.GONE);
-            nextClassView.setText(getResources().getString(R.string.pasteLinkInCalender));
-
-        }
+        DataLoaderCalendar dataLoaderCalendar = new DataLoaderCalendar(DashboardActivity.this, layoutCardCalendar, uniImage, nextClassView, layoutTime, layoutCardCalendarInformation, layoutTimeDigit, timeView, timeViewMin, letterTimeView);
+        dataLoaderCalendar.load();
     }
 
     private void loadKvv(){
@@ -369,7 +257,7 @@ public class DashboardActivity extends AppCompatActivity {
         timeView[2]= findViewById(R.id.textViewTramTimeThree);
 
         KVVDataLoader dataLoader = new KVVDataLoader(this);
-        dataLoader.setDataLoaderListener(new DataLoadListenerKVV( layoutTram, indicator,  tramView, platformView, timeView, tramImageOne, DashboardActivity.this,  getResources().getString(R.string.serverTrouble)));
+        dataLoader.setDataLoaderListener(new DataLoadListenerKVV( layoutTram, indicator,  tramView, platformView, timeView, tramImageOne, DashboardActivity.this));
         LocalDateTime now = LocalDateTime.now();
         dataLoader.loadData(now);
     }
