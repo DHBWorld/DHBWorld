@@ -318,9 +318,6 @@ public class DashboardActivity extends AppCompatActivity {
         }
     }
 
-
-
-
     public void configurationClick(@NonNull MenuItem item) throws NullPointerException {
 
         View snackbarContent = this.findViewById(android.R.id.content);
