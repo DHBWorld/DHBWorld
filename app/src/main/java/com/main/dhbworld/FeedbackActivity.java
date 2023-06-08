@@ -42,6 +42,7 @@ public class FeedbackActivity extends AppCompatActivity {
 
     private boolean issueListingInProgress = true;
 
+    private String repo;
     private String token;
     private String userId;
 
@@ -60,6 +61,7 @@ public class FeedbackActivity extends AppCompatActivity {
         addFeedbackButton.setOnClickListener(v -> {
             Intent intent = new Intent(FeedbackActivity.this, NewFeedbackActivity.class);
             intent.putExtra("token", token);
+            intent.putExtra("repo", repo);
             startActivity(intent);
         });
 
@@ -93,6 +95,7 @@ public class FeedbackActivity extends AppCompatActivity {
                     if (task.isSuccessful()){
                         DocumentSnapshot doc= task.getResult();
                         token = doc.getString("token");
+                        repo = doc.getString("repo");
                         userAndTokenListener.onData(user.getUid(), token);
                     } else {
                         userAndTokenListener.onError();
@@ -130,7 +133,7 @@ public class FeedbackActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         }).afterOnUiThread(this, () -> {
-            FeedbackAdapter feedbackAdapter = new FeedbackAdapter(feedbackArrayList, token, FeedbackActivity.this);
+            FeedbackAdapter feedbackAdapter = new FeedbackAdapter(feedbackArrayList, token, repo, FeedbackActivity.this);
             recyclerView.setAdapter(feedbackAdapter);
             recyclerView.setLayoutManager(new LinearLayoutManager(FeedbackActivity.this, LinearLayoutManager.VERTICAL, false));
             recyclerView.addItemDecoration(new DividerItemDecoration(FeedbackActivity.this, DividerItemDecoration.VERTICAL));
@@ -141,9 +144,9 @@ public class FeedbackActivity extends AppCompatActivity {
 
     private List<GHIssue> getGhIssues() throws IOException {
         GitHub gitHub = new GitHubBuilder().withOAuthToken(token).build();
-        GHRepository repository = gitHub.getRepository("blitzdose/Test");
+        GHRepository repository = gitHub.getRepository(repo);
 
-        return repository.getIssues(GHIssueState.ALL);
+        return repository.getIssues(GHIssueState.OPEN);
     }
 
     @Override

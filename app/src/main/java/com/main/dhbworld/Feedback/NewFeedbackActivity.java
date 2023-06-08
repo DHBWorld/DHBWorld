@@ -36,6 +36,8 @@ public class NewFeedbackActivity extends AppCompatActivity {
     private TextInputEditText feedbackTitle;
     private TextInputEditText feedbackDescription;
     private MaterialButton sendButton;
+
+    private String repo;
     private String token;
     private String userId;
 
@@ -55,6 +57,7 @@ public class NewFeedbackActivity extends AppCompatActivity {
             return;
         }
         token = bundle.getString("token");
+        repo = bundle.getString("repo");
 
         ProgressDialog progressDialog = new ProgressDialog(this)
                 .setMessage(R.string.please_wait)
@@ -159,7 +162,7 @@ public class NewFeedbackActivity extends AppCompatActivity {
 
     private GHRepository initializeRepo() throws IOException {
         GitHub gitHub = new GitHubBuilder().withOAuthToken(token).build();
-        return gitHub.getRepository("blitzdose/Test");
+        return gitHub.getRepository(repo);
     }
 
     private void getUserId(UserIdListener userIdListener) {

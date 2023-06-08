@@ -33,6 +33,7 @@ public class DetailFeedbackActivity extends AppCompatActivity {
     private AppCompatEditText commentMessageEditText;
     private MaterialCardView sendButton;
 
+    private String repo;
     private GHIssue issue;
 
     private ArrayList<Comment> comments;
@@ -48,6 +49,7 @@ public class DetailFeedbackActivity extends AppCompatActivity {
         }
         int issueId = bundle.getInt("issueId");
         String token = bundle.getString("token");
+        repo = bundle.getString("repo");
 
         setupViews();
 
@@ -110,7 +112,7 @@ public class DetailFeedbackActivity extends AppCompatActivity {
 
     private void initializeGitHub(String token, int issueId) throws IOException {
         GitHub gitHub = new GitHubBuilder().withOAuthToken(token).build();
-        GHRepository repository = gitHub.getRepository("blitzdose/Test");
+        GHRepository repository = gitHub.getRepository(repo);
         issue = repository.getIssue(issueId);
     }
 

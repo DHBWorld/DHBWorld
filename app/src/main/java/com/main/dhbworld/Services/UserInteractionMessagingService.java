@@ -26,6 +26,7 @@ import com.google.firebase.messaging.RemoteMessage;
 import com.main.dhbworld.BroadcastReceiver.UpdateEventsReceiver;
 import com.main.dhbworld.DashboardActivity;
 import com.main.dhbworld.Enums.InteractionState;
+import com.main.dhbworld.Feedback.DetailFeedbackActivity;
 import com.main.dhbworld.FeedbackActivity;
 import com.main.dhbworld.Firebase.Utilities;
 import com.main.dhbworld.R;
@@ -50,28 +51,29 @@ public class UserInteractionMessagingService extends FirebaseMessagingService {
                 public void run() {
                     String category = remoteMessage.getData().get("category");
                     if (category == null || remoteMessage.getData().get("problem") == null) {
-                        if (remoteMessage.getData().get("issue") != null) {
+                        if (remoteMessage.getData().get("issue_number") != null) {
                             NotificationManagerCompat notificationManager = NotificationManagerCompat.from(getApplicationContext());
 
-                            Intent intent = new Intent(getApplicationContext(), FeedbackActivity.class);
+                            Intent feedbackActivity = new Intent(getApplicationContext(), FeedbackActivity.class);
                             Intent mainActivity = new Intent(getApplicationContext(), DashboardActivity.class);
                             Intent settingsActivity = new Intent(getApplicationContext(), SettingsActivity.class);
                             TaskStackBuilder stackBuilder = TaskStackBuilder.create(getApplicationContext());
                             stackBuilder.addNextIntentWithParentStack(mainActivity);
                             stackBuilder.addNextIntentWithParentStack(settingsActivity);
-                            stackBuilder.addNextIntentWithParentStack(intent);
+                            stackBuilder.addNextIntentWithParentStack(feedbackActivity);
                             PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
                             System.out.println(remoteMessage.getData().get("issue"));
 
                             NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), "feedback")
                                     .setSmallIcon(R.drawable.baseline_language_24_red)
-                                    .setContentTitle(remoteMessage.getNotification().getTitle())
-                                    .setStyle(new NotificationCompat.BigTextStyle().bigText(remoteMessage.getNotification().getBody()))
-                                    .setContentText(remoteMessage.getNotification().getBody())
+                                    .setContentTitle(getResources().getString(R.string.new_activity_on_issue))
+                                    .setStyle(new NotificationCompat.BigTextStyle().bigText(getResources().getString(R.string.new_activity_on_issue_body)))
+                                    .setContentText(getResources().getString(R.string.new_activity_on_issue_body))
                                     .setPriority(NotificationCompat.PRIORITY_HIGH)
                                     .setDefaults(Notification.DEFAULT_ALL)
-                                    .setContentIntent(resultPendingIntent);
+                                    .setContentIntent(resultPendingIntent)
+                                    .setAutoCancel(true);
 
                             if (notificationManager.getNotificationChannel("feedback") == null) {
                                 createNotificationChannel(UserInteractionMessagingService.this, "feedback", "Information zu deinem Feedback");

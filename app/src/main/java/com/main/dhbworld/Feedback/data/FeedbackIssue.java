@@ -1,8 +1,10 @@
 package com.main.dhbworld.Feedback.data;
 
 import org.kohsuke.github.GHIssue;
+import org.kohsuke.github.GHLabel;
 
 import java.io.IOException;
+import java.util.Collection;
 import java.util.Date;
 
 public class FeedbackIssue {
@@ -22,5 +24,13 @@ public class FeedbackIssue {
 
     public int getId() {
         return ghIssue.getNumber();
+    }
+
+    public Collection<GHLabel> getLabels() {
+        return ghIssue.getLabels();
+    }
+
+    public int getCommentCount() {
+        return ghIssue.getCommentsCount();
     }
 }
