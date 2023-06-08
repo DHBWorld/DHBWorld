@@ -33,9 +33,9 @@ import com.main.dhbworld.Dashboard.Cards.DashboardCardInfo;
 import com.main.dhbworld.Dashboard.Cards.DashboardCardUserInt;
 import com.main.dhbworld.Dashboard.Cards.DashboardCardWeather;
 import com.main.dhbworld.Dashboard.Dashboard;
-import com.main.dhbworld.Dashboard.DataLoaders.DataLoaderKVV;
 import com.main.dhbworld.Dashboard.DataLoaders.DataLoaderCalendar;
 import com.main.dhbworld.Dashboard.DataLoaders.DataLoaderInfo;
+import com.main.dhbworld.Dashboard.DataLoaders.DataLoaderKVV;
 import com.main.dhbworld.Dashboard.DataLoaders.DataLoaderMealPlan;
 import com.main.dhbworld.Dashboard.DataLoaders.DataLoaderPersonalInfo;
 import com.main.dhbworld.Dashboard.DataLoaders.DataLoaderUserInt;
@@ -58,25 +58,17 @@ public class DashboardActivity extends AppCompatActivity {
 
     public static final String MyPREFERENCES = "myPreferencesKey";
 
-    Boolean refreshIsEnable = true;
-    Boolean cardInfo_isVisible = true;
+    private Boolean refreshIsEnable = true;
 
+    private MaterialCardView card_dash_calendar;
+    private MaterialCardView card_dash_pi;
+    private MaterialCardView card_dash_kvv;
+    private MaterialCardView card_dash_mealPlan;
+    private MaterialCardView card_dash_info;
+    private MaterialCardView card_dash_user_interaction;
+    private MaterialCardView card_dash_weather;
 
-    MaterialCardView card_dash_calendar;
-    MaterialCardView card_dash_pi;
-    MaterialCardView card_dash_kvv;
-    MaterialCardView card_dash_mealPlan;
-    MaterialCardView card_dash_info;
-    MaterialCardView card_dash_user_interaction;
-    MaterialCardView card_dash_weather;
-
-    DashboardCard dashboardCardMealPlan;
-    DashboardCard dashboardCarCalender;
-    DashboardCard dashboardKvv;
-    DashboardCard dashboardPI;
-    DashboardCard dashboardCardInfo;
-    DashboardCard dashboardCardWeather;
-    DashboardCard dashboardCardUserInt;
+    private DashboardCard dashboardCardInfo;
 
     private Dashboard dashboard;
 
@@ -120,19 +112,26 @@ public class DashboardActivity extends AppCompatActivity {
         setContentView(R.layout.activity_dashboard);
         NavigationUtilities.setUpNavigation(this, R.id.dashboard);
         defineViews();
-        loadWeather();
+        buildDashboard();
+        loadDashboard();
+
+    }
+
+    private void loadDashboard() {
         loadUserInteraction();
         loadPersonalInformation();
-        loadCalendar();
-        if (NetworkAvailability.check(DashboardActivity.this)) {
-            loadMealPlan();
-            loadKvv();
-            if (cardInfo_isVisible) {
-                loadInfo();
-            }
-        } else {
+        if (!NetworkAvailability.check(DashboardActivity.this)) {
             Snackbar.make(this.findViewById(android.R.id.content), getResources().getString(R.string.problemsWithInternetConnection), BaseTransientBottomBar.LENGTH_LONG).show();
+            return;
         }
+        loadMealPlan();
+        loadCalendar();
+        loadKvv();
+        loadWeather();
+        if (dashboardCardInfo.cardIsVisible()) {
+            loadInfo();
+        }
+
 
     }
 
@@ -151,6 +150,9 @@ public class DashboardActivity extends AppCompatActivity {
         card_dash_user_interaction = findViewById(R.id.card_dash_userInteraction);
         card_dash_weather = findViewById(R.id.card_dash_weather);
 
+    }
+
+    private void buildDashboard(){
         LinearLayout boxCardCalendar = findViewById(R.id.buttonCardCalendar);
         LinearLayout boxCardPI = findViewById(R.id.buttonCardPI);
         LinearLayout boxCardMealPlan = findViewById(R.id.buttonCardMealPlan);
@@ -166,13 +168,13 @@ public class DashboardActivity extends AppCompatActivity {
 
         LinearLayout forecastLayout = findViewById(R.id.weather_forecast);
 
-        dashboardCardMealPlan = new DashboardCard(CardType.CARD_MEAL_PLAN, layoutCardMealPlan, card_dash_mealPlan, boxCardMealPlan, card_dash_mealPlan_layout);
-        dashboardCarCalender = new DashboardCard(CardType.CARD_CALENDAR, layoutCardCalendar, card_dash_calendar, boxCardCalendar, card_dash_calendar_layout);
-        dashboardKvv = new DashboardCard(CardType.CARD_KVV, layoutCardKvv, card_dash_kvv, boxCardKvv, card_dash_kvv_layout);
-        dashboardPI = new DashboardCard(CardType.CARD_PI, layoutCardPI, card_dash_pi, boxCardPI, card_dash_pi_layout);
+        DashboardCard dashboardCardMealPlan = new DashboardCard(CardType.CARD_MEAL_PLAN, layoutCardMealPlan, card_dash_mealPlan, boxCardMealPlan, card_dash_mealPlan_layout);
+        DashboardCard dashboardCarCalender = new DashboardCard(CardType.CARD_CALENDAR, layoutCardCalendar, card_dash_calendar, boxCardCalendar, card_dash_calendar_layout);
+        DashboardCard dashboardKvv = new DashboardCard(CardType.CARD_KVV, layoutCardKvv, card_dash_kvv, boxCardKvv, card_dash_kvv_layout);
+        DashboardCard dashboardPI = new DashboardCard(CardType.CARD_PI, layoutCardPI, card_dash_pi, boxCardPI, card_dash_pi_layout);
         dashboardCardInfo = new DashboardCardInfo(CardType.CARD_INFO, layoutCardInfo, card_dash_info, boxCardInfo, card_dash_info_layout);
-        dashboardCardWeather = new DashboardCardWeather(CardType.CARD_WEATHER, null, card_dash_weather, null, null, forecastLayout);
-        dashboardCardUserInt = new DashboardCardUserInt(CardType.CARD_USER_INTERACTION, null, card_dash_user_interaction, null, card_dash_user_interaction_layout);
+        DashboardCard dashboardCardWeather = new DashboardCardWeather(CardType.CARD_WEATHER, null, card_dash_weather, null, null, forecastLayout);
+        DashboardCard dashboardCardUserInt = new DashboardCardUserInt(CardType.CARD_USER_INTERACTION, null, card_dash_user_interaction, null, card_dash_user_interaction_layout);
 
         dashboard = new Dashboard();
         dashboard.addCard(dashboardCardMealPlan);
@@ -184,8 +186,6 @@ public class DashboardActivity extends AppCompatActivity {
         dashboard.addCard(dashboardCardUserInt);
 
         dashboard.setUp(this.getApplicationContext(), getResources().getColor(R.color.black), DashboardActivity.this);
-
-
     }
 
     private void loadCalendar() {
@@ -303,28 +303,13 @@ public class DashboardActivity extends AppCompatActivity {
             if (refreshIsEnable) {
                 refreshIsEnable = false;
                 new CountDownTimer(10000, 1000) {
-                    public void onTick(long millisUtilFinished) {
-                    }
-
+                    public void onTick(long millisUtilFinished) {}
                     @Override
                     public void onFinish() {
                         refreshIsEnable = true;
                     }
                 }.start();
-                loadUserInteraction();
-                if (NetworkAvailability.check(DashboardActivity.this)) {
-                    loadMealPlan();
-                    loadCalendar();
-                    loadKvv();
-                    loadWeather();
-                    if (cardInfo_isVisible) {
-                        loadInfo();
-                    }
-                } else {
-                    Snackbar.make(this.findViewById(android.R.id.content), getResources().getString(R.string.problemsWithInternetConnection), BaseTransientBottomBar.LENGTH_LONG).show();
-                }
-                loadPersonalInformation();
-
+               loadDashboard();
             } else {
                 Snackbar.make(this.findViewById(android.R.id.content), getResources().getString(R.string.refreshIsOnlyIn10Min), BaseTransientBottomBar.LENGTH_SHORT).show();
             }
@@ -332,6 +317,9 @@ public class DashboardActivity extends AppCompatActivity {
             Snackbar.make(this.findViewById(android.R.id.content), getResources().getString(R.string.youAreInConfigModus), BaseTransientBottomBar.LENGTH_SHORT).show();
         }
     }
+
+
+
 
     public void configurationClick(@NonNull MenuItem item) throws NullPointerException {
 
