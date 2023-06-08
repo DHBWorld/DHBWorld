@@ -97,6 +97,16 @@ class BackupFileHandler {
             File fileDualis = new File(activity.getFilesDir().getPath() + "/../shared_prefs/Dualis.xml");
             File fileAll = new File(activity.getFilesDir().getPath() + "/../shared_prefs/com.main.dhbworld_preferences.xml");
             File filePersonal = new File(activity.getFilesDir().getPath() + "/../shared_prefs/myPreferencesKey.xml");
+            File sharedPrefsDir = new File(activity.getFilesDir().getPath() + "/../shared_prefs/");
+            File fileFirebaseUser = null;
+            File[] sharedPrefsFiles = sharedPrefsDir.listFiles();
+            if (sharedPrefsFiles != null) {
+                for (File file : sharedPrefsFiles) {
+                    if (file.getName().matches("com[.]google[.]firebase[.]auth[.]api[.]Store[.].*[.]xml")) {
+                        fileFirebaseUser = file;
+                    }
+                }
+            }
 
             OutputStream outputStream = activity.getContentResolver().openOutputStream(data.getData());
             if (password != null) {
@@ -153,6 +163,15 @@ class BackupFileHandler {
             if (filePersonal.exists()) {
                 FileInputStream fileInputStreamDualis = new FileInputStream(filePersonal);
                 ZipEntry zipEntry = new ZipEntry("myPreferencesKey.xml");
+                zipOutputStream.putNextEntry(zipEntry);
+                IOUtils.copy(fileInputStreamDualis, zipOutputStream);
+                fileInputStreamDualis.close();
+                zipOutputStream.closeEntry();
+            }
+
+            if (fileFirebaseUser != null) {
+                FileInputStream fileInputStreamDualis = new FileInputStream(fileFirebaseUser);
+                ZipEntry zipEntry = new ZipEntry(fileFirebaseUser.getName());
                 zipOutputStream.putNextEntry(zipEntry);
                 IOUtils.copy(fileInputStreamDualis, zipOutputStream);
                 fileInputStreamDualis.close();

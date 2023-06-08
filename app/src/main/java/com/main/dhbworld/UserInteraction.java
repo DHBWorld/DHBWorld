@@ -89,7 +89,7 @@ public class UserInteraction extends AppCompatActivity {
 
         NavigationUtilities.setUpNavigation(this, R.id.UserInteraction);
 
-        UserInteractionMessagingService.createNotificationChannel(this);
+        UserInteractionMessagingService.createNotificationChannel(this, "warnings", "Warnungen (User Interaction)");
 
         stateManagement();
         yesNoButtonsManagement();

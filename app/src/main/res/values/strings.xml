@@ -323,4 +323,5 @@ E-Mail-Adresse: <p><a href="mailto:zaeske.christian@gmail.com">zaeske.christian@
     <string name="cannot_get_weather">Cannot get weatherdata</string>
     <string name="weather_data_by_open_meteo_com" translatable="false">Weather data by Open-Meteo.com</string>
     <string name="feedback">Feedback</string>
+    <string name="please_fill_in_everything">Please fill in all fields</string>
 </resources>

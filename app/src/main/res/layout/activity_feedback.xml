@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <androidx.drawerlayout.widget.DrawerLayout
-    xmlns:tools="http://schemas.android.com/tools"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -22,7 +21,7 @@
                 android:id="@+id/topAppBar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                app:title="@string/page_title"
+                app:title="Feedback"
                 app:menu="@menu/top_app_bar"
                 app:navigationIcon="@drawable/ic_baseline_arrow_back_24"
 
@@ -33,93 +32,43 @@
         </com.google.android.material.appbar.AppBarLayout>
         <!-- everything above is for the topbar and navigation-->
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@id/topAppBarLayout"
-            android:orientation="vertical"
-            android:padding="16dp">
+            android:layout_below="@id/topAppBarLayout">
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/feedbackNameLayout"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            <com.google.android.material.progressindicator.LinearProgressIndicator
+                android:id="@+id/feedback_activity_progressindicator"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Name">
+                android:visibility="visible"
+                android:indeterminate="true"
+                app:indicatorColor="@color/red"/>
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/feedbackName"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/feedbackEmailLayout"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="E-Mail Adresse">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/feedbackEmail"
-                    android:inputType="textEmailAddress"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/feedbackTitleLayout"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Betreff">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/feedbackTitle"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/feedbackDescriptionLayout"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:hint="Beschreibung">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/feedbackDescription"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="top"/>
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/sendFeedbackButton"
+            <TextView
+                android:id="@+id/feedback_nothing_here"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Senden"
-                android:layout_gravity="end"
-                android:layout_marginTop="16dp"
-                app:icon="@drawable/ic_baseline_arrow_forward_24"
-                app:iconGravity="end"/>
+                android:layout_centerHorizontal="true"
+                android:text="Hier ist noch nichts zu sehen"
+                android:visibility="gone"
+                android:layout_marginTop="16dp"/>
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/openGithubButton"
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/feedback_recyclerview"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Direkt zu GitHub"
-                android:layout_gravity="end"
-                android:layout_marginTop="16dp"
-                app:iconGravity="end"/>
+                android:layout_height="match_parent" />
 
-        </LinearLayout>
+        </RelativeLayout>
 
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/add_feedback"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/baseline_add_24"
+            android:layout_margin="16dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"/>
 
     </RelativeLayout>
 </androidx.drawerlayout.widget.DrawerLayout>

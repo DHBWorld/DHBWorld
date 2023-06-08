@@ -1,34 +1,47 @@
 package com.main.dhbworld;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.util.Patterns;
 import android.view.View;
-import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.appbar.MaterialToolbar;
-import com.google.android.material.button.MaterialButton;
-import com.google.android.material.textfield.TextInputEditText;
-import com.google.android.material.textfield.TextInputLayout;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.progressindicator.LinearProgressIndicator;
+import com.google.firebase.auth.FirebaseUser;
+import com.main.dhbworld.Feedback.FeedbackAdapter;
+import com.main.dhbworld.Feedback.FeedbackIssue;
+import com.main.dhbworld.Feedback.NewFeedbackActivity;
+import com.main.dhbworld.Firebase.SignedInListener;
+import com.main.dhbworld.Firebase.Utilities;
+import com.main.dhbworld.Thread.ThreadWithUiUpdate;
+
+import org.kohsuke.github.GHIssue;
+import org.kohsuke.github.GHIssueState;
+import org.kohsuke.github.GHRepository;
+import org.kohsuke.github.GitHub;
+import org.kohsuke.github.GitHubBuilder;
 
 import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLEncoder;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.stream.Collectors;
-
-import javax.net.ssl.HttpsURLConnection;
+import java.util.ArrayList;
+import java.util.List;
 
 public class FeedbackActivity extends AppCompatActivity {
+
+    private LinearProgressIndicator progressIndicator;
+    private FloatingActionButton addFeedbackButton;
+    private RecyclerView recyclerView;
+
+    private ArrayList<FeedbackIssue> feedbackArrayList = new ArrayList<>();
+
+    private boolean issueListingInProgress = false;
+
+    private String token = "";
+    private String userId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,111 +51,74 @@ public class FeedbackActivity extends AppCompatActivity {
         MaterialToolbar toolbar = findViewById(R.id.topAppBar);
         toolbar.setNavigationOnClickListener(v -> finish());
 
-        TextInputLayout feedbackNameLayout = findViewById(R.id.feedbackNameLayout);
-        TextInputLayout feedbackEmailLayout = findViewById(R.id.feedbackEmailLayout);
-        TextInputLayout feedbackTitleLayout = findViewById(R.id.feedbackTitleLayout);
-        TextInputLayout feedbackDescriptionLayout = findViewById(R.id.feedbackDescriptionLayout);
-
-        TextInputEditText feedbackName = findViewById(R.id.feedbackName);
-        TextInputEditText feedbackEmail = findViewById(R.id.feedbackEmail);
-        TextInputEditText feedbackTitle = findViewById(R.id.feedbackTitle);
-        TextInputEditText feedbackDescription = findViewById(R.id.feedbackDescription);
-
-        MaterialButton sendButton = findViewById(R.id.sendFeedbackButton);
-        MaterialButton openGitHubButton = findViewById(R.id.openGithubButton);
-
-        removeErrorOnType(feedbackName, feedbackNameLayout);
-        removeErrorOnType(feedbackEmail, feedbackEmailLayout);
-        removeErrorOnType(feedbackTitle, feedbackTitleLayout);
-        removeErrorOnType(feedbackDescription, feedbackDescriptionLayout);
-
-        sendButton.setOnClickListener(view -> {
-            String name = feedbackName.getText().toString();
-            String email = feedbackEmail.getText().toString();
-            String title = feedbackTitle.getText().toString();
-            String description = feedbackDescription.getText().toString();
-
-            if (name.isEmpty()) {
-                feedbackNameLayout.setError("Darf nicht leer sein");
-            }
-            if (Patterns.EMAIL_ADDRESS.matcher(email).matches()) { //TODO stimmt noch nicht
-                feedbackEmailLayout.setError("Ungültige E-Mail Adresse");
-            }
-            if (email.isEmpty()) {
-                feedbackEmailLayout.setError("Darf nicht leer sein");
-            }
-            if (title.isEmpty()) {
-                feedbackTitleLayout.setError("Darf nicht leer sein");
-            }
-
-            //TODO: INFOS SENDEN
-
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    URL url = null;
-                    try {
-                        url = new URL("https://dhbworld.blitzdose.de/create-issue.php");
-                        HttpsURLConnection urlConnection = (HttpsURLConnection) url.openConnection();
-                        urlConnection.setRequestMethod("POST");
-                        urlConnection.setRequestProperty( "Content-type", "application/x-www-form-urlencoded");
-
-                        OutputStreamWriter writer = new OutputStreamWriter(urlConnection.getOutputStream());
-                        String[] data = new String[4];
-                        data[0] = "name=" + name;
-                        data[1] = "email=" + email;
-                        data[2] = "title=" + title;
-                        data[3] = "body=" + description;
-
-                        writer.write(String.join("&", data));
-                        writer.flush();
-                        writer.close();
-
-                        int status = urlConnection.getResponseCode();
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                if (status == 200) {
-                                    Toast.makeText(FeedbackActivity.this, "Success", Toast.LENGTH_SHORT).show();
-                                } else {
-                                    Toast.makeText(FeedbackActivity.this, status, Toast.LENGTH_SHORT).show();
-                                }
-                            }
-                        });
-
-
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }).start();
-
+        progressIndicator = findViewById(R.id.feedback_activity_progressindicator);
+        addFeedbackButton = findViewById(R.id.add_feedback);
+        recyclerView = findViewById(R.id.feedback_recyclerview);
+        addFeedbackButton.setOnClickListener(v -> {
+            Intent intent = new Intent(FeedbackActivity.this, NewFeedbackActivity.class);
+            intent.putExtra("token", token);
+            startActivity(intent);
         });
 
-        openGitHubButton.setOnClickListener(view -> {
-            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/inFumumVerti/DHBWorld/issues"));
-            try {
-                FeedbackActivity.this.startActivity(browserIntent);
-            } catch (Exception ignored) { }
+        Utilities utilities = new Utilities(this);
+        utilities.setSignedInListener(new SignedInListener() {
+            @Override
+            public void onSignedIn(FirebaseUser user) {
+                utilities.saveFCMToken();
+                userId = user.getUid();
+                listIssues();
+            }
+
+            @Override
+            public void onSignInError() {
+
+            }
         });
+        utilities.signIn();
     }
 
-    private void removeErrorOnType(TextInputEditText editText, TextInputLayout layout) {
-        editText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+    private void listIssues() {
+        if (issueListingInProgress) {
+            return;
+        }
+        issueListingInProgress = true;
+        new ThreadWithUiUpdate(() -> {
+            try {
+                feedbackArrayList.clear();
 
+                List<GHIssue> issues = getGhIssues();
+
+                for (GHIssue issue : issues) {
+                    String title = issue.getTitle();
+                    if (title.endsWith("#" + userId)) {
+                        feedbackArrayList.add(new FeedbackIssue(issue));
+                    }
+                }
+
+            } catch (IOException e) {
+                e.printStackTrace();
             }
+        }).afterOnUiThread(this, () -> {
+            FeedbackAdapter feedbackAdapter = new FeedbackAdapter(feedbackArrayList, token, FeedbackActivity.this);
+            recyclerView.setAdapter(feedbackAdapter);
+            recyclerView.setLayoutManager(new LinearLayoutManager(FeedbackActivity.this, LinearLayoutManager.VERTICAL, false));
+            recyclerView.addItemDecoration(new DividerItemDecoration(FeedbackActivity.this, DividerItemDecoration.VERTICAL));
+            progressIndicator.setVisibility(View.GONE);
+            issueListingInProgress = false;
+        }).start();
+    }
 
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                layout.setError(null);
-            }
+    private List<GHIssue> getGhIssues() throws IOException {
+        GitHub gitHub = new GitHubBuilder().withOAuthToken(token).build();
+        GHRepository repository = gitHub.getRepository("blitzdose/Test");
 
-            @Override
-            public void afterTextChanged(Editable editable) {
+        return repository.getIssues(GHIssueState.ALL);
+    }
 
-            }
-        });
+    @Override
+    protected void onResume() {
+        progressIndicator.setVisibility(View.VISIBLE);
+        listIssues();
+        super.onResume();
     }
 }

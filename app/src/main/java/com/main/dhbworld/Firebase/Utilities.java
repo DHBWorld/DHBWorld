@@ -7,7 +7,6 @@ import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -322,6 +321,16 @@ public class Utilities {
 
     private DatabaseReference getStatusDatabase() {
         return database.getReference().child("status");
+    }
+
+    public void saveFCMToken() {
+        FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
+            @Override
+            public void onComplete(@NonNull Task<String> task) {
+                DatabaseReference reference = database.getReference().child("fcm_tokens").child(user.getUid());
+                reference.setValue(task.getResult());
+            }
+        });
     }
 
 }
