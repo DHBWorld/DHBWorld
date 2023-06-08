@@ -140,13 +140,11 @@ public class DataLoaderCalendar {
         @Override
         public void onTick(long millisUtilFinished) {
             changeViews(Long.toString(millisUtilFinished / 60000 + 1), context.getResources().getString(R.string.startsIn), context.getResources().getString(R.string.min));
-
         }
 
         @Override
         public void onFinish() {
             changeViews(context.getResources().getString(R.string.now), "", "");
-
         }
     }
 
