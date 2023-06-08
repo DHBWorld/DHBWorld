@@ -33,7 +33,7 @@ import com.main.dhbworld.Dashboard.Cards.DashboardCardInfo;
 import com.main.dhbworld.Dashboard.Cards.DashboardCardUserInt;
 import com.main.dhbworld.Dashboard.Cards.DashboardCardWeather;
 import com.main.dhbworld.Dashboard.Dashboard;
-import com.main.dhbworld.Dashboard.DataLoaders.DataLoadListenerKVV;
+import com.main.dhbworld.Dashboard.DataLoaders.DataLoaderKVV;
 import com.main.dhbworld.Dashboard.DataLoaders.DataLoaderCalendar;
 import com.main.dhbworld.Dashboard.DataLoaders.DataLoaderInfo;
 import com.main.dhbworld.Dashboard.DataLoaders.DataLoaderMealPlan;
@@ -42,16 +42,8 @@ import com.main.dhbworld.Dashboard.DataLoaders.DataLoaderUserInt;
 import com.main.dhbworld.Dashboard.DataLoaders.DataLoaderWeather;
 import com.main.dhbworld.Debugging.Debugging;
 import com.main.dhbworld.Dualis.EverlastingService;
-import com.main.dhbworld.KVV.KVVDataLoader;
 import com.main.dhbworld.Navigation.NavigationUtilities;
-import com.main.dhbworld.Utilities.ProgressIndicator;
-import com.main.dhbworld.Weather.Forecast;
-import com.main.dhbworld.Weather.WeatherApi;
-import com.main.dhbworld.Weather.WeatherData;
 
-import java.time.LocalDateTime;
-import java.time.format.TextStyle;
-import java.util.ArrayList;
 import java.util.Locale;
 
 public class DashboardActivity extends AppCompatActivity {
@@ -215,8 +207,6 @@ public class DashboardActivity extends AppCompatActivity {
         layoutTram[0] = findViewById(R.id.layoutDepartureOne);
         layoutTram[1] = findViewById(R.id.layoutDepartureTwo);
         layoutTram[2] = findViewById(R.id.layoutDepartureThree);
-        ProgressIndicator indicator = new ProgressIndicator(DashboardActivity.this, layoutCardKvv, layoutTram);
-        indicator.show();
         ImageView tramImageOne = findViewById(R.id.imageViewTramOne);
         TextView[] tramView = new TextView[3];
         tramView[0] = findViewById(R.id.textViewTramLineOne);
@@ -231,10 +221,8 @@ public class DashboardActivity extends AppCompatActivity {
         timeView[1] = findViewById(R.id.textViewTramTimeTwo);
         timeView[2] = findViewById(R.id.textViewTramTimeThree);
 
-        KVVDataLoader dataLoader = new KVVDataLoader(this);
-        dataLoader.setDataLoaderListener(new DataLoadListenerKVV(layoutTram, indicator, tramView, platformView, timeView, tramImageOne, DashboardActivity.this));
-        LocalDateTime now = LocalDateTime.now();
-        dataLoader.loadData(now);
+        DataLoaderKVV dataLoaderKVV = new DataLoaderKVV(layoutTram, tramView, platformView, timeView, tramImageOne, this, DashboardActivity.this, layoutCardKvv);
+        dataLoaderKVV.load();
     }
 
     private void loadWeather() {
