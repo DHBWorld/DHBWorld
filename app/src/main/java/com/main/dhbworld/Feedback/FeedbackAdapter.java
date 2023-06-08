@@ -66,12 +66,7 @@ public class FeedbackAdapter extends RecyclerView.Adapter<FeedbackAdapter.ViewHo
             holder.chipGroupLabels.addView(chip);
         }
 
-        holder.chipGroupLabels.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                holder.itemView.performClick();
-            }
-        });
+        holder.chipGroupLabels.setOnClickListener(v -> holder.itemView.performClick());
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(activity);
         SharedPreferences.Editor editor = preferences.edit();

@@ -325,4 +325,6 @@ E-Mail-Adresse: <p><a href="mailto:zaeske.christian@gmail.com">zaeske.christian@
     <string name="feedback_policy">Dein Feedback und alle weiteren Nachrichten zu diesem Feedback werden öffentlich in unserem GitHub-Repository einsehbar sein. Bitte stelle sicher, dass du keine persönlichen Informationen teilst.</string>
     <string name="new_activity_on_issue">Aktivität bei deinem Feedback</string>
     <string name="new_activity_on_issue_body">Dein eingereichtes Feedback hat einen neuen Kommentar</string>
+    <string name="something_went_wrong">Etwas ist schiefgelaufen</string>
+    <string name="nothing_to_see_here_yet">Hier ist noch nichts zu sehen</string>
 </resources>

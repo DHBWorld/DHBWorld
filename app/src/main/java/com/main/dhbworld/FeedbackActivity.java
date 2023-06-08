@@ -1,8 +1,10 @@
 package com.main.dhbworld;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -12,13 +14,15 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
+import com.google.android.material.snackbar.BaseTransientBottomBar;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.main.dhbworld.Feedback.FeedbackAdapter;
-import com.main.dhbworld.Feedback.data.FeedbackIssue;
 import com.main.dhbworld.Feedback.NewFeedbackActivity;
+import com.main.dhbworld.Feedback.data.FeedbackIssue;
 import com.main.dhbworld.Firebase.SignedInListener;
 import com.main.dhbworld.Firebase.Utilities;
 import com.main.dhbworld.Thread.ThreadWithUiUpdate;
@@ -37,6 +41,8 @@ public class FeedbackActivity extends AppCompatActivity {
 
     private LinearProgressIndicator progressIndicator;
     private RecyclerView recyclerView;
+    private TextView textViewNothingHere;
+    private FloatingActionButton addFeedbackButton;
 
     private final ArrayList<FeedbackIssue> feedbackArrayList = new ArrayList<>();
 
@@ -53,17 +59,16 @@ public class FeedbackActivity extends AppCompatActivity {
 
         MaterialToolbar toolbar = findViewById(R.id.topAppBar);
         toolbar.setNavigationOnClickListener(v -> finish());
-
-        progressIndicator = findViewById(R.id.feedback_activity_progressindicator);
-        FloatingActionButton addFeedbackButton = findViewById(R.id.add_feedback);
-        recyclerView = findViewById(R.id.feedback_recyclerview);
-        addFeedbackButton.setEnabled(false);
-        addFeedbackButton.setOnClickListener(v -> {
-            Intent intent = new Intent(FeedbackActivity.this, NewFeedbackActivity.class);
-            intent.putExtra("token", token);
-            intent.putExtra("repo", repo);
-            startActivity(intent);
+        toolbar.setOnMenuItemClickListener(item -> {
+            if (item.getItemId() == R.id.github) {
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/inFumumVerti/DHBWorld/issues"));
+                FeedbackActivity.this.startActivity(browserIntent);
+            }
+            return true;
         });
+
+        setupViews();
+        setupClickListener();
 
         requestUserAndToken(new UserAndTokenListener() {
             @Override
@@ -77,9 +82,26 @@ public class FeedbackActivity extends AppCompatActivity {
 
             @Override
             public void onError() {
-
+                Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.something_went_wrong), BaseTransientBottomBar.LENGTH_LONG).show();
             }
         });
+    }
+
+    private void setupClickListener() {
+        addFeedbackButton.setOnClickListener(v -> {
+            Intent intent = new Intent(FeedbackActivity.this, NewFeedbackActivity.class);
+            intent.putExtra("token", token);
+            intent.putExtra("repo", repo);
+            startActivity(intent);
+        });
+    }
+
+    private void setupViews() {
+        progressIndicator = findViewById(R.id.feedback_activity_progressindicator);
+        addFeedbackButton = findViewById(R.id.add_feedback);
+        recyclerView = findViewById(R.id.feedback_recyclerview);
+        textViewNothingHere = findViewById(R.id.feedback_nothing_here);
+        addFeedbackButton.setEnabled(false);
     }
 
     private void requestUserAndToken(UserAndTokenListener userAndTokenListener) {
@@ -118,28 +140,41 @@ public class FeedbackActivity extends AppCompatActivity {
         issueListingInProgress = true;
         new ThreadWithUiUpdate(() -> {
             try {
-                feedbackArrayList.clear();
-
-                List<GHIssue> issues = getGhIssues();
-
-                for (GHIssue issue : issues) {
-                    String title = issue.getTitle();
-                    if (title.endsWith("#" + userId)) {
-                        feedbackArrayList.add(new FeedbackIssue(issue));
-                    }
-                }
-
+                populateArrayList();
             } catch (IOException e) {
                 e.printStackTrace();
+                Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.something_went_wrong), BaseTransientBottomBar.LENGTH_LONG).show();
             }
         }).afterOnUiThread(this, () -> {
-            FeedbackAdapter feedbackAdapter = new FeedbackAdapter(feedbackArrayList, token, repo, FeedbackActivity.this);
-            recyclerView.setAdapter(feedbackAdapter);
-            recyclerView.setLayoutManager(new LinearLayoutManager(FeedbackActivity.this, LinearLayoutManager.VERTICAL, false));
-            recyclerView.addItemDecoration(new DividerItemDecoration(FeedbackActivity.this, DividerItemDecoration.VERTICAL));
+            setupRecyclerView();
             progressIndicator.setVisibility(View.GONE);
             issueListingInProgress = false;
+            if (feedbackArrayList.size() == 0) {
+                textViewNothingHere.setVisibility(View.VISIBLE);
+            } else {
+                textViewNothingHere.setVisibility(View.GONE);
+            }
         }).start();
+    }
+
+    private void setupRecyclerView() {
+        FeedbackAdapter feedbackAdapter = new FeedbackAdapter(feedbackArrayList, token, repo, FeedbackActivity.this);
+        recyclerView.setAdapter(feedbackAdapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(FeedbackActivity.this, LinearLayoutManager.VERTICAL, false));
+        recyclerView.addItemDecoration(new DividerItemDecoration(FeedbackActivity.this, DividerItemDecoration.VERTICAL));
+    }
+
+    private void populateArrayList() throws IOException {
+        feedbackArrayList.clear();
+
+        List<GHIssue> issues = getGhIssues();
+
+        for (GHIssue issue : issues) {
+            String title = issue.getTitle();
+            if (title.endsWith("#" + userId)) {
+                feedbackArrayList.add(new FeedbackIssue(issue));
+            }
+        }
     }
 
     private List<GHIssue> getGhIssues() throws IOException {

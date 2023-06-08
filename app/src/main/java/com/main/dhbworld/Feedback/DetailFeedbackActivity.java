@@ -1,17 +1,19 @@
 package com.main.dhbworld.Feedback;
 
+import android.os.Bundle;
+import android.text.Editable;
+import android.view.View;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatEditText;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.os.Bundle;
-import android.text.Editable;
-import android.view.View;
-
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
+import com.google.android.material.snackbar.BaseTransientBottomBar;
+import com.google.android.material.snackbar.Snackbar;
 import com.main.dhbworld.Feedback.data.Comment;
 import com.main.dhbworld.R;
 import com.main.dhbworld.Thread.ThreadWithUiUpdate;
@@ -36,7 +38,7 @@ public class DetailFeedbackActivity extends AppCompatActivity {
     private String repo;
     private GHIssue issue;
 
-    private ArrayList<Comment> comments;
+    private ArrayList<Comment> comments = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +62,8 @@ public class DetailFeedbackActivity extends AppCompatActivity {
 
             } catch (IOException e) {
                 e.printStackTrace();
+                Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.something_went_wrong), BaseTransientBottomBar.LENGTH_LONG).show();
+                finish();
             }
         }).afterOnUiThread(this, () -> {
             progressIndicator.setVisibility(View.GONE);
@@ -94,6 +98,7 @@ public class DetailFeedbackActivity extends AppCompatActivity {
                 issue.comment(message);
             } catch (IOException e) {
                 e.printStackTrace();
+                Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.something_went_wrong), BaseTransientBottomBar.LENGTH_LONG).show();
             }
         }).afterOnUiThread(this, after).start();
     }
@@ -133,6 +138,7 @@ public class DetailFeedbackActivity extends AppCompatActivity {
                 comments.addAll(getComments());
             } catch (IOException e) {
                 e.printStackTrace();
+                Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.something_went_wrong), BaseTransientBottomBar.LENGTH_LONG).show();
             }
         }).afterOnUiThread(this, () -> {
             progressIndicator.setVisibility(View.GONE);

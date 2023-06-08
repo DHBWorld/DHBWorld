@@ -30,7 +30,7 @@
                 android:layout_height="wrap_content"
                 android:lines="1"
                 android:textAlignment="textStart"
-                android:text="DHBWorld"
+                android:text=""
                 android:ellipsize="end"
                 android:textStyle="bold" />
 
@@ -46,15 +46,15 @@
                 android:id="@+id/feedback_comment_body"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Hallo ich habe eine Frage\n\nMfg"/>
+                android:text=""/>
 
             <TextView
                 android:id="@+id/feedback_comment_updated"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
                 android:layout_weight="1"
                 android:textAlignment="textEnd"
-                android:text="05.06.23 15:38 Uhr"/>
+                android:text=""/>
 
         </LinearLayout>
 

@@ -21,7 +21,7 @@
             android:layout_height="wrap_content"
             android:lines="1"
             android:textAlignment="textStart"
-            android:text="Titel 123"
+            android:text=""
             android:ellipsize="end"
             android:textSize="20sp"
             android:layout_weight="1"/>
@@ -33,7 +33,8 @@
             android:layout_gravity="center"
             android:src="@drawable/baseline_circle_24"
             app:tint="@color/red"
-            android:visibility="gone"/>
+            android:visibility="gone"
+            android:importantForAccessibility="no" />
 
     </LinearLayout>
 
@@ -48,10 +49,10 @@
     <TextView
         android:id="@+id/feedback_item_updated"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_weight="1"
         android:textAlignment="textEnd"
-        android:text="Updated: 05.06.23 15:38 Uhr"/>
+        android:text=""/>
 
 
 </LinearLayout>

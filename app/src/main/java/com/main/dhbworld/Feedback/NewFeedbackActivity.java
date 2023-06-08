@@ -74,6 +74,8 @@ public class NewFeedbackActivity extends AppCompatActivity {
             @Override
             public void onError() {
                 progressDialog.dismiss();
+                Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.something_went_wrong), BaseTransientBottomBar.LENGTH_LONG).show();
+                sendButton.setEnabled(false);
             }
         });
 
@@ -127,6 +129,7 @@ public class NewFeedbackActivity extends AppCompatActivity {
                 createIssue(title, body);
             } catch (IOException e) {
                 e.printStackTrace();
+                Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.something_went_wrong), BaseTransientBottomBar.LENGTH_LONG).show();
             }
         }).afterOnUiThread(NewFeedbackActivity.this, () -> {
             progressDialog.dismiss();
