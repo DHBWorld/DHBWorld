@@ -1,9 +1,6 @@
 package com.main.dhbworld;
 
 import android.Manifest;
-import android.content.ClipData;
-import android.content.ClipboardManager;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
@@ -19,7 +16,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.app.ActivityCompat;
@@ -27,23 +23,19 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.preference.PreferenceManager;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.main.dhbworld.Dashboard.Cards.CardType;
-import com.main.dhbworld.Dashboard.Dashboard;
 import com.main.dhbworld.Dashboard.Cards.DashboardCard;
 import com.main.dhbworld.Dashboard.Cards.DashboardCardInfo;
 import com.main.dhbworld.Dashboard.Cards.DashboardCardUserInt;
 import com.main.dhbworld.Dashboard.Cards.DashboardCardWeather;
+import com.main.dhbworld.Dashboard.Dashboard;
 import com.main.dhbworld.Dashboard.DataLoaders.DataLoadListenerKVV;
 import com.main.dhbworld.Dashboard.DataLoaders.DataLoaderCalendar;
+import com.main.dhbworld.Dashboard.DataLoaders.DataLoaderInfo;
 import com.main.dhbworld.Dashboard.DataLoaders.DataLoaderMealPlan;
 import com.main.dhbworld.Dashboard.DataLoaders.DataLoaderPersonalInfo;
 import com.main.dhbworld.Dashboard.DataLoaders.DataLoaderUserInt;
@@ -58,7 +50,6 @@ import com.main.dhbworld.Weather.WeatherData;
 import java.time.LocalDateTime;
 import java.time.format.TextStyle;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 
 public class DashboardActivity extends AppCompatActivity {
@@ -71,12 +62,9 @@ public class DashboardActivity extends AppCompatActivity {
     private LinearLayout layoutCardInfo;
 
 
+    public static final String MyPREFERENCES = "myPreferencesKey";
 
-    public static final String MyPREFERENCES = "myPreferencesKey" ;
-
-    FirebaseFirestore firestore;
-
-    Boolean refreshIsEnable=true;
+    Boolean refreshIsEnable = true;
 
     Boolean cardInfo_isVisible = true;
 
@@ -97,7 +85,8 @@ public class DashboardActivity extends AppCompatActivity {
     DashboardCard dashboardCardWeather;
     DashboardCard dashboardCardUserInt;
 
-   private Dashboard dashboard;
+    private Dashboard dashboard;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -136,16 +125,16 @@ public class DashboardActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
-        NavigationUtilities.setUpNavigation(this,R.id.dashboard);
+        NavigationUtilities.setUpNavigation(this, R.id.dashboard);
         defineViews();
         loadWeather();
         loadUserInteraction();
         loadPersonalInformation();
         loadCalendar();
-        if (NetworkAvailability.check(DashboardActivity.this)){
+        if (NetworkAvailability.check(DashboardActivity.this)) {
             loadMealPlan();
             loadKvv();
-            if (cardInfo_isVisible){
+            if (cardInfo_isVisible) {
                 loadInfo();
             }
         } else {
@@ -154,8 +143,8 @@ public class DashboardActivity extends AppCompatActivity {
 
     }
 
-    private void defineViews(){
-        layoutCardMealPlan= findViewById(R.id.layoutCardMealPlan);
+    private void defineViews() {
+        layoutCardMealPlan = findViewById(R.id.layoutCardMealPlan);
         layoutCardCalendar = findViewById(R.id.layoutCardCalendar);
         layoutCardKvv = findViewById(R.id.layoutCardKvv);
         layoutCardPI = findViewById(R.id.layoutCardPI);
@@ -165,8 +154,8 @@ public class DashboardActivity extends AppCompatActivity {
         card_dash_pi = findViewById(R.id.card_dash_pi);
         card_dash_kvv = findViewById(R.id.card_dash_kvv);
         card_dash_mealPlan = findViewById(R.id.card_dash_mealPlan);
-        card_dash_info= findViewById(R.id.card_dash_info);
-        card_dash_user_interaction= findViewById(R.id.card_dash_userInteraction);
+        card_dash_info = findViewById(R.id.card_dash_info);
+        card_dash_user_interaction = findViewById(R.id.card_dash_userInteraction);
         card_dash_weather = findViewById(R.id.card_dash_weather);
 
         LinearLayout boxCardCalendar = findViewById(R.id.buttonCardCalendar);
@@ -189,8 +178,8 @@ public class DashboardActivity extends AppCompatActivity {
         dashboardKvv = new DashboardCard(CardType.CARD_KVV, layoutCardKvv, card_dash_kvv, boxCardKvv, card_dash_kvv_layout);
         dashboardPI = new DashboardCard(CardType.CARD_PI, layoutCardPI, card_dash_pi, boxCardPI, card_dash_pi_layout);
         dashboardCardInfo = new DashboardCardInfo(CardType.CARD_INFO, layoutCardInfo, card_dash_info, boxCardInfo, card_dash_info_layout);
-        dashboardCardWeather= new DashboardCardWeather(CardType.CARD_WEATHER, null, card_dash_weather, null,  null, forecastLayout);
-        dashboardCardUserInt=new DashboardCardUserInt(CardType.CARD_USER_INTERACTION, null, card_dash_user_interaction,  null, card_dash_user_interaction_layout);
+        dashboardCardWeather = new DashboardCardWeather(CardType.CARD_WEATHER, null, card_dash_weather, null, null, forecastLayout);
+        dashboardCardUserInt = new DashboardCardUserInt(CardType.CARD_USER_INTERACTION, null, card_dash_user_interaction, null, card_dash_user_interaction_layout);
 
         dashboard = new Dashboard();
         dashboard.addCard(dashboardCardMealPlan);
@@ -220,29 +209,29 @@ public class DashboardActivity extends AppCompatActivity {
         dataLoaderCalendar.load();
     }
 
-    private void loadKvv(){
+    private void loadKvv() {
         LinearLayout[] layoutTram = new LinearLayout[3];
         layoutTram[0] = findViewById(R.id.layoutDepartureOne);
         layoutTram[1] = findViewById(R.id.layoutDepartureTwo);
         layoutTram[2] = findViewById(R.id.layoutDepartureThree);
-        ProgressIndicator indicator= new ProgressIndicator(DashboardActivity.this, layoutCardKvv, layoutTram);
+        ProgressIndicator indicator = new ProgressIndicator(DashboardActivity.this, layoutCardKvv, layoutTram);
         indicator.show();
-        ImageView tramImageOne= findViewById(R.id.imageViewTramOne);
-        TextView[] tramView = new TextView [3];
+        ImageView tramImageOne = findViewById(R.id.imageViewTramOne);
+        TextView[] tramView = new TextView[3];
         tramView[0] = findViewById(R.id.textViewTramLineOne);
-        tramView[1]= findViewById(R.id.textViewTramLineTwo);
+        tramView[1] = findViewById(R.id.textViewTramLineTwo);
         tramView[2] = findViewById(R.id.textViewTramLineThree);
-        TextView[] platformView = new TextView [3];
+        TextView[] platformView = new TextView[3];
         platformView[0] = findViewById(R.id.textViewTramPlatformOne);
         platformView[1] = findViewById(R.id.textViewTramPlatformTwo);
         platformView[2] = findViewById(R.id.textViewTramPlatformThree);
-        TextView[] timeView = new TextView [3];
+        TextView[] timeView = new TextView[3];
         timeView[0] = findViewById(R.id.textViewTramTimeOne);
         timeView[1] = findViewById(R.id.textViewTramTimeTwo);
-        timeView[2]= findViewById(R.id.textViewTramTimeThree);
+        timeView[2] = findViewById(R.id.textViewTramTimeThree);
 
         KVVDataLoader dataLoader = new KVVDataLoader(this);
-        dataLoader.setDataLoaderListener(new DataLoadListenerKVV( layoutTram, indicator,  tramView, platformView, timeView, tramImageOne, DashboardActivity.this));
+        dataLoader.setDataLoaderListener(new DataLoadListenerKVV(layoutTram, indicator, tramView, platformView, timeView, tramImageOne, DashboardActivity.this));
         LocalDateTime now = LocalDateTime.now();
         dataLoader.loadData(now);
     }
@@ -250,7 +239,6 @@ public class DashboardActivity extends AppCompatActivity {
     private void loadWeather() {
         ImageView iconImageView = findViewById(R.id.weather_icon_imageview);
         TextView statusTextView = findViewById(R.id.weather_status_textview);
-
 
 
         TextView weatherLocation = findViewById(R.id.weather_location);
@@ -318,15 +306,15 @@ public class DashboardActivity extends AppCompatActivity {
         });
     }
 
-    private void loadUserInteraction(){
+    private void loadUserInteraction() {
         ImageView image_canteen = findViewById(R.id.imageBox_dashboard_canteen);
-        ImageView image_coffee= findViewById(R.id.imageBox_dashboard_coffee);
+        ImageView image_coffee = findViewById(R.id.imageBox_dashboard_coffee);
         ImageView image_printer = findViewById(R.id.imageBox_dashboard_printer);
-        DataLoaderUserInt dataLoaderUserInt= new DataLoaderUserInt(this, image_canteen,image_coffee,image_printer);
+        DataLoaderUserInt dataLoaderUserInt = new DataLoaderUserInt(this, image_canteen, image_coffee, image_printer);
         dataLoaderUserInt.load();
     }
 
-    private void loadPersonalInformation(){
+    private void loadPersonalInformation() {
         LinearLayout[] layoutInfo = new LinearLayout[3];
         layoutInfo[0] = findViewById(R.id.layoutInfoOne);
         layoutInfo[1] = findViewById(R.id.layoutInfoTwo);
@@ -344,7 +332,7 @@ public class DashboardActivity extends AppCompatActivity {
         dataLoaderPersonalInfo.load();
     }
 
-    private void loadMealPlan(){
+    private void loadMealPlan() {
         LinearLayout[] layoutMeal = new LinearLayout[3];
         layoutMeal[0] = findViewById(R.id.layoutMealOne);
         layoutMeal[1] = findViewById(R.id.layoutMealTwo);
@@ -354,106 +342,73 @@ public class DashboardActivity extends AppCompatActivity {
         textViewMeal[1] = findViewById(R.id.textViewMealTwo);
         textViewMeal[2] = findViewById(R.id.textViewMealThree);
 
-        ImageView imageViewMeal= findViewById(R.id.imageViewMeal);
+        ImageView imageViewMeal = findViewById(R.id.imageViewMeal);
 
-        DataLoaderMealPlan dataLoaderMealPlan= new DataLoaderMealPlan(DashboardActivity.this, layoutCardMealPlan, layoutMeal,textViewMeal, imageViewMeal);
+        DataLoaderMealPlan dataLoaderMealPlan = new DataLoaderMealPlan(DashboardActivity.this, layoutCardMealPlan, layoutMeal, textViewMeal, imageViewMeal);
         dataLoaderMealPlan.load();
-        }
-
-    public void refreshClick(@NonNull MenuItem item) throws NullPointerException{
-            if (!dashboard.getConfigurationModus()){
-                if (refreshIsEnable){
-                    refreshIsEnable=false;
-                    new CountDownTimer(10000,1000) {
-                        public void onTick(long millisUtilFinished) {
-                        }
-                        @Override
-                        public void onFinish() {
-                            refreshIsEnable=true;
-                        }
-                    }.start();
-                    loadUserInteraction();
-                    if (NetworkAvailability.check(DashboardActivity.this)){
-                        loadMealPlan();
-                        loadCalendar();
-                        loadKvv();
-                        loadWeather();
-                        if (cardInfo_isVisible){
-                            loadInfo();
-                        }
-                    }else{
-                        Snackbar.make(this.findViewById(android.R.id.content), getResources().getString(R.string.problemsWithInternetConnection), BaseTransientBottomBar.LENGTH_LONG).show();
-                    }
-                    loadPersonalInformation();
-
-                }else {
-                    Snackbar.make(this.findViewById(android.R.id.content), getResources().getString(R.string.refreshIsOnlyIn10Min), BaseTransientBottomBar.LENGTH_SHORT).show();
-                }
-            } else {
-                Snackbar.make(this.findViewById(android.R.id.content), getResources().getString(R.string.youAreInConfigModus), BaseTransientBottomBar.LENGTH_SHORT).show();
-            }
     }
 
-    public void configurationClick(@NonNull MenuItem item) throws NullPointerException{
+    public void refreshClick(@NonNull MenuItem item) throws NullPointerException {
+        if (!dashboard.getConfigurationModus()) {
+            if (refreshIsEnable) {
+                refreshIsEnable = false;
+                new CountDownTimer(10000, 1000) {
+                    public void onTick(long millisUtilFinished) {
+                    }
 
-        View snackbarContent=this.findViewById(android.R.id.content);
-        if (!dashboardCardInfo.cardIsVisible()){
+                    @Override
+                    public void onFinish() {
+                        refreshIsEnable = true;
+                    }
+                }.start();
+                loadUserInteraction();
+                if (NetworkAvailability.check(DashboardActivity.this)) {
+                    loadMealPlan();
+                    loadCalendar();
+                    loadKvv();
+                    loadWeather();
+                    if (cardInfo_isVisible) {
+                        loadInfo();
+                    }
+                } else {
+                    Snackbar.make(this.findViewById(android.R.id.content), getResources().getString(R.string.problemsWithInternetConnection), BaseTransientBottomBar.LENGTH_LONG).show();
+                }
+                loadPersonalInformation();
+
+            } else {
+                Snackbar.make(this.findViewById(android.R.id.content), getResources().getString(R.string.refreshIsOnlyIn10Min), BaseTransientBottomBar.LENGTH_SHORT).show();
+            }
+        } else {
+            Snackbar.make(this.findViewById(android.R.id.content), getResources().getString(R.string.youAreInConfigModus), BaseTransientBottomBar.LENGTH_SHORT).show();
+        }
+    }
+
+    public void configurationClick(@NonNull MenuItem item) throws NullPointerException {
+
+        View snackbarContent = this.findViewById(android.R.id.content);
+        if (!dashboardCardInfo.cardIsVisible()) {
             loadInfo();
         }
-        String message=getResources().getString(R.string.chooseTheCardForConfiguration);
+        String message = getResources().getString(R.string.chooseTheCardForConfiguration);
         dashboard.configurationClick(item, this.getApplicationContext(), snackbarContent, message);
     }
 
     private void loadInfo() {
         TextView title = findViewById(R.id.textViewInfoTitle);
         TextView[] message = new TextView[3];
-        message[0]=findViewById(R.id.textViewInfoMessageOne);
-        message[1]=findViewById(R.id.textViewInfoMessageTwo);
-        message[2]=findViewById(R.id.textViewInfoMessageThree);
+        message[0] = findViewById(R.id.textViewInfoMessageOne);
+        message[1] = findViewById(R.id.textViewInfoMessageTwo);
+        message[2] = findViewById(R.id.textViewInfoMessageThree);
         LinearLayout[] layoutInfoFull = new LinearLayout[1];
         layoutInfoFull[0] = findViewById(R.id.layoutInfo);
         LinearLayout[] layoutInfo = new LinearLayout[3];
         layoutInfo[0] = findViewById(R.id.layoutInfoMessageOne);
         layoutInfo[1] = findViewById(R.id.layoutInfoMessageTwo);
         layoutInfo[2] = findViewById(R.id.layoutInfoMessageThree);
-        ProgressIndicator indicator= new ProgressIndicator(DashboardActivity.this,layoutCardInfo, layoutInfoFull);
-        indicator.show();
-        new Thread(new Runnable() {
-            @RequiresApi(api = Build.VERSION_CODES.N)
-            @Override
-            public void run() {
-                layoutCardInfo.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        firestore= FirebaseFirestore.getInstance();
-                        DocumentReference contact= firestore.collection("General").document("InfoCard");
-                        contact.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                            @Override
-                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                if (task.isSuccessful()){
-                                    DocumentSnapshot doc= task.getResult();
-                                    indicator.hide();
-                                    title.setText(doc.getString("Title"));
-                                    String m=doc.getString("Message");
-                                    String[] parts = m.split("#");
-                                    for (int i=0;i<3; i++){
-                                        if (parts.length>i){
-                                            message[i].setText(parts[i]);
-                                        }else{
-                                            layoutInfo[i].setVisibility(View.GONE);
-                                        }
-                                    }
-                                    if (m.length()==0){
-                                        layoutInfo[0].setVisibility(View.GONE);
-                                    }
 
-                                }
-                            }
-                        });
-                    }
-                });
-            }
-        }).start();
+        DataLoaderInfo dataLoaderInfo = new DataLoaderInfo(this, title, message, layoutInfoFull, layoutInfo, layoutCardInfo);
+        dataLoaderInfo.load();
+
     }
 
     @Override
