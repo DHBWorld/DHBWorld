@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
@@ -84,42 +85,50 @@ public class NewFeedbackActivity extends AppCompatActivity {
     }
 
     private void setupClickListener() {
-        sendButton.setOnClickListener(v -> {
-            String[] inputData = getInputData();
+        sendButton.setOnClickListener(v -> new MaterialAlertDialogBuilder(NewFeedbackActivity.this)
+                .setTitle(R.string.important)
+                .setMessage(R.string.feedback_policy)
+                .setPositiveButton(R.string.send, (dialog, which) -> initAndCreateIssue())
+                .setNegativeButton(android.R.string.cancel, null)
+                .setCancelable(false)
+                .show());
+    }
 
-            if (inputData == null) {
-                return;
+    private void initAndCreateIssue() {
+        String[] inputData = getInputData();
+
+        if (inputData == null) {
+            return;
+        }
+
+        String type = inputData[0];
+        String name = inputData[1];
+        String title = inputData[2];
+        String description = inputData[3];
+
+        if (type.isEmpty() || name.isEmpty() || title.isEmpty() || description.isEmpty()) {
+            Snackbar.make(findViewById(android.R.id.content), getString(R.string.please_fill_in_everything), BaseTransientBottomBar.LENGTH_LONG).show();
+            return;
+        }
+
+        String phoneData = getPhoneData();
+        String body = description + "\n(" + name + ")" + phoneData + "\n\nType: " + typeMap.get(type);
+
+        ProgressDialog progressDialog = new ProgressDialog(NewFeedbackActivity.this)
+                .setMessage(R.string.please_wait)
+                .setCancelable(false)
+                .show();
+
+        new ThreadWithUiUpdate(() -> {
+            try {
+                createIssue(title, body);
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-
-            String type = inputData[0];
-            String name = inputData[1];
-            String title = inputData[2];
-            String description = inputData[3];
-
-            if (type.isEmpty() || name.isEmpty() || title.isEmpty() || description.isEmpty()) {
-                Snackbar.make(findViewById(android.R.id.content), getString(R.string.please_fill_in_everything), BaseTransientBottomBar.LENGTH_LONG).show();
-                return;
-            }
-
-            String phoneData = getPhoneData();
-            String body = description + "\n(" + name + ")" + phoneData + "\n\nType: " + typeMap.get(type);
-
-            ProgressDialog progressDialog = new ProgressDialog(NewFeedbackActivity.this)
-                    .setMessage(R.string.please_wait)
-                    .setCancelable(false)
-                    .show();
-
-            new ThreadWithUiUpdate(() -> {
-                try {
-                    createIssue(title, body);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }).afterOnUiThread(NewFeedbackActivity.this, () -> {
-                progressDialog.dismiss();
-                finish();
-            }).start();
-        });
+        }).afterOnUiThread(NewFeedbackActivity.this, () -> {
+            progressDialog.dismiss();
+            finish();
+        }).start();
     }
 
     private String[] getInputData() {

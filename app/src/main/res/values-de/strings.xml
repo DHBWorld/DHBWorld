@@ -320,4 +320,7 @@ E-Mail-Adresse: <p><a href="mailto:zaeske.christian@gmail.com">zaeske.christian@
     <string name="unknown_condition">Unbekannte Situation</string>
     <string name="cannot_get_weather">Wetterdaten nicht verfügbar</string>
     <string name="please_fill_in_everything">Bitte fülle alle Felder aus</string>
+    <string name="important">WICHTIG!</string>
+    <string name="send">Senden</string>
+    <string name="feedback_policy">Dein Feedback und alle weiteren Nachrichten zu diesem Feedback werden öffentlich in unserem GitHub-Repository einsehbar sein. Bitte stelle sicher, dass du keine persönlichen Informationen teilst.</string>
 </resources>

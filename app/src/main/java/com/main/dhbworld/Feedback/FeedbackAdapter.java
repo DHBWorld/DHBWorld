@@ -10,6 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.main.dhbworld.Feedback.data.FeedbackIssue;
 import com.main.dhbworld.R;
 
 import java.io.IOException;
@@ -33,7 +34,7 @@ public class FeedbackAdapter extends RecyclerView.Adapter<FeedbackAdapter.ViewHo
     @Override
     public FeedbackAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.feedback_list_item, parent, false);
-        return new FeedbackAdapter.ViewHolder(view);
+        return new ViewHolder(view);
     }
 
     @Override
@@ -47,14 +48,11 @@ public class FeedbackAdapter extends RecyclerView.Adapter<FeedbackAdapter.ViewHo
             e.printStackTrace();
         }
 
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(activity, DetailFeedbackActivity.class);
-                intent.putExtra("issueId", feedback.getId());
-                intent.putExtra("token", token);
-                activity.startActivity(intent);
-            }
+        holder.itemView.setOnClickListener(v -> {
+            Intent intent = new Intent(activity, DetailFeedbackActivity.class);
+            intent.putExtra("issueId", feedback.getId());
+            intent.putExtra("token", token);
+            activity.startActivity(intent);
         });
     }
 
@@ -63,7 +61,7 @@ public class FeedbackAdapter extends RecyclerView.Adapter<FeedbackAdapter.ViewHo
         return feedbackArrayList.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
         final TextView textViewTitle;
         final TextView textViewUpdated;
 

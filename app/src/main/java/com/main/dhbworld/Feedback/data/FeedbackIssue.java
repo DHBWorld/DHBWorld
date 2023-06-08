@@ -1,4 +1,4 @@
-package com.main.dhbworld.Feedback;
+package com.main.dhbworld.Feedback.data;
 
 import org.kohsuke.github.GHIssue;
 

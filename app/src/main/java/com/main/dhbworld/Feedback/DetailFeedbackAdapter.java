@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.card.MaterialCardView;
+import com.main.dhbworld.Feedback.data.Comment;
 import com.main.dhbworld.R;
 
 import java.text.SimpleDateFormat;
@@ -31,7 +32,7 @@ public class DetailFeedbackAdapter extends RecyclerView.Adapter<DetailFeedbackAd
     @Override
     public DetailFeedbackAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.feedback_comments_list_item, parent, false);
-        return new DetailFeedbackAdapter.ViewHolder(view);
+        return new ViewHolder(view);
     }
 
     @Override
@@ -66,7 +67,7 @@ public class DetailFeedbackAdapter extends RecyclerView.Adapter<DetailFeedbackAd
         );
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
 
         final TextView textViewAuthor;
         final TextView textViewBody;

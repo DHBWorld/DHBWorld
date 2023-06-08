@@ -17,7 +17,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.main.dhbworld.Feedback.FeedbackAdapter;
-import com.main.dhbworld.Feedback.FeedbackIssue;
+import com.main.dhbworld.Feedback.data.FeedbackIssue;
 import com.main.dhbworld.Feedback.NewFeedbackActivity;
 import com.main.dhbworld.Firebase.SignedInListener;
 import com.main.dhbworld.Firebase.Utilities;
@@ -56,6 +56,7 @@ public class FeedbackActivity extends AppCompatActivity {
         progressIndicator = findViewById(R.id.feedback_activity_progressindicator);
         FloatingActionButton addFeedbackButton = findViewById(R.id.add_feedback);
         recyclerView = findViewById(R.id.feedback_recyclerview);
+        addFeedbackButton.setEnabled(false);
         addFeedbackButton.setOnClickListener(v -> {
             Intent intent = new Intent(FeedbackActivity.this, NewFeedbackActivity.class);
             intent.putExtra("token", token);
@@ -69,6 +70,7 @@ public class FeedbackActivity extends AppCompatActivity {
                 FeedbackActivity.this.userId = userId;
                 issueListingInProgress = false;
                 listIssues();
+                addFeedbackButton.setEnabled(true);
             }
 
             @Override
