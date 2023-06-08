@@ -47,6 +47,7 @@ import com.main.dhbworld.Dashboard.DashboardCard;
 import com.main.dhbworld.Dashboard.DashboardCardInfo;
 import com.main.dhbworld.Dashboard.DashboardCardUserInt;
 import com.main.dhbworld.Dashboard.DashboardCardWeather;
+import com.main.dhbworld.Dashboard.DataLoadListenerKVV;
 import com.main.dhbworld.Debugging.Debugging;
 import com.main.dhbworld.Dualis.EverlastingService;
 import com.main.dhbworld.Enums.InteractionState;
@@ -151,7 +152,6 @@ public class DashboardActivity extends AppCompatActivity {
         NavigationUtilities.setUpNavigation(this,R.id.dashboard);
         defineViews();
         loadWeather();
-        userConfigurationOfDashboard();
         loadUserInteraction();
         loadPersonalInformation();
         loadCalendar();
@@ -214,13 +214,12 @@ public class DashboardActivity extends AppCompatActivity {
         dashboard.addCard(dashboardCardWeather);
         dashboard.addCard(dashboardCardUserInt);
 
-
-
-    }
-
-    private void userConfigurationOfDashboard(){
         dashboard.setUp(this.getApplicationContext(), getResources().getColor(R.color.black), DashboardActivity.this);
+
+
     }
+
+
 
     private void loadCalendar(){
         SharedPreferences preferences = PreferenceManager
@@ -370,39 +369,7 @@ public class DashboardActivity extends AppCompatActivity {
         timeView[2]= findViewById(R.id.textViewTramTimeThree);
 
         KVVDataLoader dataLoader = new KVVDataLoader(this);
-        dataLoader.setDataLoaderListener(new DataLoaderListener() {
-            @Override
-            public void onDataLoaded(ArrayList<Departure> departures, Disruption disruption) {
-                DateTimeFormatter formatter = DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT);
-                indicator.hide();
-                if ( (departures==null) || (departures.size()<1)){
-                    tramImageOne.setBackground(AppCompatResources.getDrawable(DashboardActivity.this, R.drawable.ic_pause));
-                    platformView[0].setVisibility(View.GONE);
-                    timeView[0].setVisibility(View.GONE);
-                    tramView[0].setText(getResources().getString(R.string.serverTrouble));
-                    layoutTram[2].setVisibility(View.GONE);
-                    layoutTram[1].setVisibility(View.GONE);
-                }else{
-                    tramImageOne.setBackground(AppCompatResources.getDrawable(DashboardActivity.this, R.drawable.ic_tram));
-                    platformView[0].setVisibility(View.VISIBLE);
-                    timeView[0].setVisibility(View.VISIBLE);
-                    for (int i=0;i<3;i++){
-                        if (departures.size()>i){
-                            layoutTram[i].setVisibility(View.VISIBLE);
-                            tramView[i].setText(departures.get(i).getLine().substring(departures.get(i).getLine().length()-1)+" ("+departures.get(i).getDestination()+")");
-                            if (departures.get(i).isNotServiced()) {
-                                platformView[i].setText(R.string.canceled_in_parens);
-                            } else {
-                                platformView[i].setText(departures.get(i).getPlatform());
-                            }
-                            timeView[i].setText(departures.get(i).getDepartureTime().format(formatter));
-                        }else{
-                            layoutTram[i].setVisibility(View.GONE);
-                        }
-                    }
-                }
-            }
-        });
+        dataLoader.setDataLoaderListener(new DataLoadListenerKVV( layoutTram, indicator,  tramView, platformView, timeView, tramImageOne, DashboardActivity.this,  getResources().getString(R.string.serverTrouble)));
         LocalDateTime now = LocalDateTime.now();
         dataLoader.loadData(now);
     }
@@ -633,7 +600,6 @@ public class DashboardActivity extends AppCompatActivity {
                             refreshIsEnable=true;
                         }
                     }.start();
-                    userConfigurationOfDashboard();
                     loadUserInteraction();
                     if (NetworkAvailability.check(DashboardActivity.this)){
                         loadMealPlan();
