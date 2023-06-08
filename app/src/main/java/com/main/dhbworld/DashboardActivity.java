@@ -33,23 +33,17 @@ import com.main.dhbworld.Dashboard.Cards.DashboardCardInfo;
 import com.main.dhbworld.Dashboard.Cards.DashboardCardUserInt;
 import com.main.dhbworld.Dashboard.Cards.DashboardCardWeather;
 import com.main.dhbworld.Dashboard.Dashboard;
-import com.main.dhbworld.Dashboard.DataLoaders.DataLoadListenerKVV;
+import com.main.dhbworld.Dashboard.DataLoaders.DataLoaderKVV;
 import com.main.dhbworld.Dashboard.DataLoaders.DataLoaderCalendar;
 import com.main.dhbworld.Dashboard.DataLoaders.DataLoaderInfo;
 import com.main.dhbworld.Dashboard.DataLoaders.DataLoaderMealPlan;
 import com.main.dhbworld.Dashboard.DataLoaders.DataLoaderPersonalInfo;
 import com.main.dhbworld.Dashboard.DataLoaders.DataLoaderUserInt;
+import com.main.dhbworld.Dashboard.DataLoaders.DataLoaderWeather;
 import com.main.dhbworld.Debugging.Debugging;
 import com.main.dhbworld.Dualis.EverlastingService;
-import com.main.dhbworld.KVV.KVVDataLoader;
 import com.main.dhbworld.Navigation.NavigationUtilities;
-import com.main.dhbworld.Weather.Forecast;
-import com.main.dhbworld.Weather.WeatherApi;
-import com.main.dhbworld.Weather.WeatherData;
 
-import java.time.LocalDateTime;
-import java.time.format.TextStyle;
-import java.util.ArrayList;
 import java.util.Locale;
 
 public class DashboardActivity extends AppCompatActivity {
@@ -213,8 +207,6 @@ public class DashboardActivity extends AppCompatActivity {
         layoutTram[0] = findViewById(R.id.layoutDepartureOne);
         layoutTram[1] = findViewById(R.id.layoutDepartureTwo);
         layoutTram[2] = findViewById(R.id.layoutDepartureThree);
-        ProgressIndicator indicator = new ProgressIndicator(DashboardActivity.this, layoutCardKvv, layoutTram);
-        indicator.show();
         ImageView tramImageOne = findViewById(R.id.imageViewTramOne);
         TextView[] tramView = new TextView[3];
         tramView[0] = findViewById(R.id.textViewTramLineOne);
@@ -229,80 +221,39 @@ public class DashboardActivity extends AppCompatActivity {
         timeView[1] = findViewById(R.id.textViewTramTimeTwo);
         timeView[2] = findViewById(R.id.textViewTramTimeThree);
 
-        KVVDataLoader dataLoader = new KVVDataLoader(this);
-        dataLoader.setDataLoaderListener(new DataLoadListenerKVV(layoutTram, indicator, tramView, platformView, timeView, tramImageOne, DashboardActivity.this));
-        LocalDateTime now = LocalDateTime.now();
-        dataLoader.loadData(now);
+        DataLoaderKVV dataLoaderKVV = new DataLoaderKVV(layoutTram, tramView, platformView, timeView, tramImageOne, this, DashboardActivity.this, layoutCardKvv);
+        dataLoaderKVV.load();
     }
 
     private void loadWeather() {
         ImageView iconImageView = findViewById(R.id.weather_icon_imageview);
         TextView statusTextView = findViewById(R.id.weather_status_textview);
-
-
         TextView weatherLocation = findViewById(R.id.weather_location);
 
-        TextView day1 = findViewById(R.id.forecast_day_1);
-        TextView day2 = findViewById(R.id.forecast_day_2);
-        TextView day3 = findViewById(R.id.forecast_day_3);
-        TextView day4 = findViewById(R.id.forecast_day_4);
+        TextView[] day = new TextView[4];
+        day[0] = findViewById(R.id.forecast_day_1);
+        day[1] = findViewById(R.id.forecast_day_2);
+        day[2] = findViewById(R.id.forecast_day_3);
+        day[3] = findViewById(R.id.forecast_day_4);
+        TextView[] maxTempDay = new TextView[4];
+        maxTempDay[0] = findViewById(R.id.forecast_temp_max_1);
+        maxTempDay[1] = findViewById(R.id.forecast_temp_max_2);
+        maxTempDay[2] = findViewById(R.id.forecast_temp_max_3);
+        maxTempDay[3] = findViewById(R.id.forecast_temp_max_4);
+        TextView[] minTempDay = new TextView[4];
+        minTempDay[0] = findViewById(R.id.forecast_temp_min_1);
+        minTempDay[1] = findViewById(R.id.forecast_temp_min_2);
+        minTempDay[2] = findViewById(R.id.forecast_temp_min_3);
+        minTempDay[3] = findViewById(R.id.forecast_temp_min_4);
+        ImageView[] iconDay = new ImageView[4];
+        iconDay[0] = findViewById(R.id.weather_icon_imageview_1);
+        iconDay[1] = findViewById(R.id.weather_icon_imageview_2);
+        iconDay[2] = findViewById(R.id.weather_icon_imageview_3);
+        iconDay[3] = findViewById(R.id.weather_icon_imageview_4);
 
-        TextView maxTempDay1 = findViewById(R.id.forecast_temp_max_1);
-        TextView maxTempDay2 = findViewById(R.id.forecast_temp_max_2);
-        TextView maxTempDay3 = findViewById(R.id.forecast_temp_max_3);
-        TextView maxTempDay4 = findViewById(R.id.forecast_temp_max_4);
+        DataLoaderWeather dataLoaderWeather = new DataLoaderWeather(this,iconImageView, statusTextView , weatherLocation, day, maxTempDay, minTempDay, iconDay  );
+        dataLoaderWeather.load();
 
-        TextView minTempDay1 = findViewById(R.id.forecast_temp_min_1);
-        TextView minTempDay2 = findViewById(R.id.forecast_temp_min_2);
-        TextView minTempDay3 = findViewById(R.id.forecast_temp_min_3);
-        TextView minTempDay4 = findViewById(R.id.forecast_temp_min_4);
-
-        ImageView iconDay1 = findViewById(R.id.weather_icon_imageview_1);
-        ImageView iconDay2 = findViewById(R.id.weather_icon_imageview_2);
-        ImageView iconDay3 = findViewById(R.id.weather_icon_imageview_3);
-        ImageView iconDay4 = findViewById(R.id.weather_icon_imageview_4);
-
-        WeatherApi weatherApi = new WeatherApi(WeatherApi.City.Karlsruhe);
-
-        weatherLocation.setText(WeatherApi.City.Karlsruhe.toString());
-
-        weatherApi.requestData(this, new WeatherApi.WeatherDataListener() {
-            @Override
-            public void onSuccess(WeatherData weatherData) {
-                iconImageView.setImageDrawable(weatherData.getIcon(DashboardActivity.this));
-                statusTextView.setText(String.format("%s, %s°C", weatherData.getTranslatedWeatherCode(DashboardActivity.this), weatherData.getCurrentTemperature()));
-
-                ArrayList<Forecast> forecasts = weatherData.getForecasts();
-                if (forecasts.size() < 5) {
-                    return;
-                }
-                day1.setText(forecasts.get(1).getTime().getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.getDefault()));
-                day2.setText(forecasts.get(2).getTime().getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.getDefault()));
-                day3.setText(forecasts.get(3).getTime().getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.getDefault()));
-                day4.setText(forecasts.get(4).getTime().getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.getDefault()));
-
-                maxTempDay1.setText(String.format("%s°C", forecasts.get(1).getMaxTemperatureRounded()));
-                maxTempDay2.setText(String.format("%s°C", forecasts.get(2).getMaxTemperatureRounded()));
-                maxTempDay3.setText(String.format("%s°C", forecasts.get(3).getMaxTemperatureRounded()));
-                maxTempDay4.setText(String.format("%s°C", forecasts.get(4).getMaxTemperatureRounded()));
-
-                minTempDay1.setText(String.format("%s°C", forecasts.get(1).getMinTemperatureRounded()));
-                minTempDay2.setText(String.format("%s°C", forecasts.get(2).getMinTemperatureRounded()));
-                minTempDay3.setText(String.format("%s°C", forecasts.get(3).getMinTemperatureRounded()));
-                minTempDay4.setText(String.format("%s°C", forecasts.get(4).getMinTemperatureRounded()));
-
-                iconDay1.setImageDrawable(forecasts.get(1).getIcon(DashboardActivity.this));
-                iconDay2.setImageDrawable(forecasts.get(2).getIcon(DashboardActivity.this));
-                iconDay3.setImageDrawable(forecasts.get(3).getIcon(DashboardActivity.this));
-                iconDay4.setImageDrawable(forecasts.get(4).getIcon(DashboardActivity.this));
-            }
-
-            @Override
-            public void onError() {
-                statusTextView.setText(R.string.cannot_get_weather);
-                iconImageView.setImageDrawable(null);
-            }
-        });
     }
 
     private void loadUserInteraction() {

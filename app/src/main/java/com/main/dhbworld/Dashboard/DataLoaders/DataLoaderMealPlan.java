@@ -7,18 +7,18 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.main.dhbworld.CantineActivity;
-import com.main.dhbworld.ProgressIndicator;
+import com.main.dhbworld.Utilities.ProgressIndicator;
 import com.main.dhbworld.R;
 
 import java.util.List;
 
 public class DataLoaderMealPlan {
 
-    Context context;
-    LinearLayout layoutCardMealPlan;
-    LinearLayout[] layoutMeal;
-    TextView[] textViewMeal;
-    ImageView imageViewMeal;
+    private final Context context;
+    private final LinearLayout layoutCardMealPlan;
+    private final LinearLayout[] layoutMeal;
+    private final TextView[] textViewMeal;
+    private final ImageView imageViewMeal;
 
     public DataLoaderMealPlan(Context context, LinearLayout layoutCardMealPlan, LinearLayout[] layoutMeal, TextView[] textViewMeal, ImageView imageViewMeal) {
         this.context = context;

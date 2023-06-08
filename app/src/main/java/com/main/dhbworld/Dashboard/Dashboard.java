@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Dashboard {
-    SharedPreferences sp;
+    private SharedPreferences sp;
     public static final String dashboardSettings = "dashboardSettings";
     private final List<DashboardCard> cards;
     private Boolean configurationModus;

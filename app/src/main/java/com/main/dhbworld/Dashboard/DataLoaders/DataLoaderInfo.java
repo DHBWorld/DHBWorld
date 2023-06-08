@@ -8,16 +8,16 @@ import android.widget.TextView;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.main.dhbworld.ProgressIndicator;
+import com.main.dhbworld.Utilities.ProgressIndicator;
 
 public class DataLoaderInfo {
-    Context context;
-    TextView title;
-    TextView[] message;
-    LinearLayout[] layoutInfoFull;
-    LinearLayout[] layoutInfo;
-    LinearLayout layoutCardInfo;
-    FirebaseFirestore firestore;
+    private final Context context;
+    private final TextView title;
+    private final TextView[] message;
+    private final LinearLayout[] layoutInfoFull;
+    private final LinearLayout[] layoutInfo;
+    private final LinearLayout layoutCardInfo;
+    private  FirebaseFirestore firestore;
 
     public DataLoaderInfo(Context context, TextView title, TextView[] message, LinearLayout[] layoutInfoFull, LinearLayout[] layoutInfo, LinearLayout layoutCardInfo) {
         this.context = context;

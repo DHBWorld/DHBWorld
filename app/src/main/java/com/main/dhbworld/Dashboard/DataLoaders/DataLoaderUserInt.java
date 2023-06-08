@@ -12,10 +12,10 @@ import com.main.dhbworld.Firebase.Utilities;
 import com.main.dhbworld.R;
 
 public class DataLoaderUserInt {
-    Context context;
-    ImageView image_canteen;
-    ImageView image_coffee;
-    ImageView image_printer;
+    private final Context context;
+    private final ImageView image_canteen;
+    private final ImageView image_coffee;
+    private final ImageView image_printer;
 
     public DataLoaderUserInt(Context context, ImageView image_canteen, ImageView image_coffee, ImageView image_printer) {
         this.context = context;
