@@ -22,7 +22,7 @@ public class DashboardTest {
     @Test
     public void saveVisibilityOfCards(){
         Context context = InstrumentationRegistry.getContext();
-        SharedPreferences sp = context.getSharedPreferences(DashboardActivity.dashboardSettings,Context.MODE_PRIVATE);
+        SharedPreferences sp = context.getSharedPreferences(Dashboard.dashboardSettings,Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
 
         editor.putBoolean("cardCalendar", true);
