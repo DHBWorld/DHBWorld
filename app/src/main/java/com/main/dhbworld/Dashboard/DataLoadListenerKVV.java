@@ -27,10 +27,10 @@ public class DataLoadListenerKVV implements DataLoaderListener {
     TextView[] timeView ;
     ImageView tramImageOne;
     Context context;
-    String message;
 
 
-    public DataLoadListenerKVV(LinearLayout[] layoutTram, ProgressIndicator indicator, TextView[] tramView, TextView[] platformView, TextView[] timeView, ImageView tramImageOne, Context context, String message) {
+
+    public DataLoadListenerKVV(LinearLayout[] layoutTram, ProgressIndicator indicator, TextView[] tramView, TextView[] platformView, TextView[] timeView, ImageView tramImageOne, Context context) {
         this.layoutTram = layoutTram;
        this. indicator = indicator;
         this.tramView =tramView;
@@ -38,7 +38,7 @@ public class DataLoadListenerKVV implements DataLoaderListener {
         this.timeView = timeView;
         this.tramImageOne=tramImageOne;
         this.context=context;
-        this.message= message;
+
 
     }
 
@@ -51,7 +51,7 @@ public class DataLoadListenerKVV implements DataLoaderListener {
             tramImageOne.setBackground(AppCompatResources.getDrawable(context, R.drawable.ic_pause));
             platformView[0].setVisibility(View.GONE);
             timeView[0].setVisibility(View.GONE);
-            tramView[0].setText(message);
+            tramView[0].setText(context.getResources().getString(R.string.serverTrouble));
             layoutTram[2].setVisibility(View.GONE);
             layoutTram[1].setVisibility(View.GONE);
         }else{
