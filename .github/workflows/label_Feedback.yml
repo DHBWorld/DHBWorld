@@ -1,0 +1,31 @@
+name: Label Issues when created via App
+on:
+  issues:
+    types: [opened]
+  
+jobs:
+  label_issues:
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+    steps:
+      - name: extract Label
+        id: extractLabel
+        continue-on-error: true
+        run: |
+          echo "Issue body: ${{ github.event.issue.body }}"
+          LABEL=$( echo "${{ github.event.issue.body }}" | sed 's/\n//g')
+          LABEL=$( echo $LABEL | sed 's/\r//g')
+          LABEL=$( echo $LABEL | sed 's/.*Type: \([help wanted|bug|enhancement|feedback]\)/\1/')
+          LABEL=$( echo $LABEL  | grep "^\(help wanted\|bug\|enhancement\|feedback\)\$")
+          echo "LABEL=$LABEL" >> $GITHUB_ENV
+      - uses: actions/github-script@v6
+        if: ${{ steps.extractLabel.outcome == 'success' }}
+        with:
+          script: |
+            github.rest.issues.addLabels({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              labels: ["${{ env.LABEL }}"]
+            })
