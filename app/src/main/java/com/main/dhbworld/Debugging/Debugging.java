@@ -1,9 +1,10 @@
 package com.main.dhbworld.Debugging;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.provider.DocumentsContract;
+
+import androidx.activity.result.ActivityResultLauncher;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -65,7 +66,7 @@ public class Debugging {
         return new File(context.getFilesDir().getAbsolutePath() + "/debug.log");
     }
 
-    public static void createFile(Activity activity, URI pickerInitialUri) {
+    public static void createFile(ActivityResultLauncher<Intent> activity, URI pickerInitialUri) {
         Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         intent.setType("text/plain");
@@ -75,7 +76,8 @@ public class Debugging {
         // the system file picker when your app creates the document.
         intent.putExtra(DocumentsContract.EXTRA_INITIAL_URI, pickerInitialUri);
 
-        activity.startActivityForResult(intent, 1);
+        activity.launch(intent);
+        //activity.startActivityForResult(intent, 1);
     }
 
 }
