@@ -9,13 +9,11 @@ import androidx.preference.PreferenceManager;
 import androidx.test.InstrumentationRegistry;
 import com.main.dhbworld.Calendar.nextEventsProvider;
 import com.main.dhbworld.CantineActivity;
-import com.main.dhbworld.DashboardActivity;
-import com.main.dhbworld.NetworkAvailability;
+import com.main.dhbworld.Utilities.NetworkAvailability;
 import org.hamcrest.MatcherAssert;
 import org.junit.Test;
-import java.net.MalformedURLException;
+
 import dhbw.timetable.rapla.data.event.Appointment;
-import dhbw.timetable.rapla.exceptions.NoConnectionException;
 
 public class DashboardTest {
 

@@ -15,6 +15,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.DHBWorld">
         <activity
+            android:name=".BlackboardActivity"
+            android:exported="false" />
+        <activity
             android:name=".Feedback.NewFeedbackActivity"
             android:exported="false" />
         <activity
@@ -104,7 +107,7 @@
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
-        <service android:name=".Dualis.EverlastingService"></service>
+        <service android:name=".Dualis.EverlastingService" />
     </application>
 
 </manifest>

@@ -5,7 +5,7 @@ import android.content.SharedPreferences;
 import androidx.preference.PreferenceManager;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.main.dhbworld.NetworkAvailability;
+import com.main.dhbworld.Utilities.NetworkAvailability;
 import com.main.dhbworld.R;
 
 import java.lang.reflect.Type;

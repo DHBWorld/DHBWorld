@@ -43,6 +43,7 @@ import com.main.dhbworld.Dashboard.DataLoaders.DataLoaderWeather;
 import com.main.dhbworld.Debugging.Debugging;
 import com.main.dhbworld.Dualis.EverlastingService;
 import com.main.dhbworld.Navigation.NavigationUtilities;
+import com.main.dhbworld.Utilities.NetworkAvailability;
 
 import java.util.Locale;
 

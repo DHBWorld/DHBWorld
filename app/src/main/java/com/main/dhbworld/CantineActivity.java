@@ -22,6 +22,7 @@ import com.main.dhbworld.Cantine.CantineUtilities;
 import com.main.dhbworld.Cantine.Meal;
 import com.main.dhbworld.Cantine.MealDailyPlan;
 import com.main.dhbworld.Navigation.NavigationUtilities;
+import com.main.dhbworld.Utilities.NetworkAvailability;
 import com.main.dhbworld.Utilities.ProgressIndicator;
 
 import java.io.IOException;
