@@ -40,72 +40,13 @@
             android:layout_below="@id/topAppBarLayout">
 
             <LinearLayout
-                android:id="@+id/layoutDashboardCards"
+                android:id="@+id/card_dash_mealPlan_layout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
                 android:padding="15dp">
 
-                <com.google.android.material.card.MaterialCardView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:rippleColor="@color/white"
-                    android:layout_marginTop="15dp"
-                    android:baselineAligned="false"
-                    app:cardElevation="0dp"
-                    app:strokeColor="@color/red"
-                    app:strokeWidth="3dp">
 
-                    <LinearLayout
-                        android:id="@+id/card_dash_mealPlan_layout"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="@color/red"
-                        android:orientation="vertical">
-
-                        <LinearLayout
-                            android:orientation="horizontal"
-                            android:id="@+id/buttonCardMealPlan"
-                            android:layout_width="match_parent"
-                            android:layout_height="30dp"
-                            android:stateListAnimator="@null" />
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:background="?attr/dashboardCardBackground"
-                            android:orientation="vertical"
-                            android:paddingVertical="10dp"
-                            android:paddingLeft="10dp"
-                            android:paddingRight="30dp">
-
-                            <LinearLayout
-                                android:id="@+id/layoutMealOne"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:orientation="vertical"
-                                android:paddingVertical="7dp">
-
-                                <TextView
-                                    android:id="@+id/textViewAdvertTitle"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:text="@string/questions"
-                                    android:textStyle="bold"
-                                    android:textSize="18sp" />
-
-                                <TextView
-                                    android:id="@+id/textViewAdvertText"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:text="@string/questions"
-                                    android:textSize="15sp" />
-                            </LinearLayout>
-
-
-                        </LinearLayout>
-                    </LinearLayout>
-                </com.google.android.material.card.MaterialCardView>
 
 
 
