@@ -82,9 +82,7 @@ public class OnPreferenceChangeListener {
     }
 
     public boolean sync(Object newValue) {
-        if (!sharedPrefDualis.getBoolean("saveCredentials", true)) {
-            Snackbar.make(activity.findViewById(android.R.id.content), context.getResources().getString(R.string.sync_makes_no_difference), Snackbar.LENGTH_LONG).show();
-        }
+        showNoImpactSnackbar();
         if ((boolean) newValue) {
             context.startService(new Intent(context, EverlastingService.class));
         }
@@ -92,9 +90,13 @@ public class OnPreferenceChangeListener {
     }
 
     public boolean syncTime() {
+        showNoImpactSnackbar();
+        return true;
+    }
+
+    private void showNoImpactSnackbar() {
         if (!sharedPrefDualis.getBoolean("saveCredentials", true)) {
             Snackbar.make(activity.findViewById(android.R.id.content), context.getResources().getString(R.string.sync_makes_no_difference), Snackbar.LENGTH_LONG).show();
         }
-        return true;
     }
 }
