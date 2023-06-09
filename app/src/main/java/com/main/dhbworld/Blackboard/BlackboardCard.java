@@ -143,7 +143,7 @@ public class BlackboardCard extends MaterialCardView {
     }
 
     public void configurateClickers() {
-        card.setOnClickListener(new View.OnClickListener() {
+        cardLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
