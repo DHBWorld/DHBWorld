@@ -22,7 +22,7 @@
                 android:id="@+id/topAppBar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                app:title="Neues Feedback"
+                app:title="Neue Anzeige"
                 app:menu="@menu/top_app_bar"
                 app:navigationIcon="@drawable/ic_baseline_arrow_back_24"
 
@@ -44,7 +44,7 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Feedback-Type">
+                android:hint="Dauer der Publikation">
 
                 <AutoCompleteTextView
                     android:id="@+id/publishingDuration"
@@ -56,19 +56,33 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/feedbackNameLayout"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Name">
+                android:hint="Tag">
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/feedbackName"
+                <AutoCompleteTextView
+                    android:id="@+id/tagOne"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:inputType="none" />
 
             </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Tag">
 
+                <AutoCompleteTextView
+                    android:id="@+id/tagTwo"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:inputType="none" />
+
+            </com.google.android.material.textfield.TextInputLayout>
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/feedbackTitleLayout"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -78,6 +92,7 @@
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/newAdvertTitle"
+                    android:maxLength="33"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
 

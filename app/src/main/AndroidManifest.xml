@@ -18,6 +18,9 @@
             android:name=".BlackboardActivity"
             android:exported="false" />
         <activity
+            android:name=".Blackboard.NewAdvertisementActivity"
+            android:exported="false" />
+        <activity
             android:name=".Feedback.NewFeedbackActivity"
             android:exported="false" />
         <activity
