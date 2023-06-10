@@ -21,12 +21,12 @@ public class MealDailyPlanTest {
     @Test
     public void testCreateMealPlan() throws JSONException {
         MealDailyPlan plan= new MealDailyPlan(inputFromApi);
-        assertThat(plan.getMeal()[0].getName(), is("Reine Kalbsbratwurst mit Currysauce und Baguette"));
-        assertThat(plan.getMeal()[0].getCategory(), is("Wahlessen 1"));
-        assertThat(plan.getMeal()[0].getPrice(), is("2.00"));
-        assertThat(plan.getMeal()[0].getNotes().size(), is(4));
-        assertThat(plan.getMeal()[0].getNotes().get(0), is("Sellerie"));
-        assertThat(plan.getMeal()[0].getNotes().get(1), is("Senf"));
+        assertThat(plan.getMeals()[0].getName(), is("Reine Kalbsbratwurst mit Currysauce und Baguette"));
+        assertThat(plan.getMeals()[0].getCategory(), is("Wahlessen 1"));
+        assertThat(plan.getMeals()[0].getPrice(), is("2.00"));
+        assertThat(plan.getMeals()[0].getNotes().size(), is(4));
+        assertThat(plan.getMeals()[0].getNotes().get(0), is("Sellerie"));
+        assertThat(plan.getMeals()[0].getNotes().get(1), is("Senf"));
 
     }
 

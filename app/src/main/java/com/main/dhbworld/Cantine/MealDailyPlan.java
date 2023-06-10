@@ -7,8 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MealDailyPlan {
-    private Meal[] meals;
-    List<Meal> mainCourses;
+    private final Meal[] meals;
+    private List<Meal> mainCourses;
 
     public MealDailyPlan(String inputFromApi) throws JSONException {
         //create JSONArray from input of OpennMensa
@@ -30,7 +30,7 @@ public class MealDailyPlan {
         findMainCourses();
     }
 
-    public Meal[] getMeal() { return meals; }
+    public Meal[] getMeals() { return meals; }
 
     public  void  findMainCourses() {
         mainCourses= new ArrayList<>();
@@ -38,24 +38,24 @@ public class MealDailyPlan {
         boolean basicMealTwo=true;
         boolean basicMealThree=true;
 
-        for (int i=0;i<getMeal().length; i++){
+        for (int i = 0; i< getMeals().length; i++){
             // "Künstliche Intelligenz" zur Erkennunung von Haupgerichten
-            if((getMeal()[i].getCategory().equals("Wahlessen 1")) && basicMealOne){
+            if((getMeals()[i].getCategory().equals("Wahlessen 1")) && basicMealOne){
                 basicMealOne=false;
-                mainCourses.add(getMeal()[i]);
-            }else if((getMeal()[i].getCategory().equals("Wahlessen 2")) && basicMealTwo){
+                mainCourses.add(getMeals()[i]);
+            }else if((getMeals()[i].getCategory().equals("Wahlessen 2")) && basicMealTwo){
                 basicMealTwo=false;
-                mainCourses.add(getMeal()[i]);
-            }else if((getMeal()[i].getCategory().equals("Wahlessen 3")) && basicMealThree  ){
+                mainCourses.add(getMeals()[i]);
+            }else if((getMeals()[i].getCategory().equals("Wahlessen 3")) && basicMealThree  ){
                 try {
-                    double price= Double.parseDouble(getMeal()[i].getPrice());
+                    double price= Double.parseDouble(getMeals()[i].getPrice());
                     if (price>1.80){
                         basicMealThree=false;
-                        mainCourses.add(getMeal()[i]);
+                        mainCourses.add(getMeals()[i]);
                     }
                 } catch (NumberFormatException e) {
                     e.printStackTrace();
-                    mainCourses.add(getMeal()[i]);
+                    mainCourses.add(getMeals()[i]);
                     basicMealThree=false;
                 } }}
     }
