@@ -2,11 +2,14 @@ package com.main.dhbworld.Blackboard;
 
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.preference.PreferenceManager;
+
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -16,6 +19,9 @@ import com.main.dhbworld.BlackboardActivity;
 import com.main.dhbworld.R;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.temporal.ChronoField;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -70,6 +76,7 @@ public class NewAdvertisementActivity extends AppCompatActivity {
     }
 
     private void loadDateInFirebase() {
+        updatePostingCount();
         String[] inputData = getInputData();
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         Map<String, Object> advertisement = new HashMap<>();
@@ -82,8 +89,33 @@ public class NewAdvertisementActivity extends AppCompatActivity {
 
         db.collection("Blackboard").add(advertisement);
 
-        Intent intent = new Intent(NewAdvertisementActivity.this, BlackboardActivity.class);
-        startActivity(intent);
+        // Wenn du die Activity beenden willst, nimm einfach "finish();" anstatt die vorherige Activity erneut zu starten
+
+        //Intent intent = new Intent(NewAdvertisementActivity.this, BlackboardActivity.class);
+        //startActivity(intent);
+        finish();
+    }
+
+    public void updatePostingCount() {
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor editor = sharedPrefs.edit();
+
+        long lastPostDate = sharedPrefs.getLong("blackboard_date_last_post", 0);
+        int postCount = sharedPrefs.getInt("blackboard_total_posted", 0);
+
+        Instant lastPost = Instant.ofEpochMilli(lastPostDate);
+        if (lastPostDate == 0 || lastPost.atZone(ZoneId.systemDefault()).getDayOfYear() != Instant.now().atZone(ZoneId.systemDefault()).getDayOfYear()) {
+            lastPostDate = Instant.now().toEpochMilli();
+            postCount = 1;
+        } else {
+            if (postCount < 3) {
+                postCount++;
+            }
+        }
+
+        editor.putLong("blackboard_date_last_post", lastPostDate);
+        editor.putInt("blackboard_total_posted", postCount);
+        editor.apply();
     }
 
 

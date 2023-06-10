@@ -333,4 +333,5 @@ E-Mail-Adresse: <p><a href="mailto:zaeske.christian@gmail.com">zaeske.christian@
     <string name="github" translatable="false">GitHub</string>
     <string name="nothing_to_see_here_yet">Nothing to see here yet</string>
     <string name="blackboard">Blackboard</string>
+    <string name="maximum_posts_blackboard">You can only create a maximum of 3 posts per day</string>
 </resources>

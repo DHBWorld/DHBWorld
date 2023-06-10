@@ -328,4 +328,5 @@ E-Mail-Adresse: <p><a href="mailto:zaeske.christian@gmail.com">zaeske.christian@
     <string name="something_went_wrong">Etwas ist schiefgelaufen</string>
     <string name="nothing_to_see_here_yet">Hier ist noch nichts zu sehen</string>
     <string name="blackboard">Schwarzes Brett</string>
+    <string name="maximum_posts_blackboard">Du kannst nur maximal 3 Posts am Tag erstellen</string>
 </resources>
