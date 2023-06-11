@@ -1,4 +1,4 @@
-package com.main.dhbworld.Dualis;
+package com.main.dhbworld.Dualis.view.tabs.semester;
 
 import android.content.Context;
 import android.content.res.Resources;

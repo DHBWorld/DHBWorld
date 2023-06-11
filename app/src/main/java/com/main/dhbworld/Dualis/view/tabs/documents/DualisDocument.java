@@ -1,4 +1,4 @@
-package com.main.dhbworld.Dualis;
+package com.main.dhbworld.Dualis.view.tabs.documents;
 
 public class DualisDocument {
    private final String name;

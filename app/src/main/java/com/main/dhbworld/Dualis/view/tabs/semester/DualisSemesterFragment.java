@@ -1,6 +1,5 @@
-package com.main.dhbworld.Dualis;
+package com.main.dhbworld.Dualis.view.tabs.semester;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,10 +14,10 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.android.volley.VolleyError;
 import com.google.android.material.progressindicator.CircularProgressIndicator;
 import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
+import com.main.dhbworld.Dualis.parser.DualisAPI;
 import com.main.dhbworld.R;
 
 import org.json.JSONArray;
@@ -33,7 +32,7 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DualisSemesterFragment extends Fragment implements DualisAPI.CourseDataLoadedListener, DualisAPI.CourseErrorListener {
+public class DualisSemesterFragment extends Fragment implements DualisAPI.CourseDataListener {
 
     private final String arguments;
     private final List<HttpCookie> cookies;
@@ -74,9 +73,9 @@ public class DualisSemesterFragment extends Fragment implements DualisAPI.Course
         mainProgressIndicator = mainView.findViewById(R.id.progress_main);
         mainLayout = mainView.findViewById(R.id.main_layout);
 
-        dualisAPI = new DualisAPI();
-        dualisAPI.setOnCourseDataLoadedListener(this);
-        dualisAPI.setOnCourseErrorListener(this);
+        cookieHandler = CookieManager.getDefault();
+
+        dualisAPI = new DualisAPI(getContext(), arguments, cookieHandler);
 
         if (cookies.size() == 0) {
             if (getActivity() != null) {
@@ -91,15 +90,15 @@ public class DualisSemesterFragment extends Fragment implements DualisAPI.Course
         } catch (URISyntaxException e) {
             e.printStackTrace();
         }
-        cookieHandler = CookieManager.getDefault();
 
-        makeCourseRequest(getContext(), arguments);
+
+        makeCourseRequest();
     }
 
-    static void makeCourseRequest(Context context, String arguments) {
+    public void makeCourseRequest() {
         mainLayout.setVisibility(View.INVISIBLE);
         mainProgressIndicator.setVisibility(View.VISIBLE);
-        dualisAPI.makeClassRequest(context, arguments, cookieHandler);
+        dualisAPI.requestClass(this);
     }
 
     @Nullable
@@ -110,14 +109,14 @@ public class DualisSemesterFragment extends Fragment implements DualisAPI.Course
 
     @Override
     public void onCourseDataLoaded(JSONObject data) {
-        DualisAPI.copareAndSave(getContext(), data);
         ArrayList<String> items = new ArrayList<>();
         try {
+            DualisAPI.compareAndSave(getContext(), data);
             for (int i=0; i<data.getJSONArray("semester").length(); i++) {
                 JSONObject semester = data.getJSONArray("semester").getJSONObject(i);
                 items.add(semester.getString("name"));
             }
-        } catch (JSONException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -167,7 +166,7 @@ public class DualisSemesterFragment extends Fragment implements DualisAPI.Course
     }
 
     @Override
-    public void onCourseError(VolleyError error) {
+    public void onError(Exception error) {
         Snackbar.make(DualisSemesterFragment.this.getActivity().findViewById(android.R.id.content), getString(R.string.error_with_message, error.toString()), BaseTransientBottomBar.LENGTH_LONG).show();
     }
 

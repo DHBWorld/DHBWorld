@@ -1,4 +1,4 @@
-package com.main.dhbworld.Dualis;
+package com.main.dhbworld.Dualis.service;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;

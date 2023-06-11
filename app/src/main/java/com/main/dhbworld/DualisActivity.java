@@ -11,7 +11,6 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.provider.Settings;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
@@ -31,8 +30,8 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.main.dhbworld.Debugging.Debugging;
-import com.main.dhbworld.Dualis.DualisAPI;
-import com.main.dhbworld.Dualis.LoggedInView;
+import com.main.dhbworld.Dualis.parser.DualisNotification;
+import com.main.dhbworld.Dualis.view.LoggedInView;
 import com.main.dhbworld.Dualis.SecureStore;
 import com.main.dhbworld.Navigation.NavigationUtilities;
 
@@ -97,8 +96,8 @@ public class DualisActivity extends AppCompatActivity {
 
         NavigationUtilities.setUpNavigation(this, R.id.dualis);
 
-        DualisAPI.createNotificationChannelGeneral(this);
-        DualisAPI.createNotificationChannelNewGrade(this);
+        DualisNotification.createNotificationChannelGeneral(this);
+        DualisNotification.createNotificationChannelNewGrade(this);
 
         sharedPreferences = getSharedPreferences("Dualis", MODE_PRIVATE);
         editor = sharedPreferences.edit();

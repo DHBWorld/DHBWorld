@@ -1,4 +1,4 @@
-package com.main.dhbworld.Dualis;
+package com.main.dhbworld.Dualis.view;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,6 +18,7 @@ public class LoggedInView {
     private final AppCompatActivity activity;
     private final String arguments;
     private final List<HttpCookie> cookies;
+    private DualisFragmentAdapter dualisFragmentAdapter;
 
     public LoggedInView(AppCompatActivity activity, String arguments, List<HttpCookie> cookies) {
         this.activity = activity;
@@ -32,7 +33,7 @@ public class LoggedInView {
         TabLayout tabLayout = activity.findViewById(R.id.dualisTabLayout);
 
         ViewPager2 viewPager2 = activity.findViewById(R.id.dualisViewPager);
-        DualisFragmentAdapter dualisFragmentAdapter = new DualisFragmentAdapter(activity, arguments, cookies);
+        dualisFragmentAdapter = new DualisFragmentAdapter(activity, arguments, cookies);
         viewPager2.setAdapter(dualisFragmentAdapter);
         viewPager2.setOffscreenPageLimit(2);
 
@@ -58,11 +59,11 @@ public class LoggedInView {
         toolbar.setOnMenuItemClickListener(item -> {
             if (item.getItemId() == R.id.dualis_refresh) {
                 if (tabLayout.getSelectedTabPosition() == 0) {
-                    DualisOverallFragment.makeOverallRequest(activity, arguments);
-                } else if (tabLayout.getSelectedTabPosition() == 1){
-                    DualisSemesterFragment.makeCourseRequest(activity, arguments);
+                    dualisFragmentAdapter.dualisOverallFragment.makeOverallRequest();
+                } else if (tabLayout.getSelectedTabPosition() == 1) {
+                    dualisFragmentAdapter.dualisSemesterFragment.makeCourseRequest();
                 } else {
-                    DualisDocumentFragment.makeDocumentsRequest(activity, arguments);
+                    dualisFragmentAdapter.dualisDocumentFragment.makeDocumentsRequest();
                 }
 
                 return true;

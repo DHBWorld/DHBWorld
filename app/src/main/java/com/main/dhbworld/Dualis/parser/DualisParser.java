@@ -1,4 +1,4 @@
-package com.main.dhbworld.Dualis;
+package com.main.dhbworld.Dualis.parser;
 
 import android.content.Context;
 
@@ -22,7 +22,7 @@ import java.util.regex.Pattern;
 
 public class DualisParser {
 
-    static Document parseResponse(String response) {
+    public static Document parseResponse(String response) {
         response = new String(response.getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
         return Jsoup.parse(response);
     }

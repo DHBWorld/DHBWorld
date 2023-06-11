@@ -1,4 +1,4 @@
-package com.main.dhbworld.Dualis;
+package com.main.dhbworld.Dualis.view.tabs.documents;
 
 import android.content.Context;
 import android.content.Intent;

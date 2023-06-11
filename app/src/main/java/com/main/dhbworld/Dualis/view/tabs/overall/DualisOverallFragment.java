@@ -1,6 +1,5 @@
-package com.main.dhbworld.Dualis;
+package com.main.dhbworld.Dualis.view.tabs.overall;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,10 +14,10 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.android.volley.VolleyError;
 import com.google.android.material.progressindicator.CircularProgressIndicator;
 import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
+import com.main.dhbworld.Dualis.parser.DualisAPI;
 import com.main.dhbworld.R;
 
 import org.json.JSONArray;
@@ -33,7 +32,7 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DualisOverallFragment extends Fragment implements DualisAPI.OverallDataLoadedListener, DualisAPI.OverallErrorListener {
+public class DualisOverallFragment extends Fragment implements DualisAPI.OverallDataListener {
 
     private final String arguments;
     private final List<HttpCookie> cookies;
@@ -80,9 +79,9 @@ public class DualisOverallFragment extends Fragment implements DualisAPI.Overall
         majorGPATextView = mainView.findViewById(R.id.major_gpa_tv);
         totalCreditsTextView = mainView.findViewById(R.id.total_credits_tv);
 
-        dualisAPI = new DualisAPI();
-        dualisAPI.setOnOverallDataLoadedListener(this);
-        dualisAPI.setOnOverallErrorListener(this);
+        cookieHandler = CookieManager.getDefault();
+
+        dualisAPI = new DualisAPI(getContext(), arguments, cookieHandler);
 
         if (cookies.size() == 0) {
             if (getActivity() != null) {
@@ -97,15 +96,15 @@ public class DualisOverallFragment extends Fragment implements DualisAPI.Overall
         } catch (URISyntaxException e) {
             e.printStackTrace();
         }
-        cookieHandler = CookieManager.getDefault();
 
-        makeOverallRequest(getContext(), arguments);
+
+        makeOverallRequest();
 
     }
 
-    static void makeOverallRequest(Context context, String arguments) {
+    public void makeOverallRequest() {
         hideLayout();
-        dualisAPI.makeOverallRequest(context, arguments, cookieHandler);
+        dualisAPI.requestOverall(this);
     }
 
     @Nullable
@@ -114,12 +113,12 @@ public class DualisOverallFragment extends Fragment implements DualisAPI.Overall
         return inflater.inflate(R.layout.dualis_overall_view, container, false);
     }
 
-    private static void showLayout() {
+    private void showLayout() {
         mainLayout.setVisibility(View.VISIBLE);
         mainProgressIndicator.setVisibility(View.GONE);
     }
 
-    private static void hideLayout() {
+    private void hideLayout() {
         mainLayout.setVisibility(View.INVISIBLE);
         mainProgressIndicator.setVisibility(View.VISIBLE);
     }
@@ -174,7 +173,7 @@ public class DualisOverallFragment extends Fragment implements DualisAPI.Overall
     }
 
     @Override
-    public void onOverallError(VolleyError error) {
+    public void onError(Exception error) {
         Snackbar.make(DualisOverallFragment.this.getActivity().findViewById(android.R.id.content), getString(R.string.error_with_message, error.toString()), BaseTransientBottomBar.LENGTH_LONG).show();
     }
 }

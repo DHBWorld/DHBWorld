@@ -32,7 +32,7 @@
             android:exported="false" />
 
         <receiver
-            android:name=".Dualis.AReceiver"
+            android:name=".Dualis.service.AReceiver"
             android:enabled="true"
             android:exported="false">
             <intent-filter>
@@ -104,7 +104,7 @@
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
-        <service android:name=".Dualis.EverlastingService"></service>
+        <service android:name=".Dualis.service.EverlastingService"></service>
     </application>
 
 </manifest>

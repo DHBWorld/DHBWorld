@@ -1,4 +1,4 @@
-package com.main.dhbworld.Dualis;
+package com.main.dhbworld.Dualis.service;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -10,15 +10,17 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
 
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
-import androidx.work.ListenableWorker;
 
+import com.main.dhbworld.Dualis.SecureStore;
+import com.main.dhbworld.Dualis.parser.DualisAPI;
 import com.main.dhbworld.DualisActivity;
 import com.main.dhbworld.R;
+
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.OutputStreamWriter;
@@ -34,18 +36,18 @@ import java.util.concurrent.Executors;
 
 import javax.net.ssl.HttpsURLConnection;
 
-class BackgroundTask {
+public class BackgroundTask {
 
     private Context context;
 
     private String username = "";
     private String password = "";
 
-    protected BackgroundTask(Context context) {
+    public BackgroundTask(Context context) {
         this.context = context;
     }
 
-    protected void doWork() {
+    public void doWork() {
         SharedPreferences sharedPref = context.getSharedPreferences("Dualis", MODE_PRIVATE);
 
         if (!sharedPref.getBoolean("saveCredentials", false)) {
@@ -117,9 +119,22 @@ class BackgroundTask {
                             String arguments = conn.getHeaderField("REFRESH");
                             arguments = arguments.split("&")[2];
 
-                            DualisAPI dualisAPI = new DualisAPI();
-                            dualisAPI.setOnCourseDataLoadedListener(data -> DualisAPI.copareAndSave(context, data));
-                            dualisAPI.makeClassRequest(context, arguments, cookieHandler);
+                            DualisAPI dualisAPI = new DualisAPI(context, arguments, cookieHandler);
+                            dualisAPI.requestClass(new DualisAPI.CourseDataListener() {
+                                @Override
+                                public void onCourseDataLoaded(JSONObject data) {
+                                    try {
+                                        DualisAPI.compareAndSave(context, data);
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+
+                                @Override
+                                public void onError(Exception e) {
+
+                                }
+                            });
 
                         }
                     }

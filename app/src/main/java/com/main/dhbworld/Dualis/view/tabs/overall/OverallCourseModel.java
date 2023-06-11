@@ -1,4 +1,4 @@
-package com.main.dhbworld.Dualis;
+package com.main.dhbworld.Dualis.view.tabs.overall;
 
 class OverallCourseModel {
    private final String moduleID;

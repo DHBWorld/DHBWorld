@@ -41,7 +41,7 @@ import com.main.dhbworld.Dashboard.DataLoaders.DataLoaderPersonalInfo;
 import com.main.dhbworld.Dashboard.DataLoaders.DataLoaderUserInt;
 import com.main.dhbworld.Dashboard.DataLoaders.DataLoaderWeather;
 import com.main.dhbworld.Debugging.Debugging;
-import com.main.dhbworld.Dualis.EverlastingService;
+import com.main.dhbworld.Dualis.service.EverlastingService;
 import com.main.dhbworld.Navigation.NavigationUtilities;
 
 import java.util.Locale;

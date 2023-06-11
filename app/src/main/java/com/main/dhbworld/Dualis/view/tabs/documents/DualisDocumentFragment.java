@@ -1,6 +1,5 @@
-package com.main.dhbworld.Dualis;
+package com.main.dhbworld.Dualis.view.tabs.documents;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,10 +13,10 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.android.volley.VolleyError;
 import com.google.android.material.progressindicator.CircularProgressIndicator;
 import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
+import com.main.dhbworld.Dualis.parser.DualisAPI;
 import com.main.dhbworld.R;
 
 import org.json.JSONArray;
@@ -32,7 +31,7 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DualisDocumentFragment extends Fragment implements DualisAPI.DocumentsLoadedListener, DualisAPI.DocumentsErrorListener {
+public class DualisDocumentFragment extends Fragment implements DualisAPI.DocumentsListener {
 
     private final String arguments;
     private final List<HttpCookie> cookies;
@@ -72,9 +71,8 @@ public class DualisDocumentFragment extends Fragment implements DualisAPI.Docume
         documentsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
         documentsRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
 
-        dualisAPI = new DualisAPI();
-        dualisAPI.setDocumentsLoadedListener(this);
-        dualisAPI.setDocumentsErrorListener(this);
+        cookieHandler = CookieManager.getDefault();
+        dualisAPI = new DualisAPI(getContext(), arguments, cookieHandler);
 
         if (cookies.size() == 0) {
             if (getActivity() != null) {
@@ -89,22 +87,22 @@ public class DualisDocumentFragment extends Fragment implements DualisAPI.Docume
         } catch (URISyntaxException e) {
             e.printStackTrace();
         }
-        cookieHandler = CookieManager.getDefault();
 
-        dualisAPI.makeDocumentsRequest(getContext(), arguments, cookieHandler);
+
+        dualisAPI.requestDocuments(this);
     }
 
-    static void makeDocumentsRequest(Context context, String arguments) {
+    public void makeDocumentsRequest() {
         hideLayout();
-        dualisAPI.makeDocumentsRequest(context, arguments, cookieHandler);
+        dualisAPI.requestDocuments(this);
     }
 
-    private static void showLayout() {
+    private void showLayout() {
         mainLayout.setVisibility(View.VISIBLE);
         mainProgressIndicator.setVisibility(View.GONE);
     }
 
-    private static void hideLayout() {
+    private void hideLayout() {
         mainLayout.setVisibility(View.INVISIBLE);
         mainProgressIndicator.setVisibility(View.VISIBLE);
     }
@@ -141,7 +139,7 @@ public class DualisDocumentFragment extends Fragment implements DualisAPI.Docume
     }
 
     @Override
-    public void onDocumentsError(VolleyError error) {
+    public void onError(Exception error) {
         Snackbar.make(DualisDocumentFragment.this.getActivity().findViewById(android.R.id.content), getString(R.string.error_with_message, error.toString()), BaseTransientBottomBar.LENGTH_LONG).show();
     }
 }
