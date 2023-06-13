@@ -30,7 +30,7 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.main.dhbworld.Debugging.Debugging;
-import com.main.dhbworld.Dualis.parser.DualisNotification;
+import com.main.dhbworld.Dualis.parser.api.DualisNotification;
 import com.main.dhbworld.Dualis.view.LoggedInView;
 import com.main.dhbworld.Dualis.SecureStore;
 import com.main.dhbworld.Navigation.NavigationUtilities;

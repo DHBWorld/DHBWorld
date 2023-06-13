@@ -17,12 +17,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.progressindicator.CircularProgressIndicator;
 import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
-import com.main.dhbworld.Dualis.parser.DualisAPI;
+import com.main.dhbworld.Dualis.parser.api.DualisAPI;
+import com.main.dhbworld.Dualis.parser.htmlparser.semesters.course.DualisSemesterCourse;
+import com.main.dhbworld.Dualis.parser.htmlparser.semesters.semester.DualisSemester;
 import com.main.dhbworld.R;
 
-import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.net.CookieHandler;
 import java.net.CookieManager;
@@ -32,14 +32,14 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DualisSemesterFragment extends Fragment implements DualisAPI.CourseDataListener {
+public class DualisSemesterFragment extends Fragment implements DualisAPI.SemesterDataListener {
 
     private final String arguments;
     private final List<HttpCookie> cookies;
 
     private AutoCompleteTextView semesterDropdown;
     private String currentSemester = "";
-    private List<VorlesungModel> vorlesungModels = new ArrayList<>();
+    private List<DualisSemesterCourse> vorlesungModels = new ArrayList<>();
     private VorlesungAdapter vorlesungAdapter;
     private static CircularProgressIndicator mainProgressIndicator;
     private static LinearLayout mainLayout;
@@ -98,7 +98,7 @@ public class DualisSemesterFragment extends Fragment implements DualisAPI.Course
     public void makeCourseRequest() {
         mainLayout.setVisibility(View.INVISIBLE);
         mainProgressIndicator.setVisibility(View.VISIBLE);
-        dualisAPI.requestClass(this);
+        dualisAPI.requestSemesters(this);
     }
 
     @Nullable
@@ -108,34 +108,30 @@ public class DualisSemesterFragment extends Fragment implements DualisAPI.Course
     }
 
     @Override
-    public void onCourseDataLoaded(JSONObject data) {
-        ArrayList<String> items = new ArrayList<>();
-        try {
-            DualisAPI.compareAndSave(getContext(), data);
-            for (int i=0; i<data.getJSONArray("semester").length(); i++) {
-                JSONObject semester = data.getJSONArray("semester").getJSONObject(i);
-                items.add(semester.getString("name"));
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+    public void onSemesterDataLoaded(ArrayList<DualisSemester> dualisSemesters) {
+        DualisAPI.compareSaveNotification(getContext(), dualisSemesters);
+
+        ArrayList<String> semesters = new ArrayList<>();
+        for (DualisSemester dualisSemester : dualisSemesters) {
+            semesters.add(dualisSemester.getName());
         }
 
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(getContext(), R.layout.dropdown_list_item, items);
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(getContext(), R.layout.dropdown_list_item, semesters);
         semesterDropdown.setAdapter(arrayAdapter);
-        if (items.contains(currentSemester)) {
+        if (semesters.contains(currentSemester)) {
             semesterDropdown.setText(currentSemester, false);
         } else {
-            semesterDropdown.setText(items.get(0), false);
+            semesterDropdown.setText(semesters.get(0), false);
         }
 
 
         vorlesungModels = new ArrayList<>();
         RecyclerView mRecyclerView = mainView.findViewById(R.id.recycler_view);
         try {
-            if (items.contains(currentSemester)) {
-                updateList(data, items.indexOf(currentSemester));
+            if (semesters.contains(currentSemester)) {
+                updateList(dualisSemesters.get(semesters.indexOf(currentSemester)).getDualisSemesterCourses());
             } else {
-                updateList(data, 0);
+                updateList(dualisSemesters.get(0).getDualisSemesterCourses());
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -152,7 +148,7 @@ public class DualisSemesterFragment extends Fragment implements DualisAPI.Course
         semesterDropdown.setOnItemClickListener((adapterView, view, i, l) -> {
             currentSemester = semesterDropdown.getText().toString();
             try {
-                updateList(data, i);
+                updateList(dualisSemesters.get(i).getDualisSemesterCourses());
                 vorlesungAdapter.notifyDataSetChanged();
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -170,15 +166,8 @@ public class DualisSemesterFragment extends Fragment implements DualisAPI.Course
         Snackbar.make(DualisSemesterFragment.this.getActivity().findViewById(android.R.id.content), getString(R.string.error_with_message, error.toString()), BaseTransientBottomBar.LENGTH_LONG).show();
     }
 
-    void updateList(JSONObject data, int position) throws JSONException {
+    void updateList(ArrayList<DualisSemesterCourse> dualisSemesterCourses) throws JSONException {
         vorlesungModels.clear();
-        JSONArray vorlesungen = data.getJSONArray("semester").getJSONObject(position).getJSONArray("Vorlesungen");
-        for (int k = 0; k < vorlesungen.length(); k++) {
-            JSONObject vorlesung = vorlesungen.getJSONObject(k);
-            vorlesungModels.add(new VorlesungModel(vorlesung.getString("name"),
-                    vorlesung.getJSONArray("pruefungen"),
-                    vorlesung.getString("credits"),
-                    vorlesung.getString("note")));
-        }
+        vorlesungModels.addAll(dualisSemesterCourses);
     }
 }

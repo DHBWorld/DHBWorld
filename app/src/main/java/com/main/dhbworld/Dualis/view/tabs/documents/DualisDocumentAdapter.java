@@ -11,9 +11,13 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.main.dhbworld.Dualis.parser.htmlparser.documents.DualisDocument;
 import com.main.dhbworld.R;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 
 class DualisDocumentAdapter extends RecyclerView.Adapter<DualisDocumentAdapter.ViewHolder> implements View.OnClickListener {
 
@@ -36,7 +40,10 @@ class DualisDocumentAdapter extends RecyclerView.Adapter<DualisDocumentAdapter.V
    @Override
    public void onBindViewHolder(@NonNull DualisDocumentAdapter.ViewHolder holder, int position) {
       holder.textViewName.setText(documents.get(position).getName());
-      holder.textViewDate.setText(documents.get(position).getDate());
+      Date date = documents.get(position).getDate();
+      if (date != null) {
+         holder.textViewDate.setText(new SimpleDateFormat("dd.MM.yyy HH:mm", Locale.getDefault()).format(date));
+      }
       holder.textViewUrl.setText(documents.get(position).getUrl());
    }
 

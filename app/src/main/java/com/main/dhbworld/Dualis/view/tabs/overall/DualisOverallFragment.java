@@ -17,12 +17,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.progressindicator.CircularProgressIndicator;
 import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
-import com.main.dhbworld.Dualis.parser.DualisAPI;
+import com.main.dhbworld.Dualis.parser.api.DualisAPI;
+import com.main.dhbworld.Dualis.parser.htmlparser.gpa.DualisGPA;
+import com.main.dhbworld.Dualis.parser.htmlparser.overall.DualisOverallData;
 import com.main.dhbworld.R;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.net.CookieHandler;
 import java.net.CookieManager;
@@ -124,50 +122,17 @@ public class DualisOverallFragment extends Fragment implements DualisAPI.Overall
     }
 
     @Override
-    public void onOverallDataLoaded(JSONObject data) {
-        ArrayList<OverallCourseModel> overallCourseModels = new ArrayList<>();
-        String totalGPA = "";
-        String majorCourseGPA = "";
-        String totalSum = "";
-        String totalSumNeeded = "";
-        try {
-            totalGPA = data.getString("totalGPA");
-            majorCourseGPA = data.getString("majorCourseGPA");
-            totalSum = data.getString("totalSum");
-            totalSumNeeded = data.getString("totalSumNeeded");
+    public void onOverallDataLoaded(DualisGPA dualisGPA, DualisOverallData dualisOverallData) {
+        totalGPATextView.setText(dualisGPA.getTotalGPA());
+        majorGPATextView.setText(dualisGPA.getMajorCourseGPA());
+        totalCreditsTextView.setText(getResources().getString(R.string.values_credits, dualisOverallData.getEarnedCredits(), dualisOverallData.getNeededCredits()));
 
-            JSONArray coursesArray = data.getJSONArray("courses");
-            for (int i=0; i<coursesArray.length(); i++) {
-                JSONObject course = coursesArray.getJSONObject(i);
-
-                OverallCourseModel overallCourseModel = new OverallCourseModel(
-                        course.getString("moduleID"),
-                        course.getString("moduleName"),
-                        course.getString("credits"),
-                        course.getString("grade"),
-                        course.getBoolean("passed")
-                );
-
-                overallCourseModels.add(overallCourseModel);
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        //SpannableString totalGPASpannable = new SpannableString(totalGPA);
-        //totalGPASpannable.setSpan(new UnderlineSpan(), 0, totalGPA.length(), 0);
-        //totalGPASpannable.setSpan(new StyleSpan(Typeface.BOLD), 0, totalGPA.length(), 0);
-
-        totalGPATextView.setText(totalGPA);
-        majorGPATextView.setText(majorCourseGPA);
-        totalCreditsTextView.setText(getResources().getString(R.string.values_credits, totalSum, totalSumNeeded));
-
-        OverallCourseAdapter overallCourseAdapter = new OverallCourseAdapter(getContext(), overallCourseModels);
+        OverallCourseAdapter overallCourseAdapter = new OverallCourseAdapter(getContext(), dualisOverallData.getCourses());
         coursesRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
         coursesRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
 
         coursesRecyclerView.setAdapter(overallCourseAdapter);
-        overallCourseAdapter.notifyItemRangeInserted(0, overallCourseModels.size());
+        overallCourseAdapter.notifyItemRangeInserted(0, dualisOverallData.getCourses().size());
 
         showLayout();
     }

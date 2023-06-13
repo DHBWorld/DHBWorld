@@ -16,11 +16,10 @@ import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
 import com.main.dhbworld.Dualis.SecureStore;
-import com.main.dhbworld.Dualis.parser.DualisAPI;
+import com.main.dhbworld.Dualis.parser.api.DualisAPI;
+import com.main.dhbworld.Dualis.parser.htmlparser.semesters.semester.DualisSemester;
 import com.main.dhbworld.DualisActivity;
 import com.main.dhbworld.R;
-
-import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.OutputStreamWriter;
@@ -29,6 +28,7 @@ import java.net.HttpCookie;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
@@ -120,11 +120,11 @@ public class BackgroundTask {
                             arguments = arguments.split("&")[2];
 
                             DualisAPI dualisAPI = new DualisAPI(context, arguments, cookieHandler);
-                            dualisAPI.requestClass(new DualisAPI.CourseDataListener() {
+                            dualisAPI.requestSemesters(new DualisAPI.SemesterDataListener() {
                                 @Override
-                                public void onCourseDataLoaded(JSONObject data) {
+                                public void onSemesterDataLoaded(ArrayList<DualisSemester> dualisSemesters) {
                                     try {
-                                        DualisAPI.compareAndSave(context, data);
+                                        DualisAPI.compareSaveNotification(context, dualisSemesters);
                                     } catch (Exception e) {
                                         e.printStackTrace();
                                     }

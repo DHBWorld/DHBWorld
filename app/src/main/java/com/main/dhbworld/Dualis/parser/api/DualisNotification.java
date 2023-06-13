@@ -1,4 +1,4 @@
-package com.main.dhbworld.Dualis.parser;
+package com.main.dhbworld.Dualis.parser.api;
 
 import android.Manifest;
 import android.app.NotificationChannel;

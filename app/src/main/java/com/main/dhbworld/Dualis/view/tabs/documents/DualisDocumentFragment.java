@@ -16,12 +16,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.progressindicator.CircularProgressIndicator;
 import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
-import com.main.dhbworld.Dualis.parser.DualisAPI;
+import com.main.dhbworld.Dualis.parser.api.DualisAPI;
+import com.main.dhbworld.Dualis.parser.htmlparser.documents.DualisDocument;
 import com.main.dhbworld.R;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.net.CookieHandler;
 import java.net.CookieManager;
@@ -114,28 +111,11 @@ public class DualisDocumentFragment extends Fragment implements DualisAPI.Docume
     }
 
     @Override
-    public void onDocumentsLoaded(JSONObject jsonObject) {
-        ArrayList<DualisDocument> dualisDocuments = new ArrayList<>();
-        try {
-            JSONArray documentsArray = jsonObject.getJSONArray("documents");
-            for (int i=0; i<documentsArray.length(); i++) {
-                JSONObject documentObject = documentsArray.getJSONObject(i);
-
-                String name = documentObject.getString("name");
-                String date = documentObject.getString("date");
-                String url = documentObject.getString("url");
-
-                dualisDocuments.add(new DualisDocument(name, date, url));
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
+    public void onDocumentsLoaded(ArrayList<DualisDocument> dualisDocuments) {
         DualisDocumentAdapter adapter = new DualisDocumentAdapter(getContext(), dualisDocuments);
         documentsRecyclerView.setAdapter(adapter);
 
         showLayout();
-
     }
 
     @Override

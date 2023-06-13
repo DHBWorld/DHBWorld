@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.content.res.AppCompatResources;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.main.dhbworld.Dualis.parser.htmlparser.overall.DualisOverallCourse;
 import com.main.dhbworld.R;
 
 import java.util.ArrayList;
@@ -18,9 +19,9 @@ import java.util.ArrayList;
 class OverallCourseAdapter extends RecyclerView.Adapter<OverallCourseAdapter.ViewHolder> {
 
    private Context context;
-   private ArrayList<OverallCourseModel> overallCourseModels;
+   private ArrayList<DualisOverallCourse> overallCourseModels;
 
-   OverallCourseAdapter(Context context, ArrayList<OverallCourseModel> overallCourseModel) {
+   OverallCourseAdapter(Context context, ArrayList<DualisOverallCourse> overallCourseModel) {
       this.context = context;
       this.overallCourseModels = overallCourseModel;
    }
