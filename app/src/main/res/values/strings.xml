@@ -332,4 +332,6 @@ E-Mail-Adresse: <p><a href="mailto:zaeske.christian@gmail.com">zaeske.christian@
     <string name="something_went_wrong">Something went wrong</string>
     <string name="github" translatable="false">GitHub</string>
     <string name="nothing_to_see_here_yet">Nothing to see here yet</string>
+    <string name="disable_me">Disable me</string>
+    <string name="info_dualis_notification">You can disable this notification via your phone\'s settings. Click me and deactivate this notification. Don\'t worry you will still receive other notifications.</string>
 </resources>

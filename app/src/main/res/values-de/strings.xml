@@ -327,4 +327,6 @@ E-Mail-Adresse: <p><a href="mailto:zaeske.christian@gmail.com">zaeske.christian@
     <string name="new_activity_on_issue_body">Dein eingereichtes Feedback hat einen neuen Kommentar</string>
     <string name="something_went_wrong">Etwas ist schiefgelaufen</string>
     <string name="nothing_to_see_here_yet">Hier ist noch nichts zu sehen</string>
+    <string name="disable_me">Deaktiviere mich</string>
+    <string name="info_dualis_notification">Du kannst diese Benachrichtigung über die Einstellungen deines Handys deaktivieren. Klick auf mich und deaktiviere diese Benachrichtung. Keine Angst, du bekommst weiterhin alle anderen Benachrichtigungen.</string>
 </resources>

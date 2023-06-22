@@ -80,7 +80,7 @@ public class DashboardActivity extends AppCompatActivity {
         System.out.println("Running: " + EverlastingService.isRunning);
 
         if (!EverlastingService.isRunning) {
-            startService(new Intent(this, EverlastingService.class));
+            startForegroundService(new Intent(this, EverlastingService.class));
         }
 
         SharedPreferences defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);

@@ -104,7 +104,10 @@
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
-        <service android:name=".Dualis.service.EverlastingService"></service>
+        <service
+            android:name=".Dualis.service.EverlastingService"
+            android:foregroundServiceType="dataSync"
+            android:process=":dualisService" />
     </application>
 
 </manifest>

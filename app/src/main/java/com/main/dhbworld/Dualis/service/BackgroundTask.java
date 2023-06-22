@@ -2,26 +2,19 @@ package com.main.dhbworld.Dualis.service;
 
 import static android.content.Context.MODE_PRIVATE;
 
-import android.Manifest;
-import android.app.PendingIntent;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.os.Handler;
 import android.os.Looper;
-
-import androidx.core.app.ActivityCompat;
-import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
+import android.util.Log;
 
 import com.main.dhbworld.Dualis.SecureStore;
 import com.main.dhbworld.Dualis.parser.api.DualisAPI;
 import com.main.dhbworld.Dualis.parser.htmlparser.semesters.semester.DualisSemester;
-import com.main.dhbworld.DualisActivity;
-import com.main.dhbworld.R;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.CookieHandler;
 import java.net.HttpCookie;
@@ -33,6 +26,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.stream.Collectors;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -92,29 +86,14 @@ public class BackgroundTask {
 
                     int status = conn.getResponseCode();
 
+                    BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                    String response = in.lines().collect(Collectors.joining());
+                    in.close();
+
                     if (status == HttpURLConnection.HTTP_OK) {
                         List<HttpCookie> cookies = cookieManager.getCookieStore().getCookies();
                         if (cookies.size() == 0) {
-                            handler.post(() -> {
-                                NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "4321")
-                                        .setSmallIcon(R.drawable.ic_baseline_school_24)
-                                        .setContentTitle(context.getResources().getString(R.string.authentication_expired))
-                                        .setContentText(context.getResources().getString(R.string.authentication_expired_expl))
-                                        .setStyle(new NotificationCompat.BigTextStyle().bigText(context.getResources().getString(R.string.authentication_expired_expl)))
-                                        .setPriority(NotificationCompat.PRIORITY_DEFAULT);
-
-                                Intent notificationIntent = new Intent(context, DualisActivity.class);
-                                notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
-                                        | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                                PendingIntent intent = PendingIntent.getActivity(context, 0,
-                                        notificationIntent, PendingIntent.FLAG_IMMUTABLE);
-                                builder.setContentIntent(intent);
-
-                                NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
-                                if (ActivityCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED) {
-                                    notificationManager.notify(55, builder.build());
-                                }
-                            });
+                            Log.d("DUALIS", response);
                         } else {
                             String arguments = conn.getHeaderField("REFRESH");
                             arguments = arguments.split("&")[2];
@@ -125,6 +104,9 @@ public class BackgroundTask {
                                 public void onSemesterDataLoaded(ArrayList<DualisSemester> dualisSemesters) {
                                     try {
                                         DualisAPI.compareSaveNotification(context, dualisSemesters);
+                                        SharedPreferences.Editor editor = sharedPref.edit();
+                                        editor.putLong("last_dualis_request", System.currentTimeMillis());
+                                        editor.apply();
                                     } catch (Exception e) {
                                         e.printStackTrace();
                                     }

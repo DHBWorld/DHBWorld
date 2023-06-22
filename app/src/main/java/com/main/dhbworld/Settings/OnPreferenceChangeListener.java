@@ -84,7 +84,7 @@ public class OnPreferenceChangeListener {
     public boolean sync(Object newValue) {
         showNoImpactSnackbar();
         if ((boolean) newValue) {
-            context.startService(new Intent(context, EverlastingService.class));
+            context.startForegroundService(new Intent(context, EverlastingService.class));
         }
         return true;
     }
