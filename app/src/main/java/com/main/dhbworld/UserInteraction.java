@@ -29,6 +29,7 @@ import com.main.dhbworld.Firebase.Utilities;
 import com.main.dhbworld.Fragments.DialogCofirmationUserInteraction;
 import com.main.dhbworld.Navigation.NavigationUtilities;
 import com.main.dhbworld.Services.UserInteractionMessagingService;
+import com.main.dhbworld.UserInter.UserIntUtilities;
 
 import java.util.ArrayList;
 import java.util.Locale;
@@ -116,28 +117,19 @@ public class UserInteraction extends AppCompatActivity {
                 Snackbar.make(UserInteraction.this.findViewById(android.R.id.content), getString(R.string.error), BaseTransientBottomBar.LENGTH_LONG).show();
             }
         });
-        firebaseUtilities.setCurrentStatusListener(new CurrentStatusListener() {
-            @Override
-            public void onStatusReceived(String category, int status) {
-                Resources res = getResources();
-                switch (category) {
-                    case Utilities.CATEGORY_CAFETERIA:
-                        System.out.println("STATUS: " + status);
-                        stateCanteen = InteractionState.parseId(status);
-                        stateCanteenTV.setText(getResources().getString(R.string.state, stateCanteen.getText(UserInteraction.this)));
-                        imageBox_canteen.setBackgroundColor(res.getColor(stateCanteen.getColor()));
-                        break;
-                    case Utilities.CATEGORY_COFFEE:
-                        stateCoffee = InteractionState.parseId(status);
-                        stateCoffeeTV.setText(getResources().getString(R.string.state, stateCoffee.getText(UserInteraction.this)));
-                        imageBox_coffee.setBackgroundColor(res.getColor(stateCoffee.getColor()));
-                        break;
-                    case Utilities.CATEGORY_PRINTER:
-                        statePrinter = InteractionState.parseId(status);
-                        statePrinterTV.setText(getResources().getString(R.string.state, statePrinter.getText(UserInteraction.this)));
-                        imageBox_printer.setBackgroundColor(res.getColor(statePrinter.getColor()));
-                        break;
-                }
+        firebaseUtilities.setCurrentStatusListener((category, status) -> {
+            switch (category) {
+                case Utilities.CATEGORY_CAFETERIA:
+
+                    System.out.println("STATUS: " + status);
+                    UserIntUtilities.changeStatus(stateCanteen,  stateCanteenTV,  imageBox_canteen,status, UserInteraction.this );
+                    break;
+                case Utilities.CATEGORY_COFFEE:
+                    UserIntUtilities.changeStatus(stateCoffee,  stateCoffeeTV,  imageBox_coffee,  status, UserInteraction.this);
+                    break;
+                case Utilities.CATEGORY_PRINTER:
+                    UserIntUtilities.changeStatus(statePrinter,  statePrinterTV,  imageBox_printer,  status, UserInteraction.this);
+                    break;
             }
         });
 
@@ -362,54 +354,6 @@ public class UserInteraction extends AppCompatActivity {
             firebaseUtilities.getCurrentStatus(categories[i]);
             firebaseUtilities.getReportCount(categories[i]);
         }
-    }
-
-    public InteractionState getStateCanteen() {
-        return stateCanteen;
-    }
-
-    public void setStateCanteen(InteractionState stateCanteen) {
-        this.stateCanteen = stateCanteen;
-    }
-
-    public InteractionState getStateCoffee() {
-        return stateCoffee;
-    }
-
-    public void setStateCoffee(InteractionState stateCoffee) {
-        this.stateCoffee = stateCoffee;
-    }
-
-    public static InteractionState getStatePrinter() {
-        return statePrinter;
-    }
-
-    public void setStatePrinter(InteractionState statePrinter) {
-        this.statePrinter = statePrinter;
-    }
-
-    public long getNotificationCanteen() {
-        return notificationCanteen;
-    }
-
-    public void setNotificationCanteen(long notificationCanteen) {
-        this.notificationCanteen = notificationCanteen;
-    }
-
-    public long getNotificationCoffee() {
-        return notificationCoffee;
-    }
-
-    public void setNotificationCoffee(long notificationCoffee) {
-        this.notificationCoffee = notificationCoffee;
-    }
-
-    public long getNotificationPrinter() {
-        return notificationPrinter;
-    }
-
-    public void setNotificationPrinter(long notificationPrinter) {
-        this.notificationPrinter = notificationPrinter;
     }
 
 
