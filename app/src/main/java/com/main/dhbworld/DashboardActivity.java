@@ -7,7 +7,6 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
@@ -27,6 +26,7 @@ import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
+import com.main.dhbworld.Utilities.RefreshCounter;
 import com.main.dhbworld.Dashboard.Cards.CardType;
 import com.main.dhbworld.Dashboard.Cards.DashboardCard;
 import com.main.dhbworld.Dashboard.Cards.DashboardCardInfo;
@@ -43,6 +43,7 @@ import com.main.dhbworld.Dashboard.DataLoaders.DataLoaderWeather;
 import com.main.dhbworld.Debugging.Debugging;
 import com.main.dhbworld.Dualis.EverlastingService;
 import com.main.dhbworld.Navigation.NavigationUtilities;
+import com.main.dhbworld.Dashboard.DashboardRefresh;
 
 import java.util.Locale;
 
@@ -58,7 +59,6 @@ public class DashboardActivity extends AppCompatActivity {
 
     public static final String MyPREFERENCES = "myPreferencesKey";
 
-    private Boolean refreshIsEnable = true;
 
     private MaterialCardView card_dash_calendar;
     private MaterialCardView card_dash_pi;
@@ -168,23 +168,16 @@ public class DashboardActivity extends AppCompatActivity {
 
         LinearLayout forecastLayout = findViewById(R.id.weather_forecast);
 
-        DashboardCard dashboardCardMealPlan = new DashboardCard(CardType.CARD_MEAL_PLAN, layoutCardMealPlan, card_dash_mealPlan, boxCardMealPlan, card_dash_mealPlan_layout);
-        DashboardCard dashboardCarCalender = new DashboardCard(CardType.CARD_CALENDAR, layoutCardCalendar, card_dash_calendar, boxCardCalendar, card_dash_calendar_layout);
-        DashboardCard dashboardKvv = new DashboardCard(CardType.CARD_KVV, layoutCardKvv, card_dash_kvv, boxCardKvv, card_dash_kvv_layout);
-        DashboardCard dashboardPI = new DashboardCard(CardType.CARD_PI, layoutCardPI, card_dash_pi, boxCardPI, card_dash_pi_layout);
+
         dashboardCardInfo = new DashboardCardInfo(CardType.CARD_INFO, layoutCardInfo, card_dash_info, boxCardInfo, card_dash_info_layout);
-        DashboardCard dashboardCardWeather = new DashboardCardWeather(CardType.CARD_WEATHER, null, card_dash_weather, null, null, forecastLayout);
-        DashboardCard dashboardCardUserInt = new DashboardCardUserInt(CardType.CARD_USER_INTERACTION, null, card_dash_user_interaction, null, card_dash_user_interaction_layout);
-
         dashboard = new Dashboard();
-        dashboard.addCard(dashboardCardMealPlan);
-        dashboard.addCard(dashboardCarCalender);
-        dashboard.addCard(dashboardKvv);
-        dashboard.addCard(dashboardPI);
+        dashboard.addCard(new DashboardCard(CardType.CARD_MEAL_PLAN, layoutCardMealPlan, card_dash_mealPlan, boxCardMealPlan, card_dash_mealPlan_layout));
+        dashboard.addCard(new DashboardCard(CardType.CARD_CALENDAR, layoutCardCalendar, card_dash_calendar, boxCardCalendar, card_dash_calendar_layout));
+        dashboard.addCard(new DashboardCard(CardType.CARD_KVV, layoutCardKvv, card_dash_kvv, boxCardKvv, card_dash_kvv_layout));
+        dashboard.addCard( new DashboardCard(CardType.CARD_PI, layoutCardPI, card_dash_pi, boxCardPI, card_dash_pi_layout));
         dashboard.addCard(dashboardCardInfo);
-        dashboard.addCard(dashboardCardWeather);
-        dashboard.addCard(dashboardCardUserInt);
-
+        dashboard.addCard(new DashboardCardWeather(CardType.CARD_WEATHER, null, card_dash_weather, null, null, forecastLayout));
+        dashboard.addCard(new DashboardCardUserInt(CardType.CARD_USER_INTERACTION, null, card_dash_user_interaction, null, card_dash_user_interaction_layout));
         dashboard.setUp(this.getApplicationContext(), getResources().getColor(R.color.black), DashboardActivity.this);
     }
 
@@ -299,22 +292,11 @@ public class DashboardActivity extends AppCompatActivity {
     }
 
     public void refreshClick(@NonNull MenuItem item) throws NullPointerException {
-        if (!dashboard.getConfigurationModus()) {
-            if (refreshIsEnable) {
-                refreshIsEnable = false;
-                new CountDownTimer(10000, 1000) {
-                    public void onTick(long millisUtilFinished) {}
-                    @Override
-                    public void onFinish() {
-                        refreshIsEnable = true;
-                    }
-                }.start();
-               loadDashboard();
-            } else {
-                Snackbar.make(this.findViewById(android.R.id.content), getResources().getString(R.string.refreshIsOnlyIn10Min), BaseTransientBottomBar.LENGTH_SHORT).show();
-            }
-        } else {
-            Snackbar.make(this.findViewById(android.R.id.content), getResources().getString(R.string.youAreInConfigModus), BaseTransientBottomBar.LENGTH_SHORT).show();
+        boolean doRefresh = DashboardRefresh.statusCheck(dashboard.getConfigurationModus(), dashboard.getRefreshStatus(), this.findViewById(android.R.id.content), this);
+
+        if (doRefresh) {
+            new RefreshCounter(dashboard).start();
+            loadDashboard();
         }
     }
 
