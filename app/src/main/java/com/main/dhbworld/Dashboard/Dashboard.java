@@ -11,6 +11,7 @@ import androidx.core.graphics.ColorUtils;
 
 import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
+import com.main.dhbworld.Utilities.BoardLogic;
 import com.main.dhbworld.Dashboard.Cards.DashboardCard;
 import com.main.dhbworld.DashboardActivity;
 import com.main.dhbworld.R;
@@ -18,30 +19,24 @@ import com.main.dhbworld.R;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Dashboard {
+public class Dashboard extends BoardLogic {
     private SharedPreferences sp;
     public static final String dashboardSettings = "dashboardSettings";
     private final List<DashboardCard> cards;
     private Boolean configurationModus;
-    private boolean refreshIsEnable;
+
 
 
 
     public Dashboard() {
         cards = new ArrayList<>();
         configurationModus = false;
-        refreshIsEnable=true;
+
 
 
     }
 
-    public boolean getRefreshStatus() {
-        return refreshIsEnable;
-    }
 
-    public void setRefreshStatus(boolean refreshIsEnable) {
-        this.refreshIsEnable = refreshIsEnable;
-    }
 
     public void addCard(DashboardCard card) {
         this.cards.add(card);
