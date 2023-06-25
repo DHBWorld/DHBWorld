@@ -34,7 +34,7 @@ import com.main.dhbworld.UserInter.UserIntUtilities;
 import java.util.ArrayList;
 import java.util.Locale;
 
-public class UserInteraction extends AppCompatActivity {
+public class UserInteractionActivity extends AppCompatActivity {
     private ArrayList <Button> yesButtons;
     private ArrayList <Button> noButtons;
 
@@ -148,11 +148,11 @@ public class UserInteraction extends AppCompatActivity {
                 DialogCofirmationUserInteraction confirmation;
 
                 if (buttonIndex == 2) {
-                    confirmation = new DialogCofirmationUserInteraction(UserInteraction.this, R.string.moechten_sie_melden_dass_der_drucker_kaputt_ist, R.string.problem_report);
+                    confirmation = new DialogCofirmationUserInteraction(UserInteractionActivity.this, R.string.moechten_sie_melden_dass_der_drucker_kaputt_ist, R.string.problem_report);
                 } else {
-                    confirmation = new DialogCofirmationUserInteraction(UserInteraction.this, states[buttonIndex], R.string.problem_report);
+                    confirmation = new DialogCofirmationUserInteraction(UserInteractionActivity.this, states[buttonIndex], R.string.problem_report);
                 }
-                confirmation.setPositiveButton(R.string.problem_report, new OnClickListenerConfirmationYES(firebaseUtilities, UserInteraction.this.findViewById(android.R.id.content), buttonIndex, states, confirmation));
+                confirmation.setPositiveButton(R.string.problem_report, new OnClickListenerConfirmationYES(firebaseUtilities, UserInteractionActivity.this.findViewById(android.R.id.content), buttonIndex, states, confirmation));
                 confirmation.show();
             });
 
@@ -161,9 +161,9 @@ public class UserInteraction extends AppCompatActivity {
     private void  configurateNoButtons(InteractionState[][] states){
         for(Button button: noButtons){
             button.setOnClickListener(v -> {
-                DialogCofirmationUserInteraction confirmation= new DialogCofirmationUserInteraction(UserInteraction.this, R.string.problem_still_there, R.string.problem_is_solved);
+                DialogCofirmationUserInteraction confirmation= new DialogCofirmationUserInteraction(UserInteractionActivity.this, R.string.problem_still_there, R.string.problem_is_solved);
                 int buttonIndex = noButtons.indexOf(button);
-                confirmation.setPositiveButton(R.string.problem_is_solved, new OnClickListenerConfirmationNO(firebaseUtilities, UserInteraction.this.findViewById(android.R.id.content), buttonIndex, states, confirmation));
+                confirmation.setPositiveButton(R.string.problem_is_solved, new OnClickListenerConfirmationNO(firebaseUtilities, UserInteractionActivity.this.findViewById(android.R.id.content), buttonIndex, states, confirmation));
                 confirmation.show();
             });
         }
@@ -185,9 +185,9 @@ public class UserInteraction extends AppCompatActivity {
         stateCoffee =InteractionState.NORMAL;
         statePrinter =InteractionState.NORMAL;
 
-        UserIntUtilities.setupCards(stateCanteenTV, stateCanteen, imageBox_canteen, UserInteraction.this);
-        UserIntUtilities.setupCards(stateCoffeeTV, stateCoffee, imageBox_coffee, UserInteraction.this);
-        UserIntUtilities.setupCards(statePrinterTV, statePrinter, imageBox_printer, UserInteraction.this);
+        UserIntUtilities.setupCards(stateCanteenTV, stateCanteen, imageBox_canteen, UserInteractionActivity.this);
+        UserIntUtilities.setupCards(stateCoffeeTV, stateCoffee, imageBox_coffee, UserInteractionActivity.this);
+        UserIntUtilities.setupCards(statePrinterTV, statePrinter, imageBox_printer, UserInteractionActivity.this);
     }
 
     private void notificationManagement(){
@@ -195,9 +195,9 @@ public class UserInteraction extends AppCompatActivity {
         notificationCoffeeTV = findViewById(R.id.previous_notifications_coffee);
         notificationPrinterTV = findViewById(R.id.previous_notifications_printer);
 
-        notificationCanteen= UserIntUtilities.setupNotifications(notificationCanteenTV, UserInteraction.this);
-        notificationCoffee=  UserIntUtilities.setupNotifications(notificationCoffeeTV, UserInteraction.this);
-        notificationPrinter=UserIntUtilities.setupNotifications(notificationPrinterTV, UserInteraction.this);
+        notificationCanteen= UserIntUtilities.setupNotifications(notificationCanteenTV, UserInteractionActivity.this);
+        notificationCoffee=  UserIntUtilities.setupNotifications(notificationCoffeeTV, UserInteractionActivity.this);
+        notificationPrinter=UserIntUtilities.setupNotifications(notificationPrinterTV, UserInteractionActivity.this);
 
 
     }
@@ -217,13 +217,13 @@ public class UserInteraction extends AppCompatActivity {
                 case Utilities.CATEGORY_CAFETERIA:
 
                     System.out.println("STATUS: " + status);
-                    UserIntUtilities.changeStatus(stateCanteen,  stateCanteenTV,  imageBox_canteen,status, UserInteraction.this );
+                    UserIntUtilities.changeStatus(stateCanteen,  stateCanteenTV,  imageBox_canteen,status, UserInteractionActivity.this );
                     break;
                 case Utilities.CATEGORY_COFFEE:
-                    UserIntUtilities.changeStatus(stateCoffee,  stateCoffeeTV,  imageBox_coffee,  status, UserInteraction.this);
+                    UserIntUtilities.changeStatus(stateCoffee,  stateCoffeeTV,  imageBox_coffee,  status, UserInteractionActivity.this);
                     break;
                 case Utilities.CATEGORY_PRINTER:
-                    UserIntUtilities.changeStatus(statePrinter,  statePrinterTV,  imageBox_printer,  status, UserInteraction.this);
+                    UserIntUtilities.changeStatus(statePrinter,  statePrinterTV,  imageBox_printer,  status, UserInteractionActivity.this);
                     break;
             }
         }
@@ -233,13 +233,13 @@ public class UserInteraction extends AppCompatActivity {
         public void onReportCountReceived(String category, long reportCount) {
             switch (category) {
                 case Utilities.CATEGORY_CAFETERIA:
-                    UserIntUtilities.setPriviousNotofications(notificationCanteen, notificationCanteenTV, reportCount, UserInteraction.this);
+                    UserIntUtilities.setPriviousNotofications(notificationCanteen, notificationCanteenTV, reportCount, UserInteractionActivity.this);
                     break;
                 case Utilities.CATEGORY_COFFEE:
-                    UserIntUtilities.setPriviousNotofications(notificationCoffee, notificationCoffeeTV, reportCount, UserInteraction.this);
+                    UserIntUtilities.setPriviousNotofications(notificationCoffee, notificationCoffeeTV, reportCount, UserInteractionActivity.this);
                     break;
                 case Utilities.CATEGORY_PRINTER:
-                    UserIntUtilities.setPriviousNotofications(notificationPrinter, notificationPrinterTV, reportCount, UserInteraction.this);
+                    UserIntUtilities.setPriviousNotofications(notificationPrinter, notificationPrinterTV, reportCount, UserInteractionActivity.this);
                     break;
             }
         }
@@ -256,7 +256,7 @@ public class UserInteraction extends AppCompatActivity {
         @Override
         public void onSignInError() {
             progressDialog.dismiss();
-            Snackbar.make(UserInteraction.this.findViewById(android.R.id.content), getString(R.string.error), BaseTransientBottomBar.LENGTH_LONG).show();
+            Snackbar.make(UserInteractionActivity.this.findViewById(android.R.id.content), getString(R.string.error), BaseTransientBottomBar.LENGTH_LONG).show();
         }
     }
 

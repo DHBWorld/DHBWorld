@@ -26,12 +26,11 @@ import com.google.firebase.messaging.RemoteMessage;
 import com.main.dhbworld.BroadcastReceiver.UpdateEventsReceiver;
 import com.main.dhbworld.DashboardActivity;
 import com.main.dhbworld.Enums.InteractionState;
-import com.main.dhbworld.Feedback.DetailFeedbackActivity;
 import com.main.dhbworld.FeedbackActivity;
 import com.main.dhbworld.Firebase.Utilities;
 import com.main.dhbworld.R;
 import com.main.dhbworld.SettingsActivity;
-import com.main.dhbworld.UserInteraction;
+import com.main.dhbworld.UserInteractionActivity;
 
 import java.util.Random;
 
@@ -144,7 +143,7 @@ public class UserInteractionMessagingService extends FirebaseMessagingService {
                         icon = R.drawable.ic_baseline_print_24;
                     }
 
-                    Intent intent = new Intent(getApplicationContext(), UserInteraction.class);
+                    Intent intent = new Intent(getApplicationContext(), UserInteractionActivity.class);
                     TaskStackBuilder stackBuilder = TaskStackBuilder.create(getApplicationContext());
                     stackBuilder.addNextIntentWithParentStack(intent);
                     PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);

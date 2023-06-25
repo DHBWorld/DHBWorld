@@ -49,7 +49,7 @@
             android:name=".KVVActivity"
             android:exported="false" />
         <activity
-            android:name=".UserInteraction"
+            android:name=".UserInteractionActivity"
             android:exported="false" />
         <activity
             android:name=".CantineActivity"

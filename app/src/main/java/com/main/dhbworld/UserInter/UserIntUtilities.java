@@ -6,7 +6,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.main.dhbworld.Enums.InteractionState;
 import com.main.dhbworld.R;
-import com.main.dhbworld.UserInteraction;
 
 
 public class UserIntUtilities {
