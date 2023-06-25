@@ -119,8 +119,6 @@ public class UserInteractionActivity extends AppCompatActivity {
         yesButtons.add(findViewById(R.id.yes0));
         yesButtons.add(findViewById(R.id.yes1));
         yesButtons.add(findViewById(R.id.yes2));
-
-
         noButtons =new ArrayList<> ();
         noButtons.add(findViewById(R.id.no0));
         noButtons.add(findViewById(R.id.no1));
@@ -136,9 +134,6 @@ public class UserInteractionActivity extends AppCompatActivity {
 
         configurateYesButtons(states);
         configurateNoButtons(states);
-
-
-
     }
 
     private void configurateYesButtons(InteractionState[][] states){
@@ -202,13 +197,7 @@ public class UserInteractionActivity extends AppCompatActivity {
 
     }
 
-    private void updateInteractionState() {
-        String[] categories = new String[]{Utilities.CATEGORY_CAFETERIA, Utilities.CATEGORY_COFFEE, Utilities.CATEGORY_PRINTER};
-        for (int i=0; i<3; i++) {
-            firebaseUtilities.getCurrentStatus(categories[i]);
-            firebaseUtilities.getReportCount(categories[i]);
-        }
-    }
+
 
     class CurrentStatusListenerUserInt implements CurrentStatusListener{
         @Override
@@ -246,22 +235,17 @@ public class UserInteractionActivity extends AppCompatActivity {
     }
 
     class SignedInListenerUserInt implements SignedInListener{
-
         @Override
         public void onSignedIn(FirebaseUser user) {
             progressDialog.dismiss();
-            updateInteractionState();
+            UserIntUtilities.updateInteractionState(firebaseUtilities);
         }
-
         @Override
         public void onSignInError() {
             progressDialog.dismiss();
             Snackbar.make(UserInteractionActivity.this.findViewById(android.R.id.content), getString(R.string.error), BaseTransientBottomBar.LENGTH_LONG).show();
         }
     }
-
-
-
 }
 
 

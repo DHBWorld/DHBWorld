@@ -5,6 +5,7 @@ import android.content.res.Resources;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.main.dhbworld.Enums.InteractionState;
+import com.main.dhbworld.Firebase.Utilities;
 import com.main.dhbworld.R;
 
 
@@ -32,5 +33,13 @@ public class UserIntUtilities {
     public static int setupNotifications(TextView notificationTV,  Context context){
         notificationTV.setText(context.getResources().getString(R.string.previous_notifications, String.valueOf(0)));
         return 0;
+    }
+
+    public static void updateInteractionState(Utilities firebaseUtilities) {
+        String[] categories = new String[]{Utilities.CATEGORY_CAFETERIA, Utilities.CATEGORY_COFFEE, Utilities.CATEGORY_PRINTER};
+        for (int i = 0; i < 3; i++) {
+            firebaseUtilities.getCurrentStatus(categories[i]);
+            firebaseUtilities.getReportCount(categories[i]);
+        }
     }
 }

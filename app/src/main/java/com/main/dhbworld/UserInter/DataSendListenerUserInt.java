@@ -26,7 +26,8 @@ public class DataSendListenerUserInt implements DataSendListener {
                         R.string.thank_you,
                         BaseTransientBottomBar.LENGTH_LONG)
                 .show();
-        updateInteractionState();
+
+        UserIntUtilities.updateInteractionState(firebaseUtilities);
     }
 
     @Override
@@ -39,11 +40,5 @@ public class DataSendListenerUserInt implements DataSendListener {
         }
     }
 
-    private void updateInteractionState() {
-        String[] categories = new String[]{Utilities.CATEGORY_CAFETERIA, Utilities.CATEGORY_COFFEE, Utilities.CATEGORY_PRINTER};
-        for (int i=0; i<3; i++) {
-            firebaseUtilities.getCurrentStatus(categories[i]);
-            firebaseUtilities.getReportCount(categories[i]);
-        }
-    }
+
 }
