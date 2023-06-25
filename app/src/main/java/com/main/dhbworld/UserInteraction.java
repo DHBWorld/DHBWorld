@@ -5,12 +5,10 @@ import androidx.appcompat.app.AppCompatDelegate;
 import androidx.preference.PreferenceManager;
 
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -22,21 +20,23 @@ import com.main.dhbworld.Debugging.Debugging;
 import com.main.dhbworld.Enums.InteractionState;
 
 import com.main.dhbworld.Firebase.CurrentStatusListener;
-import com.main.dhbworld.Firebase.DataSendListener;
 import com.main.dhbworld.Firebase.ReportCountListener;
 import com.main.dhbworld.Firebase.SignedInListener;
 import com.main.dhbworld.Firebase.Utilities;
 import com.main.dhbworld.Fragments.DialogCofirmationUserInteraction;
 import com.main.dhbworld.Navigation.NavigationUtilities;
 import com.main.dhbworld.Services.UserInteractionMessagingService;
+import com.main.dhbworld.UserInter.clickListeners.OnClickListenerConfirmationYES;
+
+import com.main.dhbworld.UserInter.clickListeners.OnClickListenerConfirmationNO;
 import com.main.dhbworld.UserInter.UserIntUtilities;
 
 import java.util.ArrayList;
 import java.util.Locale;
 
 public class UserInteraction extends AppCompatActivity {
-    private ArrayList <Button> yes;
-    private ArrayList <Button> no;
+    private ArrayList <Button> yesButtons;
+    private ArrayList <Button> noButtons;
 
     private TextView stateCanteenTV;
     private TextView stateCoffeeTV;
@@ -58,6 +58,7 @@ public class UserInteraction extends AppCompatActivity {
     private LinearLayout imageBox_printer;
 
     private Utilities firebaseUtilities;
+    private  ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,28 +97,122 @@ public class UserInteraction extends AppCompatActivity {
         yesNoButtonsManagement();
         notificationManagement();
 
-        ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog = new ProgressDialog(this);
         progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         progressDialog.setCancelable(false);
         progressDialog.show();
 
         Utilities.subscribeToTopics();
 
-        firebaseUtilities = new Utilities(this);
-        firebaseUtilities.setSignedInListener(new SignedInListener() {
-            @Override
-            public void onSignedIn(FirebaseUser user) {
-                progressDialog.dismiss();
-                updateInteractionState();
-            }
+        setupFirebaseUtilities();
+    }
 
-            @Override
-            public void onSignInError() {
-                progressDialog.dismiss();
-                Snackbar.make(UserInteraction.this.findViewById(android.R.id.content), getString(R.string.error), BaseTransientBottomBar.LENGTH_LONG).show();
-            }
-        });
-        firebaseUtilities.setCurrentStatusListener((category, status) -> {
+    private void setupFirebaseUtilities(){
+        firebaseUtilities = new Utilities(this);
+        firebaseUtilities.setSignedInListener(new SignedInListenerUserInt());
+        firebaseUtilities.setCurrentStatusListener(new CurrentStatusListenerUserInt());
+        firebaseUtilities.setReportCountListener(new ReportCountListenerUserInt());
+        firebaseUtilities.signIn();
+    }
+    private void yesNoButtonsSetup(){
+        yesButtons =new ArrayList<> ();
+        yesButtons.add(findViewById(R.id.yes0));
+        yesButtons.add(findViewById(R.id.yes1));
+        yesButtons.add(findViewById(R.id.yes2));
+
+
+        noButtons =new ArrayList<> ();
+        noButtons.add(findViewById(R.id.no0));
+        noButtons.add(findViewById(R.id.no1));
+        noButtons.add(findViewById(R.id.no2));
+    }
+
+    private void yesNoButtonsManagement(){
+        yesNoButtonsSetup();
+
+        InteractionState[][] states= new InteractionState[3][];
+        states[0]= new InteractionState[]{InteractionState.QUEUE_SHORT, InteractionState.QUEUE_MIDDLE, InteractionState.QUEUE_LONG};
+        states[1]= new InteractionState[]{InteractionState.CLEANING, InteractionState.DEFECT};
+
+        configurateYesButtons(states);
+        configurateNoButtons(states);
+
+
+
+    }
+
+    private void configurateYesButtons(InteractionState[][] states){
+        for (Button button : yesButtons) {
+            button.setOnClickListener(v -> {
+                int buttonIndex = yesButtons.indexOf(button);
+                DialogCofirmationUserInteraction confirmation;
+
+                if (buttonIndex == 2) {
+                    confirmation = new DialogCofirmationUserInteraction(UserInteraction.this, R.string.moechten_sie_melden_dass_der_drucker_kaputt_ist, R.string.problem_report);
+                } else {
+                    confirmation = new DialogCofirmationUserInteraction(UserInteraction.this, states[buttonIndex], R.string.problem_report);
+                }
+                confirmation.setPositiveButton(R.string.problem_report, new OnClickListenerConfirmationYES(firebaseUtilities, UserInteraction.this.findViewById(android.R.id.content), buttonIndex, states, confirmation));
+                confirmation.show();
+            });
+
+        }
+    }
+    private void  configurateNoButtons(InteractionState[][] states){
+        for(Button button: noButtons){
+            button.setOnClickListener(v -> {
+                DialogCofirmationUserInteraction confirmation= new DialogCofirmationUserInteraction(UserInteraction.this, R.string.problem_still_there, R.string.problem_is_solved);
+                int buttonIndex = noButtons.indexOf(button);
+                confirmation.setPositiveButton(R.string.problem_is_solved, new OnClickListenerConfirmationNO(firebaseUtilities, UserInteraction.this.findViewById(android.R.id.content), buttonIndex, states, confirmation));
+                confirmation.show();
+            });
+        }
+    }
+    private void setupViews(){
+        stateCanteenTV = findViewById(R.id.state_canteen);
+        stateCoffeeTV = findViewById(R.id.state_coffee);
+        statePrinterTV = findViewById(R.id.state_printer);
+
+        imageBox_canteen = findViewById(R.id.imageBox_canteen);
+        imageBox_coffee = findViewById(R.id.imageBox_coffee);
+        imageBox_printer = findViewById(R.id.imageBox_printer);
+    }
+
+    private void stateManagement(){
+        setupViews();
+
+        stateCanteen =InteractionState.QUEUE_ABCENT;
+        stateCoffee =InteractionState.NORMAL;
+        statePrinter =InteractionState.NORMAL;
+
+        UserIntUtilities.setupCards(stateCanteenTV, stateCanteen, imageBox_canteen, UserInteraction.this);
+        UserIntUtilities.setupCards(stateCoffeeTV, stateCoffee, imageBox_coffee, UserInteraction.this);
+        UserIntUtilities.setupCards(statePrinterTV, statePrinter, imageBox_printer, UserInteraction.this);
+    }
+
+    private void notificationManagement(){
+        notificationCanteenTV = findViewById(R.id.previous_notifications_canteen);
+        notificationCoffeeTV = findViewById(R.id.previous_notifications_coffee);
+        notificationPrinterTV = findViewById(R.id.previous_notifications_printer);
+
+        notificationCanteen= UserIntUtilities.setupNotifications(notificationCanteenTV, UserInteraction.this);
+        notificationCoffee=  UserIntUtilities.setupNotifications(notificationCoffeeTV, UserInteraction.this);
+        notificationPrinter=UserIntUtilities.setupNotifications(notificationPrinterTV, UserInteraction.this);
+
+
+    }
+
+    private void updateInteractionState() {
+        String[] categories = new String[]{Utilities.CATEGORY_CAFETERIA, Utilities.CATEGORY_COFFEE, Utilities.CATEGORY_PRINTER};
+        for (int i=0; i<3; i++) {
+            firebaseUtilities.getCurrentStatus(categories[i]);
+            firebaseUtilities.getReportCount(categories[i]);
+        }
+    }
+
+    class CurrentStatusListenerUserInt implements CurrentStatusListener{
+        @Override
+        public void onStatusReceived(String category, int status) {
             switch (category) {
                 case Utilities.CATEGORY_CAFETERIA:
 
@@ -131,230 +226,42 @@ public class UserInteraction extends AppCompatActivity {
                     UserIntUtilities.changeStatus(statePrinter,  statePrinterTV,  imageBox_printer,  status, UserInteraction.this);
                     break;
             }
-        });
-
-        firebaseUtilities.setReportCountListener(new ReportCountListener() {
-            @Override
-            public void onReportCountReceived(String category, long reportCount) {
-                switch (category) {
-                    case Utilities.CATEGORY_CAFETERIA:
-                        notificationCanteen = reportCount;
-                        notificationCanteenTV.setText(getResources().getString(R.string.previous_notifications, String.valueOf(notificationCanteen)));
-                        break;
-                    case Utilities.CATEGORY_COFFEE:
-                        notificationCoffee = reportCount;
-                        notificationCoffeeTV.setText(getResources().getString(R.string.previous_notifications, String.valueOf(notificationCoffee)));
-                        break;
-                    case Utilities.CATEGORY_PRINTER:
-                        notificationPrinter = reportCount;
-                        notificationPrinterTV.setText(getResources().getString(R.string.previous_notifications, String.valueOf(notificationPrinter)));
-                        break;
-                }
-            }
-        });
-
-        firebaseUtilities.signIn();
-
-    }
-
-    private void yesNoButtonsManagement(){
-        yes =new ArrayList<> ();
-        yes.add(findViewById(R.id.yes0));
-        yes.add(findViewById(R.id.yes1));
-        yes.add(findViewById(R.id.yes2));
-
-
-        no =new ArrayList<> ();
-        no.add(findViewById(R.id.no0));
-        no.add(findViewById(R.id.no1));
-        no.add(findViewById(R.id.no2));
-
-        InteractionState[][] states= new InteractionState[3][];
-        states[0]= new InteractionState[]{InteractionState.QUEUE_SHORT, InteractionState.QUEUE_MIDDLE, InteractionState.QUEUE_LONG};
-        states[1]= new InteractionState[]{InteractionState.CLEANING, InteractionState.DEFECT};
-        //states[2]= new String[]{"", ""};
-
-        for(Button j:yes){
-            if (j.equals(yes.get(2))) {
-                continue;
-            }
-            j.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                    DialogCofirmationUserInteraction confirmation= new DialogCofirmationUserInteraction(UserInteraction.this, states[yes.indexOf(j)] , R.string.problem_report);
-                    confirmation.setPositiveButton(R.string.problem_report, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            firebaseUtilities.setDataSendListener(new DataSendListener() {
-                                @Override
-                                public void success() {
-                                    Snackbar.make(UserInteraction.this.findViewById(android.R.id.content),
-                                            R.string.thank_you,
-                                            BaseTransientBottomBar.LENGTH_LONG)
-                                            .show();
-                                    updateInteractionState();
-                                }
-
-                                @Override
-                                public void failed(Exception reason) {
-                                    if (reason.getMessage() != null) {
-                                        Snackbar.make(UserInteraction.this.findViewById(android.R.id.content),
-                                                        reason.getMessage(),
-                                                        BaseTransientBottomBar.LENGTH_LONG)
-                                                .show();
-                                    }
-                                }
-                            });
-
-                            String category = "";
-                            if (j.equals(yes.get(0))) {
-                                category = Utilities.CATEGORY_CAFETERIA;
-                            } else if (j.equals(yes.get(1))) {
-                                category = Utilities.CATEGORY_COFFEE;
-                            }
-                            firebaseUtilities.addToDatabase(category, confirmation.getSelectedState().getId());
-                        }
-                    });
-                    confirmation.show();
-                }});
-
-        }
-
-        yes.get(2).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                DialogCofirmationUserInteraction confirmation= new DialogCofirmationUserInteraction(UserInteraction.this, R.string.moechten_sie_melden_dass_der_drucker_kaputt_ist, R.string.problem_report);
-
-                confirmation.setPositiveButton(R.string.problem_report, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        firebaseUtilities.setDataSendListener(new DataSendListener() {
-                            @Override
-                            public void success() {
-                                Snackbar.make(UserInteraction.this.findViewById(android.R.id.content),
-                                                R.string.thank_you,
-                                                BaseTransientBottomBar.LENGTH_LONG)
-                                        .show();
-                                updateInteractionState();
-                            }
-
-                            @Override
-                            public void failed(Exception reason) {
-                                if (reason.getMessage() != null) {
-                                    Snackbar.make(UserInteraction.this.findViewById(android.R.id.content),
-                                                    reason.getMessage(),
-                                                    BaseTransientBottomBar.LENGTH_LONG)
-                                            .show();
-                                }
-                            }
-                        });
-
-                        String category = Utilities.CATEGORY_PRINTER;
-                        firebaseUtilities.addToDatabase(category, InteractionState.DEFECT.getId());
-                    }
-                });
-                confirmation.show();
-            }
-        });
-
-
-        for(Button n: no){
-            n.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    DialogCofirmationUserInteraction confirmation= new DialogCofirmationUserInteraction(UserInteraction.this, R.string.problem_still_there, R.string.problem_is_solved);
-                    confirmation.setPositiveButton(R.string.problem_is_solved, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            firebaseUtilities.setDataSendListener(new DataSendListener() {
-                                @Override
-                                public void success() {
-                                    Snackbar.make(UserInteraction.this.findViewById(android.R.id.content),
-                                                    R.string.thank_you,
-                                                    BaseTransientBottomBar.LENGTH_LONG)
-                                            .show();
-                                    updateInteractionState();
-                                }
-
-                                @Override
-                                public void failed(Exception reason) {
-                                    if (reason.getMessage() != null) {
-                                        Snackbar.make(UserInteraction.this.findViewById(android.R.id.content),
-                                                        reason.getMessage(),
-                                                        BaseTransientBottomBar.LENGTH_LONG)
-                                                .show();
-                                    }
-                                }
-                            });
-
-                            String category = "";
-                            int id = 0;
-                            if (n.equals(no.get(0))) {
-                                category = Utilities.CATEGORY_CAFETERIA;
-                                id = 3;
-                            } else if (n.equals(no.get(1))) {
-                                category = Utilities.CATEGORY_COFFEE;
-                            } else if (n.equals(no.get(2))) {
-                                category = Utilities.CATEGORY_PRINTER;
-                            }
-                            firebaseUtilities.addToDatabase(category, id);
-                        }
-                    });
-                    confirmation.show();
-                }
-            });
-        }
-
-    }
-
-    private void stateManagement(){
-
-        stateCanteenTV = findViewById(R.id.state_canteen);
-        stateCoffeeTV = findViewById(R.id.state_coffee);
-        statePrinterTV = findViewById(R.id.state_printer);
-
-        stateCanteen =InteractionState.QUEUE_ABCENT;
-        stateCoffee =InteractionState.NORMAL;
-        statePrinter =InteractionState.NORMAL;
-
-        stateCanteenTV.setText(getResources().getString(R.string.state, stateCanteen.getText(UserInteraction.this)));
-        stateCoffeeTV.setText(getResources().getString(R.string.state, stateCoffee.getText(UserInteraction.this)));
-        statePrinterTV.setText(getResources().getString(R.string.state, statePrinter.getText(UserInteraction.this)));
-
-        Resources res = getResources();
-
-        imageBox_canteen = findViewById(R.id.imageBox_canteen);
-        imageBox_coffee = findViewById(R.id.imageBox_coffee);
-        imageBox_printer = findViewById(R.id.imageBox_printer);
-
-        imageBox_canteen.setBackgroundColor(res.getColor(stateCanteen.getColor()));
-        imageBox_coffee.setBackgroundColor(res.getColor(stateCoffee.getColor()));
-        imageBox_printer.setBackgroundColor(res.getColor(statePrinter.getColor()));
-    }
-
-    private void notificationManagement(){
-        notificationCanteenTV = findViewById(R.id.previous_notifications_canteen);
-        notificationCoffeeTV = findViewById(R.id.previous_notifications_coffee);
-        notificationPrinterTV = findViewById(R.id.previous_notifications_printer);
-
-        notificationCanteen =0;
-        notificationCoffee =0;
-        notificationPrinter =0;
-
-        notificationCanteenTV.setText(getResources().getString(R.string.previous_notifications, String.valueOf(notificationCanteen)));
-        notificationCoffeeTV.setText(getResources().getString(R.string.previous_notifications, String.valueOf(notificationCoffee)));
-        notificationPrinterTV.setText(getResources().getString(R.string.previous_notifications, String.valueOf(notificationPrinter)));
-
-    }
-
-    private void updateInteractionState() {
-        String[] categories = new String[]{Utilities.CATEGORY_CAFETERIA, Utilities.CATEGORY_COFFEE, Utilities.CATEGORY_PRINTER};
-        for (int i=0; i<3; i++) {
-            firebaseUtilities.getCurrentStatus(categories[i]);
-            firebaseUtilities.getReportCount(categories[i]);
         }
     }
+    class ReportCountListenerUserInt implements ReportCountListener{
+        @Override
+        public void onReportCountReceived(String category, long reportCount) {
+            switch (category) {
+                case Utilities.CATEGORY_CAFETERIA:
+                    UserIntUtilities.setPriviousNotofications(notificationCanteen, notificationCanteenTV, reportCount, UserInteraction.this);
+                    break;
+                case Utilities.CATEGORY_COFFEE:
+                    UserIntUtilities.setPriviousNotofications(notificationCoffee, notificationCoffeeTV, reportCount, UserInteraction.this);
+                    break;
+                case Utilities.CATEGORY_PRINTER:
+                    UserIntUtilities.setPriviousNotofications(notificationPrinter, notificationPrinterTV, reportCount, UserInteraction.this);
+                    break;
+            }
+        }
+    }
+
+    class SignedInListenerUserInt implements SignedInListener{
+
+        @Override
+        public void onSignedIn(FirebaseUser user) {
+            progressDialog.dismiss();
+            updateInteractionState();
+        }
+
+        @Override
+        public void onSignInError() {
+            progressDialog.dismiss();
+            Snackbar.make(UserInteraction.this.findViewById(android.R.id.content), getString(R.string.error), BaseTransientBottomBar.LENGTH_LONG).show();
+        }
+    }
+
 
 
 }
+
+
