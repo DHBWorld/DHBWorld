@@ -23,14 +23,24 @@ public class Dashboard {
     public static final String dashboardSettings = "dashboardSettings";
     private final List<DashboardCard> cards;
     private Boolean configurationModus;
+    private boolean refreshIsEnable;
 
 
 
     public Dashboard() {
         cards = new ArrayList<>();
         configurationModus = false;
+        refreshIsEnable=true;
 
 
+    }
+
+    public boolean getRefreshStatus() {
+        return refreshIsEnable;
+    }
+
+    public void setRefreshStatus(boolean refreshIsEnable) {
+        this.refreshIsEnable = refreshIsEnable;
     }
 
     public void addCard(DashboardCard card) {
