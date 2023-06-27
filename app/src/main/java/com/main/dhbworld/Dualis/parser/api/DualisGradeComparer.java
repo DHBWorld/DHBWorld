@@ -16,6 +16,9 @@ import java.util.Map;
 public class DualisGradeComparer {
     public static void compareSaveNotification(Context context, ArrayList<DualisSemester> dualisSemesters) {
         ArrayList<DualisSemester> savedDualisSemesters = DualisParser.getSavedFileContent(context);
+        if (savedDualisSemesters == null) {
+            return;
+        }
         DualisParser.saveFileContent(context, dualisSemesters);
 
         if (savedDualisSemesters.size() == 0) {

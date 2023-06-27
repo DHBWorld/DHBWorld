@@ -60,6 +60,9 @@ public class DualisParser {
     }
 
     public static ArrayList<DualisSemester> getSavedFileContent(Context context) {
+        if (context == null) {
+            return null;
+        }
         File file = new File(context.getFilesDir() + "/data_v2.json");
         String fileContent = null;
         if (file.exists()) {

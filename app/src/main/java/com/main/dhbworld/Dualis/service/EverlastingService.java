@@ -28,7 +28,6 @@ public class EverlastingService extends Service {
 
    private static final int RESPAWN_DELAY = 1000;
 
-   private final SharedPreferences settingsPref;
    private final int name;
 
    private volatile HandlerThread mHandlerThread;
@@ -40,12 +39,13 @@ public class EverlastingService extends Service {
    public EverlastingService() {
       super();
       name = Long.hashCode(System.currentTimeMillis());
-      settingsPref = PreferenceManager.getDefaultSharedPreferences(this);
    }
 
    @WorkerThread
    protected void run() {
       isRunning = true;
+
+      SharedPreferences settingsPref = PreferenceManager.getDefaultSharedPreferences(this);
 
       long sleepTimeMinutes = Long.parseLong(settingsPref.getString("sync_time", "15"));
       if (!settingsPref.getBoolean("sync", true)) {

@@ -1,6 +1,9 @@
 package com.main.dhbworld.Dualis.parser.api;
 
+import android.app.Activity;
 import android.content.Context;
+import android.os.Handler;
+import android.os.Looper;
 
 import com.main.dhbworld.Dualis.parser.DualisParser;
 import com.main.dhbworld.Dualis.parser.DualisURL;
@@ -12,8 +15,12 @@ import com.main.dhbworld.R;
 
 import org.jsoup.nodes.Document;
 
+import java.io.IOException;
 import java.net.CookieHandler;
+import java.net.HttpCookie;
+import java.net.HttpURLConnection;
 import java.util.ArrayList;
+import java.util.List;
 
 public class DualisAPI {
 
@@ -25,6 +32,25 @@ public class DualisAPI {
         this.context = context;
         this.mainArguments = DualisURL.refactorMainArguments(arguments);
         this.cookieHandler = cookieHandler;
+    }
+
+    public static void login(Activity activity, String email, String password, LoginListener loginListener) {
+        Handler handler = new Handler(Looper.getMainLooper());
+        try {
+            new DualisURL.DualisLoginRequest(email, password).createRequest((responseCode, arguments, cookies) -> {
+                if (responseCode == HttpURLConnection.HTTP_OK) {
+                    if (cookies.size() == 0) {
+                        handler.post(loginListener::onNoCookies);
+                    } else {
+                        activity.runOnUiThread(() -> loginListener.onSuccess(arguments, cookies));
+                    }
+                } else {
+                    handler.post(loginListener::onNon200);
+                }
+            });
+        } catch (IOException e) {
+            handler.post(() -> loginListener.onError(e));
+        }
     }
 
     public void requestDocuments(DocumentsListener documentsListener) {
@@ -65,6 +91,13 @@ public class DualisAPI {
 
     public static void compareSaveNotification(Context context, ArrayList<DualisSemester> dualisSemesters) {
         DualisGradeComparer.compareSaveNotification(context, dualisSemesters);
+    }
+
+    public interface LoginListener {
+        void onSuccess(String arguments, List<HttpCookie> cookies);
+        void onNoCookies();
+        void onError(Exception e);
+        void onNon200();
     }
 
     public interface SemesterDataListener {
