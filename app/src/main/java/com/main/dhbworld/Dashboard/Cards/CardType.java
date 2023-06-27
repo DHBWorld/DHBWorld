@@ -2,13 +2,11 @@ package com.main.dhbworld.Dashboard.Cards;
 
 import android.app.Activity;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import com.main.dhbworld.Calendar.CalendarActivity;
 import com.main.dhbworld.CantineActivity;
 import com.main.dhbworld.KVVActivity;
 import com.main.dhbworld.MainActivity;
-import com.main.dhbworld.UserInteraction;
+import com.main.dhbworld.UserInteractionActivity;
 
 public enum CardType {
 
@@ -18,7 +16,7 @@ public enum CardType {
     CARD_MEAL_PLAN(CantineActivity.class, "cardMealPlan"),
     CARD_INFO(CantineActivity.class, "cardInfo"),
     CARD_WEATHER(null, "cardWeather"),
-    CARD_USER_INTERACTION(UserInteraction.class, "cardUserInt");
+    CARD_USER_INTERACTION(UserInteractionActivity.class, "cardUserInt");
 
     private final Class <Activity> link;
     private final String savedIn;

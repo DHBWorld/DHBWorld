@@ -19,7 +19,7 @@ title __DHBWORLD's Class Diagram__\n
   
 
   namespace com.main.dhbworld {
-    class com.main.dhbworld.UserInteraction {
+    class com.main.dhbworld.UserInteractionActivity {
         - imageBox_canteen : LinearLayout
         - imageBox_coffee : LinearLayout
         - imageBox_printer : LinearLayout
@@ -219,11 +219,11 @@ namespace com.main.dhbworld {
   com.main.dhbworld.BroadcastReceiver.UpdateEventsReceiver -up-|> android.content.BroadcastReceiver
 
   com.main.dhbworld.MainActivity -up-|> androidx.appcompat.app.AppCompatActivity
-  com.main.dhbworld.UserInteraction -up-|> androidx.appcompat.app.AppCompatActivity
-  com.main.dhbworld.UserInteraction o-- com.main.dhbworld.Firebase.Utilities : firebaseUtilities
-  com.main.dhbworld.UserInteraction o-- com.main.dhbworld.Enums.InteractionState : stateCanteen
-  com.main.dhbworld.UserInteraction o-- com.main.dhbworld.Enums.InteractionState : stateCoffee
-  com.main.dhbworld.UserInteraction o-- com.main.dhbworld.Enums.InteractionState : statePrinter
+  com.main.dhbworld.UserInteractionActivity -up-|> androidx.appcompat.app.AppCompatActivity
+  com.main.dhbworld.UserInteractionActivity o-- com.main.dhbworld.Firebase.Utilities : firebaseUtilities
+  com.main.dhbworld.UserInteractionActivity o-- com.main.dhbworld.Enums.InteractionState : stateCanteen
+  com.main.dhbworld.UserInteractionActivity o-- com.main.dhbworld.Enums.InteractionState : stateCoffee
+  com.main.dhbworld.UserInteractionActivity o-- com.main.dhbworld.Enums.InteractionState : statePrinter
 
 right footer
 
