@@ -110,6 +110,9 @@ public class DualisSemesterFragment extends Fragment implements DualisAPI.Semest
     @Override
     public void onSemesterDataLoaded(ArrayList<DualisSemester> dualisSemesters) {
         DualisAPI.compareSaveNotification(getContext(), dualisSemesters);
+        if (getContext() == null) {
+            return;
+        }
 
         ArrayList<String> semesters = new ArrayList<>();
         for (DualisSemester dualisSemester : dualisSemesters) {
