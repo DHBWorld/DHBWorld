@@ -1,12 +1,12 @@
 package com.main.dhbworld.Blackboard;
 
 
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.PreferenceManager;
 
@@ -15,17 +15,18 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.main.dhbworld.BlackboardActivity;
 import com.main.dhbworld.R;
+import com.main.dhbworld.Utilities.SimpleDataFormatUniversal;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.ZoneId;
-import java.time.temporal.ChronoField;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class NewAdvertisementActivity extends AppCompatActivity {
 
@@ -81,18 +82,13 @@ public class NewAdvertisementActivity extends AppCompatActivity {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         Map<String, Object> advertisement = new HashMap<>();
         advertisement.put("approved", false);
-        advertisement.put("validUntil", inputData[0]);
-        advertisement.put("title", inputData[1]);
-        advertisement.put("text", inputData[2]);
-        advertisement.put("tagOne", inputData[3]);
-        advertisement.put("tagTwo", inputData[4]);
+        advertisement.put("validUntil", Objects.requireNonNull(inputData)[0]);
+        advertisement.put("title", Objects.requireNonNull(inputData)[1]);
+        advertisement.put("text", Objects.requireNonNull(inputData)[2]);
+        advertisement.put("tagOne", Objects.requireNonNull(inputData)[3]);
+        advertisement.put("tagTwo", Objects.requireNonNull(inputData)[4]);
 
         db.collection("Blackboard").add(advertisement);
-
-        // Wenn du die Activity beenden willst, nimm einfach "finish();" anstatt die vorherige Activity erneut zu starten
-
-        //Intent intent = new Intent(NewAdvertisementActivity.this, BlackboardActivity.class);
-        //startActivity(intent);
         finish();
     }
 
@@ -132,12 +128,21 @@ public class NewAdvertisementActivity extends AppCompatActivity {
         }
 
         inputData[0] = calculateDeleteDay(validUntilText.toString());
-        inputData[1] = titleText.toString();
-        inputData[2] = descriptionText.toString();
+        inputData[1] = validatedInput(titleText.toString());
+        inputData[2] = validatedInput(descriptionText.toString());
         inputData[3] = tagOneText.toString();
         inputData[4] = tagTwoText.toString();
 
         return inputData;
+    }
+    private String validatedInput(String input){
+        input=input.replace("<!", " ");
+        input=input.replace("<!--", " ");
+        input=input.replace("/*", " ");
+        if (input.contains(">")){
+            input=input.replace("<", " ");
+        }
+        return input;
     }
 
     private String  calculateDeleteDay(String publishingPeriod){
@@ -161,11 +166,12 @@ public class NewAdvertisementActivity extends AppCompatActivity {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(new Date());
         calendar.add(Calendar.DAY_OF_YEAR, publishingDuration);
-        DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
+        DateFormat dateFormat = new SimpleDataFormatUniversal();
         return dateFormat.format(calendar.getTime());
 
 
     }
+
 
 
 

@@ -24,6 +24,7 @@ import com.main.dhbworld.Cantine.MealDailyPlan;
 import com.main.dhbworld.Navigation.NavigationUtilities;
 import com.main.dhbworld.Utilities.NetworkAvailability;
 import com.main.dhbworld.Utilities.ProgressIndicator;
+import com.main.dhbworld.Utilities.SimpleDataFormatUniversal;
 
 import java.io.IOException;
 import java.text.NumberFormat;
@@ -146,7 +147,7 @@ public class CantineActivity extends AppCompatActivity {
         todayIs.setVisibility(View.VISIBLE);
         layoutMealCardsBasic.removeAllViews();
         layoutMealCardsExtra.removeAllViews();
-        SimpleDateFormat format =new SimpleDateFormat("dd.MM.yyyy");
+        SimpleDateFormat format =new SimpleDataFormatUniversal();
         todayIs.setText(format.format(today));
         for (int i=0;i<mealDailyPlan.getMeal().length; i++){
             MaterialCardView mealCard= new MaterialCardView(CantineActivity.this);
@@ -285,7 +286,7 @@ public class CantineActivity extends AppCompatActivity {
                 layoutMealCardsBasic.post(new Runnable() {
                     @Override
                     public void run() {
-                        SimpleDateFormat f =new SimpleDateFormat("dd.MM.yyyy", Locale.GERMAN);
+                        SimpleDateFormat f =new SimpleDataFormatUniversal();
                         loadDisplay(getString(R.string.thereIsNoData)+" "+f.format(date)+" "+getString(R.string.cantineIsProbablyClosed));
                     }
                 });
