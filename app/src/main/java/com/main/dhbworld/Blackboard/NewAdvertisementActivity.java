@@ -4,8 +4,11 @@ package com.main.dhbworld.Blackboard;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.CheckBox;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.PreferenceManager;
@@ -14,36 +17,42 @@ import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.main.dhbworld.R;
-import com.main.dhbworld.Utilities.SimpleDataFormatUniversal;
+import com.main.dhbworld.Utilities.SimpleDataFormatUniversalDay;
+import com.main.dhbworld.Utilities.SimpleDataFormatUniversalDayTime;
 
 import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
 public class NewAdvertisementActivity extends AppCompatActivity {
 
     private AutoCompleteTextView validUntil;
-    private AutoCompleteTextView tagOne;
-    private AutoCompleteTextView tagTwo;
+
     private TextInputEditText title;
     private TextInputEditText description;
     private MaterialButton sendButton;
+    private List<CheckBox> tags;
+    private int tagsCounter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_advertisement);
+        tagsCounter=0;
         setupViews();
 
-        setupClickListener();
+        setupClickListeners();
 
     }
 
@@ -52,20 +61,30 @@ public class NewAdvertisementActivity extends AppCompatActivity {
         toolbar.setNavigationOnClickListener(v -> finish());
 
         validUntil = findViewById(R.id.publishingDuration);
-        tagOne=findViewById(R.id.tagOne);
-        tagTwo=findViewById(R.id.tagTwo);
+        TextInputLayout tagsLayout = findViewById(R.id.advertisementTagsLayout);
         String[] types = {"1 Week", "2 Week", "4 Week", "12 Week"};
         validUntil.setAdapter(new ArrayAdapter<>(this, R.layout.dropdown_list_item, types));
-        String[] tags = {"Event", "Mieten", "Sport", "Sonstiges", "Suchen"};
-        tagOne.setAdapter(new ArrayAdapter<>(this, R.layout.dropdown_list_item, tags));
-        tagTwo.setAdapter(new ArrayAdapter<>(this, R.layout.dropdown_list_item, tags));
+        String[] tagLabels = {"Event", "Mieten", "Sport", "Verloren", "Gesucht", "Gefunden"};
         title = findViewById(R.id.newAdvertTitle);
         description = findViewById(R.id.newAdvertDiscription);
         sendButton = findViewById(R.id.sendAdvert);
+        tags= new ArrayList<>();
+
+
+        for (String s:tagLabels){
+            CheckBox box= new CheckBox(this);
+            box.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+            box.setText(s);
+            tags.add(box);
+
+            tagsLayout.addView(box);
+        }
+
+
     }
 
 
-    private void setupClickListener() {
+    private void setupClickListeners() {
         sendButton.setOnClickListener(v -> new MaterialAlertDialogBuilder(com.main.dhbworld.Blackboard.NewAdvertisementActivity.this)
                 .setTitle(R.string.important)
                 .setMessage("Wenn Sie fortsetzten, kann Ihre Anzeige nicht mehr geändert werden. Bei Problemen mit bereits publizierten Anzeigen wenden Sie sich direkt an das DHBWorld-Team über die Feadback-Funktion oder per E-mail.")
@@ -73,6 +92,10 @@ public class NewAdvertisementActivity extends AppCompatActivity {
                 .setNegativeButton(android.R.string.cancel, null)
                 .setCancelable(false)
                 .show());
+
+        for (CheckBox tag:tags){
+            tag.setOnClickListener(new CheckBoxClickListener(tag));
+        }
 
     }
 
@@ -87,6 +110,8 @@ public class NewAdvertisementActivity extends AppCompatActivity {
         advertisement.put("text", Objects.requireNonNull(inputData)[2]);
         advertisement.put("tagOne", Objects.requireNonNull(inputData)[3]);
         advertisement.put("tagTwo", Objects.requireNonNull(inputData)[4]);
+        advertisement.put("tagThree", Objects.requireNonNull(inputData)[5]);
+        advertisement.put("addedOn", Objects.requireNonNull(inputData)[6]);
 
         db.collection("Blackboard").add(advertisement);
         finish();
@@ -114,14 +139,13 @@ public class NewAdvertisementActivity extends AppCompatActivity {
         editor.apply();
     }
 
-
     private String[] getInputData() {
-        String[] inputData = new String[5];
+        String[] inputData = new String[7];
         Editable validUntilText = validUntil.getText();
         Editable titleText = title.getText();
         Editable descriptionText = description.getText();
-        Editable tagOneText = tagOne.getText();
-        Editable tagTwoText = tagTwo.getText();
+
+
 
         if (validUntilText == null || titleText == null || descriptionText == null) {
             return null;
@@ -130,11 +154,28 @@ public class NewAdvertisementActivity extends AppCompatActivity {
         inputData[0] = calculateDeleteDay(validUntilText.toString());
         inputData[1] = validatedInput(titleText.toString());
         inputData[2] = validatedInput(descriptionText.toString());
-        inputData[3] = tagOneText.toString();
-        inputData[4] = tagTwoText.toString();
-
+        inputData[3] = "";
+        inputData[4] ="";
+        inputData[5] ="";
+        List <String> tagLabels=new ArrayList<>();
+        for (CheckBox box:tags){
+            if (box.isChecked()){
+                tagLabels.add(box.getText().toString());
+            }
+        }
+        if (tagLabels.size()>0){
+          inputData[3] = tagLabels.get(0);
+        }
+        if (tagLabels.size()>1){
+           inputData[4] = tagLabels.get(1);
+        }
+        if (tagLabels.size()>1){
+            inputData[5] = tagLabels.get(2);
+        }
+        inputData[6] = new SimpleDataFormatUniversalDayTime().format(new Date());
         return inputData;
     }
+
     private String validatedInput(String input){
         input=input.replace("<!", " ");
         input=input.replace("<!--", " ");
@@ -166,10 +207,45 @@ public class NewAdvertisementActivity extends AppCompatActivity {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(new Date());
         calendar.add(Calendar.DAY_OF_YEAR, publishingDuration);
-        DateFormat dateFormat = new SimpleDataFormatUniversal();
-        return dateFormat.format(calendar.getTime());
+        return new SimpleDataFormatUniversalDay().format(calendar.getTime());
 
 
+    }
+
+    class CheckBoxClickListener implements View.OnClickListener{
+        private final CheckBox tag;
+
+        public CheckBoxClickListener(CheckBox tag) {
+            this.tag=tag;
+        }
+
+        @Override
+        public void onClick(View view) {
+
+            if (tag.isChecked()) {
+                tagsCounter++;
+                if (tagsCounter < 3) {
+                    return;
+                }
+                for (CheckBox t : tags) {
+                    t.setClickable(t.isChecked());
+                    t.setEnabled(t.isChecked());
+                }
+            }else{
+                if (tagsCounter<1){
+                    return;
+                }
+                tagsCounter--;
+                if (tagsCounter!=2){
+                    return;
+                }
+                for (CheckBox t:tags){
+                    t.setClickable(true);
+                    t.setEnabled(true);
+                }
+
+            }
+        }
     }
 
 

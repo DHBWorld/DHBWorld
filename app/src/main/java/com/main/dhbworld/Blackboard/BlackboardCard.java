@@ -7,13 +7,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.Transformation;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.constraintlayout.widget.Constraints;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.chip.Chip;
 import com.main.dhbworld.R;
-
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -28,6 +28,8 @@ public class BlackboardCard extends MaterialCardView {
     private LinearLayout cardLayout;
     private LinearLayout tagLayout;
     private LinearLayout descriptionLayout;
+    private ImageButton arrow;
+    private LinearLayout extrasLayout;
 
     public BlackboardCard(Context context, LinearLayout board, int color) {
         super(context);
@@ -94,10 +96,15 @@ public class BlackboardCard extends MaterialCardView {
         title.setPadding(10, 0, 10, 0);
         cardLayout.addView(title);
 
+        extrasLayout = new LinearLayout(context);
+        extrasLayout.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        extrasLayout.setOrientation(LinearLayout.HORIZONTAL);
+        cardLayout.addView(extrasLayout);
+
         tagLayout = new LinearLayout(context);
-        tagLayout.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        tagLayout.setLayoutParams(new ViewGroup.LayoutParams(800, ViewGroup.LayoutParams.WRAP_CONTENT));
         tagLayout.setOrientation(LinearLayout.HORIZONTAL);
-        cardLayout.addView(tagLayout);
+        extrasLayout.addView(tagLayout);
 
 
     }
@@ -109,15 +116,28 @@ public class BlackboardCard extends MaterialCardView {
         board.addView(padding);
     }
 
-    public void setTags(ArrayList<String> tags) {
+    public void addTags(ArrayList<String> tags) {
 
         for (String tag : tags) {
             if ((Objects.nonNull(tag)) && (!tag.equals(""))) {
                 buildTag(tag);
             }
         }
+        addArrow();
+    }
 
+    private void addArrow() {
+        LinearLayout arrowLayoutPadding = new LinearLayout(context);
+        arrowLayoutPadding.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        arrowLayoutPadding.setOrientation(LinearLayout.HORIZONTAL);
+        extrasLayout.addView(arrowLayoutPadding);
 
+        arrow = new ImageButton(context);
+        arrow.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_arrow_down));
+        arrow.setBackgroundColor(context.getColor(R.color.white));
+        arrow.setColorFilter(context.getColor(R.color.grey_dark));
+        arrowLayoutPadding.addView(arrow);
+        arrow.setOnClickListener(new CardExpandClicker());
     }
 
     private void buildTag(String tagText) {
@@ -130,8 +150,8 @@ public class BlackboardCard extends MaterialCardView {
         chip.setCheckable(false);
         chip.setClickable(false);
         tagLayout.addView(chip);
-    }
 
+    }
 
     public void setText(String text) {
         this.text.setText(text);
@@ -143,63 +163,72 @@ public class BlackboardCard extends MaterialCardView {
     }
 
     public void configurateClickers() {
-        cardLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        cardLayout.setOnClickListener(new CardExpandClicker());
+        tagLayout.setOnClickListener(new CardExpandClicker());
+    }
+
+    class CardExpandClicker implements View.OnClickListener {
+        @Override
+        public void onClick(View view) {
 
 
-                if (descriptionLayout.getVisibility() == View.GONE) {
-                    expand(descriptionLayout);
-                } else {
-                    collapse(descriptionLayout);
-                }
+            if (descriptionLayout.getVisibility() == View.GONE) {
+                expand(descriptionLayout);
+            } else {
+                collapse(descriptionLayout);
             }
+        }
 
 
-            public void expand(final View v) {
-                int matchParentMeasureSpec = View.MeasureSpec.makeMeasureSpec(((View) v.getParent()).getWidth(), View.MeasureSpec.EXACTLY);
-                int wrapContentMeasureSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
-                v.measure(matchParentMeasureSpec, wrapContentMeasureSpec);
-                final int targetHeight = v.getMeasuredHeight();
+        public void expand(final View v) {
+            int matchParentMeasureSpec = View.MeasureSpec.makeMeasureSpec(((View) v.getParent()).getWidth(), View.MeasureSpec.EXACTLY);
+            int wrapContentMeasureSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
+            v.measure(matchParentMeasureSpec, wrapContentMeasureSpec);
+            final int targetHeight = v.getMeasuredHeight();
 
-                // Older versions of android (pre API 21) cancel animations for views with a height of 0.
-                v.getLayoutParams().height = 1;
-                v.setVisibility(View.VISIBLE);
-                Animation a = new Animation() {
-                    @Override
-                    protected void applyTransformation(float interpolatedTime, Transformation t) {
-                        v.getLayoutParams().height = interpolatedTime == 1
-                                ? Constraints.LayoutParams.WRAP_CONTENT
-                                : (int) (targetHeight * interpolatedTime);
+            // Older versions of android (pre API 21) cancel animations for views with a height of 0.
+            v.getLayoutParams().height = 1;
+            v.setVisibility(View.VISIBLE);
+            Animation a = new Animation() {
+                @Override
+                protected void applyTransformation(float interpolatedTime, Transformation t) {
+                    v.getLayoutParams().height = interpolatedTime == 1
+                            ? Constraints.LayoutParams.WRAP_CONTENT
+                            : (int) (targetHeight * interpolatedTime);
+                    v.requestLayout();
+                }
+            };
+
+            // Expansion speed of 1dp/ms
+            a.setDuration((int) (targetHeight / v.getContext().getResources().getDisplayMetrics().density));
+            v.startAnimation(a);
+            arrow.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_arrow_up));
+
+        }
+
+        public void collapse(final View v) {
+            final int initialHeight = v.getMeasuredHeight();
+
+            Animation a = new Animation() {
+                @Override
+                protected void applyTransformation(float interpolatedTime, Transformation t) {
+                    if (interpolatedTime == 1) {
+                        v.setVisibility(View.GONE);
+                    } else {
+                        v.getLayoutParams().height = initialHeight - (int) (initialHeight * interpolatedTime);
                         v.requestLayout();
                     }
-                };
+                }
+            };
 
-                // Expansion speed of 1dp/ms
-                a.setDuration((int) (targetHeight / v.getContext().getResources().getDisplayMetrics().density));
-                v.startAnimation(a);
-            }
+            // Collapse speed of 1dp/ms
+            a.setDuration((int) (initialHeight / v.getContext().getResources().getDisplayMetrics().density));
+            v.startAnimation(a);
+            arrow.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_arrow_down));
 
-            public void collapse(final View v) {
-                final int initialHeight = v.getMeasuredHeight();
 
-                Animation a = new Animation() {
-                    @Override
-                    protected void applyTransformation(float interpolatedTime, Transformation t) {
-                        if (interpolatedTime == 1) {
-                            v.setVisibility(View.GONE);
-                        } else {
-                            v.getLayoutParams().height = initialHeight - (int) (initialHeight * interpolatedTime);
-                            v.requestLayout();
-                        }
-                    }
-                };
-
-                // Collapse speed of 1dp/ms
-                a.setDuration((int) (initialHeight / v.getContext().getResources().getDisplayMetrics().density));
-                v.startAnimation(a);
-            }
-        });
-
+        }
     }
 }
+
+

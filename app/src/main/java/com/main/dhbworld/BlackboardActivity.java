@@ -8,7 +8,6 @@ import android.util.Log;
 import android.widget.LinearLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.PreferenceManager;
-
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
@@ -17,11 +16,8 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.main.dhbworld.Blackboard.BlackboardCard;
 import com.main.dhbworld.Blackboard.NewAdvertisementActivity;
 import com.main.dhbworld.Navigation.NavigationUtilities;
-
 import java.time.Instant;
 import java.time.ZoneId;
-import java.time.temporal.ChronoField;
-import java.time.temporal.TemporalField;
 import java.util.ArrayList;
 
 public class BlackboardActivity extends AppCompatActivity {
@@ -70,7 +66,7 @@ public class BlackboardActivity extends AppCompatActivity {
 
     private void loadAdvertisements() {
         FirebaseFirestore firestore = FirebaseFirestore.getInstance();
-        firestore.collection("Blackboard").get().addOnCompleteListener(task -> {
+        firestore.collection("Blackboard").orderBy("addedOn").get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 int nextCardColor = R.color.grey_light;
                 for (QueryDocumentSnapshot document : task.getResult()) {
@@ -81,7 +77,8 @@ public class BlackboardActivity extends AppCompatActivity {
                         ArrayList<String> tags = new ArrayList<>();
                         tags.add(document.getString("tagOne"));
                         tags.add(document.getString("tagTwo"));
-                        card.setTags(tags);
+                        tags.add(document.getString("tagThree"));
+                        card.addTags(tags);
                         card.setText(document.getString("text"));
                         nextCardColor = changeColor(nextCardColor);
                     }

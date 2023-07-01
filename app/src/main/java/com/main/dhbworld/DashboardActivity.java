@@ -186,7 +186,7 @@ public class DashboardActivity extends AppCompatActivity {
         dashboard.addCard(dashboardCardWeather);
         dashboard.addCard(dashboardCardUserInt);
 
-        dashboard.setUp(this.getApplicationContext(), getResources().getColor(R.color.black), DashboardActivity.this);
+        dashboard.setUp(this.getApplicationContext(), DashboardActivity.this);
     }
 
     private void loadCalendar() {
