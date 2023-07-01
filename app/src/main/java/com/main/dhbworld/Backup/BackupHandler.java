@@ -9,6 +9,7 @@ import android.text.TextWatcher;
 import android.widget.Button;
 import android.widget.CheckBox;
 
+import androidx.activity.result.ActivityResultLauncher;
 import androidx.appcompat.app.AlertDialog;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -31,23 +32,23 @@ public class BackupHandler {
     protected static final byte[] ENC_MAGIC_NUMBER = new byte[]{40, 80, 20, 50};
     protected static final byte[] NOENC_MAGIC_NUMBER = new byte[]{50, 80, 20, 50};
 
-    public static void exportBackup(Activity activity, URI pickerInitialUri) {
+    public static void exportBackup(ActivityResultLauncher<Intent> activity, URI pickerInitialUri) {
         Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         intent.setType("application/octet-stream");
         intent.putExtra(Intent.EXTRA_TITLE, "Backup.dhbworld");
         intent.putExtra(DocumentsContract.EXTRA_INITIAL_URI, pickerInitialUri);
 
-        activity.startActivityForResult(intent, 2);
+        activity.launch(intent);
     }
 
-    public static void restoreBackup(Activity activity, URI pickerInitialUri) {
+    public static void restoreBackup(ActivityResultLauncher<Intent> activity, URI pickerInitialUri) {
         Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         intent.setType("application/octet-stream");
         intent.putExtra(DocumentsContract.EXTRA_INITIAL_URI, pickerInitialUri);
 
-        activity.startActivityForResult(intent, 3);
+        activity.launch(intent);
     }
 
     public static void saveBackupAskPassword(Intent data, Activity activity) {

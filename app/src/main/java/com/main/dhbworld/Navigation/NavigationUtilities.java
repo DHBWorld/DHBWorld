@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.view.GravityCompat;
@@ -25,7 +24,7 @@ import com.main.dhbworld.MapActivity;
 import com.main.dhbworld.Organizer.OrganizerActivity;
 import com.main.dhbworld.R;
 import com.main.dhbworld.SettingsActivity;
-import com.main.dhbworld.UserInteraction;
+import com.main.dhbworld.UserInteractionActivity;
 
 import java.util.List;
 
@@ -61,7 +60,7 @@ public class NavigationUtilities {
                         startActivity(activity, CalendarActivity.class);
                         break;
                     case R.id.UserInteraction:
-                        startActivity(activity, UserInteraction.class);
+                        startActivity(activity, UserInteractionActivity.class);
                         break;
                     case R.id.Settings:
                         startActivity(activity, SettingsActivity.class);
