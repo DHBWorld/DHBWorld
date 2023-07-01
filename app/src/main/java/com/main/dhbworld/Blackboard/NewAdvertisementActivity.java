@@ -64,17 +64,17 @@ public class NewAdvertisementActivity extends AppCompatActivity {
         TextInputLayout tagsLayout = findViewById(R.id.advertisementTagsLayout);
         String[] types = {"1 Week", "2 Week", "4 Week", "12 Week"};
         validUntil.setAdapter(new ArrayAdapter<>(this, R.layout.dropdown_list_item, types));
-        String[] tagLabels = {"Event", "Mieten", "Sport", "Verloren", "Gesucht", "Gefunden"};
+        CardTags[] tagLabels = {CardTags.EVENT, CardTags.RENT, CardTags.SPORT, CardTags.LOST, CardTags.SEARCH_FOR,CardTags.FOUND};
         title = findViewById(R.id.newAdvertTitle);
         description = findViewById(R.id.newAdvertDiscription);
         sendButton = findViewById(R.id.sendAdvert);
         tags= new ArrayList<>();
 
 
-        for (String s:tagLabels){
+        for (CardTags cardTag:tagLabels){
             CheckBox box= new CheckBox(this);
             box.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-            box.setText(s);
+            box.setText(cardTag.getName());
             tags.add(box);
 
             tagsLayout.addView(box);

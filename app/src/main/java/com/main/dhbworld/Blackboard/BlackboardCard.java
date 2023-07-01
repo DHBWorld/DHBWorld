@@ -1,6 +1,8 @@
 package com.main.dhbworld.Blackboard;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.view.Gravity;
 import android.view.View;
@@ -144,18 +146,23 @@ public class BlackboardCard extends MaterialCardView {
         Chip chip = new Chip(context);
         chip.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         chip.setText(tagText);
+        for (CardTags cardTag : CardTags.values()) {
+            if (cardTag.compare(tagText)) {
+                chip.setChipBackgroundColorResource((cardTag.getColor()));
+            }
+        }
         chip.setTextSize(12);
         chip.setGravity(Gravity.CENTER);
         chip.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-        chip.setCheckable(false);
+        chip.setRippleColor(ColorStateList.valueOf(Color.TRANSPARENT));
         chip.setClickable(false);
+        chip.setFocusable(false);
         tagLayout.addView(chip);
 
     }
 
     public void setText(String text) {
         this.text.setText(text);
-
     }
 
     public void setTitle(String title) {
@@ -164,7 +171,7 @@ public class BlackboardCard extends MaterialCardView {
 
     public void configurateClickers() {
         cardLayout.setOnClickListener(new CardExpandClicker());
-        tagLayout.setOnClickListener(new CardExpandClicker());
+        extrasLayout.setOnClickListener(new CardExpandClicker());
     }
 
     class CardExpandClicker implements View.OnClickListener {
