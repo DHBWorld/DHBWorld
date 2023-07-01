@@ -180,7 +180,7 @@ public class DashboardActivity extends AppCompatActivity {
         dashboard.addCard(dashboardCardInfo);
         dashboard.addCard(new DashboardCardWeather(CardType.CARD_WEATHER, null, card_dash_weather, null, null, forecastLayout));
         dashboard.addCard(new DashboardCardUserInt(CardType.CARD_USER_INTERACTION, null, card_dash_user_interaction, null, card_dash_user_interaction_layout));
-        dashboard.setUp(this.getApplicationContext(), getResources().getColor(R.color.black), DashboardActivity.this);
+        dashboard.setUp(this.getApplicationContext(),  DashboardActivity.this);
 
     }
 
