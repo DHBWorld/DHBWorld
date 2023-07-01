@@ -43,7 +43,9 @@ import com.main.dhbworld.Dashboard.DataLoaders.DataLoaderWeather;
 import com.main.dhbworld.Debugging.Debugging;
 import com.main.dhbworld.Dualis.EverlastingService;
 import com.main.dhbworld.Navigation.NavigationUtilities;
+import com.main.dhbworld.Utilities.NetworkAvailability;
 import com.main.dhbworld.Dashboard.DashboardRefresh;
+
 
 import java.util.Locale;
 
@@ -179,6 +181,7 @@ public class DashboardActivity extends AppCompatActivity {
         dashboard.addCard(new DashboardCardWeather(CardType.CARD_WEATHER, null, card_dash_weather, null, null, forecastLayout));
         dashboard.addCard(new DashboardCardUserInt(CardType.CARD_USER_INTERACTION, null, card_dash_user_interaction, null, card_dash_user_interaction_layout));
         dashboard.setUp(this.getApplicationContext(), getResources().getColor(R.color.black), DashboardActivity.this);
+
     }
 
     private void loadCalendar() {

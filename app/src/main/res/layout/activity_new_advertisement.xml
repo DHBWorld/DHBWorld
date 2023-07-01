@@ -22,7 +22,7 @@
                 android:id="@+id/topAppBar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                app:title="Neues Feedback"
+                app:title="Neue Anzeige"
                 app:menu="@menu/top_app_bar"
                 app:navigationIcon="@drawable/ic_baseline_arrow_back_24"
 
@@ -44,7 +44,7 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Feedback-Type">
+                android:hint="Dauer der Publikation">
 
                 <AutoCompleteTextView
                     android:id="@+id/publishingDuration"
@@ -55,19 +55,17 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
+
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/feedbackNameLayout"
+                android:id="@+id/advertisementTagsLayout"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Name">
+                android:hint="Titel">
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/feedbackName"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
 
             </com.google.android.material.textfield.TextInputLayout>
+
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/feedbackTitleLayout"
@@ -78,6 +76,7 @@
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/newAdvertTitle"
+                    android:maxLength="33"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
 

@@ -13,6 +13,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.navigation.NavigationView;
+import com.main.dhbworld.BlackboardActivity;
 import com.main.dhbworld.Calendar.CalendarActivity;
 import com.main.dhbworld.CantineActivity;
 import com.main.dhbworld.DashboardActivity;
@@ -78,6 +79,9 @@ public class NavigationUtilities {
                         break;
                     case R.id.map:
                         startActivity(activity, MapActivity.class);
+                        break;
+                    case R.id.blackboard:
+                        startActivity(activity, BlackboardActivity.class);
                         break;
                 }
                 return true;

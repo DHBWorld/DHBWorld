@@ -122,7 +122,7 @@ public class Dashboard extends BoardLogic {
         }
     }
 
-    public void setUp(Context context, int color, DashboardActivity dashboardActivity) {
+    public void setUp(Context context, DashboardActivity dashboardActivity) {
        setConfigurationModus(false);
         setColorIntensity((ColorUtils.setAlphaComponent(context.getResources().getColor(R.color.black), 0)));
        changeCardVisibility(context);
