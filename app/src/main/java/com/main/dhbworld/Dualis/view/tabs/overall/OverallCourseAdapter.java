@@ -1,4 +1,4 @@
-package com.main.dhbworld.Dualis;
+package com.main.dhbworld.Dualis.view.tabs.overall;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -11,17 +11,17 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.content.res.AppCompatResources;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.main.dhbworld.KVV.KVVListAdapter;
+import com.main.dhbworld.Dualis.parser.htmlparser.overall.DualisOverallCourse;
 import com.main.dhbworld.R;
 
 import java.util.ArrayList;
 
 class OverallCourseAdapter extends RecyclerView.Adapter<OverallCourseAdapter.ViewHolder> {
 
-   private Context context;
-   private ArrayList<OverallCourseModel> overallCourseModels;
+   private final Context context;
+   private final ArrayList<DualisOverallCourse> overallCourseModels;
 
-   OverallCourseAdapter(Context context, ArrayList<OverallCourseModel> overallCourseModel) {
+   OverallCourseAdapter(Context context, ArrayList<DualisOverallCourse> overallCourseModel) {
       this.context = context;
       this.overallCourseModels = overallCourseModel;
    }

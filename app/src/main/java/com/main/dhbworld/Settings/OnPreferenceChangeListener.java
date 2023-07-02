@@ -12,7 +12,7 @@ import android.content.res.Resources;
 import androidx.appcompat.app.AppCompatDelegate;
 
 import com.google.android.material.snackbar.Snackbar;
-import com.main.dhbworld.Dualis.EverlastingService;
+import com.main.dhbworld.Dualis.service.EverlastingService;
 import com.main.dhbworld.Firebase.Utilities;
 import com.main.dhbworld.R;
 
@@ -84,7 +84,7 @@ public class OnPreferenceChangeListener {
     public boolean sync(Object newValue) {
         showNoImpactSnackbar();
         if ((boolean) newValue) {
-            context.startService(new Intent(context, EverlastingService.class));
+            context.startForegroundService(new Intent(context, EverlastingService.class));
         }
         return true;
     }

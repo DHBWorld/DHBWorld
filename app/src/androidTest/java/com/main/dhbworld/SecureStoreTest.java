@@ -7,20 +7,15 @@ import static org.junit.Assert.assertTrue;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import androidx.fragment.app.Fragment;
-import androidx.test.core.app.ActivityScenario;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
 
-import com.main.dhbworld.Dualis.DualisFragmentAdapter;
-import com.main.dhbworld.Dualis.DualisOverallFragment;
 import com.main.dhbworld.Dualis.SecureStore;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 

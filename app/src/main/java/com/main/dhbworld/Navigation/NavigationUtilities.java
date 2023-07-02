@@ -4,12 +4,17 @@ import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.view.MenuItem;
 import android.view.View;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.preference.PreferenceManager;
 
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.navigation.NavigationView;
@@ -27,6 +32,7 @@ import com.main.dhbworld.SettingsActivity;
 import com.main.dhbworld.UserInteractionActivity;
 
 import java.util.List;
+import java.util.Locale;
 
 public class NavigationUtilities {
     public static void setUpNavigation(Activity activity, int checkedItem) {
@@ -107,6 +113,27 @@ public class NavigationUtilities {
                 goalIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 activity.startActivity(goalIntent);
             }
+        }
+    }
+
+    public static void setupLangAndDarkmode(Context context, Resources resources) {
+        SharedPreferences defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        int darkmode = Integer.parseInt(defaultSharedPreferences.getString("darkmode", "-1"));
+        AppCompatDelegate.setDefaultNightMode(darkmode);
+
+        String language = defaultSharedPreferences.getString("language", "default");
+        if (language.equals("default")) {
+            Locale locale = Resources.getSystem().getConfiguration().getLocales().get(0);
+            Locale.setDefault(locale);
+            Configuration config = resources.getConfiguration();
+            config.setLocale(locale);
+            resources.updateConfiguration(config, resources.getDisplayMetrics());
+        } else {
+            Locale locale = new Locale(language);
+            Locale.setDefault(locale);
+            Configuration config = resources.getConfiguration();
+            config.setLocale(locale);
+            resources.updateConfiguration(config, resources.getDisplayMetrics());
         }
     }
 }

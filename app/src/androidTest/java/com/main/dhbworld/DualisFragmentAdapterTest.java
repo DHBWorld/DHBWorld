@@ -6,10 +6,10 @@ import androidx.fragment.app.Fragment;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
-import com.main.dhbworld.Dualis.DualisDocumentFragment;
-import com.main.dhbworld.Dualis.DualisFragmentAdapter;
-import com.main.dhbworld.Dualis.DualisOverallFragment;
-import com.main.dhbworld.Dualis.DualisSemesterFragment;
+import com.main.dhbworld.Dualis.view.tabs.documents.DualisDocumentFragment;
+import com.main.dhbworld.Dualis.view.DualisFragmentAdapter;
+import com.main.dhbworld.Dualis.view.tabs.overall.DualisOverallFragment;
+import com.main.dhbworld.Dualis.view.tabs.semester.DualisSemesterFragment;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

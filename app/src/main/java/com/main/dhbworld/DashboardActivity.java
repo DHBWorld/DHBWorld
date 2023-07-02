@@ -41,7 +41,7 @@ import com.main.dhbworld.Dashboard.DataLoaders.DataLoaderPersonalInfo;
 import com.main.dhbworld.Dashboard.DataLoaders.DataLoaderUserInt;
 import com.main.dhbworld.Dashboard.DataLoaders.DataLoaderWeather;
 import com.main.dhbworld.Debugging.Debugging;
-import com.main.dhbworld.Dualis.EverlastingService;
+import com.main.dhbworld.Dualis.service.EverlastingService;
 import com.main.dhbworld.Navigation.NavigationUtilities;
 import com.main.dhbworld.Utilities.NetworkAvailability;
 import com.main.dhbworld.Dashboard.DashboardRefresh;
@@ -82,7 +82,7 @@ public class DashboardActivity extends AppCompatActivity {
         System.out.println("Running: " + EverlastingService.isRunning);
 
         if (!EverlastingService.isRunning) {
-            startService(new Intent(this, EverlastingService.class));
+            startForegroundService(new Intent(this, EverlastingService.class));
         }
 
         SharedPreferences defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);

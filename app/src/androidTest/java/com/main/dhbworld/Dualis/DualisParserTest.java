@@ -2,15 +2,10 @@ package com.main.dhbworld.Dualis;
 
 import static org.junit.Assert.*;
 
-import android.content.Context;
-
 import androidx.test.ext.junit.runners.AndroidJUnit4;
-import androidx.test.platform.app.InstrumentationRegistry;
 
-import com.main.dhbworld.R;
+import com.main.dhbworld.Dualis.parser.DualisParser;
 
-import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;

@@ -332,6 +332,12 @@ E-Mail-Adresse: <p><a href="mailto:zaeske.christian@gmail.com">zaeske.christian@
     <string name="something_went_wrong">Something went wrong</string>
     <string name="github" translatable="false">GitHub</string>
     <string name="nothing_to_see_here_yet">Nothing to see here yet</string>
+    <string name="disable_me">Disable me</string>
+    <string name="info_dualis_notification">You can disable this notification via your phone\'s settings. Click me and deactivate this notification. Don\'t worry you will still receive other notifications.</string>
+    <string name="biometric_authentication">Biometric Authentication</string>
+    <string name="authenticate_with_biometrics">Please authenticate</string>
+    <string name="use_biometrics">Use biometrics</string>
+    <string name="use_biometrics_for_authentication">Use biometrics for authentication?</string>
     <string name="blackboard">Blackboard</string>
     <string name="maximum_posts_blackboard">You can only create a maximum of 3 posts per day</string>
 </resources>

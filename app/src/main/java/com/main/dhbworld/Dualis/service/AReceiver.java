@@ -1,4 +1,4 @@
-package com.main.dhbworld.Dualis;
+package com.main.dhbworld.Dualis.service;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
