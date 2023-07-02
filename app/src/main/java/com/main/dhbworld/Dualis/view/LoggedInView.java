@@ -1,6 +1,5 @@
 package com.main.dhbworld.Dualis.view;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.viewpager2.widget.ViewPager2;
@@ -18,7 +17,11 @@ public class LoggedInView {
     private final AppCompatActivity activity;
     private final String arguments;
     private final List<HttpCookie> cookies;
+
+    private TabLayout tabLayout;
+    private ViewPager2 viewPager2;
     private DualisFragmentAdapter dualisFragmentAdapter;
+    private Toolbar toolbar;
 
     public LoggedInView(AppCompatActivity activity, String arguments, List<HttpCookie> cookies) {
         this.activity = activity;
@@ -30,32 +33,41 @@ public class LoggedInView {
         activity.setContentView(R.layout.activity_dualis);
         NavigationUtilities.setUpNavigation(activity, R.id.dualis);
 
-        TabLayout tabLayout = activity.findViewById(R.id.dualisTabLayout);
+        setupViews();
 
-        ViewPager2 viewPager2 = activity.findViewById(R.id.dualisViewPager);
+        setupViewPager();
+        setupTabs();
+        setupToolbar();
+    }
+
+    private void setupViews() {
+        tabLayout = activity.findViewById(R.id.dualisTabLayout);
+        viewPager2 = activity.findViewById(R.id.dualisViewPager);
         dualisFragmentAdapter = new DualisFragmentAdapter(activity, arguments, cookies);
+        toolbar = activity.findViewById(R.id.topAppBar);
+    }
+
+    private void setupViewPager() {
         viewPager2.setAdapter(dualisFragmentAdapter);
         viewPager2.setOffscreenPageLimit(2);
+    }
 
-        TabLayoutMediator tabLayoutMediator = new TabLayoutMediator(tabLayout, viewPager2, new TabLayoutMediator.TabConfigurationStrategy() {
-            @Override
-            public void onConfigureTab(@NonNull TabLayout.Tab tab, int position) {
-                if (position == 0) {
-                    tab.setText(R.string.overview);
-                    tab.setIcon(R.drawable.ic_baseline_dashboard_24);
-                } else if (position == 1) {
-                    tab.setText(R.string.Courses);
-                    tab.setIcon(R.drawable.ic_baseline_book_24);
-                } else {
-                    tab.setText(R.string.documents);
-                    tab.setIcon(R.drawable.ic_baseline_description_24);
-                }
+    private void setupTabs() {
+        new TabLayoutMediator(tabLayout, viewPager2, (tab, position) -> {
+            if (position == 0) {
+                tab.setText(R.string.overview);
+                tab.setIcon(R.drawable.ic_baseline_dashboard_24);
+            } else if (position == 1) {
+                tab.setText(R.string.Courses);
+                tab.setIcon(R.drawable.ic_baseline_book_24);
+            } else {
+                tab.setText(R.string.documents);
+                tab.setIcon(R.drawable.ic_baseline_description_24);
             }
-        });
+        }).attach();
+    }
 
-        tabLayoutMediator.attach();
-        Toolbar toolbar = activity.findViewById(R.id.topAppBar);
-
+    private void setupToolbar() {
         toolbar.setOnMenuItemClickListener(item -> {
             if (item.getItemId() == R.id.dualis_refresh) {
                 if (tabLayout.getSelectedTabPosition() == 0) {
@@ -65,7 +77,6 @@ public class LoggedInView {
                 } else {
                     dualisFragmentAdapter.dualisDocumentFragment.makeDocumentsRequest();
                 }
-
                 return true;
             }
             return false;
