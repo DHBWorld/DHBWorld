@@ -1,5 +1,7 @@
 package com.main.dhbworld.Dualis.view.tabs.documents;
 
+import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,13 +35,14 @@ public class DualisDocumentFragment extends Fragment implements DualisAPI.Docume
     private final String arguments;
     private final List<HttpCookie> cookies;
 
-    private static CircularProgressIndicator mainProgressIndicator;
-    private static LinearLayout mainLayout;
-    private RecyclerView documentsRecyclerView;
-    private static DualisAPI dualisAPI;
-    private static CookieHandler cookieHandler;
+    private Context context;
+    private Activity activity;
 
-    private View mainView;
+    private CircularProgressIndicator mainProgressIndicator;
+    private LinearLayout mainLayout;
+    private RecyclerView documentsRecyclerView;
+    private DualisAPI dualisAPI;
+    private CookieHandler cookieHandler;
 
     public DualisDocumentFragment() {
         arguments = "";
@@ -59,23 +62,40 @@ public class DualisDocumentFragment extends Fragment implements DualisAPI.Docume
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        mainView = this.getView();
-
-        mainProgressIndicator = mainView.findViewById(R.id.progress_main);
-        mainLayout = mainView.findViewById(R.id.main_layout);
-        documentsRecyclerView = mainView.findViewById(R.id.documents_list_view);
-        documentsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
-        documentsRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
-
-        cookieHandler = CookieManager.getDefault();
-        dualisAPI = new DualisAPI(getContext(), arguments, cookieHandler);
-
-        if (cookies.size() == 0) {
-            if (getActivity() != null) {
-                Snackbar.make(getActivity().findViewById(android.R.id.content), getResources().getString(R.string.error_getting_kvv_data), BaseTransientBottomBar.LENGTH_SHORT).show();
-            }
+        context = getContext();
+        activity = getActivity();
+        if (context == null || activity == null) {
             return;
+        }
+
+        setupViews();
+        setupRecyclerView();
+
+        if (!setupCookies()) return;
+
+        setupDualisAPI();
+    }
+
+    private void setupViews() {
+        if (this.getView() == null) {
+            return;
+        }
+
+        mainProgressIndicator = this.getView().findViewById(R.id.progress_main);
+        mainLayout = this.getView().findViewById(R.id.main_layout);
+        documentsRecyclerView = this.getView().findViewById(R.id.documents_list_view);
+    }
+
+    private void setupRecyclerView() {
+        documentsRecyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
+        documentsRecyclerView.addItemDecoration(new DividerItemDecoration(context, DividerItemDecoration.VERTICAL));
+    }
+
+    private boolean setupCookies() {
+        cookieHandler = CookieManager.getDefault();
+        if (cookies.size() == 0) {
+            Snackbar.make(activity.findViewById(android.R.id.content), getResources().getString(R.string.error_getting_kvv_data), BaseTransientBottomBar.LENGTH_SHORT).show();
+            return false;
         }
 
         CookieManager cookieManager = new CookieManager();
@@ -84,8 +104,11 @@ public class DualisDocumentFragment extends Fragment implements DualisAPI.Docume
         } catch (URISyntaxException e) {
             e.printStackTrace();
         }
+        return true;
+    }
 
-
+    private void setupDualisAPI() {
+        dualisAPI = new DualisAPI(context, arguments, cookieHandler);
         dualisAPI.requestDocuments(this);
     }
 
@@ -120,6 +143,6 @@ public class DualisDocumentFragment extends Fragment implements DualisAPI.Docume
 
     @Override
     public void onError(Exception error) {
-        Snackbar.make(DualisDocumentFragment.this.getActivity().findViewById(android.R.id.content), getString(R.string.error_with_message, error.toString()), BaseTransientBottomBar.LENGTH_LONG).show();
+        Snackbar.make(DualisDocumentFragment.this.activity.findViewById(android.R.id.content), getString(R.string.error_with_message, error.toString()), BaseTransientBottomBar.LENGTH_LONG).show();
     }
 }

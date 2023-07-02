@@ -41,7 +41,7 @@ public class DualisFragmentAdapter extends FragmentStateAdapter {
                 dualisDocumentFragment = new DualisDocumentFragment(arguments, cookies);
                 return dualisDocumentFragment;
             default:
-                return null;
+                throw new RuntimeException();
         }
     }
 
