@@ -18,8 +18,8 @@ import java.util.ArrayList;
 
 class OverallCourseAdapter extends RecyclerView.Adapter<OverallCourseAdapter.ViewHolder> {
 
-   private Context context;
-   private ArrayList<DualisOverallCourse> overallCourseModels;
+   private final Context context;
+   private final ArrayList<DualisOverallCourse> overallCourseModels;
 
    OverallCourseAdapter(Context context, ArrayList<DualisOverallCourse> overallCourseModel) {
       this.context = context;

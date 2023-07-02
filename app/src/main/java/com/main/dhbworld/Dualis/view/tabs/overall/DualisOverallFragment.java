@@ -1,5 +1,7 @@
 package com.main.dhbworld.Dualis.view.tabs.overall;
 
+import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,18 +37,19 @@ public class DualisOverallFragment extends Fragment implements DualisAPI.Overall
     private final String arguments;
     private final List<HttpCookie> cookies;
 
-    private static CircularProgressIndicator mainProgressIndicator;
-    private static LinearLayout mainLayout;
+    private Context context;
+    private Activity activity;
+
+    private CircularProgressIndicator mainProgressIndicator;
+    private LinearLayout mainLayout;
     private RecyclerView coursesRecyclerView;
 
     private TextView totalGPATextView;
     private TextView majorGPATextView;
     private TextView totalCreditsTextView;
 
-    private static DualisAPI dualisAPI;
-    private static CookieHandler cookieHandler;
-
-    View mainView;
+    private DualisAPI dualisAPI;
+    private CookieHandler cookieHandler;
 
     public DualisOverallFragment() {
         this.arguments = "";
@@ -65,27 +68,39 @@ public class DualisOverallFragment extends Fragment implements DualisAPI.Overall
 
     @Override
     public void onViewCreated(@NonNull View v, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(mainView, savedInstanceState);
-
-        mainView = this.getView();
-
-        mainProgressIndicator = mainView.findViewById(R.id.progress_main);
-        mainLayout = mainView.findViewById(R.id.main_layout);
-        coursesRecyclerView = mainView.findViewById(R.id.recycler_view_courses);
-
-        totalGPATextView = mainView.findViewById(R.id.total_gpa_tv);
-        majorGPATextView = mainView.findViewById(R.id.major_gpa_tv);
-        totalCreditsTextView = mainView.findViewById(R.id.total_credits_tv);
-
-        cookieHandler = CookieManager.getDefault();
-
-        dualisAPI = new DualisAPI(getContext(), arguments, cookieHandler);
-
-        if (cookies.size() == 0) {
-            if (getActivity() != null) {
-                Snackbar.make(getActivity().findViewById(android.R.id.content), getResources().getString(R.string.error_getting_kvv_data), BaseTransientBottomBar.LENGTH_SHORT).show();
-            }
+        super.onViewCreated(v, savedInstanceState);
+        context = getContext();
+        activity = getActivity();
+        if (context == null || activity == null) {
             return;
+        }
+
+        setupViews();
+
+        if (!setupCookies()) return;
+
+        setupDualisAPI();
+    }
+
+    private void setupViews() {
+        if (this.getView() == null) {
+            return;
+        }
+
+        mainProgressIndicator = this.getView().findViewById(R.id.progress_main);
+        mainLayout = this.getView().findViewById(R.id.main_layout);
+        coursesRecyclerView = this.getView().findViewById(R.id.recycler_view_courses);
+
+        totalGPATextView = this.getView().findViewById(R.id.total_gpa_tv);
+        majorGPATextView = this.getView().findViewById(R.id.major_gpa_tv);
+        totalCreditsTextView = this.getView().findViewById(R.id.total_credits_tv);
+    }
+
+    private boolean setupCookies() {
+        cookieHandler = CookieManager.getDefault();
+        if (cookies.size() == 0) {
+            Snackbar.make(activity.findViewById(android.R.id.content), getResources().getString(R.string.error_getting_kvv_data), BaseTransientBottomBar.LENGTH_SHORT).show();
+            return false;
         }
 
         CookieManager cookieManager = new CookieManager();
@@ -94,10 +109,12 @@ public class DualisOverallFragment extends Fragment implements DualisAPI.Overall
         } catch (URISyntaxException e) {
             e.printStackTrace();
         }
+        return true;
+    }
 
-
+    private void setupDualisAPI() {
+        dualisAPI = new DualisAPI(context, arguments, cookieHandler);
         makeOverallRequest();
-
     }
 
     public void makeOverallRequest() {
@@ -127,9 +144,9 @@ public class DualisOverallFragment extends Fragment implements DualisAPI.Overall
         majorGPATextView.setText(dualisGPA.getMajorCourseGPA());
         totalCreditsTextView.setText(getResources().getString(R.string.values_credits, dualisOverallData.getEarnedCredits(), dualisOverallData.getNeededCredits()));
 
-        OverallCourseAdapter overallCourseAdapter = new OverallCourseAdapter(getContext(), dualisOverallData.getCourses());
-        coursesRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
-        coursesRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
+        OverallCourseAdapter overallCourseAdapter = new OverallCourseAdapter(context, dualisOverallData.getCourses());
+        coursesRecyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
+        coursesRecyclerView.addItemDecoration(new DividerItemDecoration(context, DividerItemDecoration.VERTICAL));
 
         coursesRecyclerView.setAdapter(overallCourseAdapter);
         overallCourseAdapter.notifyItemRangeInserted(0, dualisOverallData.getCourses().size());
@@ -139,6 +156,6 @@ public class DualisOverallFragment extends Fragment implements DualisAPI.Overall
 
     @Override
     public void onError(Exception error) {
-        Snackbar.make(DualisOverallFragment.this.getActivity().findViewById(android.R.id.content), getString(R.string.error_with_message, error.toString()), BaseTransientBottomBar.LENGTH_LONG).show();
+        Snackbar.make(activity.findViewById(android.R.id.content), getString(R.string.error_with_message, error.toString()), BaseTransientBottomBar.LENGTH_LONG).show();
     }
 }
