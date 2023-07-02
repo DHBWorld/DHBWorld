@@ -1,7 +1,6 @@
 package com.main.dhbworld;
 
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,16 +10,19 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.material.snackbar.BaseTransientBottomBar;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
+import com.main.dhbworld.Cantine.Cantine;
 import com.main.dhbworld.Cantine.CantineParser;
 import com.main.dhbworld.Cantine.CantineUtilities;
 import com.main.dhbworld.Cantine.Meal;
 import com.main.dhbworld.Cantine.MealCard;
 import com.main.dhbworld.Cantine.MealDailyPlan;
+import com.main.dhbworld.Utilities.RefreshCounter;
+import com.main.dhbworld.Dashboard.DashboardRefresh;
 import com.main.dhbworld.Navigation.NavigationUtilities;
+import com.main.dhbworld.Utilities.NetworkAvailability;
 import com.main.dhbworld.Utilities.ProgressIndicator;
+import com.main.dhbworld.Utilities.SimpleDataFormatUniversalDay;
 
 import org.json.JSONException;
 
@@ -34,6 +36,7 @@ import java.util.Locale;
 import java.util.Objects;
 
 
+
 public class CantineActivity extends AppCompatActivity {
     private LinearLayout layoutMealCardsBasic;
     private LinearLayout layoutMealCardsExtra;
@@ -43,7 +46,9 @@ public class CantineActivity extends AppCompatActivity {
     private TextView pageTitleBasic;
     private TextView pageTitleExtra;
     private TextView todayIs;
-    private boolean refreshIsEnable;
+
+    private Cantine cantine;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,7 +68,8 @@ public class CantineActivity extends AppCompatActivity {
         todayIs = findViewById(R.id.textView_todayIs_canteen);
 
         indicator = new ProgressIndicator(CantineActivity.this, layoutMealCardsBasic);
-        refreshIsEnable=true;
+        cantine=new Cantine();
+
     }
 
     private void startActivityLogic() {
@@ -130,6 +136,7 @@ public class CantineActivity extends AppCompatActivity {
         });
     }
 
+
     private void loadLayout(MealDailyPlan mealDailyPlan, Date today) {
         prepareLayout();
         SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy");
@@ -186,9 +193,11 @@ public class CantineActivity extends AppCompatActivity {
                     return;
                 }
 
+
                 layoutMealCardsBasic.post(() -> {
                     SimpleDateFormat f = new SimpleDateFormat("dd.MM.yyyy", Locale.GERMAN);
                     loadDisplay(getString(R.string.thereIsNoData) + " " + f.format(date) + " " + getString(R.string.cantineIsProbablyClosed));
+
                 });
             }
         }).startAsync();
@@ -234,20 +243,13 @@ public class CantineActivity extends AppCompatActivity {
     }
 
     public void refreshClick(@NonNull MenuItem item) throws NullPointerException {
+       boolean doRefresh = DashboardRefresh.statusCheck(false, cantine.getRefreshStatus(), this.findViewById(android.R.id.content), this);
 
-            if (refreshIsEnable) {
-                refreshIsEnable = false;
-                new CountDownTimer(10000, 1000) {
-                    public void onTick(long millisUtilFinished) {}
-                    @Override
-                    public void onFinish() {
-                        refreshIsEnable = true;
-                    }
-                }.start();
-                startActivityLogic();
-            } else {
-                Snackbar.make(this.findViewById(android.R.id.content), getResources().getString(R.string.refreshIsOnlyIn10Min), BaseTransientBottomBar.LENGTH_SHORT).show();
-            }
+        if (doRefresh) {
+            new RefreshCounter(cantine);
+            startActivityLogic();
+        }
 
     }
+
 }

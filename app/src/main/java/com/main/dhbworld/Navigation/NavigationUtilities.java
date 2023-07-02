@@ -18,6 +18,7 @@ import androidx.preference.PreferenceManager;
 
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.navigation.NavigationView;
+import com.main.dhbworld.BlackboardActivity;
 import com.main.dhbworld.Calendar.CalendarActivity;
 import com.main.dhbworld.CantineActivity;
 import com.main.dhbworld.DashboardActivity;
@@ -28,7 +29,7 @@ import com.main.dhbworld.MapActivity;
 import com.main.dhbworld.Organizer.OrganizerActivity;
 import com.main.dhbworld.R;
 import com.main.dhbworld.SettingsActivity;
-import com.main.dhbworld.UserInteraction;
+import com.main.dhbworld.UserInteractionActivity;
 
 import java.util.List;
 import java.util.Locale;
@@ -65,7 +66,7 @@ public class NavigationUtilities {
                         startActivity(activity, CalendarActivity.class);
                         break;
                     case R.id.UserInteraction:
-                        startActivity(activity, UserInteraction.class);
+                        startActivity(activity, UserInteractionActivity.class);
                         break;
                     case R.id.Settings:
                         startActivity(activity, SettingsActivity.class);
@@ -84,6 +85,9 @@ public class NavigationUtilities {
                         break;
                     case R.id.map:
                         startActivity(activity, MapActivity.class);
+                        break;
+                    case R.id.blackboard:
+                        startActivity(activity, BlackboardActivity.class);
                         break;
                 }
                 return true;

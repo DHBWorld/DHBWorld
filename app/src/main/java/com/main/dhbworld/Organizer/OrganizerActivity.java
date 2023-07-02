@@ -20,7 +20,7 @@ import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.main.dhbworld.DashboardActivity;
 import com.main.dhbworld.Navigation.NavigationUtilities;
-import com.main.dhbworld.NetworkAvailability;
+import com.main.dhbworld.Utilities.NetworkAvailability;
 import com.main.dhbworld.R;
 
 import java.util.ArrayList;

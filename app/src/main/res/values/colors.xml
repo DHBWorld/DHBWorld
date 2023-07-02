@@ -167,6 +167,11 @@
     <color name="DarkBlue">#00008B</color>
     <color name="Navy">#000080</color>
     <color name="Black">#000000</color>
+    <color name="LightBlueSummer">#c3d8e6</color>
+    <color name="LightLilaSummer">#8fa7e3</color>
+    <color name="LightYellowSummer">#edbf4a</color>
+    <color name="LightRedSummer">#eba9a9</color>
+    <color name="LightGreenSummer">#abc7b9</color>
 
 
 

@@ -15,6 +15,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.DHBWorld">
         <activity
+            android:name=".BlackboardActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Blackboard.NewAdvertisementActivity"
+            android:exported="false" />
+        <activity
             android:name=".Feedback.NewFeedbackActivity"
             android:exported="false" />
         <activity
@@ -49,7 +55,7 @@
             android:name=".KVVActivity"
             android:exported="false" />
         <activity
-            android:name=".UserInteraction"
+            android:name=".UserInteractionActivity"
             android:exported="false" />
         <activity
             android:name=".CantineActivity"

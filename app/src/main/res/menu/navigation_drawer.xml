@@ -34,6 +34,9 @@
         <item
             android:id="@+id/map"
             android:title="@string/map"/>
+        <item
+            android:id="@+id/blackboard"
+            android:title="@string/blackboard"/>
     </group>
 
     <group

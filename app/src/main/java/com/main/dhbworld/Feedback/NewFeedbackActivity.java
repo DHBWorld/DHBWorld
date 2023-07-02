@@ -201,15 +201,15 @@ public class NewFeedbackActivity extends AppCompatActivity {
         MaterialToolbar toolbar = findViewById(R.id.topAppBar);
         toolbar.setNavigationOnClickListener(v -> finish());
 
-        feedbackType = findViewById(R.id.feedbackType);
+        feedbackType = findViewById(R.id.publishingDuration);
         String[] types = getResources().getStringArray(R.array.feedback_types);
         feedbackType.setAdapter(new ArrayAdapter<>(this, R.layout.dropdown_list_item, types));
 
         feedbackName = findViewById(R.id.feedbackName);
-        feedbackTitle = findViewById(R.id.feedbackTitle);
-        feedbackDescription = findViewById(R.id.feedbackDescription);
+        feedbackTitle = findViewById(R.id.newAdvertTitle);
+        feedbackDescription = findViewById(R.id.newAdvertDiscription);
 
-        sendButton = findViewById(R.id.sendFeedbackButton);
+        sendButton = findViewById(R.id.sendAdvert);
     }
 
     private interface UserIdListener {

@@ -27,7 +27,7 @@ import com.google.firebase.firestore.SetOptions;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.main.dhbworld.Navigation.NavigationUtilities;
-import com.main.dhbworld.NetworkAvailability;
+import com.main.dhbworld.Utilities.NetworkAvailability;
 import com.main.dhbworld.Organizer.OrganizerActivity;
 import com.main.dhbworld.R;
 
