@@ -6,8 +6,12 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.LinearLayout;
+
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.preference.PreferenceManager;
+
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
@@ -31,6 +35,8 @@ public class BlackboardActivity extends AppCompatActivity {
         setContentView(R.layout.activity_blackboard);
         NavigationUtilities.setUpNavigation(this, R.id.blackboard);
 
+        setupToolbar();
+
         board = findViewById(R.id.card_dash_mealPlan_layout);
         loadAdvertisements();
         configurateClickers();
@@ -40,6 +46,25 @@ public class BlackboardActivity extends AppCompatActivity {
 
 
     }
+
+    private void setupToolbar() {
+        Toolbar toolbar = findViewById(R.id.topAppBar);
+        toolbar.setOnMenuItemClickListener(item -> {
+            if (item.getItemId() == R.id.blackboard_information) {
+                showInformation();
+            }
+            return false;
+        });
+    }
+
+    private void showInformation() {
+        new MaterialAlertDialogBuilder(this)
+                .setTitle(R.string.disclaimer)
+                .setMessage(R.string.blackboard_disclaimer)
+                .setPositiveButton(R.string.ok, null)
+                .show();
+    }
+
     private void configurateClickers(){
         addAdvertisementButton = findViewById(R.id.add_advertisement);
         addAdvertisementButton.setOnClickListener(v -> {

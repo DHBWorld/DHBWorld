@@ -340,4 +340,7 @@ E-Mail-Adresse: <p><a href="mailto:zaeske.christian@gmail.com">zaeske.christian@
     <string name="use_biometrics_for_authentication">Use biometrics for authentication?</string>
     <string name="blackboard">Blackboard</string>
     <string name="maximum_posts_blackboard">You can only create a maximum of 3 posts per day</string>
+    <string name="information">Information</string>
+    <string name="disclaimer">Disclaimer</string>
+    <string name="blackboard_disclaimer">The content shared here is created by users. The DHBWorld team is not the author and dissociates itself from any content not created by the DHBWorld team itself. All contributions are subject to manual review before they are published.</string>
 </resources>

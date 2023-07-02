@@ -335,4 +335,7 @@ E-Mail-Adresse: <p><a href="mailto:zaeske.christian@gmail.com">zaeske.christian@
     <string name="use_biometrics_for_authentication">Biometrische Daten für die Authentifizierung verwenden?</string>
     <string name="blackboard">Schwarzes Brett</string>
     <string name="maximum_posts_blackboard">Du kannst nur maximal 3 Posts am Tag erstellen</string>
+    <string name="information">Information</string>
+    <string name="disclaimer">Haftungsausschluss</string>
+    <string name="blackboard_disclaimer">Die hier geteilten Inhalte werden von Benutzern erstellt. Das DHBWorld-Team ist nicht der Autor und distanziert sich von jeglichen Inhalten, die nicht von dem DHBWorld-Team selbst erstellt wurden. Alle Beiträge werden einer manuellen Prüfung unterzugen, bevor diese veröffentlicht werden.</string>
 </resources>
