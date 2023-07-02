@@ -1,5 +1,8 @@
 package com.main.dhbworld.Dualis.view.tabs.semester;
 
+import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,8 +25,6 @@ import com.main.dhbworld.Dualis.parser.htmlparser.semesters.course.DualisSemeste
 import com.main.dhbworld.Dualis.parser.htmlparser.semesters.semester.DualisSemester;
 import com.main.dhbworld.R;
 
-import org.json.JSONException;
-
 import java.net.CookieHandler;
 import java.net.CookieManager;
 import java.net.HttpCookie;
@@ -37,17 +38,19 @@ public class DualisSemesterFragment extends Fragment implements DualisAPI.Semest
     private final String arguments;
     private final List<HttpCookie> cookies;
 
+    private Context context;
+    private Activity activity;
+
     private AutoCompleteTextView semesterDropdown;
     private String currentSemester = "";
     private List<DualisSemesterCourse> vorlesungModels = new ArrayList<>();
     private VorlesungAdapter vorlesungAdapter;
-    private static CircularProgressIndicator mainProgressIndicator;
-    private static LinearLayout mainLayout;
+    private CircularProgressIndicator mainProgressIndicator;
+    private LinearLayout mainLayout;
+    private RecyclerView mRecyclerView;
 
-    private static DualisAPI dualisAPI;
-    private static CookieHandler cookieHandler;
-
-    View mainView;
+    private DualisAPI dualisAPI;
+    private CookieHandler cookieHandler;
 
     public DualisSemesterFragment() {
         this.arguments = "";
@@ -65,23 +68,35 @@ public class DualisSemesterFragment extends Fragment implements DualisAPI.Semest
 
     @Override
     public void onViewCreated(@NonNull View v, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(mainView, savedInstanceState);
+        super.onViewCreated(v, savedInstanceState);
+        context = getContext();
+        activity = getActivity();
+        if (context == null || activity == null) {
+            return;
+        }
 
-        mainView = this.getView();
+        setupViews();
+        if (!setupCookies()) return;
+        setupDualisAPI();
+    }
 
-        semesterDropdown = mainView.findViewById(R.id.autoComplete);
-        mainProgressIndicator = mainView.findViewById(R.id.progress_main);
-        mainLayout = mainView.findViewById(R.id.main_layout);
+    private void setupViews() {
+        if (this.getView() == null) {
+            return;
+        }
 
+        semesterDropdown = this.getView().findViewById(R.id.autoComplete);
+        mainProgressIndicator = this.getView().findViewById(R.id.progress_main);
+        mainLayout = this.getView().findViewById(R.id.main_layout);
+        mRecyclerView = this.getView().findViewById(R.id.recycler_view);
+    }
+
+    private boolean setupCookies() {
         cookieHandler = CookieManager.getDefault();
 
-        dualisAPI = new DualisAPI(getContext(), arguments, cookieHandler);
-
         if (cookies.size() == 0) {
-            if (getActivity() != null) {
-                Snackbar.make(getActivity().findViewById(android.R.id.content), getResources().getString(R.string.error_getting_kvv_data), BaseTransientBottomBar.LENGTH_SHORT).show();
-            }
-            return;
+            Snackbar.make(activity.findViewById(android.R.id.content), getResources().getString(R.string.error_getting_kvv_data), BaseTransientBottomBar.LENGTH_SHORT).show();
+            return false;
         }
 
         CookieManager cookieManager = new CookieManager();
@@ -90,8 +105,11 @@ public class DualisSemesterFragment extends Fragment implements DualisAPI.Semest
         } catch (URISyntaxException e) {
             e.printStackTrace();
         }
+        return true;
+    }
 
-
+    private void setupDualisAPI() {
+        dualisAPI = new DualisAPI(context, arguments, cookieHandler);
         makeCourseRequest();
     }
 
@@ -109,67 +127,66 @@ public class DualisSemesterFragment extends Fragment implements DualisAPI.Semest
 
     @Override
     public void onSemesterDataLoaded(ArrayList<DualisSemester> dualisSemesters) {
-        DualisAPI.compareSaveNotification(getContext(), dualisSemesters);
-        if (getContext() == null) {
-            return;
-        }
+        DualisAPI.compareSaveNotification(context, dualisSemesters);
 
-        ArrayList<String> semesters = new ArrayList<>();
-        for (DualisSemester dualisSemester : dualisSemesters) {
-            semesters.add(dualisSemester.getName());
-        }
+        ArrayList<String> semesterNames = getSemesterNames(dualisSemesters);
+        setupSemesterDropdown(semesterNames, dualisSemesters);
+        setupVorlesungModelsList(dualisSemesters, semesterNames);
 
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(getContext(), R.layout.dropdown_list_item, semesters);
-        semesterDropdown.setAdapter(arrayAdapter);
-        if (semesters.contains(currentSemester)) {
-            semesterDropdown.setText(currentSemester, false);
-        } else {
-            semesterDropdown.setText(semesters.get(0), false);
-        }
+        setupRecyclerView();
 
-
-        vorlesungModels = new ArrayList<>();
-        RecyclerView mRecyclerView = mainView.findViewById(R.id.recycler_view);
-        try {
-            if (semesters.contains(currentSemester)) {
-                updateList(dualisSemesters.get(semesters.indexOf(currentSemester)).getDualisSemesterCourses());
-            } else {
-                updateList(dualisSemesters.get(0).getDualisSemesterCourses());
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        mRecyclerView.setHasFixedSize(true);
-        LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext());
-        mRecyclerView.setLayoutManager(mLayoutManager);
-        vorlesungAdapter = new VorlesungAdapter(vorlesungModels, getContext());
-        mRecyclerView.setAdapter(vorlesungAdapter);
-
-
-
-        semesterDropdown.setOnItemClickListener((adapterView, view, i, l) -> {
-            currentSemester = semesterDropdown.getText().toString();
-            try {
-                updateList(dualisSemesters.get(i).getDualisSemesterCourses());
-                vorlesungAdapter.notifyDataSetChanged();
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        });
-
-
-        semesterDropdown.setEnabled(true);
         mainProgressIndicator.setVisibility(View.GONE);
         mainLayout.setVisibility(View.VISIBLE);
     }
 
-    @Override
-    public void onError(Exception error) {
-        Snackbar.make(DualisSemesterFragment.this.getActivity().findViewById(android.R.id.content), getString(R.string.error_with_message, error.toString()), BaseTransientBottomBar.LENGTH_LONG).show();
+    private ArrayList<String> getSemesterNames(ArrayList<DualisSemester> dualisSemesters) {
+        ArrayList<String> semesters = new ArrayList<>();
+        for (DualisSemester dualisSemester : dualisSemesters) {
+            semesters.add(dualisSemester.getName());
+        }
+        return semesters;
     }
 
-    void updateList(ArrayList<DualisSemesterCourse> dualisSemesterCourses) throws JSONException {
+    @SuppressLint("NotifyDataSetChanged")
+    private void setupSemesterDropdown(ArrayList<String> semesterNames, ArrayList<DualisSemester> dualisSemesters) {
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(context, R.layout.dropdown_list_item, semesterNames);
+        semesterDropdown.setAdapter(arrayAdapter);
+        if (semesterNames.contains(currentSemester)) {
+            semesterDropdown.setText(currentSemester, false);
+        } else {
+            semesterDropdown.setText(semesterNames.get(0), false);
+        }
+        semesterDropdown.setOnItemClickListener((adapterView, view, i, l) -> {
+            currentSemester = semesterDropdown.getText().toString();
+            updateList(dualisSemesters.get(i).getDualisSemesterCourses());
+            vorlesungAdapter.notifyDataSetChanged();
+        });
+        semesterDropdown.setEnabled(true);
+    }
+
+    private void setupVorlesungModelsList(ArrayList<DualisSemester> dualisSemesters, ArrayList<String> semesterNames) {
+        vorlesungModels = new ArrayList<>();
+        if (semesterNames.contains(currentSemester)) {
+            updateList(dualisSemesters.get(semesterNames.indexOf(currentSemester)).getDualisSemesterCourses());
+        } else {
+            updateList(dualisSemesters.get(0).getDualisSemesterCourses());
+        }
+    }
+
+    private void setupRecyclerView() {
+        mRecyclerView.setHasFixedSize(true);
+        LinearLayoutManager mLayoutManager = new LinearLayoutManager(context);
+        mRecyclerView.setLayoutManager(mLayoutManager);
+        vorlesungAdapter = new VorlesungAdapter(vorlesungModels, context);
+        mRecyclerView.setAdapter(vorlesungAdapter);
+    }
+
+    @Override
+    public void onError(Exception error) {
+        Snackbar.make(activity.findViewById(android.R.id.content), getString(R.string.error_with_message, error.toString()), BaseTransientBottomBar.LENGTH_LONG).show();
+    }
+
+    void updateList(ArrayList<DualisSemesterCourse> dualisSemesterCourses) {
         vorlesungModels.clear();
         vorlesungModels.addAll(dualisSemesterCourses);
     }
