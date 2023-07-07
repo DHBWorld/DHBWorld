@@ -52,6 +52,8 @@ public class DualisSemesterFragment extends Fragment implements DualisAPI.Semest
     private DualisAPI dualisAPI;
     private CookieHandler cookieHandler;
 
+    private boolean secondTry = false;
+
     public DualisSemesterFragment() {
         this.arguments = "";
         this.cookies = new ArrayList<>();
@@ -110,10 +112,11 @@ public class DualisSemesterFragment extends Fragment implements DualisAPI.Semest
 
     private void setupDualisAPI() {
         dualisAPI = new DualisAPI(context, arguments, cookieHandler);
-        makeCourseRequest();
+        makeCourseRequest(false);
     }
 
-    public void makeCourseRequest() {
+    public void makeCourseRequest(boolean secondTry) {
+        this.secondTry = secondTry;
         mainLayout.setVisibility(View.INVISIBLE);
         mainProgressIndicator.setVisibility(View.VISIBLE);
         dualisAPI.requestSemesters(this);
@@ -127,7 +130,11 @@ public class DualisSemesterFragment extends Fragment implements DualisAPI.Semest
 
     @Override
     public void onSemesterDataLoaded(ArrayList<DualisSemester> dualisSemesters) {
-        DualisAPI.compareSaveNotification(context, dualisSemesters);
+        boolean success = DualisAPI.compareSaveNotification(context, dualisSemesters, secondTry);
+        if (!success) {
+            makeCourseRequest(true);
+            return;
+        }
 
         ArrayList<String> semesterNames = getSemesterNames(dualisSemesters);
         setupSemesterDropdown(semesterNames, dualisSemesters);

@@ -89,8 +89,8 @@ public class DualisAPI {
         dualisSemesterAPI.requestSemesters(semesterDataListener);
     }
 
-    public static void compareSaveNotification(Context context, ArrayList<DualisSemester> dualisSemesters) {
-        DualisGradeComparer.compareSaveNotification(context, dualisSemesters);
+    public static boolean compareSaveNotification(Context context, ArrayList<DualisSemester> dualisSemesters, boolean secondTry) {
+        return DualisGradeComparer.compareSaveNotification(context, dualisSemesters, secondTry);
     }
 
     public interface LoginListener {

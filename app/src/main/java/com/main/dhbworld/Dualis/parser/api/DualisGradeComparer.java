@@ -14,23 +14,28 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class DualisGradeComparer {
-    public static void compareSaveNotification(Context context, ArrayList<DualisSemester> dualisSemesters) {
+
+    static ArrayList<Grade> newGrades = new ArrayList<>();
+    static boolean secondTry = false;
+
+    public static boolean compareSaveNotification(Context context, ArrayList<DualisSemester> dualisSemesters, boolean secondTry) {
+        DualisGradeComparer.secondTry = secondTry;
         ArrayList<DualisSemester> savedDualisSemesters = DualisParser.getSavedFileContent(context);
         if (savedDualisSemesters == null) {
-            return;
+            return true;
         }
         DualisParser.saveFileContent(context, dualisSemesters);
 
         if (savedDualisSemesters.size() == 0) {
-            return;
+            return true;
         }
         if (DualisParser.semestersEqual(savedDualisSemesters, dualisSemesters)) {
             Log.d("DualisAPI", "No new grades");
-            return;
+            return true;
         }
 
         Map<String, DualisSemesterCourse> savedDualisSemesterCourseMap = createCourseMap(savedDualisSemesters);
-        checkForNewGrades(context, dualisSemesters, savedDualisSemesterCourseMap);
+        return checkForNewGrades(context, dualisSemesters, savedDualisSemesterCourseMap);
     }
 
     private static Map<String, DualisSemesterCourse> createCourseMap(ArrayList<DualisSemester> savedDualisSemesters) {
@@ -43,7 +48,7 @@ public class DualisGradeComparer {
         return savedDualisSemesterCourseMap;
     }
 
-    private static void checkForNewGrades(Context context, ArrayList<DualisSemester> dualisSemesters, Map<String, DualisSemesterCourse> savedDualisSemesterCourseMap) {
+    private static boolean checkForNewGrades(Context context, ArrayList<DualisSemester> dualisSemesters, Map<String, DualisSemesterCourse> savedDualisSemesterCourseMap) {
         for (DualisSemester dualisSemester : dualisSemesters) {
             for (DualisSemesterCourse dualisSemesterCourse : dualisSemester.getDualisSemesterCourses()) {
                 DualisSemesterCourse savedDualisSemesterCourse = savedDualisSemesterCourseMap.get(dualisSemester.getName() + dualisSemesterCourse.getNumber());
@@ -55,6 +60,18 @@ public class DualisGradeComparer {
                     checkForNewFinalGrade(context, dualisSemesterCourse, savedDualisSemesterCourse);
                 }
             }
+        }
+        return sendNotifications(context);
+    }
+
+    private static boolean sendNotifications(Context context) {
+        if (newGrades.size() < 4 || secondTry) {
+            for (Grade grade : newGrades) {
+                DualisNotification.sendNotification(context, grade.title, grade.message, grade.id);
+            }
+            return true;
+        } else {
+            return false;
         }
     }
 
@@ -98,10 +115,15 @@ public class DualisGradeComparer {
         String gradeDot = grade.replace(",", "").trim();
 
         if (isNumber(gradeDot)) {
-            DualisNotification.sendNotification(context,
+            newGrades.add(new Grade(
                     context.getResources().getString(R.string.new_grade_exam),
                     context.getResources().getString(R.string.new_grade_exam_text, dualisSemesterCourse.getName(), grade),
-                    DualisNotification.calcID(dualisSemesterCourse.getName() + grade));
+                    DualisNotification.calcID(dualisSemesterCourse.getName() + grade)
+            ));
+            //DualisNotification.sendNotification(context,
+            //        context.getResources().getString(R.string.new_grade_exam),
+            //        context.getResources().getString(R.string.new_grade_exam_text, dualisSemesterCourse.getName(), grade),
+            //        DualisNotification.calcID(dualisSemesterCourse.getName() + grade));
         }
     }
 
@@ -109,10 +131,15 @@ public class DualisGradeComparer {
         String gradeDot = dualisSemesterCourse.getGrade().replace(",", "").trim();
 
         if (isNumber(gradeDot)) {
-            DualisNotification.sendNotification(context,
+            newGrades.add(new Grade(
                     context.getResources().getString(R.string.new_grade_final),
                     context.getResources().getString(R.string.new_grade_final_text, dualisSemesterCourse.getName(), dualisSemesterCourse.getGrade()),
-                    DualisNotification.calcID(dualisSemesterCourse.getName() + dualisSemesterCourse.getGrade()));
+                    DualisNotification.calcID(dualisSemesterCourse.getName() + dualisSemesterCourse.getGrade())
+            ));
+            //DualisNotification.sendNotification(context,
+            //        context.getResources().getString(R.string.new_grade_final),
+            //        context.getResources().getString(R.string.new_grade_final_text, dualisSemesterCourse.getName(), dualisSemesterCourse.getGrade()),
+            //        DualisNotification.calcID(dualisSemesterCourse.getName() + dualisSemesterCourse.getGrade()));
         }
     }
 
@@ -122,6 +149,18 @@ public class DualisGradeComparer {
             return true;
         } catch (NumberFormatException ignored) {
             return false;
+        }
+    }
+
+    private static class Grade {
+        private final String title;
+        private final String message;
+        private final int id;
+
+        private Grade(String title, String message, int id) {
+            this.title = title;
+            this.message = message;
+            this.id = id;
         }
     }
 }

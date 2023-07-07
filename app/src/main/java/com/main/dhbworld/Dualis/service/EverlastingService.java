@@ -52,7 +52,7 @@ public class EverlastingService extends Service {
          return;
       }
 
-      new BackgroundTask(this).doWork();
+      new BackgroundTask(this).doWork(false);
 
       try {
          for (int i=0; i<sleepTimeMinutes*6; i++) {

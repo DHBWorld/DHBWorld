@@ -41,7 +41,7 @@ public class BackgroundTask {
         sharedPref = context.getSharedPreferences("Dualis", MODE_PRIVATE);
     }
 
-    public void doWork() {
+    public void doWork(boolean secondTry) {
         if (!sharedPref.getBoolean("saveCredentials", false)) {
             return;
         }
@@ -53,7 +53,7 @@ public class BackgroundTask {
 
         new Thread(() -> {
             ExecutorService executor = Executors.newSingleThreadExecutor();
-            executor.execute(() -> getDualisUpdates(credentials.get("email"), credentials.get("password")));
+            executor.execute(() -> getDualisUpdates(credentials.get("email"), credentials.get("password"), secondTry));
         }).start();
     }
 
@@ -69,7 +69,7 @@ public class BackgroundTask {
         return null;
     }
 
-    private void getDualisUpdates(String username, String password) {
+    private void getDualisUpdates(String username, String password, boolean secondTry) {
         java.net.CookieManager cookieManager = new java.net.CookieManager();
         CookieHandler cookieHandler = getCookieHandler(cookieManager);
         try {
@@ -82,7 +82,7 @@ public class BackgroundTask {
                 if (cookies.size() == 0) {
                     Log.d("DUALIS", response);
                 } else {
-                    handleSuccessfullogin(cookieHandler, conn);
+                    handleSuccessfullogin(cookieHandler, conn, secondTry);
                 }
             }
         } catch (IOException e) {
@@ -128,14 +128,17 @@ public class BackgroundTask {
         return conn;
     }
 
-    private void handleSuccessfullogin(CookieHandler cookieHandler, HttpsURLConnection conn) {
+    private void handleSuccessfullogin(CookieHandler cookieHandler, HttpsURLConnection conn, boolean secondTry) {
         String arguments = getArguments(conn);
         DualisAPI dualisAPI = new DualisAPI(context, arguments, cookieHandler);
         dualisAPI.requestSemesters(new DualisAPI.SemesterDataListener() {
             @Override
             public void onSemesterDataLoaded(ArrayList<DualisSemester> dualisSemesters) {
                 try {
-                    DualisAPI.compareSaveNotification(context, dualisSemesters);
+                    boolean success = DualisAPI.compareSaveNotification(context, dualisSemesters, secondTry);
+                    if (!success) {
+                        doWork(true);
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
