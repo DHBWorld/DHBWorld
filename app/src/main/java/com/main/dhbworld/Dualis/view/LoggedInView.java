@@ -73,7 +73,7 @@ public class LoggedInView {
                 if (tabLayout.getSelectedTabPosition() == 0) {
                     dualisFragmentAdapter.dualisOverallFragment.makeOverallRequest();
                 } else if (tabLayout.getSelectedTabPosition() == 1) {
-                    dualisFragmentAdapter.dualisSemesterFragment.makeCourseRequest();
+                    dualisFragmentAdapter.dualisSemesterFragment.makeCourseRequest(false);
                 } else {
                     dualisFragmentAdapter.dualisDocumentFragment.makeDocumentsRequest();
                 }
