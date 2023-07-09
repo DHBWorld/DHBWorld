@@ -17,7 +17,7 @@ public class DataLoaderInfo {
     private final LinearLayout[] layoutInfoFull;
     private final LinearLayout[] layoutInfo;
     private final LinearLayout layoutCardInfo;
-    private  FirebaseFirestore firestore;
+
 
     public DataLoaderInfo(Context context, TextView title, TextView[] message, LinearLayout[] layoutInfoFull, LinearLayout[] layoutInfo, LinearLayout layoutCardInfo) {
         this.context = context;
@@ -28,12 +28,11 @@ public class DataLoaderInfo {
         this.layoutCardInfo = layoutCardInfo;
     }
 
-    public void load() {
+    public void load(FirebaseFirestore firestore) {
 
         ProgressIndicator indicator = new ProgressIndicator(context, layoutCardInfo, layoutInfoFull);
         indicator.show();
         new Thread(() -> layoutCardInfo.post(() -> {
-            firestore = FirebaseFirestore.getInstance();
             DocumentReference contact = firestore.collection("General").document("InfoCard");
             contact.get().addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {

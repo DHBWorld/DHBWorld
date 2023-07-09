@@ -445,20 +445,21 @@
                             android:paddingStart="35dp"
                             android:paddingTop="15dp"
                             android:paddingEnd="15dp"
-                            android:paddingBottom="15dp">
+                            android:paddingBottom="5dp">
 
                             <LinearLayout
                                 android:id="@+id/layoutAdvertisement"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:orientation="horizontal">
+                                android:orientation="horizontal"
+                                android:visibility="gone">
 
                                 <ImageView
                                     android:id="@+id/imageViewAdvertisement"
                                     android:layout_width="20dp"
                                     android:layout_height="20dp"
                                     android:layout_marginRight="3dp"
-                                    android:background="@drawable/ic_pencil" />
+                                    android:background="@drawable/push_pin_black_24dp" />
 
                                 <TextView
                                     android:id="@+id/textViewAdvertTitle"
@@ -466,6 +467,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
                                     android:text="@string/questions"
+                                    android:textStyle="bold"
                                     android:textSize="15sp" />
 
                             </LinearLayout>
@@ -475,7 +477,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:orientation="horizontal"
-                                android:paddingVertical="7dp">
+                                android:paddingLeft="20dp">
                             </LinearLayout>
                         </LinearLayout>
 

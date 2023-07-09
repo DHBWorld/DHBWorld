@@ -122,7 +122,7 @@ public class BlackboardCard extends MaterialCardView {
 
         for (String tag : tags) {
             if ((Objects.nonNull(tag)) && (!tag.equals(""))) {
-                buildTag(tag);
+                buildTag(tag, tagLayout, context);
             }
         }
         addArrow();
@@ -142,7 +142,7 @@ public class BlackboardCard extends MaterialCardView {
         arrow.setOnClickListener(new CardExpandClicker());
     }
 
-    private void buildTag(String tagText) {
+    public static void buildTag(String tagText, LinearLayout layout, Context context) {
         Chip chip = new Chip(context);
         chip.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         chip.setText(tagText);
@@ -157,7 +157,7 @@ public class BlackboardCard extends MaterialCardView {
         chip.setRippleColor(ColorStateList.valueOf(Color.TRANSPARENT));
         chip.setClickable(false);
         chip.setFocusable(false);
-        tagLayout.addView(chip);
+        layout.addView(chip);
 
     }
 

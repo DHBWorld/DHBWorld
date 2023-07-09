@@ -26,6 +26,8 @@ import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.main.dhbworld.Dashboard.DataLoaders.DataLoaderBb;
 import com.main.dhbworld.Utilities.RefreshCounter;
 import com.main.dhbworld.Dashboard.Cards.CardType;
 import com.main.dhbworld.Dashboard.Cards.DashboardCard;
@@ -57,6 +59,7 @@ public class DashboardActivity extends AppCompatActivity {
     private LinearLayout layoutCardKvv;
     private LinearLayout layoutCardPI;
     private LinearLayout layoutCardInfo;
+    private LinearLayout layoutCardBb;
 
 
     public static final String MyPREFERENCES = "myPreferencesKey";
@@ -69,10 +72,13 @@ public class DashboardActivity extends AppCompatActivity {
     private MaterialCardView card_dash_info;
     private MaterialCardView card_dash_user_interaction;
     private MaterialCardView card_dash_weather;
+    private MaterialCardView card_dash_bb;
 
     private DashboardCard dashboardCardInfo;
 
     private Dashboard dashboard;
+    private FirebaseFirestore firestore;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,9 +116,11 @@ public class DashboardActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.POST_NOTIFICATIONS}, 23);
         }
 
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
         NavigationUtilities.setUpNavigation(this, R.id.dashboard);
+        firestore=FirebaseFirestore.getInstance();
         defineViews();
         buildDashboard();
         loadDashboard();
@@ -121,6 +129,7 @@ public class DashboardActivity extends AppCompatActivity {
 
     private void loadDashboard() {
         loadUserInteraction();
+        loadBlackBoard();
         loadPersonalInformation();
         if (!NetworkAvailability.check(DashboardActivity.this)) {
             Snackbar.make(this.findViewById(android.R.id.content), getResources().getString(R.string.problemsWithInternetConnection), BaseTransientBottomBar.LENGTH_LONG).show();
@@ -137,12 +146,22 @@ public class DashboardActivity extends AppCompatActivity {
 
     }
 
+    private void loadBlackBoard() {
+        LinearLayout layoutAdverTags = findViewById(R.id.layoutAdverTags);
+        LinearLayout layoutAdvertisement = findViewById(R.id.layoutAdvertisement);
+        TextView textViewAdvertTitle = findViewById(R.id.textViewAdvertTitle);
+
+        DataLoaderBb dataLoaderBb = new DataLoaderBb(DashboardActivity.this,   layoutAdvertisement,  textViewAdvertTitle,  layoutAdverTags,  layoutCardBb);
+        dataLoaderBb.load(firestore);
+    }
+
     private void defineViews() {
         layoutCardMealPlan = findViewById(R.id.layoutCardMealPlan);
         layoutCardCalendar = findViewById(R.id.layoutCardCalendar);
         layoutCardKvv = findViewById(R.id.layoutCardKvv);
         layoutCardPI = findViewById(R.id.layoutCardPI);
         layoutCardInfo = findViewById(R.id.layoutCardInfo);
+        layoutCardBb = findViewById(R.id.layoutCardBb);
 
         card_dash_calendar = findViewById(R.id.card_dash_calendar);
         card_dash_pi = findViewById(R.id.card_dash_pi);
@@ -151,6 +170,7 @@ public class DashboardActivity extends AppCompatActivity {
         card_dash_info = findViewById(R.id.card_dash_info);
         card_dash_user_interaction = findViewById(R.id.card_dash_userInteraction);
         card_dash_weather = findViewById(R.id.card_dash_weather);
+        card_dash_bb = findViewById(R.id.card_dash_bb);
 
     }
 
@@ -160,6 +180,7 @@ public class DashboardActivity extends AppCompatActivity {
         LinearLayout boxCardMealPlan = findViewById(R.id.buttonCardMealPlan);
         LinearLayout boxCardKvv = findViewById(R.id.buttonCardKvv);
         LinearLayout boxCardInfo = findViewById(R.id.buttonCardInfo);
+        LinearLayout boxCardBb = findViewById(R.id.buttonCardBb);
 
         LinearLayout card_dash_calendar_layout = findViewById(R.id.card_dash_calendar_layout);
         LinearLayout card_dash_pi_layout = findViewById(R.id.card_dash_pi_layout);
@@ -167,6 +188,7 @@ public class DashboardActivity extends AppCompatActivity {
         LinearLayout card_dash_mealPlan_layout = findViewById(R.id.card_dash_mealPlan_layout);
         LinearLayout card_dash_user_interaction_layout = findViewById(R.id.card_dash_userInteraction_layout);
         LinearLayout card_dash_info_layout = findViewById(R.id.card_dash_info_layout);
+        LinearLayout card_dash_bb_layout = findViewById(R.id.card_dash_bb_layout);
 
         LinearLayout forecastLayout = findViewById(R.id.weather_forecast);
 
@@ -177,6 +199,7 @@ public class DashboardActivity extends AppCompatActivity {
         dashboard.addCard(new DashboardCard(CardType.CARD_CALENDAR, layoutCardCalendar, card_dash_calendar, boxCardCalendar, card_dash_calendar_layout));
         dashboard.addCard(new DashboardCard(CardType.CARD_KVV, layoutCardKvv, card_dash_kvv, boxCardKvv, card_dash_kvv_layout));
         dashboard.addCard( new DashboardCard(CardType.CARD_PI, layoutCardPI, card_dash_pi, boxCardPI, card_dash_pi_layout));
+        dashboard.addCard( new DashboardCard(CardType.CARD_BB, layoutCardBb, card_dash_bb, boxCardBb, card_dash_bb_layout));
         dashboard.addCard(dashboardCardInfo);
         dashboard.addCard(new DashboardCardWeather(CardType.CARD_WEATHER, null, card_dash_weather, null, null, forecastLayout));
         dashboard.addCard(new DashboardCardUserInt(CardType.CARD_USER_INTERACTION, null, card_dash_user_interaction, null, card_dash_user_interaction_layout));
@@ -327,7 +350,7 @@ public class DashboardActivity extends AppCompatActivity {
         layoutInfo[2] = findViewById(R.id.layoutInfoMessageThree);
 
         DataLoaderInfo dataLoaderInfo = new DataLoaderInfo(this, title, message, layoutInfoFull, layoutInfo, layoutCardInfo);
-        dataLoaderInfo.load();
+        dataLoaderInfo.load(firestore);
 
     }
 
