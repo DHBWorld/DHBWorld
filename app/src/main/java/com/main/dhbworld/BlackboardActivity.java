@@ -5,7 +5,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -16,17 +18,20 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.main.dhbworld.Blackboard.BlackboardCard;
 import com.main.dhbworld.Blackboard.NewAdvertisementActivity;
 import com.main.dhbworld.Navigation.NavigationUtilities;
+import com.main.dhbworld.Utilities.ProgressIndicator;
+
 import java.time.Instant;
 import java.time.ZoneId;
 import java.util.ArrayList;
 
 public class BlackboardActivity extends AppCompatActivity {
     private LinearLayout board;
-    private FloatingActionButton addAdvertisementButton;
+    private ProgressIndicator indicator;
 
 
     @Override
@@ -38,12 +43,10 @@ public class BlackboardActivity extends AppCompatActivity {
         setupToolbar();
 
         board = findViewById(R.id.card_dash_mealPlan_layout);
+        indicator=new ProgressIndicator(this, board);
+        indicator.show();
         loadAdvertisements();
         configurateClickers();
-
-
-
-
 
     }
 
@@ -66,7 +69,7 @@ public class BlackboardActivity extends AppCompatActivity {
     }
 
     private void configurateClickers(){
-        addAdvertisementButton = findViewById(R.id.add_advertisement);
+        FloatingActionButton addAdvertisementButton = findViewById(R.id.add_advertisement);
         addAdvertisementButton.setOnClickListener(v -> {
             if (isPostingAllowed()) {
                 Intent intent = new Intent(BlackboardActivity.this, NewAdvertisementActivity.class);
@@ -91,11 +94,12 @@ public class BlackboardActivity extends AppCompatActivity {
 
     private void loadAdvertisements() {
         FirebaseFirestore firestore = FirebaseFirestore.getInstance();
-        firestore.collection("Blackboard").orderBy("addedOn").get().addOnCompleteListener(task -> {
+        firestore.collection("Blackboard").orderBy("addedOn", Query.Direction.DESCENDING).get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 int nextCardColor = R.color.grey_light;
                 for (QueryDocumentSnapshot document : task.getResult()) {
                     if (Boolean.TRUE.equals(document.getBoolean("approved"))) {
+                        indicator.hide();
                         BlackboardCard card = new BlackboardCard(BlackboardActivity.this, board, nextCardColor);
 
                         card.setTitle(document.getString("title"));
@@ -108,10 +112,20 @@ public class BlackboardActivity extends AppCompatActivity {
                         nextCardColor = changeColor(nextCardColor);
                     }
                 }
+                if (board.getChildCount() < 2) {
+                    showEmptyBoard();
+                }
             } else {
-                Log.d(TAG, "Error getting documents: ", task.getException());
+                showEmptyBoard();
+
             }
         });
+    }
+    private void showEmptyBoard(){
+        indicator.hide();
+        TextView message= new TextView(this);
+        message.setText(R.string.empty_blackboard);
+        board.addView(message);
     }
 
     private int changeColor(int color) {

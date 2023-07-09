@@ -101,7 +101,7 @@ public class NewAdvertisementActivity extends AppCompatActivity {
 
     private void loadDateInFirebase() {
         updatePostingCount();
-        String[] inputData = getInputData();
+        Object[] inputData = getInputData();
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         Map<String, Object> advertisement = new HashMap<>();
         advertisement.put("approved", false);
@@ -139,13 +139,11 @@ public class NewAdvertisementActivity extends AppCompatActivity {
         editor.apply();
     }
 
-    private String[] getInputData() {
-        String[] inputData = new String[7];
+    private Object[] getInputData() {
+        Object[] inputData = new Object[7];
         Editable validUntilText = validUntil.getText();
         Editable titleText = title.getText();
         Editable descriptionText = description.getText();
-
-
 
         if (validUntilText == null || titleText == null || descriptionText == null) {
             return null;
@@ -154,7 +152,7 @@ public class NewAdvertisementActivity extends AppCompatActivity {
         inputData[0] = calculateDeleteDay(validUntilText.toString());
         inputData[1] = validatedInput(titleText.toString());
         inputData[2] = validatedInput(descriptionText.toString());
-        inputData[3] = "";
+        inputData[3] ="";
         inputData[4] ="";
         inputData[5] ="";
         List <String> tagLabels=new ArrayList<>();
@@ -169,10 +167,10 @@ public class NewAdvertisementActivity extends AppCompatActivity {
         if (tagLabels.size()>1){
            inputData[4] = tagLabels.get(1);
         }
-        if (tagLabels.size()>1){
+        if (tagLabels.size()>2){
             inputData[5] = tagLabels.get(2);
         }
-        inputData[6] = new SimpleDataFormatUniversalDayTime().format(new Date());
+        inputData[6] = new Date();
         return inputData;
     }
 

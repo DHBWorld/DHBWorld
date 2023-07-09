@@ -25,15 +25,9 @@ public class Dashboard extends BoardLogic {
     private final List<DashboardCard> cards;
     private Boolean configurationModus;
 
-
-
-
     public Dashboard() {
         cards = new ArrayList<>();
         configurationModus = false;
-
-
-
     }
 
 
