@@ -123,11 +123,12 @@ public class DashboardActivity extends AppCompatActivity {
         firestore=FirebaseFirestore.getInstance();
         defineViews();
         buildDashboard();
+
         loadDashboard();
 
     }
 
-    private void loadDashboard() {
+    private void loadDashboardCards() {
         loadUserInteraction();
         loadBlackBoard();
         loadPersonalInformation();
@@ -316,15 +317,19 @@ public class DashboardActivity extends AppCompatActivity {
         DataLoaderMealPlan dataLoaderMealPlan = new DataLoaderMealPlan(DashboardActivity.this, layoutCardMealPlan, layoutMeal, textViewMeal, imageViewMeal);
         dataLoaderMealPlan.load();
     }
-
-    public void refreshClick(@NonNull MenuItem item) throws NullPointerException {
+    private void loadDashboard(){
         boolean doRefresh = DashboardRefresh.statusCheck(dashboard.getConfigurationModus(), dashboard.getRefreshStatus(), this.findViewById(android.R.id.content), this);
 
         if (doRefresh) {
             new RefreshCounter(dashboard).start();
-            loadDashboard();
+            loadDashboardCards();
         }
     }
+
+    public void refreshClick(@NonNull MenuItem item) throws NullPointerException {
+       loadDashboard();
+    }
+
 
     public void configurationClick(@NonNull MenuItem item) throws NullPointerException {
 

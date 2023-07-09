@@ -57,6 +57,7 @@ public class DataLoaderBb {
     }
 
     private void showLastAdvert(DocumentSnapshot doc) {
+
         layoutAdvertisement.setVisibility(View.VISIBLE);
         layoutAdverTags.removeAllViews();
         textViewAdvertTitle.setText(doc.getString("title"));
