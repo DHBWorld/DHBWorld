@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -32,7 +31,6 @@ import java.util.ArrayList;
 
 public class BlackboardActivity extends AppCompatActivity {
     private LinearLayout board;
-    private FloatingActionButton addAdvertisementButton;
     private ProgressIndicator indicator;
 
 
@@ -71,7 +69,7 @@ public class BlackboardActivity extends AppCompatActivity {
     }
 
     private void configurateClickers(){
-        addAdvertisementButton = findViewById(R.id.add_advertisement);
+        FloatingActionButton addAdvertisementButton = findViewById(R.id.add_advertisement);
         addAdvertisementButton.setOnClickListener(v -> {
             if (isPostingAllowed()) {
                 Intent intent = new Intent(BlackboardActivity.this, NewAdvertisementActivity.class);
@@ -114,21 +112,20 @@ public class BlackboardActivity extends AppCompatActivity {
                         nextCardColor = changeColor(nextCardColor);
                     }
                 }
-                if (board.getChildCount()<2){
-                    indicator.hide();
-                    TextView message= new TextView(this);
-                    message.setText(R.string.empty_blackboard);
-                    message.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-                    board.addView(message);
+                if (board.getChildCount() < 2) {
+                    showEmptyBoard();
                 }
             } else {
-                Log.d(TAG, "Error getting documents: ", task.getException());
-                indicator.hide();
-                TextView message= new TextView(this);
-                message.setText(R.string.empty_blackboard);
+                showEmptyBoard();
 
             }
         });
+    }
+    private void showEmptyBoard(){
+        indicator.hide();
+        TextView message= new TextView(this);
+        message.setText(R.string.empty_blackboard);
+        board.addView(message);
     }
 
     private int changeColor(int color) {
