@@ -104,7 +104,7 @@ public class DataLoaderCalendar {
         if (durationUntilStartOfClass.toMinutes() >= 0) {
             new CountDownTimerOne(durationUntilStartOfClass.toMinutes() * 60000, 60000).start();
         } else {
-            new CountDownTimerTwo(durationUntilEndOfClass.toMinutes() * 60000, 60000);
+            new CountDownTimerTwo(durationUntilEndOfClass.toMinutes() * 60000, 60000).start();
         }
 
     }

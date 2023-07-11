@@ -1,7 +1,9 @@
 package com.main.dhbworld.Blackboard;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.ColorStateList;
+import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.view.Gravity;
@@ -25,20 +27,23 @@ public class BlackboardCard extends MaterialCardView {
     private TextView title;
     private final LinearLayout board;
     private final Context context;
-    private final int color;
+    private final int cardsBorderColor;
     private MaterialCardView card;
     private LinearLayout cardLayout;
     private LinearLayout tagLayout;
     private LinearLayout descriptionLayout;
     private ImageButton arrow;
     private LinearLayout extrasLayout;
+    private int cardsBackgroungColor;
 
-    public BlackboardCard(Context context, LinearLayout board, int color) {
+
+    public BlackboardCard(Context context, LinearLayout board, int cardsBorderColor) {
         super(context);
 
         this.context = context;
         this.board = board;
-        this.color = color;
+        this.cardsBorderColor = cardsBorderColor;
+        this.cardsBackgroungColor=choseCardsColor();
 
 
         createBox();
@@ -53,7 +58,7 @@ public class BlackboardCard extends MaterialCardView {
     private void createBox() {
         card = new MaterialCardView(context);
         card.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-        card.setStrokeColor(context.getResources().getColor(color));
+        card.setStrokeColor(context.getResources().getColor(cardsBorderColor));
         card.setCardElevation(0);
         card.setStrokeWidth(10);
         board.addView(card);
@@ -63,11 +68,11 @@ public class BlackboardCard extends MaterialCardView {
         LinearLayout paddingRed = new LinearLayout(context);
         paddingRed.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         paddingRed.setPadding(0, 70, 0, 0);
-        paddingRed.setBackgroundColor(context.getResources().getColor(color));
+        paddingRed.setBackgroundColor(context.getResources().getColor(cardsBorderColor));
         card.addView(paddingRed);
 
         cardLayout = new LinearLayout(context);
-        cardLayout.setBackgroundColor(context.getResources().getColor(R.color.white));
+        cardLayout.setBackgroundColor(context.getResources().getColor(cardsBackgroungColor));
         cardLayout.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         cardLayout.setOrientation(LinearLayout.VERTICAL);
         cardLayout.setPadding(30, 20, 30, 20);
@@ -136,10 +141,17 @@ public class BlackboardCard extends MaterialCardView {
 
         arrow = new ImageButton(context);
         arrow.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_arrow_down));
-        arrow.setBackgroundColor(context.getColor(R.color.white));
+        arrow.setBackgroundColor(context.getColor(cardsBackgroungColor));
         arrow.setColorFilter(context.getColor(R.color.grey_dark));
         arrowLayoutPadding.addView(arrow);
         arrow.setOnClickListener(new CardExpandClicker());
+    }
+    private int choseCardsColor(){
+        int[] attrs = {R.attr.dashboardCardBackground};
+        @SuppressLint("ResourceType") TypedArray ta = context.obtainStyledAttributes(attrs);
+        int color = ta.getResourceId(0, android.R.color.black);
+        ta.recycle();
+        return color;
     }
 
     public static void buildTag(String tagText, LinearLayout layout, Context context) {
