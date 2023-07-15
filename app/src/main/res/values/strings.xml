@@ -350,4 +350,7 @@ E-Mail-Adresse: <p><a href="mailto:zaeske.christian@gmail.com">zaeske.christian@
     <string name="save_changes_message">Do you want to save the changes you made?</string>
     <string name="discard">Discard</string>
     <string name="cannot_hide_home">You cannot hide the \"Home\" entry</string>
+    <string name="warning_send_advert_message">If you continue, your ad can no longer be changed. In case of problems with already published ads, contact the DHBWorld team directly via the Feedback function or by e-mail. By submitting, you agree to the terms and conditions.</string>
+    <string name="terms">Terms</string>
+    <string name="terms_message">All entered data is manually checked and confirmed by the DHBWorld team before it can be publicly viewed by other users. The DHBWorld team reserves the right to reject or delete advertisements at any time without stating a reason. As a user, you are aware that the data entered here will be made publicly available to other users.</string>
 </resources>
