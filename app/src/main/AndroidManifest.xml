@@ -15,6 +15,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.DHBWorld">
         <activity
+            android:name=".MenuReorder.ReorderMenuActivity"
+            android:exported="false" />
+        <activity
             android:name=".BlackboardActivity"
             android:exported="false" />
         <activity

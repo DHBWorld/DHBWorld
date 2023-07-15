@@ -1,6 +1,5 @@
 package com.main.dhbworld;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -28,8 +27,6 @@ public class SettingsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.settings_activity);
 
-        NavigationUtilities.setUpNavigation(this, R.id.Settings);
-
         if (savedInstanceState == null) {
             getSupportFragmentManager()
                     .beginTransaction()
@@ -45,7 +42,7 @@ public class SettingsActivity extends AppCompatActivity {
     public static class SettingsFragment extends PreferenceFragmentCompat {
 
         Context context;
-        Activity activity;
+        AppCompatActivity activity;
 
         OnPreferenceChangeListener changeListener;
         OnPreferenceClickListener clickListener;
@@ -53,6 +50,7 @@ public class SettingsActivity extends AppCompatActivity {
         ActivityResultLauncher<Intent> activityResultLauncherExportDebugLog;
         ActivityResultLauncher<Intent> activityResultLauncherExportBackup;
         ActivityResultLauncher<Intent> activityResultLauncherRestoreBackup;
+        ActivityResultLauncher<Intent> activityResultLauncherReorder;
 
         @Override
         public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -65,12 +63,16 @@ public class SettingsActivity extends AppCompatActivity {
 
             activityResultLauncherRestoreBackup = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
                     result -> clickListener.handleRestoreBackup(result.getData()));
+
+            activityResultLauncherReorder = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+                            result -> NavigationUtilities.setUpNavigation(activity, R.id.Settings));
+
         }
 
         @Override
         public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
             context = getContext();
-            activity = getActivity();
+            activity = (AppCompatActivity) getActivity();
             if (context == null || activity == null) {
                 return;
             }
@@ -89,6 +91,7 @@ public class SettingsActivity extends AppCompatActivity {
         private void initializePreferences(SettingsPreferenceManager preferenceManager) {
             preferenceManager.addPreference("darkmode", (preference, newValue) -> changeListener.darkmode(newValue));
             preferenceManager.addPreference("language", (preference, newValue) -> changeListener.language(newValue));
+            preferenceManager.addPreference("reorder_menu", preference -> clickListener.reorderMenu(activityResultLauncherReorder));
             preferenceManager.addPreference("informations", preference -> clickListener.information());
             preferenceManager.addPreference("licenses", preference -> clickListener.licenses());
             preferenceManager.addPreference("dataprivacy", preference -> clickListener.dataPrivacy());

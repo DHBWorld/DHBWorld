@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/topAppBarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/Widget.MaterialComponents.AppBarLayout.Primary"
+        android:fitsSystemWindows="true">
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/topAppBar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:title="@string/edit_sidemenu"
+            app:menu="@menu/reorder_menu"
+            app:navigationIcon="@drawable/ic_baseline_arrow_back_24"
+
+            style="@style/Widget.MaterialComponents.Toolbar.Primary"
+            android:background="@android:color/transparent"
+            android:elevation="0dp"
+            />
+    </com.google.android.material.appbar.AppBarLayout>
+    <!-- everything above is for the topbar and navigation-->
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/reoder_recycler_view"
+        android:layout_below="@id/topAppBarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+</RelativeLayout>
