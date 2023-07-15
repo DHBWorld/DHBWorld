@@ -1,15 +1,23 @@
 package com.main.dhbworld.Settings;
 
+import static androidx.activity.result.ActivityResultCallerKt.registerForActivityResult;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Environment;
 import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.ActivityResultRegistry;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.BaseTransientBottomBar;
@@ -21,6 +29,7 @@ import com.main.dhbworld.DataPrivacyActivity;
 import com.main.dhbworld.Debugging.Debugging;
 import com.main.dhbworld.FeedbackActivity;
 import com.main.dhbworld.LicenseActivity;
+import com.main.dhbworld.MenuReorder.ReorderMenuActivity;
 import com.main.dhbworld.R;
 
 import java.io.File;
@@ -146,5 +155,10 @@ public class OnPreferenceClickListener {
 
     public void handleRestoreBackup(Intent data) {
         BackupHandler.restoreCheckPassword(data, activity);
+    }
+
+    public boolean reorderMenu(ActivityResultLauncher<Intent> activityLauncher) {
+        activityLauncher.launch(new Intent(context, ReorderMenuActivity.class));
+        return true;
     }
 }

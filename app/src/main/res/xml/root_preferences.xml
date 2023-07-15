@@ -20,6 +20,12 @@
             app:key="language"
             app:icon="@drawable/baseline_language_24"
             app:useSimpleSummaryProvider="true" />
+
+        <Preference
+            android:title="@string/edit_sidemenu"
+            android:summary="@string/edit_sidemenu_summary"
+            android:key="reorder_menu"
+            android:icon="@drawable/baseline_sort_24" />
     </PreferenceCategory>
 
     <PreferenceCategory app:title="@string/user_interaction">
