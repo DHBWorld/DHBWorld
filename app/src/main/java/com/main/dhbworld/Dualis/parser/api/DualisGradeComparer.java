@@ -19,16 +19,17 @@ public class DualisGradeComparer {
     static boolean secondTry = false;
 
     public static boolean compareSaveNotification(Context context, ArrayList<DualisSemester> dualisSemesters, boolean secondTry) {
+        DualisGradeComparer.newGrades = new ArrayList<>();
         DualisGradeComparer.secondTry = secondTry;
         ArrayList<DualisSemester> savedDualisSemesters = DualisParser.getSavedFileContent(context);
         if (savedDualisSemesters == null) {
             return true;
         }
-        DualisParser.saveFileContent(context, dualisSemesters);
 
         if (savedDualisSemesters.size() == 0) {
             return true;
         }
+
         if (DualisParser.semestersEqual(savedDualisSemesters, dualisSemesters)) {
             Log.d("DualisAPI", "No new grades");
             return true;
@@ -61,14 +62,15 @@ public class DualisGradeComparer {
                 }
             }
         }
-        return sendNotifications(context);
+        return sendNotifications(context, dualisSemesters);
     }
 
-    private static boolean sendNotifications(Context context) {
+    private static boolean sendNotifications(Context context, ArrayList<DualisSemester> dualisSemesters) {
         if (newGrades.size() < 4 || secondTry) {
             for (Grade grade : newGrades) {
                 DualisNotification.sendNotification(context, grade.title, grade.message, grade.id);
             }
+            DualisParser.saveFileContent(context, dualisSemesters);
             return true;
         } else {
             return false;
