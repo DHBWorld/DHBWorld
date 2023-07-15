@@ -345,4 +345,7 @@ E-Mail-Adresse: <p><a href="mailto:zaeske.christian@gmail.com">zaeske.christian@
     <string name="save_changes_message">Möchtest du deine Änderungen speichern?</string>
     <string name="discard">Verwerfen</string>
     <string name="cannot_hide_home">Du kannst den \"Home\"-Eintrag nicht ausblenden</string>
+    <string name="warning_send_advert_message">Wenn Sie fortsetzten, kann Ihre Anzeige nicht mehr geändert werden. Bei Problemen mit bereits publizierten Anzeigen wenden Sie sich direkt an das DHBWorld-Team über die Feadback-Funktion oder per E-mail.</string>
+    <string name="terms">Bedingungen</string>
+    <string name="terms_message">Alle eingetragenen Daten werden manuell von dem DHBWorld-Team überprüft und bestätigt, bevor diese öffentlich für andere Nutzer einsehbar sind. Das DHBWorld-Team behält sich vor, ohne Benennung eines Grundes Anzeigen jederzeit abzulehnen oder zu löschen. Als Nutzer sind Sie sich bewusst, dass die hier eingetragenen Daten anderen Nutzern öffentlich zugänglich gemacht werden.</string>
 </resources>

@@ -21,9 +21,7 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.main.dhbworld.R;
 import com.main.dhbworld.Utilities.SimpleDataFormatUniversalDay;
-import com.main.dhbworld.Utilities.SimpleDataFormatUniversalDayTime;
 
-import java.text.DateFormat;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.util.ArrayList;
@@ -85,10 +83,11 @@ public class NewAdvertisementActivity extends AppCompatActivity {
 
 
     private void setupClickListeners() {
-        sendButton.setOnClickListener(v -> new MaterialAlertDialogBuilder(com.main.dhbworld.Blackboard.NewAdvertisementActivity.this)
+        sendButton.setOnClickListener(v -> new MaterialAlertDialogBuilder(NewAdvertisementActivity.this)
                 .setTitle(R.string.important)
-                .setMessage("Wenn Sie fortsetzten, kann Ihre Anzeige nicht mehr geändert werden. Bei Problemen mit bereits publizierten Anzeigen wenden Sie sich direkt an das DHBWorld-Team über die Feadback-Funktion oder per E-mail.")
+                .setMessage(R.string.warning_send_advert_message)
                 .setPositiveButton(R.string.send, (dialog, which) -> loadDateInFirebase())
+                .setNeutralButton(getString(R.string.terms), (dialog, which) -> showTerms())
                 .setNegativeButton(android.R.string.cancel, null)
                 .setCancelable(false)
                 .show());
@@ -97,6 +96,15 @@ public class NewAdvertisementActivity extends AppCompatActivity {
             tag.setOnClickListener(new CheckBoxClickListener(tag));
         }
 
+    }
+
+    private void showTerms() {
+        new MaterialAlertDialogBuilder(NewAdvertisementActivity.this)
+                .setTitle(R.string.terms)
+                .setMessage(R.string.terms_message)
+                .setPositiveButton(R.string.close, null)
+                .setCancelable(false)
+                .show();
     }
 
     private void loadDateInFirebase() {
