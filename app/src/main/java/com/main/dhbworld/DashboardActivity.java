@@ -24,6 +24,7 @@ import androidx.preference.PreferenceManager;
 
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.progressindicator.CircularProgressIndicator;
 import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -246,6 +247,9 @@ public class DashboardActivity extends AppCompatActivity {
     }
 
     private void loadWeather() {
+        CircularProgressIndicator progressIndicator = findViewById(R.id.progress_indicator_weather);
+        LinearLayout mainWeatherLayout = findViewById(R.id.weather_main_layout);
+
         ImageView iconImageView = findViewById(R.id.weather_icon_imageview);
         TextView statusTextView = findViewById(R.id.weather_status_textview);
         TextView weatherLocation = findViewById(R.id.weather_location);
@@ -271,7 +275,7 @@ public class DashboardActivity extends AppCompatActivity {
         iconDay[2] = findViewById(R.id.weather_icon_imageview_3);
         iconDay[3] = findViewById(R.id.weather_icon_imageview_4);
 
-        DataLoaderWeather dataLoaderWeather = new DataLoaderWeather(this,iconImageView, statusTextView , weatherLocation, day, maxTempDay, minTempDay, iconDay  );
+        DataLoaderWeather dataLoaderWeather = new DataLoaderWeather(this, progressIndicator, mainWeatherLayout, iconImageView, statusTextView, weatherLocation, day, maxTempDay, minTempDay, iconDay);
         dataLoaderWeather.load();
 
     }
