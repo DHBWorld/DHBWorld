@@ -1,9 +1,12 @@
 package com.main.dhbworld.Dashboard.DataLoaders;
 
 import android.content.Context;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.android.material.progressindicator.CircularProgressIndicator;
 import com.main.dhbworld.DashboardActivity;
 import com.main.dhbworld.R;
 import com.main.dhbworld.Weather.Forecast;
@@ -15,7 +18,10 @@ import java.util.ArrayList;
 import java.util.Locale;
 
 public class DataLoaderWeather {
-   private final ImageView iconImageView ;
+
+    private final CircularProgressIndicator progressIndicator;
+    private final LinearLayout mainWeatherLayout;
+    private final ImageView iconImageView ;
     private final TextView statusTextView ;
     private final TextView weatherLocation ;
     private final TextView[] day ;
@@ -25,8 +31,10 @@ public class DataLoaderWeather {
     private final Context context;
 
 
-    public DataLoaderWeather(Context context, ImageView iconImageView, TextView statusTextView, TextView weatherLocation, TextView[] day, TextView[] maxTempDay, TextView[] minTempDay, ImageView[] iconDay) {
+    public DataLoaderWeather(Context context, CircularProgressIndicator progressIndicator, LinearLayout mainWeatherLayout, ImageView iconImageView, TextView statusTextView, TextView weatherLocation, TextView[] day, TextView[] maxTempDay, TextView[] minTempDay, ImageView[] iconDay) {
     this.context=context;
+    this.progressIndicator = progressIndicator;
+    this.mainWeatherLayout = mainWeatherLayout;
     this.iconImageView=iconImageView;
     this.statusTextView=statusTextView;
     this.weatherLocation=weatherLocation;
@@ -45,6 +53,8 @@ public class DataLoaderWeather {
         weatherApi.requestData(context, new WeatherApi.WeatherDataListener() {
             @Override
             public void onSuccess(WeatherData weatherData) {
+                progressIndicator.setVisibility(View.GONE);
+                mainWeatherLayout.setVisibility(View.VISIBLE);
                 iconImageView.setImageDrawable(weatherData.getIcon(context));
                 statusTextView.setText(String.format("%s, %s°C", weatherData.getTranslatedWeatherCode(context), weatherData.getCurrentTemperature()));
 
@@ -63,6 +73,8 @@ public class DataLoaderWeather {
 
             @Override
             public void onError() {
+                progressIndicator.setVisibility(View.GONE);
+                mainWeatherLayout.setVisibility(View.VISIBLE);
                 statusTextView.setText(R.string.cannot_get_weather);
                 iconImageView.setImageDrawable(null);
             }

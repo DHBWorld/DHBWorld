@@ -109,11 +109,20 @@
                         android:background="?attr/dashboardCardBackground"
                         android:orientation="vertical">
 
+                        <com.google.android.material.progressindicator.CircularProgressIndicator
+                            android:id="@+id/progress_indicator_weather"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:indeterminate="true"
+                            android:padding="8dp"/>
+
                         <LinearLayout
+                            android:id="@+id/weather_main_layout"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="horizontal"
-                            android:gravity="center">
+                            android:gravity="center"
+                            android:visibility="gone">
 
                             <ImageView
                                 android:id="@+id/weather_icon_imageview"
