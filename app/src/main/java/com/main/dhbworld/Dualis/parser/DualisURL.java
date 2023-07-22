@@ -44,6 +44,17 @@ public enum DualisURL {
         return mainArguments.replace("-N000019,", "-N000307");
     }
 
+    private static class RequestQueueManager {
+        static RequestQueue requestQueue;
+
+        public static RequestQueue getRequestQueue(Context context) {
+            if (requestQueue == null) {
+                requestQueue = Volley.newRequestQueue(context);
+            }
+            return requestQueue;
+        }
+    }
+
     public static class DualisURLRequest {
 
         private final Context context;
@@ -56,7 +67,8 @@ public enum DualisURL {
 
         public void createRequest(String url, Response.Listener<String> responseListener, Response.ErrorListener errorListener) {
             CookieManager.setDefault(cookieHandler);
-            RequestQueue queue = Volley.newRequestQueue(context);
+            RequestQueue queue = RequestQueueManager.getRequestQueue(context);
+            System.out.println(queue);
             StringRequest stringRequest = new StringRequest(Request.Method.GET, url, responseListener, errorListener);
             queue.add(stringRequest);
         }
