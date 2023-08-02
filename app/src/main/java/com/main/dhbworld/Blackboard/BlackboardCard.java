@@ -6,6 +6,8 @@ import android.content.res.ColorStateList;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.text.method.LinkMovementMethod;
+import android.text.util.Linkify;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -92,7 +94,14 @@ public class BlackboardCard extends MaterialCardView {
         text.setTextSize(15);
         text.setPadding(0, 10, 0, 10);
         text.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        text.setClickable(true);
+        text.setLinksClickable(true);
+        text.setAutoLinkMask(Linkify.ALL);
+        text.setMovementMethod(LinkMovementMethod.getInstance());
         descriptionLayout.addView(text);
+    }
+    public void setLink(){
+       // descriptionLayout.addView();
     }
 
     private void addFields() {
