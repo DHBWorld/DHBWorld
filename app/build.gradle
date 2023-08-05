@@ -54,6 +54,18 @@ task jacocoCombinedTestReports(type: JacocoReport, dependsOn: ['testDebugUnitTes
     ])
 }
 
+tasks.register('printVersionName') {
+    doLast {
+        println android.defaultConfig.versionName
+    }
+}
+
+tasks.register('printVersionCode') {
+    doLast {
+        println android.defaultConfig.versionCode
+    }
+}
+
 android {
     compileSdk 33
 
