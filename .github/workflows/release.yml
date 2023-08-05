@@ -1,0 +1,117 @@
+name: Android CI
+
+on: 
+  workflow_dispatch:
+    inputs:
+      changed_data:
+        description: "Release notes und Version angepasst?"
+        required: true
+        type: boolean
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+    - name: check input
+      if: ${{ inputs.changed_data == false }}
+      uses: actions/github-script@v3
+      with:
+        script: |
+          core.setFailed('Bitte bestätige, dass Version und Release notes angepasst wurden')
+    - uses: actions/checkout@v3
+    - uses: cardinalby/git-get-release-action@v1
+      id: get_latest_release
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
+      with:
+        latest: true
+    - name: get old VersionName
+      id: get_version_name_old
+      run: echo "VERSION_NAME_OLD=$(echo ${{ steps.get_latest_release.outputs.tag_name }} | sed 's/release-//' )" >> $GITHUB_OUTPUT
+    - name: set up JDK 11
+      uses: actions/setup-java@v3
+      with:
+        java-version: '11'
+        distribution: 'temurin'
+        cache: gradle
+
+    - name: Grant execute permission for gradlew
+      run: chmod +x gradlew
+    - name: get VersionName
+      id: get_version_name
+      run: echo "VERSION_NAME=$(./gradlew -q printVersionName)" >> $GITHUB_OUTPUT
+    - name: get VersionCode
+      id: get_version_code
+      run: echo "VERSION_CODE=$(./gradlew -q printVersionCode)" >> $GITHUB_OUTPUT
+    - name: echo
+      run: echo ${{ steps.get_version_name_old.outputs.VERSION_NAME_OLD }}
+    - name: echo
+      run: echo ${{ steps.get_version_name.outputs.VERSION_NAME }}
+    - name: Check Version Code
+      if: ${{ steps.get_version_name_old.outputs.VERSION_NAME_OLD == steps.get_version_name.outputs.VERSION_NAME }}
+      uses: actions/github-script@v3
+      with:
+        script: |
+          core.setFailed('Gleicher Versionsname wie beim letzten Relase. Vergessen zu ändern?')
+    - name: Exit if error
+      if: ${{ failure() }}
+      run: exit 1
+    - name: Build ABB with Gradle
+      run: ./gradlew bundleRelease
+    - name: Build APK with Gradle
+      run: ./gradlew assembleRelease
+    - name: Sign AAB
+      id: sign_aab
+      uses: r0adkll/sign-android-release@v1
+      with:
+        releaseDirectory: app/build/outputs/bundle/release
+        signingKeyBase64: ${{ secrets.SIGNING_KEYSTORE }}
+        alias: ${{ secrets.SIGNING_ALIAS }}
+        keyStorePassword: ${{ secrets.SIGNING_KEYSTORE_PASSWORD }}
+        keyPassword: ${{ secrets.SIGNING_ALIAS_PASSWORD }}  
+    - name: Sign APK
+      id: sign_apk
+      uses: r0adkll/sign-android-release@v1
+      with:
+        releaseDirectory: app/build/outputs/apk/release
+        signingKeyBase64: ${{ secrets.SIGNING_KEYSTORE }}
+        alias: ${{ secrets.SIGNING_ALIAS }}
+        keyStorePassword: ${{ secrets.SIGNING_KEYSTORE_PASSWORD }}
+        keyPassword: ${{ secrets.SIGNING_ALIAS_PASSWORD }}
+    - name: Rename AAB
+      run: mv ${{steps.sign_aab.outputs.signedReleaseFile}} app-release-${{ steps.get_version_name.outputs.VERSION_NAME }}.aab
+    - name: Rename APK
+      run: mv ${{steps.sign_apk.outputs.signedReleaseFile}} CaptureTheStreet_${{ steps.get_version_name.outputs.VERSION_NAME }}.apk
+    - run: echo "Build status report=${{ job.status }}."
+    - name: Upload AAB Bundle
+      uses: actions/upload-artifact@v1
+      with:
+        name: AAB
+        path: app-release-${{ steps.get_version_name.outputs.VERSION_NAME }}.aab
+    - name: Upload APK Bundle
+      uses: actions/upload-artifact@v1
+      with:
+        name: APK
+        path: CaptureTheStreet_${{ steps.get_version_name.outputs.VERSION_NAME }}.apk
+    - uses: ncipollo/release-action@v1
+      with:
+        artifacts: CaptureTheStreet_${{ steps.get_version_name.outputs.VERSION_NAME }}.apk
+        makeLatest: true
+        bodyFile: "ReleaseNotes.md"
+        tag: release-${{ steps.get_version_name.outputs.VERSION_NAME }}
+        name: Release ${{ steps.get_version_name.outputs.VERSION_NAME }} 🎉
+    - name: create whatsnew
+      run: |
+        mkdir whatsnew
+        echo "Visit https://github.com/DHBWorld/DHBWorld/releases/latest to see whats new in this version" >> whatsnew/whatsnew-de-DE
+    - uses: r0adkll/upload-google-play@v1
+      with:
+        serviceAccountJsonPlainText: ${{ secrets.SERVICE_ACCOUNT_JSON }}
+        packageName: com.main.dhbworld
+        releaseFiles: app-release-${{ steps.get_version_name.outputs.VERSION_NAME }}.aab
+        track: production
+        whatsNewDirectory: distribution/whatsnew
