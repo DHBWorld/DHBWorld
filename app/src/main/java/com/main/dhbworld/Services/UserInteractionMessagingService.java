@@ -83,7 +83,7 @@ public class UserInteractionMessagingService extends FirebaseMessagingService {
                         } else {
                             NotificationManagerCompat notificationManager = NotificationManagerCompat.from(getApplicationContext());
 
-                            NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), "feedback")
+                            NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), "general")
                                     .setSmallIcon(R.drawable.baseline_language_24_red)
                                     .setContentTitle(remoteMessage.getNotification().getTitle())
                                     .setStyle(new NotificationCompat.BigTextStyle().bigText(remoteMessage.getNotification().getBody()))
