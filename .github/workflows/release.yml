@@ -85,7 +85,7 @@ jobs:
     - name: Rename AAB
       run: mv ${{steps.sign_aab.outputs.signedReleaseFile}} app-release-${{ steps.get_version_name.outputs.VERSION_NAME }}.aab
     - name: Rename APK
-      run: mv ${{steps.sign_apk.outputs.signedReleaseFile}} CaptureTheStreet_${{ steps.get_version_name.outputs.VERSION_NAME }}.apk
+      run: mv ${{steps.sign_apk.outputs.signedReleaseFile}} DHBWorld_${{ steps.get_version_name.outputs.VERSION_NAME }}.apk
     - run: echo "Build status report=${{ job.status }}."
     - name: Upload AAB Bundle
       uses: actions/upload-artifact@v1
@@ -96,10 +96,10 @@ jobs:
       uses: actions/upload-artifact@v1
       with:
         name: APK
-        path: CaptureTheStreet_${{ steps.get_version_name.outputs.VERSION_NAME }}.apk
+        path: DHBWorld_${{ steps.get_version_name.outputs.VERSION_NAME }}.apk
     - uses: ncipollo/release-action@v1
       with:
-        artifacts: CaptureTheStreet_${{ steps.get_version_name.outputs.VERSION_NAME }}.apk
+        artifacts: DHBWorld_${{ steps.get_version_name.outputs.VERSION_NAME }}.apk
         makeLatest: true
         bodyFile: "ReleaseNotes.md"
         tag: release-${{ steps.get_version_name.outputs.VERSION_NAME }}
