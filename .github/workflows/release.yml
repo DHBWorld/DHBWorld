@@ -114,4 +114,4 @@ jobs:
         packageName: com.main.dhbworld
         releaseFiles: app-release-${{ steps.get_version_name.outputs.VERSION_NAME }}.aab
         track: production
-        whatsNewDirectory: distribution/whatsnew
+        whatsNewDirectory: whatsnew
