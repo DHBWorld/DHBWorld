@@ -200,7 +200,7 @@ public final class DataImporter {
                 String type = element.getAttribute("class");
                 if (type.startsWith("week_block")) {
                     appointments.add(importAppointment(cell, currDate));
-                } else if (type.startsWith("week_separatorcell")) {
+                } else if (type.startsWith("week_separatorcell") || type.startsWith("week_separatornolinecell")) {
                     currDate = currDate.plusDays(1);
                 }
             }
