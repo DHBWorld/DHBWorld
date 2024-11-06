@@ -2,8 +2,6 @@ package dhbw.timetable.rapla.parser;
 
 import dhbw.timetable.rapla.date.DateUtilities;
 import dhbw.timetable.rapla.data.event.Appointment;
-import dhbw.timetable.rapla.data.event.BackportAppointment;
-import dhbw.timetable.rapla.data.time.TimelessDate;
 import dhbw.timetable.rapla.exceptions.NoConnectionException;
 import dhbw.timetable.rapla.network.BaseURL;
 import dhbw.timetable.rapla.network.NetworkUtilities;
