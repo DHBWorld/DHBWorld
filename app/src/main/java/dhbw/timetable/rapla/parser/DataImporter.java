@@ -2,8 +2,6 @@ package dhbw.timetable.rapla.parser;
 
 import dhbw.timetable.rapla.date.DateUtilities;
 import dhbw.timetable.rapla.data.event.Appointment;
-import dhbw.timetable.rapla.data.event.BackportAppointment;
-import dhbw.timetable.rapla.data.time.TimelessDate;
 import dhbw.timetable.rapla.exceptions.NoConnectionException;
 import dhbw.timetable.rapla.network.BaseURL;
 import dhbw.timetable.rapla.network.NetworkUtilities;
@@ -219,7 +217,7 @@ public final class DataImporter {
 
         String time = getTime(aChildren);
 
-        if(aChildren.item(aChildren.getLength() - 1).getLastChild() != null && aChildren.item(aChildren.getLength() - 1).getNodeName().equals("span")){
+        if(aChildren.item(aChildren.getLength() - 1).getLastChild() != null && aChildren.item(aChildren.getLength() - 1).getNodeName().equals("span") && !((Element) aChildren.item(aChildren.getLength() - 1)).getAttribute("class").equals("link")){
             // Rows from table body
             NodeList rows = aChildren.item(aChildren.getLength() - 1).getLastChild().getChildNodes();
 
@@ -232,8 +230,13 @@ public final class DataImporter {
             LocalDateTime[] times = DateUtilities.ConvertToTime(date, time);
             ArrayList<Node> nList = new ArrayList<Node>();
             for(int i = 0; i < block.getChildNodes().getLength(); i++){
-                if(block.getChildNodes().item(i).getNodeName().equals("a") || block.getChildNodes().item(i).getNodeName().equals("span")){
-                    nList.add(block.getChildNodes().item(i).getFirstChild());
+                if(block.getChildNodes().item(i).getNodeName().equals("a") || block.getChildNodes().item(i).getNodeName().equals("span")) {
+                    if (block.getChildNodes().item(i).getFirstChild().getNodeType() == Node.ELEMENT_NODE) {
+                        nList.add(block.getChildNodes().item(i).getFirstChild().getFirstChild());
+                        nList.add(block.getChildNodes().item(i).getFirstChild().getLastChild());
+                    } else {
+                        nList.add(block.getChildNodes().item(i).getFirstChild());
+                    }
                     if(block.getChildNodes().item(i).getLastChild().getNodeType() == Node.TEXT_NODE && block.getChildNodes().item(i).getChildNodes().getLength() != 1){
                         nList.add(block.getChildNodes().item(i).getLastChild());
                     }
