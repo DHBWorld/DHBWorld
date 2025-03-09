@@ -288,7 +288,13 @@ public final class DataImporter {
         } else if (firstElNode.getNodeType() == Node.TEXT_NODE){
             timeData = ((CharacterData) firstElNode).getData();
             // Filter &#160; alias &nbsp;
-            time = timeData.substring(0, 5).concat(timeData.substring(6));
+            if (timeData.startsWith("\u00a0-")) {
+                time = "08:00" + timeData.substring(1);
+            } else if (timeData.length() < 6) {
+                time = timeData.substring(0, 5) + "-18:00";
+            } else {
+                time = timeData.substring(0, 5).concat(timeData.substring(6));
+            }
         }
         return time;
     }
